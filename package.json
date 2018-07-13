@@ -1,0 +1,68 @@
+{
+  "name": "photoviewer",
+  "version": "1.0.0",
+  "description": "A JS plugin to view images just like in Windows",
+  "main": "dist/photoviewer.js",
+  "homepage": "https://github.com/nzbin/photoviewer#readme",
+  "author": "nzbin",
+  "license": "MIT",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nzbin/photoviewer.git"
+  },
+  "keywords": [
+    "photoviewer",
+    "lightbox",
+    "image-gallery",
+    "responsive",
+    "jquery",
+    "modal",
+    "draggable",
+    "resizable",
+    "zoomable"
+  ],
+  "bugs": {
+    "url": "https://github.com/nzbin/photoviewer/issues"
+  },
+  "scripts": {
+    "sass": "node-sass --output-style expanded src/sass/photoviewer.scss dist/photoviewer.css",
+    "autoprefixer": "postcss -u autoprefixer --no-map.inline --autoprefixer.browsers \"last 1 versions\" -r dist/*.css",
+    "build": "run-s build:css build:js",
+    "build:css": "run-s sass autoprefixer",
+    "build:js": "rollup -c",
+    "compress": "run-s compress:css compress:js",
+    "compress:css": "node-sass --output-style compressed src/sass/photoviewer.scss dist/photoviewer.min.css",
+    "compress:js": "uglifyjs dist/photoviewer.js -o dist/photoviewer.min.js -c -m --comments /^!/",
+    "copy": "run-s copy:css copy:js",
+    "copy:css": "cpy dist/photoviewer.css docs/css",
+    "copy:js": "cpy dist/photoviewer.js docs/js",
+    "release": "run-s build compress",
+    "release:css": "run-s build:css compress:css",
+    "release:js": "run-s build:js compress:js",
+    "lint": "run-s lint:css lint:js",
+    "lint:css": "stylelint --syntax scss \"src/**/*.scss\" --fix",
+    "lint:js": "eslint src/js --fix"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.6",
+    "concat": "^1.0.3",
+    "cpy-cli": "^1.0.1",
+    "eslint": "^4.17.0",
+    "node-sass": "^4.7.2",
+    "npm-run-all": "^4.1.2",
+    "onchange": "^3.2.1",
+    "postcss-cli": "^4.1.1",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "stylelint": "^9.2.1",
+    "stylelint-config-recommended-scss": "^3.2.0",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-scss": "^3.1.0",
+    "uglify-js": "^3.1.10"
+  }
+}
