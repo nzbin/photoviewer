@@ -1,0 +1,145 @@
+// -----------------------
+// General
+// -----------------------
+.photoviewer-modal {
+  position: absolute;
+  z-index: 1090;
+  width: 320px;
+  height: 320px;
+  background-color: #111;
+  background-color: rgba(0, 0, 0, .85);
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
+  cursor: default;
+}
+
+.photoviewer-maximize {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.photoviewer-toolbar {
+  font-size: 0;
+}
+
+.photoviewer-header {
+  position: relative;
+  z-index: 2;
+  height: 40px;
+  color: #fff;
+
+  .photoviewer-toolbar {
+    float: right;
+  }
+}
+
+.photoviewer-title {
+  padding: 13px 10px;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  user-select: none;
+  overflow: hidden;
+}
+
+.photoviewer-stage {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  bottom: 40px;
+  left: 10px;
+  z-index: 1;
+  border: 1px solid #ccc;
+  overflow: hidden;
+
+  &.stage-ready {
+    text-align: center;
+  }
+}
+
+.photoviewer-image {
+  position: relative;
+  display: inline-block;
+
+  &.image-ready {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.photoviewer-footer {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  height: 40px;
+  color: #fff;
+  text-align: center;
+
+  .photoviewer-toolbar {
+    display: inline-block;
+  }
+}
+
+.photoviewer-button {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px;
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1;
+  text-align: center;
+  background: none;
+  border-width: 0;
+  border-radius: 0;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.photoviewer-button-close:hover {
+  background-color: #ff4545;
+}
+
+.photoviewer-button-maximize:hover {
+  background-color: #525252;
+}
+
+.photoviewer-button-minimize:hover {
+  background-color: #525252;
+}
+
+// loader
+.photoviewer-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  text-align: center;
+  background-color: rgba(0, 0, 0, .3);
+  color: #333;
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+  }
+
+  i {
+    font-size: 32px;
+  }
+}

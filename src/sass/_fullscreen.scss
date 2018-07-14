@@ -1,0 +1,36 @@
+// -----------------------
+// Fullscreen
+// -----------------------
+$fullscreen-list: -webkit-full-screen,-moz-full-screen,-ms-fullscreen,full-screen,fullscreen;
+
+$backdrop-list: backdrop,-ms-backdrop;
+
+@each $fullscreen in $fullscreen-list {
+  :#{$fullscreen} {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+
+    .photoviewer-header,
+    .photoviewer-footer,
+    .photoviewer-resizable-handle {
+      display: none;
+    }
+
+    .photoviewer-stage {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-width: 0;
+      background-color: #000;
+    }
+  }
+}
+
+@each $backdrop in $backdrop-list {
+  ::#{$backdrop} {
+    background-color: #000;
+  }
+}

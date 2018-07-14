@@ -30,9 +30,9 @@
   },
   "scripts": {
     "sass": "node-sass --output-style expanded src/sass/photoviewer.scss dist/photoviewer.css",
-    "autoprefixer": "postcss -u autoprefixer --no-map.inline --autoprefixer.browsers \"last 1 versions\" -r dist/*.css",
+    "postcss": "postcss -r dist/*.css --map",
     "build": "run-s build:css build:js",
-    "build:css": "run-s sass autoprefixer",
+    "build:css": "run-s sass postcss",
     "build:js": "rollup -c",
     "compress": "run-s compress:css compress:js",
     "compress:css": "node-sass --output-style compressed src/sass/photoviewer.scss dist/photoviewer.min.css",
@@ -48,15 +48,19 @@
     "lint:js": "eslint src/js --fix"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.53",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.53",
+    "@babel/preset-env": "^7.0.0-beta.53",
     "autoprefixer": "^7.1.6",
-    "concat": "^1.0.3",
     "cpy-cli": "^1.0.1",
     "eslint": "^4.17.0",
     "node-sass": "^4.7.2",
     "npm-run-all": "^4.1.2",
     "onchange": "^3.2.1",
     "postcss-cli": "^4.1.1",
-    "rollup-plugin-babel": "^3.0.7",
+    "postcss-header": "^1.0.0",
+    "rollup": "^0.62.0",
+    "rollup-plugin-babel": "^4.0.0-beta.5",
     "rollup-plugin-commonjs": "^9.1.3",
     "rollup-plugin-node-resolve": "^3.3.0",
     "stylelint": "^9.2.1",
@@ -64,5 +68,8 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint-scss": "^3.1.0",
     "uglify-js": "^3.1.10"
+  },
+  "peerDependencies": {
+    "jquery": "^3.3.1"
   }
 }
