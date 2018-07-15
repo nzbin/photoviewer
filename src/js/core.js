@@ -31,13 +31,12 @@ import draggable from './draggable';
 import movable from './movable';
 import resizable from './resizable';
 
-// jquery element of calling plugin
-let jqEl = null;
-
-
+/**
+ * PhotoViewer Class
+ */
 class PhotoViewer {
 
-  constructor(el, options) {
+  constructor(el, items, options) {
 
     let self = this;
 
@@ -76,46 +75,31 @@ class PhotoViewer {
       top: null
     };
 
-    this.init(el, self.options);
+    this.init(el, items, self.options);
 
   }
 
+  init(el, items, opts) {
 
-  init(el, options) {
+    this.groupData = items;
+    this.groupIndex = opts['index'];
 
     // Get image src
-    let imgSrc = getImgSrc(el);
-
-    // Get image group
-    this.groupName = null;
-
-    let currentGroupName = $(el).attr('data-group'),
-      groupList = $D.find('[data-group="' + currentGroupName + '"]');
-
-    if (currentGroupName !== undefined) {
-
-      this.groupName = currentGroupName;
-      this.getImgGroup(groupList, imgSrc);
-
-    } else {
-
-      this.getImgGroup(jqEl.not('[data-group]'), imgSrc);
-
-    }
+    let imgSrc = items[this.groupIndex]['src'];
 
     this.open();
 
     this.loadImg(imgSrc);
 
     // draggable & movable & resizable
-    if (this.options.draggable) {
+    if (opts.draggable) {
       this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
     }
-    if (this.options.movable) {
+    if (opts.movable) {
       this.movable(this.$stage, this.$image);
     }
-    if (this.options.resizable) {
-      this.resizable(this.$photoviewer, this.$stage, this.$image, this.options.modalWidth, this.options.modalHeight);
+    if (opts.resizable) {
+      this.resizable(this.$photoviewer, this.$stage, this.$image, opts.modalWidth, opts.modalHeight);
     }
 
   }
@@ -500,33 +484,9 @@ class PhotoViewer {
 
   }
 
-  getImgGroup(list, imgSrc) {
-
-    let self = this;
-
-    self.groupData = [];
-
-    $(list).each(function (index, item) {
-
-      let src = getImgSrc(this);
-
-      self.groupData.push({
-        src: src,
-        caption: $(this).attr('data-caption')
-      });
-      // Get image index
-      if (imgSrc === src) {
-        self.groupIndex = index;
-      }
-
-    });
-
-  }
-
   setImgTitle(url) {
 
-    let index = this.groupIndex,
-      caption = this.groupData[index].caption,
+    let caption = this.groupData[this.groupIndex].caption,
       captionTxt = caption ? caption : getImageNameFromUrl(url);
 
     this.$title.text(captionTxt);
@@ -908,11 +868,36 @@ class PhotoViewer {
  */
 $.extend(PhotoViewer.prototype, draggable, movable, resizable);
 
+/**
+ * Add PhotoViewer to globle
+ */
 window.PhotoViewer = PhotoViewer;
 
 /**
  * jQuery plugin
  */
+
+// jquery element of calling plugin
+let jqEl = null,
+  getImgGroup = function (list, groupName) {
+
+    let items = [];
+
+    $(list).each(function () {
+
+      let src = getImgSrc(this);
+
+      items.push({
+        src: src,
+        caption: $(this).attr('data-caption'),
+        groupName: groupName
+      });
+
+    });
+
+    return items;
+
+  }
 
 $.fn.photoviewer = function (options) {
 
@@ -955,7 +940,24 @@ $.fn.photoviewer = function (options) {
       // This will stop triggering data-api event
       e.stopPropagation();
 
-      $(this).data(NS, new PhotoViewer(this, options));
+      // Get image group
+      let items = [],
+        currentGroupName = $(this).attr('data-group'),
+        groupList = $D.find('[data-group="' + currentGroupName + '"]');
+
+      if (currentGroupName !== undefined) {
+
+        items = getImgGroup(groupList, currentGroupName);
+        options['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
+
+      } else {
+
+        items = getImgGroup(jqEl.not('[data-group]'));
+        options['index'] = $(this).index();
+
+      }
+
+      $(this).data(NS, new PhotoViewer(this, items, options));
 
     });
 
@@ -974,7 +976,24 @@ $D.on(CLICK_EVENT + EVENT_NS, '[data-' + NS + ']', function (e) {
 
   e.preventDefault();
 
-  $(this).data(NS, new PhotoViewer(this, defaults));
+  // Get image group
+  let items = [],
+    currentGroupName = $(this).attr('data-group'),
+    groupList = $D.find('[data-group="' + currentGroupName + '"]');
+
+  if (currentGroupName !== undefined) {
+
+    items = getImgGroup(groupList, currentGroupName);
+    defaults['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
+
+  } else {
+
+    items = getImgGroup(jqEl.not('[data-group]'));
+    defaults['index'] = $(this).index();
+
+  }
+
+  $(this).data(NS, new PhotoViewer(this, items, defaults));
 
 });
 

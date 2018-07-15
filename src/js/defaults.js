@@ -116,6 +116,9 @@ export default {
     closed: $.noop,
     beforeChange: $.noop,
     changed: $.noop
-  }
+  },
+
+  // Start images index
+  index: 0
 
 }

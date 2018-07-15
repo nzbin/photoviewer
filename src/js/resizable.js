@@ -91,7 +91,7 @@ export default {
       direction = '';
 
     // modal CSS options
-    let getModalOpts = function(dir, offsetX, offsetY) {
+    let getModalOpts = function (dir, offsetX, offsetY) {
 
       // Modal should not move when its width to the minwidth
       let modalLeft = (-offsetX + modalData.w) > minWidth ? (offsetX + modalData.l) : (modalData.l + modalData.w - minWidth),
@@ -138,7 +138,7 @@ export default {
     };
 
     // image CSS options
-    let getImageOpts = function(dir, offsetX, offsetY) {
+    let getImageOpts = function (dir, offsetX, offsetY) {
 
       // Image should not move when modal width to the min width
       // The minwidth is modal width, so we should clac the stage minwidth
@@ -189,9 +189,9 @@ export default {
       return opts[dir];
     };
 
-    let dragStart = function(dir, evt) {
+    let dragStart = function (dir, e) {
 
-      let e = evt || window.event;
+      e = e || window.event;
 
       e.preventDefault();
 
@@ -238,9 +238,9 @@ export default {
 
     };
 
-    let dragMove = function(evt) {
+    let dragMove = function (e) {
 
-      let e = evt || window.event;
+      e = e || window.event;
 
       e.preventDefault();
 
@@ -264,7 +264,7 @@ export default {
 
     };
 
-    let dragEnd = function() {
+    let dragEnd = function () {
 
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
         .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
@@ -284,8 +284,8 @@ export default {
 
     };
 
-    $.each(resizableHandles, function(dir, handle) {
-      handle.on(TOUCH_START_EVENT + EVENT_NS, function(e) {
+    $.each(resizableHandles, function (dir, handle) {
+      handle.on(TOUCH_START_EVENT + EVENT_NS, function (e) {
         dragStart(dir, e);
       });
     });

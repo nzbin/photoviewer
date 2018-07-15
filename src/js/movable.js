@@ -41,9 +41,9 @@ export default {
 
       δ = 0;
 
-    let dragStart = function (evt) {
+    let dragStart = function (e) {
 
-      let e = evt || window.event;
+      e = e || window.event;
 
       e.preventDefault();
 
@@ -81,9 +81,9 @@ export default {
 
     };
 
-    let dragMove = function (evt) {
+    let dragMove = function (e) {
 
-      let e = evt || window.event;
+      e = e || window.event;
 
       e.preventDefault();
 

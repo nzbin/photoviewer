@@ -27,9 +27,9 @@ export default {
       left = 0,
       top = 0;
 
-    let dragStart = function(evt) {
+    let dragStart = function (e) {
 
-      let e = evt || window.event;
+      e = e || window.event;
 
       // Must be removed
       // e.preventDefault();
@@ -58,9 +58,9 @@ export default {
 
     };
 
-    let dragMove = function(evt) {
+    let dragMove = function (e) {
 
-      let e = evt || window.event;
+      e = e || window.event;
 
       e.preventDefault();
 
@@ -81,7 +81,7 @@ export default {
 
     };
 
-    let dragEnd = function() {
+    let dragEnd = function () {
 
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
         .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
