@@ -4,7 +4,7 @@ import babel from 'rollup-plugin-babel';
 import pkg from './package.json';
 
 const banner = `
-/**
+/*!
  *  ____  _   _  ___  _____  ___  _   _ _____ ____ _    _ ____ ____
  * |  _ \\| | | |/ _ \\|_   _|/ _ \\| | | |_   _|  __| |  | |  __|  _ \\
  * | |_| | |_| | | | | | | | | | | | | | | | | |__| |  | | |__| |_| |

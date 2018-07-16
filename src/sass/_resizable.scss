@@ -1,95 +1,82 @@
 // -----------------------
 // Resizable
 // -----------------------
-// .photoviewer-resizable-handle {}
+.photoviewer-resizable-handle {
+  position: absolute;
+  z-index: 10;
+}
 
 .photoviewer-resizable-handle-e {
-  position: absolute;
   top: 0;
   right: -5px;
   bottom: 0;
   left: auto;
-  z-index: 10;
   width: 10px;
   cursor: e-resize;
 }
 
 .photoviewer-resizable-handle-s {
-  position: absolute;
   top: auto;
   right: 0;
   bottom: -5px;
   left: 0;
-  z-index: 10;
   height: 10px;
   cursor: s-resize;
 }
 
 .photoviewer-resizable-handle-w {
-  position: absolute;
   top: 0;
   right: auto;
   bottom: 0;
   left: -5px;
-  z-index: 10;
   width: 10px;
   cursor: w-resize;
 }
 
 .photoviewer-resizable-handle-n {
-  position: absolute;
   top: -5px;
   right: 0;
   bottom: auto;
   left: 0;
-  z-index: 10;
   height: 10px;
   cursor: n-resize;
 }
 
 .photoviewer-resizable-handle-se {
-  position: absolute;
   top: auto;
   right: -5px;
   bottom: -5px;
   left: auto;
-  z-index: 11;
   width: 10px;
   height: 10px;
   cursor: se-resize;
 }
 
 .photoviewer-resizable-handle-sw {
-  position: absolute;
   top: auto;
   right: auto;
   bottom: -5px;
   left: -5px;
-  z-index: 11;
   width: 10px;
   height: 10px;
   cursor: sw-resize;
 }
 
 .photoviewer-resizable-handle-nw {
-  position: absolute;
   top: -5px;
   right: auto;
   bottom: auto;
   left: -5px;
-  z-index: 11;
   width: 10px;
   height: 10px;
   cursor: nw-resize;
 }
 
 .photoviewer-resizable-handle-ne {
-  position: absolute;
   top: -5px;
   right: -5px;
   bottom: auto;
   left: auto;
-  z-index: 11;
   width: 10px;
   height: 10px;
   cursor: ne-resize;

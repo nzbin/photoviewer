@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import defaults from './defaults';
+import DEFAULTS from './defaults';
 
 import {
   $W,
@@ -36,11 +36,11 @@ import resizable from './resizable';
  */
 class PhotoViewer {
 
-  constructor(el, items, options) {
+  constructor(items, options, el) {
 
     let self = this;
 
-    this.options = $.extend(true, {}, defaults, options);
+    this.options = $.extend(true, {}, DEFAULTS, options);
 
     if (options && $.isArray(options.footToolbar)) {
       this.options.footToolbar = options.footToolbar;
@@ -75,11 +75,11 @@ class PhotoViewer {
       top: null
     };
 
-    this.init(el, items, self.options);
+    this.init(items, self.options, el);
 
   }
 
-  init(el, items, opts) {
+  init(items, opts, el) {
 
     this.groupData = items;
     this.groupIndex = opts['index'];
@@ -160,18 +160,20 @@ class PhotoViewer {
 
     // photoviewer base HTML
     let photoviewerHTML = `<div class="${NS}-modal">
-                            <div class="${NS}-header">
-                              <div class="${NS}-toolbar ${NS}-toolbar-head">
-                                ${this._creatBtns(this.options.headToolbar, btnsTpl)}
+                            <div class="${NS}-inner">
+                              <div class="${NS}-header">
+                                <div class="${NS}-toolbar ${NS}-toolbar-head">
+                                  ${this._creatBtns(this.options.headToolbar, btnsTpl)}
+                                </div>
+                                ${this._creatTitle()}
                               </div>
-                              ${this._creatTitle()}
-                            </div>
-                            <div class="${NS}-stage">
-                              <img class="${NS}-image" src="" alt="" />
-                            </div>
-                            <div class="${NS}-footer">
-                              <div class="${NS}-toolbar ${NS}-toolbar-foot">
-                                ${this._creatBtns(this.options.footToolbar, btnsTpl)}
+                              <div class="${NS}-stage">
+                                <img class="${NS}-image" src="" alt="" />
+                              </div>
+                              <div class="${NS}-footer">
+                                <div class="${NS}-toolbar ${NS}-toolbar-foot">
+                                  ${this._creatBtns(this.options.footToolbar, btnsTpl)}
+                                </div>
                               </div>
                             </div>
                           </div>`;
@@ -260,7 +262,7 @@ class PhotoViewer {
 
   }
 
-  close(el) {
+  close() {
 
     this._triggerHook('beforeClose', this.$el);
 
@@ -445,7 +447,7 @@ class PhotoViewer {
 
     let self = this;
 
-    let loaderHTML = `<div class="${NS}-loader"><i class="${this.options.icons.loader}"></i></div>`;
+    let loaderHTML = `<div class="${NS}-loader"></div>`;
 
     // loader start
     this.$photoviewer.append(loaderHTML);
@@ -877,7 +879,6 @@ window.PhotoViewer = PhotoViewer;
  * jQuery plugin
  */
 
-// jquery element of calling plugin
 let jqEl = null,
   getImgGroup = function (list, groupName) {
 
@@ -911,7 +912,7 @@ $.fn.photoviewer = function (options) {
   }
 
   // Get init event, 'click' or 'dblclick'
-  let opts = $.extend(true, {}, defaults, options);
+  let opts = $.extend(true, {}, DEFAULTS, options);
 
   // We should get zIndex of options before plugin's init.
   PUBLIC_VARS['zIndex'] = opts.zIndex;
@@ -946,18 +947,14 @@ $.fn.photoviewer = function (options) {
         groupList = $D.find('[data-group="' + currentGroupName + '"]');
 
       if (currentGroupName !== undefined) {
-
         items = getImgGroup(groupList, currentGroupName);
         options['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
-
       } else {
-
         items = getImgGroup(jqEl.not('[data-group]'));
         options['index'] = $(this).index();
-
       }
 
-      $(this).data(NS, new PhotoViewer(this, items, options));
+      $(this).data(NS, new PhotoViewer(items, options, this));
 
     });
 
@@ -982,18 +979,14 @@ $D.on(CLICK_EVENT + EVENT_NS, '[data-' + NS + ']', function (e) {
     groupList = $D.find('[data-group="' + currentGroupName + '"]');
 
   if (currentGroupName !== undefined) {
-
     items = getImgGroup(groupList, currentGroupName);
-    defaults['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
-
+    DEFAULTS['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
   } else {
-
     items = getImgGroup(jqEl.not('[data-group]'));
-    defaults['index'] = $(this).index();
-
+    DEFAULTS['index'] = $(this).index();
   }
 
-  $(this).data(NS, new PhotoViewer(this, items, defaults));
+  $(this).data(NS, new PhotoViewer(items, DEFAULTS, this));
 
 });
 

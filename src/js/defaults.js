@@ -71,8 +71,7 @@ export default {
     fullscreen: 'fa fa-photo',
     actualSize: 'fa fa-arrows-alt',
     rotateLeft: 'fa fa-rotate-left',
-    rotateRight: 'fa fa-rotate-right',
-    loader: 'fa fa-spinner fa-pulse'
+    rotateRight: 'fa fa-rotate-right'
   },
 
   // Customize language of button title
