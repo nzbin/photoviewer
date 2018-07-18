@@ -92,9 +92,6 @@ export default {
   // Enable multiple instances
   multiInstances: true,
 
-  // Init trigger event
-  initEvent: 'click',
-
   // Enable animation
   initAnimation: true,
 

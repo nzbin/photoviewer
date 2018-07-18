@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.0.0-beta.0
+ * photoviewer - v2.0.0-beta.1
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -86,8 +86,6 @@
     },
     // Enable multiple instances
     multiInstances: true,
-    // Init trigger event
-    initEvent: 'click',
     // Enable animation
     initAnimation: true,
     // Disable modal position fixed when change images

@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.0.0-beta.0
+ * photoviewer - v2.0.0-beta.1
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -160,14 +160,16 @@
   content: '';
   display: inline-block;
   position: relative;
-  width: 35px;
-  height: 35px;
+  width: 36px;
+  height: 36px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
   border-width: 5px;
   border-style: solid;
   border-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(255, 255, 255, 0.5);
   border-radius: 100%;
-  -webkit-animation: photoviewerLoading 1s infinite linear;
-  animation: photoviewerLoading 1s infinite linear;
+  -webkit-animation: magnifyLoading 1s infinite linear;
+  animation: magnifyLoading 1s infinite linear;
 }
 
 .photoviewer-loader::after {
