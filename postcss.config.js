@@ -26,7 +26,8 @@ module.exports = ctx => ({
       header: banner,
     },
     'autoprefixer': {
-      cascade: false
+      cascade: false,
+      browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']
     },
     cssnano: ctx.env === 'production' ? {} : false
   }
