@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-beta.1",
   "description": "A JS plugin to view images just like in Windows",
   "main": "dist/photoviewer.js",
   "homepage": "https://github.com/nzbin/photoviewer#readme",
@@ -41,7 +41,7 @@
     "copy": "run-s copy:css copy:js",
     "copy:css": "cpy dist/photoviewer.css docs/css",
     "copy:js": "cpy dist/photoviewer.js docs/js",
-    "release": "run-s build compress",
+    "release": "run-s build compress copy",
     "release:css": "run-s build:css compress:css",
     "release:js": "run-s build:js compress:js",
     "lint": "run-s lint:css lint:js",
