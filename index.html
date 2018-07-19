@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="photoviewer,jquery plugin,lightbox,viewer,Windows 照片查看器,图片查看器,模态窗,拖拽,缩放,旋转,平移,最大化">
+  <title>PhotoViewer</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/photoviewer.css" rel="stylesheet">
+  <link href="css/snack.css" rel="stylesheet">
+  <link href="css/snack-helper.css" rel="stylesheet">
+  <link href="css/docs.css" rel="stylesheet">
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <!--[if lt IE 9]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <div class="container">
+    <div class="header p-20 text-white text-center m-l--15 m-r--15">
+      <h1 class="m-t-15 m-b-10">PhotoViewer</h1>
+      <p>PhotoViewer is a jQuery plugin to view images just like in Windows.</p>
+      <p>
+        <a class="btn primary m-5" href="https://github.com/nzbin/photoviewer">View on GitHub</a>
+        <a class="btn danger m-5" href="https://github.com/nzbin/photoviewer/archive/master.zip">Download</a>
+      </p>
+    </div>
+    <h2 class="b-b-1 p-b-10 p-t-10 m-t-30" id="examples">Examples</h2>
+    <p>All the pictures come from Flickr website, copyright to the original author.
+    </p>
+
+    <h3 class="f-s-18">1. initialize with jQuery</h3>
+
+    <div class="image-set">
+      <a data-gallery="jquery" data-caption="Slipping Away by Jerry Fryer" data-group="a" href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
+        <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
+      </a>
+      <a data-gallery="jquery" data-caption="Mi Fuego by albert dros" data-group="a" href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
+        <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
+      </a>
+      <a data-gallery="jquery" data-caption="Winter Fairytale by Achim Thomae" data-group="a" href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
+        <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
+      </a>
+    </div>
+
+    <h3 class="f-s-18">2. initialize manually with an Array from a list of links</h3>
+
+    <div class="image-set">
+      <a data-gallery="manual" href="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg" data-group="b">
+        <img src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
+      </a>
+      <a data-gallery="manual" href="https://farm5.staticflickr.com/4304/35957594681_187d1eab44_z.jpg" data-group="b">
+        <img src="https://farm5.staticflickr.com/4304/35957594681_187d1eab44_s.jpg" alt="">
+      </a>
+      <a data-gallery="manual" href="https://farm1.staticflickr.com/512/32967783396_a6b4babd92_z.jpg" data-group="b">
+        <img src="https://farm1.staticflickr.com/512/32967783396_a6b4babd92_s.jpg" alt="">
+      </a>
+    </div>
+
+    <h3 class="f-s-18">3. initialize with an Array of images Object</h3>
+    <div>
+      <button type="button" class="btn default">Open PhotoViewer</button>
+    </div>
+
+    <footer class="footer text-center">
+      <p class="text-center">Designed by
+        <a href="https://github.com/nzbin" target="_blank">nzbin</a> ❤️ Made with using
+        <a href="https://github.com/nzbin/snack" target="_blank">snack</a>
+      </p>
+    </footer>
+  </div>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/photoviewer.js"></script>
+  <script>
+
+    // jQuery plugin
+    $('[data-gallery=jquery]').photoviewer();
+
+    // initialize manually with an Array from a list of links
+    $('[data-gallery=manual]').click(function(e){
+
+      e.preventDefault();
+
+      var items = [],
+          options = {
+            index: $(this).index()
+          };
+
+      $('[data-gallery=manual]').each(function(){
+        let src = $(this).attr('href');
+        items.push({
+          src: src
+        });
+      });
+
+      new PhotoViewer(items, options);
+
+    });
+
+    // initialize with an Array of images Object
+    $('button').click(function () {
+
+      new PhotoViewer([{
+        src: 'https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg',
+      }, {
+        src: 'https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg',
+      }, {
+        src: 'https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg',
+      }]);
+
+    });
+  </script>
+</body>
+
+</html>
