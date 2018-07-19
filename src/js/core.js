@@ -904,6 +904,8 @@ $.fn.photoviewer = function (options) {
 
   jqEl = $(this);
 
+  options = options ? options : {};
+
   // Convert a numeric string into a number
   for (let key in options) {
     if (typeof (options[key]) === 'string' && !isNaN(options[key])) {
@@ -923,19 +925,7 @@ $.fn.photoviewer = function (options) {
 
   } else {
 
-    if (opts.initEvent === 'dblclick') {
-
-      jqEl.off('click' + EVENT_NS).on('click' + EVENT_NS, function (e) {
-
-        e.preventDefault();
-        // This will stop triggering data-api event
-        e.stopPropagation();
-
-      });
-
-    }
-
-    jqEl.off(opts.initEvent + EVENT_NS).on(opts.initEvent + EVENT_NS, function (e) {
+    jqEl.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
 
       e.preventDefault();
       // This will stop triggering data-api event

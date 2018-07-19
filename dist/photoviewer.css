@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.0.0-beta.1
+ * photoviewer - v2.0.0-beta.2
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -24,9 +24,11 @@
 }
 
 .photoviewer-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #111;
   background-color: rgba(0, 0, 0, 0.85);
   -webkit-box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);

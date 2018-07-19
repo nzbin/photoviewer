@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.0.0-beta.1
+ * photoviewer - v2.0.0-beta.2
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -1415,7 +1415,8 @@
   };
 
   $$1.fn.photoviewer = function (options) {
-    jqEl = $$1(this); // Convert a numeric string into a number
+    jqEl = $$1(this);
+    options = options ? options : {}; // Convert a numeric string into a number
 
     for (var key in options) {
       if (typeof options[key] === 'string' && !isNaN(options[key])) {
@@ -1429,15 +1430,7 @@
     PUBLIC_VARS['zIndex'] = opts.zIndex;
 
     if (typeof options === 'string') ; else {
-      if (opts.initEvent === 'dblclick') {
-        jqEl.off('click' + EVENT_NS).on('click' + EVENT_NS, function (e) {
-          e.preventDefault(); // This will stop triggering data-api event
-
-          e.stopPropagation();
-        });
-      }
-
-      jqEl.off(opts.initEvent + EVENT_NS).on(opts.initEvent + EVENT_NS, function (e) {
+      jqEl.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
         e.preventDefault(); // This will stop triggering data-api event
 
         e.stopPropagation(); // Get image group
