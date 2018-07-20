@@ -1029,7 +1029,7 @@
     _proto.setImgTitle = function setImgTitle(url) {
       var caption = this.groupData[this.groupIndex].caption,
           captionTxt = caption ? caption : getImageNameFromUrl(url);
-      this.$title.text(captionTxt);
+      this.$title.html(captionTxt);
     };
 
     _proto.jump = function jump(index) {

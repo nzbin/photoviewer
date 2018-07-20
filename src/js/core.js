@@ -491,7 +491,7 @@ class PhotoViewer {
     let caption = this.groupData[this.groupIndex].caption,
       captionTxt = caption ? caption : getImageNameFromUrl(url);
 
-    this.$title.text(captionTxt);
+    this.$title.html(captionTxt);
 
   }
 
