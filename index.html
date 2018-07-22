@@ -116,7 +116,7 @@ $('[data-gallery=manual]').click(function (e) {
       index: $(this).index()
     };
   
-  // looping to create array
+  // looping to create images array
   $('[data-gallery=manual]').each(function () {
     let src = $(this).attr('href');
     items.push({
@@ -144,7 +144,7 @@ $('[data-gallery=manual]').click(function (e) {
 
     <h4>Way 2: Initializing as jQuery plugin</h4>
     <p>If you use PhotoViewer as a jQuery plugin, it's just same to <a href="https://github.com/nzbin/magnify" target="_blank">Magnify</a> except namespace.</p>
-    <p>You can make DOM structure like</p>
+    <p>You can make DOM structure like this</p>
     <pre class="prettyprint">
 &lt;a data-gallery=&quot;jquery&quot; href=&quot;big-1.jpg&quot;&gt;
   &lt;img src=&quot;small-1.jpg&quot;&gt;
@@ -163,7 +163,24 @@ $('[data-gallery=manual]').click(function (e) {
 &lt;img data-gallery=&quot;jquery&quot; data-src=&quot;big-3.jpg&quot; src=&quot;small-3.jpg&quot;&gt;
 </pre>
 
-   <p>Initializing with jQuery is the simplest.</p>
+  <p>All structures above have optional attributes as below:</p>
+  <ul>
+    <li>Add a
+      <code>data-src</code> attribute to link big image if you do not want to use a
+      <code>&lt;a&gt;</code> tag. If you use it in a
+      <code>&lt;a&gt;</code> tag, it will override the image link in
+      <code>href</code> attribute.</li>
+    <li>Add a
+      <code>data-caption</code> attribute if you want to show a caption. If you are not using this attribute, it will show the image name in the
+      url when you set the
+      <code>title</code> option
+      <code>true</code>.</li>
+    <li>Add a
+      <code>data-group</code> attribute if you want to set the images in groups.
+    </li>
+  </ul>
+
+   <p>Initializing as jQuery plugin is the simplest.</p>
    <pre class="prettyprint">
 $('[data-gallery=jquery]').photoviewer(options);
 </pre>
