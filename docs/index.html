@@ -89,7 +89,7 @@ var viewer = new PhotoViewer(items, options);
 
     <!-- Initializing form a list of links -->
     <h3>Initializing form a list of links</h3>
-    <p>There have 2 ways to initializing the plugin form a list of links</p>
+    <p>There have 2 ways to initializing the plugin form a list of links.</p>
     <h4>Way 1: Bind event to links manually</h4>
     <p>The default DOM structure as following:</p>
     <pre class="prettyprint">
@@ -143,7 +143,8 @@ $('[data-gallery=manual]').click(function (e) {
     </div>
 
     <h4>Way 2: Initializing as jQuery plugin</h4>
-    <p>If you use PhotoViewer as a jQuery plugin, it's just same to <a href="https://github.com/nzbin/magnify" target="_blank">Magnify</a> except namespace.</p>
+    <p>If you use PhotoViewer as a jQuery plugin, it's just same to
+      <a href="https://github.com/nzbin/magnify" target="_blank">Magnify</a> except namespace.</p>
     <p>You can make DOM structure like this</p>
     <pre class="prettyprint">
 &lt;a data-gallery=&quot;jquery&quot; href=&quot;big-1.jpg&quot;&gt;
@@ -163,29 +164,30 @@ $('[data-gallery=manual]').click(function (e) {
 &lt;img data-gallery=&quot;jquery&quot; data-src=&quot;big-3.jpg&quot; src=&quot;small-3.jpg&quot;&gt;
 </pre>
 
-  <p>All structures above have optional attributes as below:</p>
-  <ul>
-    <li>Add a
-      <code>data-src</code> attribute to link big image if you do not want to use a
-      <code>&lt;a&gt;</code> tag. If you use it in a
-      <code>&lt;a&gt;</code> tag, it will override the image link in
-      <code>href</code> attribute.</li>
-    <li>Add a
-      <code>data-caption</code> attribute if you want to show a caption. If you are not using this attribute, it will show the image name in the
-      url when you set the
-      <code>title</code> option
-      <code>true</code>.</li>
-    <li>Add a
-      <code>data-group</code> attribute if you want to set the images in groups.
-    </li>
-  </ul>
+    <p>All structures above have optional attributes as below:</p>
+    <ul>
+      <li>Add a
+        <code>data-src</code> attribute to link big image if you do not want to use a
+        <code>&lt;a&gt;</code> tag. If you use it in a
+        <code>&lt;a&gt;</code> tag, it will override the image link in
+        <code>href</code> attribute.</li>
+      <li>Add a
+        <code>data-caption</code> attribute if you want to show a caption. If you are not using this attribute, it will show the image name in the
+        url when you set the
+        <code>title</code> option
+        <code>true</code>.</li>
+      <li>Add a
+        <code>data-group</code> attribute if you want to set the images in groups.
+      </li>
+    </ul>
 
-   <p>Initializing as jQuery plugin is the simplest.</p>
-   <pre class="prettyprint">
+    <p>Initializing as jQuery plugin is the simplest.</p>
+    <pre class="prettyprint">
 $('[data-gallery=jquery]').photoviewer(options);
 </pre>
-   <p>If you add attribute <code>data-photoviewer</code>, you can write none of js, it will initialize automaticlly.</p>
-   <div class="image-set">
+    <p>If you add attribute
+      <code>data-photoviewer</code>, you can write none of js, it will initialize automaticlly.</p>
+    <div class="image-set">
       <a data-gallery="jquery" data-caption="Slipping Away by Jerry Fryer" data-group="a" href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
         <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
       </a>
@@ -198,8 +200,172 @@ $('[data-gallery=jquery]').photoviewer(options);
     </div>
 
     <!-- Options -->
-    <!-- <h2 class="b-b-1 p-b-10 p-t-10 m-t-30">Options</h2> -->
-   
+    <h2 class="b-b-1 p-b-10 p-t-10 m-t-30">Options</h2>
+    <h3>Index
+      <small>
+        <code>0</code>
+      </small>
+    </h3>
+    <p>Start at first image.</p>
+    <h3>Draggble
+      <small>
+        <code>true</code>
+      </small>
+    </h3>
+    <p>If ture, it allow modal dragging.</p>
+    <h3>resizable
+      <small>
+        <code>true</code>
+      </small>
+    </h3>
+    <p>If ture, it allow modal resizing.</p>
+    <h3>movable
+      <small>
+        <code>true</code>
+      </small>
+    </h3>
+    <p>If ture, it allow image moving.</p>
+    <h3>keyboard
+      <small>
+        <code>true</code>
+      </small>
+    </h3>
+    <p>If ture, it allow keyboard control. It is similar to Windows photo viewer.</p>
+    <ul>
+      <li>
+        <kbd>←</kbd> prev image
+      </li>
+      <li>
+        <kbd>→</kbd> next image
+      </li>
+      <li>
+        <kbd>+</kbd> zoom in image
+      </li>
+      <li>
+        <kbd>ctrl</kbd> +
+        <kbd>alt</kbd> +
+        <kbd>0</kbd> image autual size
+      </li>
+      <li>
+        <kbd>ctrl</kbd> +
+        <kbd>,</kbd> rotate image left
+      </li>
+      <li>
+        <kbd>ctrl</kbd> +
+        <kbd>.</kbd> rotate image right
+      </li>
+    </ul>
+    <h3>title
+      <small>
+        <code>true</code>
+      </small>
+    </h3>
+    <p>If ture, it will show image title on header.</p>
+    <h3>fixedModalSize
+      <small>
+        <code>false</code>
+      </small>
+    </h3>
+    <p>If false, the modal init size will fit to image size. If true, the modal init size will be set with modalWidth and modalHeight.</p>
+    <h3>modalWidth
+      <small>
+        <code>320</code>
+      </small>
+    </h3>
+    <p>The modal min width.</p>
+    <h3>modalHeight
+      <small>
+        <code>320</code>
+      </small>
+    </h3>
+    <p>The modal min height.</p>
+    <h3>gapThreshold
+      <small>
+        <code>0.02</code>
+      </small>
+    </h3>
+    <p>There will have a gap if modal too big to beyond the browser.</p>
+    <h3>ratioThreshold
+      <small>
+        <code>0.01</code>
+      </small>
+    </h3>
+    <p>Image zoom ratio threshold.</p>
+    <h3>minRatio
+      <small>
+        <code>0.1</code>
+      </small>
+    </h3>
+    <p>The min ratio(10%) to show image.</p>
+    <h3>maxRatio
+      <small>
+        <code>16</code>
+      </small>
+    </h3>
+    <p>The max ratio(160%) to show image.</p>
+    <h3>icons
+      <small>
+        <code>object</code>
+      </small>
+    </h3>
+    <p>You can customize the icons class in following key.</p>
+    <h3>headToolbar
+      <small>
+        <code>'maximize','close']</code>
+      </small>
+    </h3>
+    <p>The buttons display in header toolbar</p>
+    <h3>footToolbar
+      <small>
+        <code>['zoomIn','zoomOut','prev','fullscreen','next','actualSize','rotateRight']</code>
+      </small>
+    </h3>
+    <p>The buttons display in footer toolbar.</p>
+    <h3>fixedContent
+      <small>
+        <code>true</code>
+      </small>
+    </h3>
+    <p>If true, the content will be fixed.</p>
+    <h3>i18n
+      <small>
+        <code>object</code>
+      </small>
+    </h3>
+    <p>You can customize the buttons title in following key.</p>
+    <h3>initMaximized
+      <small>
+        <code>false</code>
+      </small>
+    </h3>
+    <p>If false, the modal size will be set of image size or what you set. If true, the modal size will be set maximized when
+      init
+    </p>
+    <h3>initAnimation
+      <small>
+        <code>true</code>
+      </small>
+    </h3>
+    <p>If false, it will not have animation at plugin's init.</p>
+    <h3>fixedModalPos
+      <small>
+        <code>false</code>
+      </small>
+    </h3>
+    <p>if true, the modal position will be fixed when change images.</p>
+    <h3>zIndex
+      <small>
+        <code>1090</code>
+      </small>
+    </h3>
+    <p>The modal style of z-index, it is useful with multiple instances.</p>
+    <h3>dragHandle
+      <small>
+        <code>modal</code>
+      </small>
+    </h3>
+    <p>The handle of draggable.</p>
+
 
     <footer class="footer text-center">
       <p class="text-center">Designed by
