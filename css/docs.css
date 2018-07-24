@@ -1,3 +1,8 @@
+html, body {
+  font-size: 16px;
+  line-height: 24px;
+}
+
 .container {
   max-width: 840px;
 }

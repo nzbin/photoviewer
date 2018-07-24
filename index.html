@@ -203,34 +203,34 @@ $('[data-gallery=jquery]').photoviewer(options);
     <h2 class="b-b-1 p-b-10 p-t-10 m-t-30">Options</h2>
     <h3>Index
       <small>
-        <code>0</code>
+        <code>number 0</code>
       </small>
     </h3>
-    <p>Start at first image.</p>
+    <p>The images array index. If <code>0</code>, it will show first image when photoviewer opened.</p>
     <h3>Draggble
       <small>
-        <code>true</code>
+        <code>boolean true</code>
       </small>
     </h3>
     <p>If ture, it allow modal dragging.</p>
     <h3>resizable
       <small>
-        <code>true</code>
+        <code>boolean true</code>
       </small>
     </h3>
     <p>If ture, it allow modal resizing.</p>
     <h3>movable
       <small>
-        <code>true</code>
+        <code>boolean true</code>
       </small>
     </h3>
     <p>If ture, it allow image moving.</p>
     <h3>keyboard
       <small>
-        <code>true</code>
+        <code>boolean true</code>
       </small>
     </h3>
-    <p>If ture, it allow keyboard control. It is similar to Windows photo viewer.</p>
+    <p>Make photoviewer can be controled by keyboard. The shortcut key is similar to Windows photo viewer.</p>
     <ul>
       <li>
         <kbd>←</kbd> prev image
@@ -257,114 +257,116 @@ $('[data-gallery=jquery]').photoviewer(options);
     </ul>
     <h3>title
       <small>
-        <code>true</code>
+        <code>boolean true</code>
       </small>
     </h3>
     <p>If ture, it will show image title on header.</p>
     <h3>fixedModalSize
       <small>
-        <code>false</code>
+        <code>boolean false</code>
       </small>
     </h3>
-    <p>If false, the modal init size will fit to image size. If true, the modal init size will be set with modalWidth and modalHeight.</p>
+    <p>This option will set photoviewer's size when it opened. If false, the modal initialized size will fit to image size. If true, the modal initialized size will be set with modalWidth and modalHeight.</p>
     <h3>modalWidth
       <small>
         <code>320</code>
       </small>
     </h3>
-    <p>The modal min width.</p>
+    <p>It's the modal min width or modal initialized width when opened.</p>
     <h3>modalHeight
       <small>
         <code>320</code>
       </small>
     </h3>
-    <p>The modal min height.</p>
+    <p>It's the modal min height or modal initialized height when opened.</p>
     <h3>gapThreshold
       <small>
-        <code>0.02</code>
+        <code>number 0.02</code>
       </small>
     </h3>
-    <p>There will have a gap if modal too big to beyond the browser.</p>
+    <p>The gap size threshold. There will have a gap if modal too large to beyond the browser. Its min value is <code>0</code>, means the modal's width or height should be equal to browser window if it's too large.</p>
     <h3>ratioThreshold
       <small>
-        <code>0.01</code>
+        <code>number 0.01</code>
       </small>
     </h3>
     <p>Image zoom ratio threshold.</p>
     <h3>minRatio
       <small>
-        <code>0.1</code>
+        <code>number 0.1</code>
       </small>
     </h3>
-    <p>The min ratio(10%) to show image.</p>
+    <p>The min ratio to show image. <code>0.1</code> means the image can be zoomed 0.1x from original size.</p>
     <h3>maxRatio
       <small>
-        <code>16</code>
+        <code>number 16</code>
       </small>
     </h3>
-    <p>The max ratio(160%) to show image.</p>
+    <p>The max ratio to show image. <code>16</code> means the image can be zoomed 16x from original size.</p>
+    
+    <h3>headToolbar
+      <small>
+        <code>array ['maximize','close']</code>
+      </small>
+    </h3>
+    <p>The buttons display in header toolbar.</p>
+    <h3>footToolbar
+      <small>
+        <code>array ['zoomIn','zoomOut','prev','fullscreen','next','actualSize','rotateRight']</code>
+      </small>
+    </h3>
+    <p>The buttons display in footer toolbar.</p>
+    <h3>fixedContent
+      <small>
+        <code>boolean true</code>
+      </small>
+    </h3>
+    <p>If true, the document page can not scoll.</p>
+    
+    <h3>initMaximized
+      <small>
+        <code>boolean false</code>
+      </small>
+    </h3>
+    <p>If false, the modal size will be set of image size or what you set with modalWidth and modalHeight. If true, the modal size will be set maximized when
+      initialized just like other lightbox.
+    </p>
+    <h3>initAnimation
+      <small>
+        <code>boolean true</code>
+      </small>
+    </h3>
+    <p>If false, it will not have animation at plugin's initialized.</p>
+    <h3>fixedModalPos
+      <small>
+        <code>boolean false</code>
+      </small>
+    </h3>
+    <p>If true, the modal position will be fixed when change images.</p>
+    <h3>zIndex
+      <small>
+        <code>number 1090</code>
+      </small>
+    </h3>
+    <p>The modal style of z-index, it is useful with multiple instances.</p>
+    <h3>dragHandle
+      <small>
+        <code>string modal</code>
+      </small>
+    </h3>
+    <p>The handle of draggable.</p>
     <h3>icons
       <small>
         <code>object</code>
       </small>
     </h3>
     <p>You can customize the icons class in following key.</p>
-    <h3>headToolbar
-      <small>
-        <code>'maximize','close']</code>
-      </small>
-    </h3>
-    <p>The buttons display in header toolbar</p>
-    <h3>footToolbar
-      <small>
-        <code>['zoomIn','zoomOut','prev','fullscreen','next','actualSize','rotateRight']</code>
-      </small>
-    </h3>
-    <p>The buttons display in footer toolbar.</p>
-    <h3>fixedContent
-      <small>
-        <code>true</code>
-      </small>
-    </h3>
-    <p>If true, the content will be fixed.</p>
     <h3>i18n
       <small>
         <code>object</code>
       </small>
     </h3>
     <p>You can customize the buttons title in following key.</p>
-    <h3>initMaximized
-      <small>
-        <code>false</code>
-      </small>
-    </h3>
-    <p>If false, the modal size will be set of image size or what you set. If true, the modal size will be set maximized when
-      init
-    </p>
-    <h3>initAnimation
-      <small>
-        <code>true</code>
-      </small>
-    </h3>
-    <p>If false, it will not have animation at plugin's init.</p>
-    <h3>fixedModalPos
-      <small>
-        <code>false</code>
-      </small>
-    </h3>
-    <p>if true, the modal position will be fixed when change images.</p>
-    <h3>zIndex
-      <small>
-        <code>1090</code>
-      </small>
-    </h3>
-    <p>The modal style of z-index, it is useful with multiple instances.</p>
-    <h3>dragHandle
-      <small>
-        <code>modal</code>
-      </small>
-    </h3>
-    <p>The handle of draggable.</p>
 
 
     <footer class="footer text-center">
