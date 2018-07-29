@@ -35,7 +35,20 @@ export default [
         },
         file: "dist/photoviewer.js",
         format: 'umd',
-        sourcemap: true,
+        sourcemap: true
+      },
+      {
+        file: 'dist/photoviewer.common.js',
+        banner,
+        format: 'cjs',
+        sourcemap: true
+
+      },
+      {
+        file: 'dist/photoviewer.esm.js',
+        banner,
+        format: 'es',
+        sourcemap: true
       }
     ],
     plugins: [
