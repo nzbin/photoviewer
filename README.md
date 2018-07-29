@@ -1,5 +1,8 @@
 # PhotoViewer
 
+[![npm](https://img.shields.io/npm/v/photoviewer.svg)](https://www.npmjs.com/package/photoviewer)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/nzbin/photoviewer)
+
 PhotoViewer is a JS plugin to view images just like in windows. 
 
 ## Main Features
@@ -18,6 +21,3 @@ PhotoViewer is a JS plugin to view images just like in windows.
 ## License
 
 MIT License
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
