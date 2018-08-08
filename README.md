@@ -30,7 +30,7 @@ $ npm install photoviewer --save
 
 ### Step 1: Include files
 
-```js
+```html
 <!-- Core CSS file -->
 <link href="/path/to/photoviewer.css" rel="stylesheet">
 
