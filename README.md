@@ -16,7 +16,6 @@ PhotoViewer is a JS plugin to view images just like in windows.
 - Keyboard control.
 - Fullscreen showing.
 - Multiple instances.
-- Browser support.
 
 ## Installing
 
