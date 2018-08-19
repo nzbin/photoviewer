@@ -3,7 +3,9 @@
 [![npm](https://img.shields.io/npm/v/photoviewer.svg)](https://www.npmjs.com/package/photoviewer)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/nzbin/photoviewer)
 
-PhotoViewer is a JS plugin to view images just like in windows. 
+PhotoViewer is a JS plugin to view images just like in windows.
+
+> If you want to support IE8, please goto [Magnify](https://github.com/nzbin/magnify/).
 
 ## Main Features
 
