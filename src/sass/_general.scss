@@ -43,24 +43,18 @@
 
   .photoviewer-toolbar {
     float: right;
-    margin-right: 5px;
   }
   .photoviewer-button {
-    height: 22px;
-    padding: 0;
-    background-color: #eee;
-    color: #fff;
-    text-shadow: 0 0 1px #000;
+    height: 30px;
 
     &:hover {
-      color: #fff;
-      background-color: #ccc;
+      color: #333;
+      background-color: #eee;
     }
   }
   .photoviewer-button-close {
-    background-color: #ff6e6e;
-  
     &:hover {
+      color: #fff;
       background-color: #ff4545;
     }
   }
@@ -124,9 +118,8 @@
   height: 40px;
   box-sizing: border-box;
   margin: 0;
-  padding: 10px;
-  font-size: 14px;
-  color: #666;
+  font-size: 16px;
+  color: #3d3d3d;
   line-height: 1;
   text-align: center;
   background: none;
@@ -136,7 +129,16 @@
   outline: none;
 
   &:hover {
-    color: #333;
+    color: #111;
+  }
+
+  svg {
+    display: inline-block;
+    font-size: inherit;
+    width: 1em;
+    height: 1em;
+    overflow: visible;
+    vertical-align: -.125em;
   }
 }
 

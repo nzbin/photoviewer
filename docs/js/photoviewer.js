@@ -58,17 +58,17 @@
     footToolbar: ['zoomIn', 'zoomOut', 'prev', 'fullscreen', 'next', 'actualSize', 'rotateRight'],
     // Customize button icon
     icons: {
-      minimize: 'fa fa-window-minimize',
-      maximize: 'fa fa-window-maximize',
-      close: 'fa fa-close',
-      zoomIn: 'fa fa-search-plus',
-      zoomOut: 'fa fa-search-minus',
-      prev: 'fa fa-arrow-left',
-      next: 'fa fa-arrow-right',
-      fullscreen: 'fa fa-photo',
-      actualSize: 'fa fa-arrows-alt',
-      rotateLeft: 'fa fa-rotate-left',
-      rotateRight: 'fa fa-rotate-right'
+      minimize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M20,14H4V10H20\"></path></svg>",
+      maximize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M4,4H20V20H4V4M6,8V18H18V8H6Z\"></path></svg>",
+      close: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5\n    V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z\"></path></svg>",
+      zoomIn: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43\n    C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,\n    13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14M12,10H10V12H9V10H7V9H9\n    V7H10V9H12V10Z\"></path></svg>",
+      zoomOut: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M15.5,14H14.71L14.43,13.73C15.41,12.59 16,11.11 16,\n    9.5A6.5,6.5 0 0,0 9.5,3A6.5,6.5 0 0,0 3,9.5A6.5,6.5 0 0,0 9.5,16C11.11,16 12.59,15.41 13.73,14.43L14,14.71V15.5L19,20.5\n    L20.5,19L15.5,14M9.5,14C7,14 5,12 5,9.5C5,7 7,5 9.5,5C12,5 14,7 14,9.5C14,12 12,14 9.5,14M7,9H12V10H7V9Z\"></path></svg>",
+      prev: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z\"></path></svg>",
+      next: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M16,18H18V6H16M6,18L14.5,12L6,6V18Z\"></path></svg>",
+      fullscreen: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M8.5,12.5L11,15.5L14.5,11L19,17H5M23,18V6A2,2 0 0,\n    0 21,4H3A2,2 0 0,0 1,6V18A2,2 0 0,0 3,20H21A2,2 0 0,0 23,18Z\"></path></svg>",
+      actualSize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M9.5,13.09L10.91,14.5L6.41,19H10V21H3V14H5V17.59\n    L9.5,13.09M10.91,9.5L9.5,10.91L5,6.41V10H3V3H10V5H6.41L10.91,9.5M14.5,13.09L19,17.59V14H21V21H14V19H17.59L13.09,14.5L14.5,\n    13.09M13.09,9.5L17.59,5H14V3H21V10H19V6.41L14.5,10.91L13.09,9.5Z\"></path></svg>",
+      rotateLeft: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M13,4.07V1L8.45,5.55L13,10V6.09C15.84,6.57 18,9.03 18,\n    12C18,14.97 15.84,17.43 13,17.91V19.93C16.95,19.44 20,16.08 20,12C20,7.92 16.95,4.56 13,4.07M7.1,18.32C8.26,19.22 9.61,19.76 11,\n    19.93V17.9C10.13,17.75 9.29,17.41 8.54,16.87L7.1,18.32M6.09,13H4.07C4.24,14.39 4.79,15.73 5.69,16.89L7.1,15.47C6.58,14.72 6.23,\n    13.88 6.09,13M7.11,8.53L5.7,7.11C4.8,8.27 4.24,9.61 4.07,11H6.09C6.23,10.13 6.58,9.28 7.11,8.53Z\"></path></svg>",
+      rotateRight: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M16.89,15.5L18.31,16.89C19.21,15.73 19.76,14.39 19.93,\n    13H17.91C17.77,13.87 17.43,14.72 16.89,15.5M13,17.9V19.92C14.39,19.75 15.74,19.21 16.9,18.31L15.46,16.87C14.71,17.41 13.87,\n    17.76 13,17.9M19.93,11C19.76,9.61 19.21,8.27 18.31,7.11L16.89,8.53C17.43,9.28 17.77,10.13 17.91,11M15.55,5.55L11,1V4.07C7.06,\n    4.56 4,7.92 4,12C4,16.08 7.05,19.44 11,19.93V17.91C8.16,17.43 6,14.97 6,12C6,9.03 8.16,6.57 11,6.09V10L15.55,5.55Z\"></path></svg>"
     },
     // Customize language of button title
     i18n: {
@@ -750,17 +750,17 @@
 
     _proto._creatDOM = function _creatDOM() {
       var btnsTpl = {
-        minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\" title=\"" + this.options.i18n.minimize + "\">\n                    <i class=\"" + this.options.icons.minimize + "\" aria-hidden=\"true\"></i>\n                  </button>",
-        maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\" title=\"" + this.options.i18n.maximize + "\">\n                    <i class=\"" + this.options.icons.maximize + "\" aria-hidden=\"true\"></i>                  </button>",
-        close: "<button class=\"" + NS + "-button " + NS + "-button-close\" title=\"" + this.options.i18n.close + "\">                <i class=\"" + this.options.icons.close + "\" aria-hidden=\"true\"></i>              </button>",
-        zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\" title=\"" + this.options.i18n.zoomIn + "\">                  <i class=\"" + this.options.icons.zoomIn + "\" aria-hidden=\"true\"></i>                </button>",
-        zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\" title=\"" + this.options.i18n.zoomOut + "\">                  <i class=\"" + this.options.icons.zoomOut + "\" aria-hidden=\"true\"></i>                </button>",
-        prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\" title=\"" + this.options.i18n.prev + "\">                <i class=\"" + this.options.icons.prev + "\" aria-hidden=\"true\"></i>              </button>",
-        next: "<button class=\"" + NS + "-button " + NS + "-button-next\" title=\"" + this.options.i18n.next + "\">                <i class=\"" + this.options.icons.next + "\" aria-hidden=\"true\"></i>              </button>",
-        fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\" title=\"" + this.options.i18n.fullscreen + "\">                    <i class=\"" + this.options.icons.fullscreen + "\" aria-hidden=\"true\"></i>                  </button>",
-        actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" title=\"" + this.options.i18n.actualSize + "\">                      <i class=\"" + this.options.icons.actualSize + "\" aria-hidden=\"true\"></i>                    </button>",
-        rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" title=\"" + this.options.i18n.rotateLeft + "\">                      <i class=\"" + this.options.icons.rotateLeft + "\" aria-hidden=\"true\"></i>                    </button>",
-        rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">                      <i class=\"" + this.options.icons.rotateRight + "\" aria-hidden=\"true\"></i>                    </button>"
+        minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\" title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
+        maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\" title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
+        close: "<button class=\"" + NS + "-button " + NS + "-button-close\" title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
+        zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\" title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
+        zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\" title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
+        prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\" title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
+        next: "<button class=\"" + NS + "-button " + NS + "-button-next\" title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
+        fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\" title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
+        actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
+        rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
+        rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
       }; // photoviewer base HTML
 
       var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n                            <div class=\"" + NS + "-inner\">\n                              <div class=\"" + NS + "-header\">\n                                <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n                                  " + this._creatBtns(this.options.headToolbar, btnsTpl) + "\n                                </div>\n                                " + this._creatTitle() + "\n                              </div>\n                              <div class=\"" + NS + "-stage\">\n                                <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n                              </div>\n                              <div class=\"" + NS + "-footer\">\n                                <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n                                  " + this._creatBtns(this.options.footToolbar, btnsTpl) + "\n                                </div>\n                              </div>\n                            </div>\n                          </div>";

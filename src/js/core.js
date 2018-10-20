@@ -124,37 +124,37 @@ class PhotoViewer {
 
     let btnsTpl = {
       minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
-                    <i class="${this.options.icons.minimize}" aria-hidden="true"></i>
+                    ${this.options.icons.minimize}
                   </button>`,
       maximize: `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
-                    <i class="${this.options.icons.maximize}" aria-hidden="true"></i>\
+                    ${this.options.icons.maximize}
                   </button>`,
-      close: `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">\
-                <i class="${this.options.icons.close}" aria-hidden="true"></i>\
+      close: `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
+                ${this.options.icons.close}
               </button>`,
-      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">\
-                  <i class="${this.options.icons.zoomIn}" aria-hidden="true"></i>\
+      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
+                  ${this.options.icons.zoomIn}
                 </button>`,
-      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">\
-                  <i class="${this.options.icons.zoomOut}" aria-hidden="true"></i>\
+      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
+                  ${this.options.icons.zoomOut}
                 </button>`,
-      prev: `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">\
-                <i class="${this.options.icons.prev}" aria-hidden="true"></i>\
+      prev: `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
+                ${this.options.icons.prev}
               </button>`,
-      next: `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">\
-                <i class="${this.options.icons.next}" aria-hidden="true"></i>\
+      next: `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
+                ${this.options.icons.next}
               </button>`,
-      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">\
-                    <i class="${this.options.icons.fullscreen}" aria-hidden="true"></i>\
+      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
+                    ${this.options.icons.fullscreen}
                   </button>`,
-      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">\
-                      <i class="${this.options.icons.actualSize}" aria-hidden="true"></i>\
+      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
+                      ${this.options.icons.actualSize}
                     </button>`,
-      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">\
-                      <i class="${this.options.icons.rotateLeft}" aria-hidden="true"></i>\
+      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
+                      ${this.options.icons.rotateLeft}
                     </button>`,
-      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">\
-                      <i class="${this.options.icons.rotateRight}" aria-hidden="true"></i>\
+      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
+                      ${this.options.icons.rotateRight}
                     </button>`
     };
 
