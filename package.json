@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A JS plugin to view images just like in Windows",
   "main": "dist/photoviewer.js",
   "homepage": "https://github.com/nzbin/photoviewer#readme",
