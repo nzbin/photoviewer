@@ -52,15 +52,23 @@ export default {
         stageWidth = $(stage).width(),
         stageHeight = $(stage).height();
 
-      startX = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageX : e.clientX;
-      startY = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageY : e.clientY;
+      startX = e.type === 'touchstart'
+        ? e.originalEvent.targetTouches[0].pageX
+        : e.clientX;
+      startY = e.type === 'touchstart'
+        ? e.originalEvent.targetTouches[0].pageY
+        : e.clientY;
 
       // δ is the difference between image width and height
       δ = !self.isRotated ? 0 : (imageWidth - imageHeight) / 2;
 
       // Width or height difference can be use to limit image right or top position
-      widthDiff = !self.isRotated ? (imageWidth - stageWidth) : (imageHeight - stageWidth);
-      heightDiff = !self.isRotated ? (imageHeight - stageHeight) : (imageWidth - stageHeight);
+      widthDiff = !self.isRotated
+        ? (imageWidth - stageWidth)
+        : (imageHeight - stageWidth);
+      heightDiff = !self.isRotated
+        ? (imageHeight - stageHeight)
+        : (imageWidth - stageHeight);
 
       // Modal can be dragging if image is smaller to stage
       isDragging = (widthDiff > 0 || heightDiff > 0) ? true : false;
@@ -89,8 +97,12 @@ export default {
 
       if (isDragging) {
 
-        let endX = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageX : e.clientX,
-          endY = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageY : e.clientY,
+        let endX = e.type === 'touchmove'
+          ? e.originalEvent.targetTouches[0].pageX
+          : e.clientX,
+          endY = e.type === 'touchmove'
+            ? e.originalEvent.targetTouches[0].pageY
+            : e.clientY,
 
           relativeX = endX - startX,
           relativeY = endY - startY,

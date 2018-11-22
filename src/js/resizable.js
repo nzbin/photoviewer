@@ -94,8 +94,12 @@ export default {
     let getModalOpts = function (dir, offsetX, offsetY) {
 
       // Modal should not move when its width to the minwidth
-      let modalLeft = (-offsetX + modalData.w) > minWidth ? (offsetX + modalData.l) : (modalData.l + modalData.w - minWidth),
-        modalTop = (-offsetY + modalData.h) > minHeight ? (offsetY + modalData.t) : (modalData.t + modalData.h - minHeight);
+      let modalLeft = (-offsetX + modalData.w) > minWidth
+        ? (offsetX + modalData.l)
+        : (modalData.l + modalData.w - minWidth),
+        modalTop = (-offsetY + modalData.h) > minHeight
+          ? (offsetY + modalData.t)
+          : (modalData.t + modalData.h - minHeight);
 
       let opts = {
         'e': {
@@ -142,47 +146,119 @@ export default {
 
       // Image should not move when modal width to the min width
       // The minwidth is modal width, so we should clac the stage minwidth
-      let widthDiff = (offsetX + modalData.w) > minWidth ? (stageData.w - imgWidth + offsetX - δ) : (minWidth - (modalData.w - stageData.w) - imgWidth - δ),
-        heightDiff = (offsetY + modalData.h) > minHeight ? (stageData.h - imgHeight + offsetY + δ) : (minHeight - (modalData.h - stageData.h) - imgHeight + δ),
+      let widthDiff = (offsetX + modalData.w) > minWidth
+        ? (stageData.w - imgWidth + offsetX - δ)
+        : (minWidth - (modalData.w - stageData.w) - imgWidth - δ),
+        heightDiff = (offsetY + modalData.h) > minHeight
+          ? (stageData.h - imgHeight + offsetY + δ)
+          : (minHeight - (modalData.h - stageData.h) - imgHeight + δ),
 
-        widthDiff2 = (-offsetX + modalData.w) > minWidth ? (stageData.w - imgWidth - offsetX - δ) : (minWidth - (modalData.w - stageData.w) - imgWidth - δ),
-        heightDiff2 = (-offsetY + modalData.h) > minHeight ? (stageData.h - imgHeight - offsetY + δ) : (minHeight - (modalData.h - stageData.h) - imgHeight + δ);
+        widthDiff2 = (-offsetX + modalData.w) > minWidth
+          ? (stageData.w - imgWidth - offsetX - δ)
+          : (minWidth - (modalData.w - stageData.w) - imgWidth - δ),
+        heightDiff2 = (-offsetY + modalData.h) > minHeight
+          ? (stageData.h - imgHeight - offsetY + δ)
+          : (minHeight - (modalData.h - stageData.h) - imgHeight + δ);
 
       // Get image position in dragging
-      let imgLeft = (widthDiff > 0 ? $(image).position().left : ($(image).position().left < 0 ? $(image).position().left : 0)) - δ,
-        imgTop = (heightDiff > 0 ? $(image).position().top : ($(image).position().top < 0 ? $(image).position().top : 0)) + δ,
+      let imgLeft = (widthDiff > 0
+        ? $(image).position().left
+        : ($(image).position().left < 0
+          ? $(image).position().left
+          : 0)) - δ,
+        imgTop = (heightDiff > 0
+          ? $(image).position().top
+          : ($(image).position().top < 0
+            ? $(image).position().top
+            : 0)) + δ,
 
-        imgLeft2 = (widthDiff2 > 0 ? $(image).position().left : ($(image).position().left < 0 ? $(image).position().left : 0)) - δ,
-        imgTop2 = (heightDiff2 > 0 ? $(image).position().top : ($(image).position().top < 0 ? $(image).position().top : 0)) + δ;
+        imgLeft2 = (widthDiff2 > 0
+          ? $(image).position().left
+          : ($(image).position().left < 0
+            ? $(image).position().left
+            : 0)) - δ,
+        imgTop2 = (heightDiff2 > 0
+          ? $(image).position().top
+          : ($(image).position().top < 0
+            ? $(image).position().top
+            : 0)) + δ;
 
       let opts = {
         'e': {
-          left: widthDiff >= -δ ? ((widthDiff - δ) / 2 + 'px') : (imgLeft > widthDiff ? (imgLeft + 'px') : (widthDiff + 'px'))
+          left: widthDiff >= -δ
+            ? ((widthDiff - δ) / 2 + 'px')
+            : (imgLeft > widthDiff
+              ? (imgLeft + 'px')
+              : (widthDiff + 'px'))
         },
         's': {
-          top: heightDiff >= δ ? ((heightDiff + δ) / 2 + 'px') : (imgTop > heightDiff ? (imgTop + 'px') : (heightDiff + 'px'))
+          top: heightDiff >= δ
+            ? ((heightDiff + δ) / 2 + 'px')
+            : (imgTop > heightDiff
+              ? (imgTop + 'px')
+              : (heightDiff + 'px'))
         },
         'se': {
-          top: heightDiff >= δ ? ((heightDiff + δ) / 2 + 'px') : (imgTop > heightDiff ? (imgTop + 'px') : (heightDiff + 'px')),
-          left: widthDiff >= -δ ? ((widthDiff - δ) / 2 + 'px') : (imgLeft > widthDiff ? (imgLeft + 'px') : (widthDiff + 'px'))
+          top: heightDiff >= δ
+            ? ((heightDiff + δ) / 2 + 'px')
+            : (imgTop > heightDiff
+              ? (imgTop + 'px')
+              : (heightDiff + 'px')),
+          left: widthDiff >= -δ
+            ? ((widthDiff - δ) / 2 + 'px')
+            : (imgLeft > widthDiff
+              ? (imgLeft + 'px')
+              : (widthDiff + 'px'))
         },
         'w': {
-          left: widthDiff2 >= -δ ? ((widthDiff2 - δ) / 2 + 'px') : (imgLeft2 > widthDiff2 ? (imgLeft2 + 'px') : (widthDiff2 + 'px'))
+          left: widthDiff2 >= -δ
+            ? ((widthDiff2 - δ) / 2 + 'px')
+            : (imgLeft2 > widthDiff2
+              ? (imgLeft2 + 'px')
+              : (widthDiff2 + 'px'))
         },
         'n': {
-          top: heightDiff2 >= δ ? ((heightDiff2 + δ) / 2 + 'px') : (imgTop2 > heightDiff2 ? (imgTop2 + 'px') : (heightDiff2 + 'px'))
+          top: heightDiff2 >= δ
+            ? ((heightDiff2 + δ) / 2 + 'px')
+            : (imgTop2 > heightDiff2
+              ? (imgTop2 + 'px')
+              : (heightDiff2 + 'px'))
         },
         'nw': {
-          top: heightDiff2 >= δ ? ((heightDiff2 + δ) / 2 + 'px') : (imgTop2 > heightDiff2 ? (imgTop2 + 'px') : (heightDiff2 + 'px')),
-          left: widthDiff2 >= -δ ? ((widthDiff2 - δ) / 2 + 'px') : (imgLeft2 > widthDiff2 ? (imgLeft2 + 'px') : (widthDiff2 + 'px'))
+          top: heightDiff2 >= δ
+            ? ((heightDiff2 + δ) / 2 + 'px')
+            : (imgTop2 > heightDiff2
+              ? (imgTop2 + 'px')
+              : (heightDiff2 + 'px')),
+          left: widthDiff2 >= -δ
+            ? ((widthDiff2 - δ) / 2 + 'px')
+            : (imgLeft2 > widthDiff2
+              ? (imgLeft2 + 'px')
+              : (widthDiff2 + 'px'))
         },
         'ne': {
-          top: heightDiff2 >= δ ? ((heightDiff2 + δ) / 2 + 'px') : (imgTop2 > heightDiff2 ? (imgTop2 + 'px') : (heightDiff2 + 'px')),
-          left: widthDiff >= -δ ? ((widthDiff - δ) / 2 + 'px') : (imgLeft > widthDiff ? (imgLeft + 'px') : (widthDiff + 'px'))
+          top: heightDiff2 >= δ
+            ? ((heightDiff2 + δ) / 2 + 'px')
+            : (imgTop2 > heightDiff2
+              ? (imgTop2 + 'px')
+              : (heightDiff2 + 'px')),
+          left: widthDiff >= -δ
+            ? ((widthDiff - δ) / 2 + 'px')
+            : (imgLeft > widthDiff
+              ? (imgLeft + 'px')
+              : (widthDiff + 'px'))
         },
         'sw': {
-          top: heightDiff >= δ ? ((heightDiff + δ) / 2 + 'px') : (imgTop > heightDiff ? (imgTop + 'px') : (heightDiff + 'px')),
-          left: widthDiff2 >= -δ ? ((widthDiff2 - δ) / 2 + 'px') : (imgLeft2 > widthDiff2 ? (imgLeft2 + 'px') : (widthDiff2 + 'px'))
+          top: heightDiff >= δ
+            ? ((heightDiff + δ) / 2 + 'px')
+            : (imgTop > heightDiff
+              ? (imgTop + 'px')
+              : (heightDiff + 'px')),
+          left: widthDiff2 >= -δ
+            ? ((widthDiff2 - δ) / 2 + 'px')
+            : (imgLeft2 > widthDiff2
+              ? (imgLeft2 + 'px')
+              : (widthDiff2 + 'px'))
         }
       };
 
@@ -198,8 +274,12 @@ export default {
       isDragging = true;
       PUBLIC_VARS['isResizing'] = true;
 
-      startX = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageX : e.clientX;
-      startY = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageY : e.clientY;
+      startX = e.type === 'touchstart'
+        ? e.originalEvent.targetTouches[0].pageX
+        : e.clientX;
+      startY = e.type === 'touchstart'
+        ? e.originalEvent.targetTouches[0].pageY
+        : e.clientY;
 
       // Reclac the modal data when mousedown
       modalData = {
@@ -224,9 +304,15 @@ export default {
       };
 
       // δ is the difference between image width and height
-      δ = !self.isRotated ? 0 : (imageData.w - imageData.h) / 2;
-      imgWidth = !self.isRotated ? imageData.w : imageData.h;
-      imgHeight = !self.isRotated ? imageData.h : imageData.w;
+      δ = !self.isRotated
+        ? 0
+        : (imageData.w - imageData.h) / 2;
+      imgWidth = !self.isRotated
+        ? imageData.w
+        : imageData.h;
+      imgHeight = !self.isRotated
+        ? imageData.h
+        : imageData.w;
 
       direction = dir;
 
@@ -246,8 +332,12 @@ export default {
 
       if (isDragging && !self.isMaximized) {
 
-        let endX = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageX : e.clientX,
-          endY = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageY : e.clientY,
+        let endX = e.type === 'touchmove'
+          ? e.originalEvent.targetTouches[0].pageX
+          : e.clientX,
+          endY = e.type === 'touchmove'
+            ? e.originalEvent.targetTouches[0].pageY
+            : e.clientY,
 
           relativeX = endX - startX,
           relativeY = endY - startY;
@@ -271,7 +361,15 @@ export default {
 
       // Set grab cursor
       if (PUBLIC_VARS['isResizing']) {
-        setGrabCursor({ w: imgWidth, h: imgHeight }, { w: $(stage).width(), h: $(stage).height() },
+        setGrabCursor(
+          {
+            w: imgWidth,
+            h: imgHeight
+          },
+          {
+            w: $(stage).width(),
+            h: $(stage).height()
+          },
           stage
         );
       }

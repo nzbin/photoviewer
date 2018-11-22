@@ -47,8 +47,12 @@ export default {
 
       isDragging = true;
 
-      startX = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageX : e.clientX;
-      startY = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageY : e.clientY;
+      startX = e.type === 'touchstart'
+        ? e.originalEvent.targetTouches[0].pageX
+        : e.clientX;
+      startY = e.type === 'touchstart'
+        ? e.originalEvent.targetTouches[0].pageY
+        : e.clientY;
 
       left = $(modal).offset().left;
       top = $(modal).offset().top;
@@ -66,8 +70,12 @@ export default {
 
       if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !self.isMaximized) {
 
-        let endX = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageX : e.clientX,
-          endY = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageY : e.clientY,
+        let endX = e.type === 'touchmove'
+          ? e.originalEvent.targetTouches[0].pageX
+          : e.clientX,
+          endY = e.type === 'touchmove'
+            ? e.originalEvent.targetTouches[0].pageY
+            : e.clientY,
 
           relativeX = endX - startX,
           relativeY = endY - startY;
