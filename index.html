@@ -61,11 +61,11 @@
 var items = [
     {
         src: 'path/to/image1.jpg', // path to image
-        caption: 'Image Caption 1' // If you skip it, there will display the original image name(image1)
+        title: 'Image Caption 1' // If you skip it, there will display the original image name(image1)
     },
     {
         src: 'path/to/image2.jpg',
-        caption: 'Image Caption 2'
+        title: 'Image Caption 2'
     }
 ];
 
@@ -171,7 +171,7 @@ $('[data-gallery=manual]').click(function (e) {
         <code>&lt;a&gt;</code> tag, it will override the image link in
         <code>href</code> attribute.</li>
       <li>Add a
-        <code>data-caption</code> attribute if you want to show a caption. If you are not using this attribute, it will show the image name in the
+        <code>data-title</code> attribute if you want to show a title. If you are not using this attribute, it will show the image name in the
         url when you set the
         <code>title</code> option
         <code>true</code>.</li>
@@ -187,13 +187,13 @@ $('[data-gallery=jquery]').photoviewer(options);
     <p>If you add attribute
       <code>data-photoviewer</code>, you can write none of js, it will initialize automaticlly.</p>
     <div class="image-set">
-      <a data-gallery="jquery" data-caption="Slipping Away by Jerry Fryer" data-group="a" href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
+      <a data-gallery="jquery" data-title="Slipping Away by Jerry Fryer" data-group="a" href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
         <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
       </a>
-      <a data-gallery="jquery" data-caption="Mi Fuego by albert dros" data-group="a" href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
+      <a data-gallery="jquery" data-title="Mi Fuego by albert dros" data-group="a" href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
         <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
       </a>
-      <a data-gallery="jquery" data-caption="Winter Fairytale by Achim Thomae" data-group="a" href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
+      <a data-gallery="jquery" data-title="Winter Fairytale by Achim Thomae" data-group="a" href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
         <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
       </a>
     </div>
@@ -419,13 +419,13 @@ $('[data-gallery=jquery]').photoviewer(options);
 
       new PhotoViewer([{
         src: 'https://c1.staticflickr.com/3/2136/32571842110_faadf0b1a7_k.jpg',
-        caption: 'Glendalough Upper Lake by <a href="https://www.flickr.com/photos/desomnis/">Angelika Hörschläger</a>'
+        title: 'Glendalough Upper Lake by <a href="https://www.flickr.com/photos/desomnis/">Angelika Hörschläger</a>'
       }, {
         src: 'https://c1.staticflickr.com/5/4364/35774111373_187963664b_h.jpg',
-        caption: 'A foggy summer day by <a href="https://www.flickr.com/photos/desomnis/">Angelika Hörschläger</a>'
+        title: 'A foggy summer day by <a href="https://www.flickr.com/photos/desomnis/">Angelika Hörschläger</a>'
       }, {
         src: 'https://c1.staticflickr.com/8/7737/28617607314_170a8e6752_k.jpg',
-        caption: 'My Silver Lining (explore) by <a href="https://www.flickr.com/photos/desomnis/">Angelika Hörschläger</a>'
+        title: 'My Silver Lining (explore) by <a href="https://www.flickr.com/photos/desomnis/">Angelika Hörschläger</a>'
       }]);
 
     });
