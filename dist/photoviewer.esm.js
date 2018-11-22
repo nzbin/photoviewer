@@ -744,17 +744,17 @@ function () {
 
   _proto._creatDOM = function _creatDOM() {
     var btnsTpl = {
-      minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\" title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
-      maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\" title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
-      close: "<button class=\"" + NS + "-button " + NS + "-button-close\" title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
-      zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\" title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
-      zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\" title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
-      prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\" title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
-      next: "<button class=\"" + NS + "-button " + NS + "-button-next\" title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
-      fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\" title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
-      actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
-      rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
-      rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
+      minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\" \n                  title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
+      maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\" \n                  title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
+      close: "<button class=\"" + NS + "-button " + NS + "-button-close\" \n              title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
+      zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\" \n                title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
+      zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\" \n                title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
+      prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\" \n              title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
+      next: "<button class=\"" + NS + "-button " + NS + "-button-next\" \n              title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
+      fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\" \n                    title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
+      actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" \n                    title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
+      rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" \n                    title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
+      rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" \n                      title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
     }; // photoviewer base HTML
 
     var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n                            <div class=\"" + NS + "-inner\">\n                              <div class=\"" + NS + "-header\">\n                                <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n                                  " + this._creatBtns(this.options.headToolbar, btnsTpl) + "\n                                </div>\n                                " + this._creatTitle() + "\n                              </div>\n                              <div class=\"" + NS + "-stage\">\n                                <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n                              </div>\n                              <div class=\"" + NS + "-footer\">\n                                <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n                                  " + this._creatBtns(this.options.footToolbar, btnsTpl) + "\n                                </div>\n                              </div>\n                            </div>\n                          </div>";
@@ -1021,9 +1021,8 @@ function () {
   };
 
   _proto.setImgTitle = function setImgTitle(url) {
-    var caption = this.groupData[this.groupIndex].caption,
-        captionTxt = caption ? caption : getImageNameFromUrl(url);
-    this.$title.html(captionTxt);
+    var title = this.groupData[this.groupIndex].title ? this.groupData[this.groupIndex].title : getImageNameFromUrl(url);
+    this.$title.html(title);
   };
 
   _proto.jump = function jump(index) {
@@ -1401,7 +1400,7 @@ var jqEl = null,
     var src = getImgSrc(this);
     items.push({
       src: src,
-      caption: $$1(this).attr('data-caption'),
+      title: $$1(this).attr('data-title'),
       groupName: groupName
     });
   });

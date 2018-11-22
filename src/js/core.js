@@ -99,7 +99,13 @@ class PhotoViewer {
       this.movable(this.$stage, this.$image);
     }
     if (opts.resizable) {
-      this.resizable(this.$photoviewer, this.$stage, this.$image, opts.modalWidth, opts.modalHeight);
+      this.resizable(
+        this.$photoviewer,
+        this.$stage,
+        this.$image,
+        opts.modalWidth,
+        opts.modalHeight
+      );
     }
 
   }
@@ -123,37 +129,48 @@ class PhotoViewer {
   _creatDOM() {
 
     let btnsTpl = {
-      minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
+      minimize: `<button class="${NS}-button ${NS}-button-minimize" 
+                  title="${this.options.i18n.minimize}">
                     ${this.options.icons.minimize}
                   </button>`,
-      maximize: `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
+      maximize: `<button class="${NS}-button ${NS}-button-maximize" 
+                  title="${this.options.i18n.maximize}">
                     ${this.options.icons.maximize}
                   </button>`,
-      close: `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
+      close: `<button class="${NS}-button ${NS}-button-close" 
+              title="${this.options.i18n.close}">
                 ${this.options.icons.close}
               </button>`,
-      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
+      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" 
+                title="${this.options.i18n.zoomIn}">
                   ${this.options.icons.zoomIn}
                 </button>`,
-      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
+      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" 
+                title="${this.options.i18n.zoomOut}">
                   ${this.options.icons.zoomOut}
                 </button>`,
-      prev: `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
+      prev: `<button class="${NS}-button ${NS}-button-prev" 
+              title="${this.options.i18n.prev}">
                 ${this.options.icons.prev}
               </button>`,
-      next: `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
+      next: `<button class="${NS}-button ${NS}-button-next" 
+              title="${this.options.i18n.next}">
                 ${this.options.icons.next}
               </button>`,
-      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
+      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" 
+                    title="${this.options.i18n.fullscreen}">
                     ${this.options.icons.fullscreen}
                   </button>`,
-      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
+      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" 
+                    title="${this.options.i18n.actualSize}">
                       ${this.options.icons.actualSize}
                     </button>`,
-      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
+      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" 
+                    title="${this.options.i18n.rotateLeft}">
                       ${this.options.icons.rotateLeft}
                     </button>`,
-      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
+      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" 
+                      title="${this.options.i18n.rotateRight}">
                       ${this.options.icons.rotateRight}
                     </button>`
     };
@@ -356,20 +373,34 @@ class PhotoViewer {
     };
 
     // Modal size should calc with stage css value
-    let modalWidth = img.width + getNumFromCSSValue(stageCSS.left) + getNumFromCSSValue(stageCSS.right) +
-      getNumFromCSSValue(stageCSS.borderLeft) + getNumFromCSSValue(stageCSS.borderRight),
-      modalHeight = img.height + getNumFromCSSValue(stageCSS.top) + getNumFromCSSValue(stageCSS.bottom) +
-        getNumFromCSSValue(stageCSS.borderTop) + getNumFromCSSValue(stageCSS.borderBottom);
+    let modalWidth = img.width +
+      getNumFromCSSValue(stageCSS.left) +
+      getNumFromCSSValue(stageCSS.right) +
+      getNumFromCSSValue(stageCSS.borderLeft) +
+      getNumFromCSSValue(stageCSS.borderRight),
+      modalHeight = img.height +
+        getNumFromCSSValue(stageCSS.top) +
+        getNumFromCSSValue(stageCSS.bottom) +
+        getNumFromCSSValue(stageCSS.borderTop) +
+        getNumFromCSSValue(stageCSS.borderBottom);
 
     let gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
       // modal scale to window
-      scale = Math.min(winWidth / (modalWidth * gapThreshold), winHeight / (modalHeight * gapThreshold), 1);
+      scale = Math.min(
+        winWidth / (modalWidth * gapThreshold),
+        winHeight / (modalHeight * gapThreshold),
+        1
+      );
 
     let minWidth = Math.max(modalWidth * scale, this.options.modalWidth),
       minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
 
-    minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
-    minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
+    minWidth = this.options.fixedModalSize
+      ? this.options.modalWidth
+      : Math.round(minWidth);
+    minHeight = this.options.fixedModalSize
+      ? this.options.modalHeight
+      : Math.round(minHeight);
 
     let modalCSSObj = {
       width: minWidth + 'px',
@@ -380,16 +411,12 @@ class PhotoViewer {
 
     // Add modal init animation
     if (this.options.initAnimation) {
-
       this.$photoviewer.animate(modalCSSObj, function () {
         self.setImageSize(img);
       });
-
     } else {
-
       this.$photoviewer.css(modalCSSObj);
       this.setImageSize(img);
-
     }
 
     this.isOpened = true;
@@ -407,9 +434,17 @@ class PhotoViewer {
     let scale = 1;
 
     if (!this.isRotated) {
-      scale = Math.min(stageData.w / img.width, stageData.h / img.height, 1);
+      scale = Math.min(
+        stageData.w / img.width,
+        stageData.h / img.height,
+        1
+      );
     } else {
-      scale = Math.min(stageData.w / img.height, stageData.h / img.width, 1);
+      scale = Math.min(
+        stageData.w / img.height,
+        stageData.h / img.width,
+        1
+      );
     }
 
     this.$image.css({
@@ -428,7 +463,15 @@ class PhotoViewer {
     });
 
     // Set grab cursor
-    setGrabCursor({ w: this.$image.width(), h: this.$image.height() }, { w: this.$stage.width(), h: this.$stage.height() },
+    setGrabCursor(
+      {
+        w: this.$image.width(),
+        h: this.$image.height()
+      },
+      {
+        w: this.$stage.width(),
+        h: this.$stage.height()
+      },
       this.$stage,
       this.isRotated
     );
@@ -488,10 +531,11 @@ class PhotoViewer {
 
   setImgTitle(url) {
 
-    let caption = this.groupData[this.groupIndex].caption,
-      captionTxt = caption ? caption : getImageNameFromUrl(url);
+    let title = this.groupData[this.groupIndex].title
+      ? this.groupData[this.groupIndex].title
+      : getImageNameFromUrl(url);
 
-    this.$title.html(captionTxt);
+    this.$title.html(title);
 
   }
 
@@ -610,13 +654,21 @@ class PhotoViewer {
     if (imgNewHeight <= stageData.h) {
       newTop = (stageData.h - newHeight) / 2;
     } else {
-      newTop = newTop > δ ? δ : (newTop > (offsetY - δ) ? newTop : (offsetY - δ));
+      newTop = newTop > δ
+        ? δ
+        : (newTop > (offsetY - δ)
+          ? newTop
+          : (offsetY - δ));
     }
 
     if (imgNewWidth <= stageData.w) {
       newLeft = (stageData.w - newWidth) / 2;
     } else {
-      newLeft = newLeft > -δ ? -δ : (newLeft > (offsetX + δ) ? newLeft : (offsetX + δ));
+      newLeft = newLeft > -δ
+        ? -δ
+        : (newLeft > (offsetX + δ)
+          ? newLeft
+          : (offsetX + δ));
     }
 
     $image.css({
@@ -635,7 +687,15 @@ class PhotoViewer {
     });
 
     // Set grab cursor
-    setGrabCursor({ w: Math.round(imgNewWidth), h: Math.round(imgNewHeight) }, { w: stageData.w, h: stageData.h },
+    setGrabCursor(
+      {
+        w: Math.round(imgNewWidth),
+        h: Math.round(imgNewHeight)
+      },
+      {
+        w: stageData.w,
+        h: stageData.h
+      },
       this.$stage
     );
 
@@ -663,7 +723,10 @@ class PhotoViewer {
       transform: 'rotate(' + angle + 'deg)'
     });
 
-    this.setImageSize({ width: this.imageData.originalWidth, height: this.imageData.originalHeight });
+    this.setImageSize({
+      width: this.imageData.originalWidth,
+      height: this.imageData.originalHeight
+    });
 
     // Remove grab cursor when rotate
     this.$stage.removeClass('is-grab');
@@ -677,13 +740,17 @@ class PhotoViewer {
     let resizeHandler = throttle(function () {
 
       if (self.isOpened) {
-
         if (self.isMaximized) {
-          self.setImageSize({ width: self.imageData.originalWidth, height: self.imageData.originalHeight });
+          self.setImageSize({
+            width: self.imageData.originalWidth,
+            height: self.imageData.originalHeight
+          });
         } else {
-          self.setModalSize({ width: self.imageData.originalWidth, height: self.imageData.originalHeight });
+          self.setModalSize({
+            width: self.imageData.originalWidth,
+            height: self.imageData.originalHeight
+          });
         }
-
       }
 
     }, 500);
@@ -721,16 +788,27 @@ class PhotoViewer {
       this.$photoviewer.removeClass(NS + '-maximize');
 
       this.$photoviewer.css({
-        width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
-        height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
-        left: this.modalData.left ? this.modalData.left : ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft(),
-        top: this.modalData.top ? this.modalData.top : ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop()
+        width: this.modalData.width
+          ? this.modalData.width
+          : this.options.modalWidth,
+        height: this.modalData.height
+          ? this.modalData.height
+          : this.options.modalHeight,
+        left: this.modalData.left
+          ? this.modalData.left
+          : ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft(),
+        top: this.modalData.top
+          ? this.modalData.top
+          : ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop()
       });
 
       this.isMaximized = false;
     }
 
-    this.setImageSize({ width: this.imageData.originalWidth, height: this.imageData.originalHeight });
+    this.setImageSize({
+      width: this.imageData.originalWidth,
+      height: this.imageData.originalHeight
+    });
 
   }
 
@@ -763,24 +841,44 @@ class PhotoViewer {
         break;
       // +
       case 187:
-        self.zoom(self.options.ratioThreshold * 3, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+        self.zoom(
+          self.options.ratioThreshold * 3,
+          { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
+          e
+        );
         break;
       // -
       case 189:
-        self.zoom(-self.options.ratioThreshold * 3, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+        self.zoom(
+          -self.options.ratioThreshold * 3,
+          { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
+          e
+        );
         break;
       // + Firefox
       case 61:
-        self.zoom(self.options.ratioThreshold * 3, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+        self.zoom(
+          self.options.ratioThreshold * 3,
+          { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
+          e
+        );
         break;
       // - Firefox
       case 173:
-        self.zoom(-self.options.ratioThreshold * 3, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+        self.zoom(
+          -self.options.ratioThreshold * 3,
+          { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
+          e
+        );
         break;
       // ctrl + alt + 0
       case 48:
         if (ctrlKey && altKey) {
-          self.zoomTo(1, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+          self.zoomTo(
+            1,
+            { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
+            e
+          );
         }
         break;
       // ctrl + ,
@@ -813,15 +911,36 @@ class PhotoViewer {
     });
 
     this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-      self.zoom(self.options.ratioThreshold * 3, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+      self.zoom(
+        self.options.ratioThreshold * 3,
+        {
+          x: self.$stage.width() / 2,
+          y: self.$stage.height() / 2
+        },
+        e
+      );
     });
 
     this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-      self.zoom(-self.options.ratioThreshold * 3, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+      self.zoom(
+        -self.options.ratioThreshold * 3,
+        {
+          x: self.$stage.width() / 2,
+          y: self.$stage.height() / 2
+        },
+        e
+      );
     });
 
     this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-      self.zoomTo(1, { x: self.$stage.width() / 2, y: self.$stage.height() / 2 }, e);
+      self.zoomTo(
+        1,
+        {
+          x: self.$stage.width() / 2,
+          y: self.$stage.height() / 2
+        },
+        e
+      );
     });
 
     this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
@@ -890,7 +1009,7 @@ let jqEl = null,
 
       items.push({
         src: src,
-        caption: $(this).attr('data-caption'),
+        title: $(this).attr('data-title'),
         groupName: groupName
       });
 

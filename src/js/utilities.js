@@ -4,7 +4,9 @@
  */
 export function getImgSrc(el) {
   // Get data-src as image src at first
-  let src = $(el).attr('data-src') ? $(el).attr('data-src') : $(el).attr('href');
+  let src = $(el).attr('data-src')
+    ? $(el).attr('data-src')
+    : $(el).attr('href');
   return src;
 }
 
