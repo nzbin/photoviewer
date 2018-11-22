@@ -53,11 +53,11 @@ The usage of photoviewer is very simple, the `PhotoViewer` constructor has 2 arg
 var items = [
     {
         src: 'path/to/image1.jpg', // path to image
-        caption: 'Image Caption 1' // If you skip it, there will display the original image name(image1)
+        title: 'Image Caption 1' // If you skip it, there will display the original image name(image1)
     },
     {
         src: 'path/to/image2.jpg',
-        caption: 'Image Caption 2'
+        title: 'Image Caption 2'
     }
 ];
 
