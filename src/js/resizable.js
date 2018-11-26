@@ -350,6 +350,8 @@ export default {
 
         $(image).css(imageOpts);
 
+        self.isDoResize = true;
+
       }
 
     };
@@ -379,6 +381,19 @@ export default {
 
       // Remove resizable cursor
       $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
+
+      // Update image initial data
+      let scale = self.getImageScaleToStage(
+        $(stage).width(),
+        $(stage).height()
+      );
+
+      $.extend(self.imageData, {
+        initWidth: self.img.width * scale,
+        initHeight: self.img.height * scale,
+        initLeft: ($(stage).width() - self.img.width * scale) / 2,
+        initTop: ($(stage).height() - self.img.height * scale) / 2
+      });
 
     };
 

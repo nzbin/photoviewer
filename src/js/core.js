@@ -65,6 +65,9 @@ class PhotoViewer {
     // image rotate angle
     this.rotateAngle = 0;
 
+    // if modal do resize
+    this.isDoResize = false;
+
     // Store image data in every instance
     this.imageData = {};
     // Store modal data in every instance
@@ -176,24 +179,25 @@ class PhotoViewer {
     };
 
     // photoviewer base HTML
-    let photoviewerHTML = `<div class="${NS}-modal">
-                            <div class="${NS}-inner">
-                              <div class="${NS}-header">
-                                <div class="${NS}-toolbar ${NS}-toolbar-head">
-                                  ${this._creatBtns(this.options.headToolbar, btnsTpl)}
-                                </div>
-                                ${this._creatTitle()}
-                              </div>
-                              <div class="${NS}-stage">
-                                <img class="${NS}-image" src="" alt="" />
-                              </div>
-                              <div class="${NS}-footer">
-                                <div class="${NS}-toolbar ${NS}-toolbar-foot">
-                                  ${this._creatBtns(this.options.footToolbar, btnsTpl)}
-                                </div>
-                              </div>
-                            </div>
-                          </div>`;
+    let photoviewerHTML =
+      `<div class="${NS}-modal">
+        <div class="${NS}-inner">
+          <div class="${NS}-header">
+            <div class="${NS}-toolbar ${NS}-toolbar-head">
+              ${this._creatBtns(this.options.headToolbar, btnsTpl)}
+            </div>
+            ${this._creatTitle()}
+          </div>
+          <div class="${NS}-stage">
+            <img class="${NS}-image" src="" alt="" />
+          </div>
+          <div class="${NS}-footer">
+            <div class="${NS}-toolbar ${NS}-toolbar-foot">
+              ${this._creatBtns(this.options.footToolbar, btnsTpl)}
+            </div>
+          </div>
+        </div>
+      </div>`;
 
     return photoviewerHTML;
 
@@ -423,6 +427,19 @@ class PhotoViewer {
 
   }
 
+  getImageScaleToStage(stageWidth, stageHeight) {
+
+    var scale = 1;
+
+    if (!this.isRotated) {
+      scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
+    } else {
+      scale = Math.min(stageWidth / this.img.height, stageHeight / this.img.width, 1);
+    }
+
+    return scale;
+  }
+
   setImageSize(img) {
 
     let stageData = {
@@ -430,22 +447,10 @@ class PhotoViewer {
       h: this.$stage.height()
     };
 
-    // image scale to stage
-    let scale = 1;
-
-    if (!this.isRotated) {
-      scale = Math.min(
-        stageData.w / img.width,
-        stageData.h / img.height,
-        1
-      );
-    } else {
-      scale = Math.min(
-        stageData.w / img.height,
-        stageData.h / img.width,
-        1
-      );
-    }
+    let scale = this.getImageScaleToStage(
+      stageData.w,
+      stageData.h
+    );
 
     this.$image.css({
       width: Math.ceil(img.width * scale) + 'px',
@@ -456,6 +461,10 @@ class PhotoViewer {
 
     // Store image initial data
     $.extend(this.imageData, {
+      initWidth: img.width * scale,
+      initHeight: img.height * scale,
+      initLeft: (stageData.w - img.width * scale) / 2,
+      initTop: (stageData.h - img.height * scale) / 2,
       width: img.width * scale,
       height: img.height * scale,
       left: (stageData.w - img.width * scale) / 2,
@@ -502,6 +511,8 @@ class PhotoViewer {
     this.$image.attr('src', imgSrc);
 
     preloadImg(imgSrc, function (img) {
+      // Store HTMLImageElement
+      self.img = img;
 
       // Store original data
       self.imageData = {
@@ -596,19 +607,20 @@ class PhotoViewer {
 
   zoom(ratio, origin, e) {
 
-    // zoom out & zoom in
+    // zoom out ratio & zoom in ratio
     ratio = ratio < 0 ? (1 / (1 - ratio)) : (1 + ratio);
 
-    if (ratio > 0.95 && ratio < 1.05) {
-      ratio = 1;
-    }
-
+    // image ratio
     ratio = this.$image.width() / this.imageData.originalWidth * ratio;
 
-    // min image size
-    ratio = Math.max(ratio, this.options.minRatio);
-    // max image size
-    ratio = Math.min(ratio, this.options.maxRatio);
+    // Fixed digital error
+    // if (ratio > 0.95 && ratio < 1.05) {
+    //   ratio = 1;
+    // }
+
+    if (ratio > this.options.maxRatio || ratio < this.options.minRatio) {
+      return;
+    }
 
     this.zoomTo(ratio, origin, e);
 
@@ -636,7 +648,7 @@ class PhotoViewer {
 
     let newWidth = this.imageData.originalWidth * ratio,
       newHeight = this.imageData.originalHeight * ratio,
-      // Think about it for a while ~~~
+      // Think about it for a while
       newLeft = origin.x - (origin.x - imgData.x) / imgData.w * newWidth,
       newTop = origin.y - (origin.y - imgData.y) / imgData.h * newHeight;
 
@@ -671,12 +683,31 @@ class PhotoViewer {
           : (offsetX + δ));
     }
 
-    $image.css({
-      width: Math.round(newWidth) + 'px',
-      height: Math.round(newHeight) + 'px',
-      left: Math.round(newLeft) + 'px',
-      top: Math.round(newTop) + 'px'
-    });
+    // if the image scale get to the critical point
+    if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
+      this.setImageSize(this.img);
+    } else {
+      $image.css({
+        width: Math.round(newWidth) + 'px',
+        height: Math.round(newHeight) + 'px',
+        left: Math.round(newLeft) + 'px',
+        top: Math.round(newTop) + 'px'
+      });
+
+      // Set grab cursor
+      setGrabCursor(
+        {
+          w: Math.round(imgNewWidth),
+          h: Math.round(imgNewHeight)
+        },
+        {
+          w: stageData.w,
+          h: stageData.h
+        },
+        this.$stage
+      );
+    }
+
 
     // Update image initial data
     $.extend(this.imageData, {
@@ -685,19 +716,6 @@ class PhotoViewer {
       left: newLeft,
       top: newTop
     });
-
-    // Set grab cursor
-    setGrabCursor(
-      {
-        w: Math.round(imgNewWidth),
-        h: Math.round(imgNewHeight)
-      },
-      {
-        w: stageData.w,
-        h: stageData.h
-      },
-      this.$stage
-    );
 
   }
 
@@ -913,10 +931,7 @@ class PhotoViewer {
     this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
       self.zoom(
         self.options.ratioThreshold * 3,
-        {
-          x: self.$stage.width() / 2,
-          y: self.$stage.height() / 2
-        },
+        { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
         e
       );
     });
@@ -924,10 +939,7 @@ class PhotoViewer {
     this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
       self.zoom(
         -self.options.ratioThreshold * 3,
-        {
-          x: self.$stage.width() / 2,
-          y: self.$stage.height() / 2
-        },
+        { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
         e
       );
     });
@@ -935,10 +947,7 @@ class PhotoViewer {
     this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
       self.zoomTo(
         1,
-        {
-          x: self.$stage.width() / 2,
-          y: self.$stage.height() / 2
-        },
+        { x: self.$stage.width() / 2, y: self.$stage.height() / 2 },
         e
       );
     });
