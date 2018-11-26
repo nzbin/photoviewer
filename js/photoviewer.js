@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.1.2
+ * photoviewer - v2.1.3
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -49,7 +49,7 @@
     // Threshold of image ratio
     ratioThreshold: 0.1,
     // Min ratio of image when zoom out
-    minRatio: 0.1,
+    minRatio: 0.05,
     // Max ratio of image when zoom in
     maxRatio: 16,
     // Toolbar options in header
@@ -58,17 +58,17 @@
     footToolbar: ['zoomIn', 'zoomOut', 'prev', 'fullscreen', 'next', 'actualSize', 'rotateRight'],
     // Customize button icon
     icons: {
-      minimize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M20,14H4V10H20\"></path></svg>",
-      maximize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M4,4H20V20H4V4M6,8V18H18V8H6Z\"></path></svg>",
-      close: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5\n    V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z\"></path></svg>",
-      zoomIn: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43\n    C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,\n    13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14M12,10H10V12H9V10H7V9H9\n    V7H10V9H12V10Z\"></path></svg>",
-      zoomOut: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M15.5,14H14.71L14.43,13.73C15.41,12.59 16,11.11 16,\n    9.5A6.5,6.5 0 0,0 9.5,3A6.5,6.5 0 0,0 3,9.5A6.5,6.5 0 0,0 9.5,16C11.11,16 12.59,15.41 13.73,14.43L14,14.71V15.5L19,20.5\n    L20.5,19L15.5,14M9.5,14C7,14 5,12 5,9.5C5,7 7,5 9.5,5C12,5 14,7 14,9.5C14,12 12,14 9.5,14M7,9H12V10H7V9Z\"></path></svg>",
-      prev: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z\"></path></svg>",
-      next: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M16,18H18V6H16M6,18L14.5,12L6,6V18Z\"></path></svg>",
-      fullscreen: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M8.5,12.5L11,15.5L14.5,11L19,17H5M23,18V6A2,2 0 0,\n    0 21,4H3A2,2 0 0,0 1,6V18A2,2 0 0,0 3,20H21A2,2 0 0,0 23,18Z\"></path></svg>",
-      actualSize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M9.5,13.09L10.91,14.5L6.41,19H10V21H3V14H5V17.59\n    L9.5,13.09M10.91,9.5L9.5,10.91L5,6.41V10H3V3H10V5H6.41L10.91,9.5M14.5,13.09L19,17.59V14H21V21H14V19H17.59L13.09,14.5L14.5,\n    13.09M13.09,9.5L17.59,5H14V3H21V10H19V6.41L14.5,10.91L13.09,9.5Z\"></path></svg>",
-      rotateLeft: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M13,4.07V1L8.45,5.55L13,10V6.09C15.84,6.57 18,9.03 18,\n    12C18,14.97 15.84,17.43 13,17.91V19.93C16.95,19.44 20,16.08 20,12C20,7.92 16.95,4.56 13,4.07M7.1,18.32C8.26,19.22 9.61,19.76 11,\n    19.93V17.9C10.13,17.75 9.29,17.41 8.54,16.87L7.1,18.32M6.09,13H4.07C4.24,14.39 4.79,15.73 5.69,16.89L7.1,15.47C6.58,14.72 6.23,\n    13.88 6.09,13M7.11,8.53L5.7,7.11C4.8,8.27 4.24,9.61 4.07,11H6.09C6.23,10.13 6.58,9.28 7.11,8.53Z\"></path></svg>",
-      rotateRight: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\"><path fill=\"currentColor\" d=\"M16.89,15.5L18.31,16.89C19.21,15.73 19.76,14.39 19.93,\n    13H17.91C17.77,13.87 17.43,14.72 16.89,15.5M13,17.9V19.92C14.39,19.75 15.74,19.21 16.9,18.31L15.46,16.87C14.71,17.41 13.87,\n    17.76 13,17.9M19.93,11C19.76,9.61 19.21,8.27 18.31,7.11L16.89,8.53C17.43,9.28 17.77,10.13 17.91,11M15.55,5.55L11,1V4.07C7.06,\n    4.56 4,7.92 4,12C4,16.08 7.05,19.44 11,19.93V17.91C8.16,17.43 6,14.97 6,12C6,9.03 8.16,6.57 11,6.09V10L15.55,5.55Z\"></path></svg>"
+      minimize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n               <path fill=\"currentColor\" d=\"M20,14H4V10H20\"></path>\n               </svg>",
+      maximize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n               <path fill=\"currentColor\" d=\"M4,4H20V20H4V4M6,8V18H18V8H6Z\"></path>\n               </svg>",
+      close: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n            <path fill=\"currentColor\" d=\"M13.46,12L19,17.54V19H17.54L12,13.46\n            L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46\n            L13.46,12Z\"></path>\n            </svg>",
+      zoomIn: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n             <path fill=\"currentColor\" d=\"M15.5,14L20.5,19L19,20.5L14,15.5V14.71\n             L13.73,14.43C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,\n             6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,\n             13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,\n             7 5,9.5C5,12 7,14 9.5,14M12,10H10V12H9V10H7V9H9V7H10V9H12V10Z\"></path>\n            </svg>",
+      zoomOut: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n              <path fill=\"currentColor\" d=\"M15.5,14H14.71L14.43,13.73C15.41,\n              12.59 16,11.11 16,9.5A6.5,6.5 0 0,0 9.5,3A6.5,6.5 0 0,0 3,9.5A6.5,\n              6.5 0 0,0 9.5,16C11.11,16 12.59,15.41 13.73,14.43L14,14.71V15.5\n              L19,20.5L20.5,19L15.5,14M9.5,14C7,14 5,12 5,9.5C5,7 7,5 9.5,5C12,\n              5 14,7 14,9.5C14,12 12,14 9.5,14M7,9H12V10H7V9Z\"></path>\n              </svg>",
+      prev: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n           <path fill=\"currentColor\" d=\"M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z\"></path>\n           </svg>",
+      next: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n           <path fill=\"currentColor\" d=\"M16,18H18V6H16M6,18L14.5,12L6,6V18Z\"></path>\n           </svg>",
+      fullscreen: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n                 <path fill=\"currentColor\" d=\"M8.5,12.5L11,15.5L14.5,11L19,17H5\n                 M23,18V6A2,2 0 0,0 21,4H3A2,2 0 0,0 1,6V18A2,2 0 0,0 3,20H21A2,\n                 2 0 0,0 23,18Z\"></path>\n                 </svg>",
+      actualSize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n                 <path fill=\"currentColor\" d=\"M9.5,13.09L10.91,14.5L6.41,19H10V21\n                 H3V14H5V17.59L9.5,13.09M10.91,9.5L9.5,10.91L5,6.41V10H3V3H10V5\n                 H6.41L10.91,9.5M14.5,13.09L19,17.59V14H21V21H14V19H17.59L13.09,\n                 14.5L14.5,13.09M13.09,9.5L17.59,5H14V3H21V10H19V6.41L14.5,10.91\n                 L13.09,9.5Z\"></path>\n                </svg>",
+      rotateLeft: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n                 <path fill=\"currentColor\" d=\"M13,4.07V1L8.45,5.55L13,10V6.09\n                 C15.84,6.57 18,9.03 18,12C18,14.97 15.84,17.43 13,17.91V19.93\n                 C16.95,19.44 20,16.08 20,12C20,7.92 16.95,4.56 13,4.07M7.1,18.32\n                 C8.26,19.22 9.61,19.76 11,19.93V17.9C10.13,17.75 9.29,17.41 8.54,\n                 16.87L7.1,18.32M6.09,13H4.07C4.24,14.39 4.79,15.73 5.69,16.89\n                 L7.1,15.47C6.58,14.72 6.23,13.88 6.09,13M7.11,8.53L5.7,7.11C4.8,\n                 8.27 4.24,9.61 4.07,11H6.09C6.23,10.13 6.58,9.28 7.11,8.53Z\"></path>\n                 </svg>",
+      rotateRight: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n                  <path fill=\"currentColor\" d=\"M16.89,15.5L18.31,16.89C19.21,\n                  15.73 19.76,14.39 19.93,13H17.91C17.77,13.87 17.43,14.72 16.89,\n                  15.5M13,17.9V19.92C14.39,19.75 15.74,19.21 16.9,18.31L15.46,\n                  16.87C14.71,17.41 13.87,17.76 13,17.9M19.93,11C19.76,9.61 19.21,\n                  8.27 18.31,7.11L16.89,8.53C17.43,9.28 17.77,10.13 17.91,11M15.55,\n                  5.55L11,1V4.07C7.06,4.56 4,7.92 4,12C4,16.08 7.05,19.44 11,19.93\n                  V17.91C8.16,17.43 6,14.97 6,12C6,9.03 8.16,6.57 11,6.09V10L15.55,\n                  5.55Z\"></path>\n                  </svg>"
     },
     // Customize language of button title
     i18n: {
@@ -640,6 +640,7 @@
           $(modal).css(modalOpts);
           var imageOpts = getImageOpts(direction, relativeX, relativeY);
           $(image).css(imageOpts);
+          self.isDoResize = true;
         }
       };
 
@@ -659,7 +660,15 @@
         isDragging = false;
         PUBLIC_VARS['isResizing'] = false; // Remove resizable cursor
 
-        $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
+        $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', ''); // Update image initial data
+
+        var scale = self.getImageScaleToStage($(stage).width(), $(stage).height());
+        $.extend(self.imageData, {
+          initWidth: self.img.width * scale,
+          initHeight: self.img.height * scale,
+          initLeft: ($(stage).width() - self.img.width * scale) / 2,
+          initTop: ($(stage).height() - self.img.height * scale) / 2
+        });
       };
 
       $.each(resizableHandles, function (dir, handle) {
@@ -700,7 +709,9 @@
 
       this.isRotated = false; // image rotate angle
 
-      this.rotateAngle = 0; // Store image data in every instance
+      this.rotateAngle = 0; // if modal do resize
+
+      this.isDoResize = false; // Store image data in every instance
 
       this.imageData = {}; // Store modal data in every instance
 
@@ -763,7 +774,7 @@
         rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" \n                      title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
       }; // photoviewer base HTML
 
-      var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n                            <div class=\"" + NS + "-inner\">\n                              <div class=\"" + NS + "-header\">\n                                <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n                                  " + this._creatBtns(this.options.headToolbar, btnsTpl) + "\n                                </div>\n                                " + this._creatTitle() + "\n                              </div>\n                              <div class=\"" + NS + "-stage\">\n                                <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n                              </div>\n                              <div class=\"" + NS + "-footer\">\n                                <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n                                  " + this._creatBtns(this.options.footToolbar, btnsTpl) + "\n                                </div>\n                              </div>\n                            </div>\n                          </div>";
+      var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._creatBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._creatTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._creatBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
       return photoviewerHTML;
     };
 
@@ -947,20 +958,24 @@
       this.isOpened = true;
     };
 
+    _proto.getImageScaleToStage = function getImageScaleToStage(stageWidth, stageHeight) {
+      var scale = 1;
+
+      if (!this.isRotated) {
+        scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
+      } else {
+        scale = Math.min(stageWidth / this.img.height, stageHeight / this.img.width, 1);
+      }
+
+      return scale;
+    };
+
     _proto.setImageSize = function setImageSize(img) {
       var stageData = {
         w: this.$stage.width(),
         h: this.$stage.height()
-      }; // image scale to stage
-
-      var scale = 1;
-
-      if (!this.isRotated) {
-        scale = Math.min(stageData.w / img.width, stageData.h / img.height, 1);
-      } else {
-        scale = Math.min(stageData.w / img.height, stageData.h / img.width, 1);
-      }
-
+      };
+      var scale = this.getImageScaleToStage(stageData.w, stageData.h);
       this.$image.css({
         width: Math.ceil(img.width * scale) + 'px',
         height: Math.ceil(img.height * scale) + 'px',
@@ -969,6 +984,10 @@
       }); // Store image initial data
 
       $$1.extend(this.imageData, {
+        initWidth: img.width * scale,
+        initHeight: img.height * scale,
+        initLeft: (stageData.w - img.width * scale) / 2,
+        initTop: (stageData.h - img.height * scale) / 2,
         width: img.width * scale,
         height: img.height * scale,
         left: (stageData.w - img.width * scale) / 2,
@@ -1002,7 +1021,9 @@
 
       this.$image.attr('src', imgSrc);
       preloadImg(imgSrc, function (img) {
-        // Store original data
+        // Store HTMLImageElement
+        self.img = img; // Store original data
+
         self.imageData = {
           originalWidth: img.width,
           originalHeight: img.height
@@ -1077,18 +1098,18 @@
     };
 
     _proto.zoom = function zoom(ratio, origin, e) {
-      // zoom out & zoom in
-      ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
+      // zoom out ratio & zoom in ratio
+      ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio; // image ratio
 
-      if (ratio > 0.95 && ratio < 1.05) {
-        ratio = 1;
+      ratio = this.$image.width() / this.imageData.originalWidth * ratio; // Fixed digital error
+      // if (ratio > 0.95 && ratio < 1.05) {
+      //   ratio = 1;
+      // }
+
+      if (ratio > this.options.maxRatio || ratio < this.options.minRatio) {
+        return;
       }
 
-      ratio = this.$image.width() / this.imageData.originalWidth * ratio; // min image size
-
-      ratio = Math.max(ratio, this.options.minRatio); // max image size
-
-      ratio = Math.min(ratio, this.options.maxRatio);
       this.zoomTo(ratio, origin, e);
     };
 
@@ -1111,7 +1132,7 @@
       };
       var newWidth = this.imageData.originalWidth * ratio,
           newHeight = this.imageData.originalHeight * ratio,
-          // Think about it for a while ~~~
+          // Think about it for a while
       newLeft = origin.x - (origin.x - imgData.x) / imgData.w * newWidth,
           newTop = origin.y - (origin.y - imgData.y) / imgData.h * newHeight; // δ is the difference between image new width and new height
 
@@ -1133,29 +1154,35 @@
         newLeft = (stageData.w - newWidth) / 2;
       } else {
         newLeft = newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
-      }
+      } // if the image scale get to the critical point
 
-      $image.css({
-        width: Math.round(newWidth) + 'px',
-        height: Math.round(newHeight) + 'px',
-        left: Math.round(newLeft) + 'px',
-        top: Math.round(newTop) + 'px'
-      }); // Update image initial data
+
+      if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
+        this.setImageSize(this.img);
+      } else {
+        $image.css({
+          width: Math.round(newWidth) + 'px',
+          height: Math.round(newHeight) + 'px',
+          left: Math.round(newLeft) + 'px',
+          top: Math.round(newTop) + 'px'
+        }); // Set grab cursor
+
+        setGrabCursor({
+          w: Math.round(imgNewWidth),
+          h: Math.round(imgNewHeight)
+        }, {
+          w: stageData.w,
+          h: stageData.h
+        }, this.$stage);
+      } // Update image initial data
+
 
       $$1.extend(this.imageData, {
         width: newWidth,
         height: newHeight,
         left: newLeft,
         top: newTop
-      }); // Set grab cursor
-
-      setGrabCursor({
-        w: Math.round(imgNewWidth),
-        h: Math.round(imgNewHeight)
-      }, {
-        w: stageData.w,
-        h: stageData.h
-      }, this.$stage);
+      });
     };
 
     _proto.rotate = function rotate(angle) {
