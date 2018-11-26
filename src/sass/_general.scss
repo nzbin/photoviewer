@@ -17,7 +17,7 @@
   right: -1px;
   bottom: -1px;
   background-color: rgba(255, 255, 255, .85);
-  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, .3);
   border-radius: 5px;
   border: 1px solid #666;
   backdrop-filter: blur(5px);
@@ -34,6 +34,7 @@
   .photoviewer-inner {
     border-radius: 0;
   }
+
   .photoviewer-resizable-handle {
     display: none;
   }
@@ -41,6 +42,36 @@
 
 .photoviewer-toolbar {
   font-size: 0;
+}
+
+.photoviewer-button {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  margin: 0;
+  font-size: 16px;
+  color: #3d3d3d;
+  line-height: 1;
+  text-align: center;
+  background: none;
+  border-width: 0;
+  border-radius: 0;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    color: #111;
+  }
+
+  svg {
+    display: inline-block;
+    font-size: inherit;
+    width: 1em;
+    height: 1em;
+    overflow: visible;
+    vertical-align: -.125em;
+  }
 }
 
 .photoviewer-header {
@@ -51,6 +82,7 @@
   .photoviewer-toolbar {
     float: right;
   }
+
   .photoviewer-button {
     height: 30px;
 
@@ -59,6 +91,7 @@
       background-color: #eee;
     }
   }
+
   .photoviewer-button-close {
     &:hover {
       color: #fff;
@@ -116,36 +149,6 @@
 
   .photoviewer-toolbar {
     display: inline-block;
-  }
-}
-
-.photoviewer-button {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  box-sizing: border-box;
-  margin: 0;
-  font-size: 16px;
-  color: #3d3d3d;
-  line-height: 1;
-  text-align: center;
-  background: none;
-  border-width: 0;
-  border-radius: 0;
-  cursor: pointer;
-  outline: none;
-
-  &:hover {
-    color: #111;
-  }
-
-  svg {
-    display: inline-block;
-    font-size: inherit;
-    width: 1em;
-    height: 1em;
-    overflow: visible;
-    vertical-align: -.125em;
   }
 }
 

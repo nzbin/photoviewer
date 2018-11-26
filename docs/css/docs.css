@@ -13,6 +13,10 @@ code {
   font-size: 80%;
 }
 
+h3 {
+  word-break: break-all;
+}
+
 h3 code {
   padding: 6px 10px;
   font-size: 22px;
