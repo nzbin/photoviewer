@@ -114,7 +114,7 @@ $('[data-gallery=manual]').click(function (e) {
     options = {
       index: $(this).index()
     };
-  
+
   // looping to create images array
   $('[data-gallery=manual]').each(function () {
     let src = $(this).attr('href');
@@ -441,7 +441,7 @@ $('[data-gallery=jquery]').photoviewer(options);
         };
 
       $('[data-gallery=manual]').each(function () {
-        let src = $(this).attr('href');
+        var src = $(this).attr('href');
         items.push({
           src: src
         });
