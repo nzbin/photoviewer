@@ -17,8 +17,6 @@ export default {
    */
   draggable(modal, dragHandle, dragCancel) {
 
-    let self = this;
-
     let isDragging = false;
 
     let startX = 0,
@@ -27,14 +25,14 @@ export default {
       left = 0,
       top = 0;
 
-    let dragStart = function (e) {
+    let dragStart = (e) => {
 
       e = e || window.event;
 
       // Must be removed
       // e.preventDefault();
 
-      if (self.options.multiInstances) {
+      if (this.options.multiInstances) {
         modal.css('z-index', ++PUBLIC_VARS['zIndex']);
       }
 
@@ -62,13 +60,13 @@ export default {
 
     };
 
-    let dragMove = function (e) {
+    let dragMove = (e) => {
 
       e = e || window.event;
 
       e.preventDefault();
 
-      if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !self.isMaximized) {
+      if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !this.isMaximized) {
 
         let endX = e.type === 'touchmove'
           ? e.originalEvent.targetTouches[0].pageX
@@ -89,7 +87,7 @@ export default {
 
     };
 
-    let dragEnd = function () {
+    let dragEnd = () => {
 
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
         .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);

@@ -102,7 +102,9 @@ var DEFAULTS = {
     changed: $.noop
   },
   // Start images index
-  index: 0
+  index: 0,
+  // Load the image progressively
+  progressiveLoading: true
 };
 
 /**
@@ -270,7 +272,8 @@ var draggable = {
    * @param  {[Object]} dragCancel  [the cancel element when dragging]
    */
   draggable: function draggable(modal, dragHandle, dragCancel) {
-    var self = this;
+    var _this = this;
+
     var isDragging = false;
     var startX = 0,
         startY = 0,
@@ -281,7 +284,7 @@ var draggable = {
       e = e || window.event; // Must be removed
       // e.preventDefault();
 
-      if (self.options.multiInstances) {
+      if (_this.options.multiInstances) {
         modal.css('z-index', ++PUBLIC_VARS['zIndex']);
       } // Get clicked button
 
@@ -304,7 +307,7 @@ var draggable = {
       e = e || window.event;
       e.preventDefault();
 
-      if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !self.isMaximized) {
+      if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !_this.isMaximized) {
         var endX = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageX : e.clientX,
             endY = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageY : e.clientY,
             relativeX = endX - startX,
@@ -340,7 +343,8 @@ var movable = {
    * @param  {[Object]} image   [the image element]
    */
   movable: function movable(stage, image) {
-    var self = this;
+    var _this = this;
+
     var isDragging = false;
     var startX = 0,
         startY = 0,
@@ -360,10 +364,10 @@ var movable = {
       startX = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageY : e.clientY; // δ is the difference between image width and height
 
-      δ = !self.isRotated ? 0 : (imageWidth - imageHeight) / 2; // Width or height difference can be use to limit image right or top position
+      δ = !_this.isRotated ? 0 : (imageWidth - imageHeight) / 2; // Width or height difference can be use to limit image right or top position
 
-      widthDiff = !self.isRotated ? imageWidth - stageWidth : imageHeight - stageWidth;
-      heightDiff = !self.isRotated ? imageHeight - stageHeight : imageWidth - stageHeight; // Modal can be dragging if image is smaller to stage
+      widthDiff = !_this.isRotated ? imageWidth - stageWidth : imageHeight - stageWidth;
+      heightDiff = !_this.isRotated ? imageHeight - stageHeight : imageWidth - stageHeight; // Modal can be dragging if image is smaller to stage
 
       isDragging = widthDiff > 0 || heightDiff > 0 ? true : false;
       PUBLIC_VARS['isMoving'] = widthDiff > 0 || heightDiff > 0 ? true : false; // Reclac the element position when mousedown
@@ -417,7 +421,7 @@ var movable = {
           top: newTop + 'px'
         }); // Update image initial data
 
-        $.extend(self.imageData, {
+        $.extend(_this.imageData, {
           left: newLeft,
           top: newTop
         });
@@ -453,7 +457,8 @@ var resizable = {
    * @param  {[Number]} minHeight   [the option of modalHeight]
    */
   resizable: function resizable(modal, stage, image, minWidth, minHeight) {
-    var self = this;
+    var _this = this;
+
     var resizableHandleE = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-e\"></div>"),
         resizableHandleW = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-w\"></div>"),
         resizableHandleS = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-s\"></div>"),
@@ -616,9 +621,9 @@ var resizable = {
         t: $(image).position().top
       }; // δ is the difference between image width and height
 
-      δ = !self.isRotated ? 0 : (imageData.w - imageData.h) / 2;
-      imgWidth = !self.isRotated ? imageData.w : imageData.h;
-      imgHeight = !self.isRotated ? imageData.h : imageData.w;
+      δ = !_this.isRotated ? 0 : (imageData.w - imageData.h) / 2;
+      imgWidth = !_this.isRotated ? imageData.w : imageData.h;
+      imgHeight = !_this.isRotated ? imageData.h : imageData.w;
       direction = dir; // Add resizable cursor
 
       $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
@@ -629,7 +634,7 @@ var resizable = {
       e = e || window.event;
       e.preventDefault();
 
-      if (isDragging && !self.isMaximized) {
+      if (isDragging && !_this.isMaximized) {
         var endX = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageX : e.clientX,
             endY = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageY : e.clientY,
             relativeX = endX - startX,
@@ -638,7 +643,7 @@ var resizable = {
         $(modal).css(modalOpts);
         var imageOpts = getImageOpts(direction, relativeX, relativeY);
         $(image).css(imageOpts);
-        self.isDoResize = true;
+        _this.isDoResize = true;
       }
     };
 
@@ -660,12 +665,13 @@ var resizable = {
 
       $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', ''); // Update image initial data
 
-      var scale = self.getImageScaleToStage($(stage).width(), $(stage).height());
-      $.extend(self.imageData, {
-        initWidth: self.img.width * scale,
-        initHeight: self.img.height * scale,
-        initLeft: ($(stage).width() - self.img.width * scale) / 2,
-        initTop: ($(stage).height() - self.img.height * scale) / 2
+      var scale = _this.getImageScaleToStage($(stage).width(), $(stage).height());
+
+      $.extend(_this.imageData, {
+        initWidth: _this.img.width * scale,
+        initHeight: _this.img.height * scale,
+        initLeft: ($(stage).width() - _this.img.width * scale) / 2,
+        initTop: ($(stage).height() - _this.img.height * scale) / 2
       });
     };
 
@@ -685,7 +691,6 @@ var PhotoViewer =
 /*#__PURE__*/
 function () {
   function PhotoViewer(items, options, el) {
-    var self = this;
     this.options = $$1.extend(true, {}, DEFAULTS, options);
 
     if (options && $$1.isArray(options.footToolbar)) {
@@ -719,7 +724,7 @@ function () {
       left: null,
       top: null
     };
-    this.init(items, self.options, el);
+    this.init(items, this.options, el);
   }
 
   var _proto = PhotoViewer.prototype;
@@ -759,17 +764,17 @@ function () {
 
   _proto._creatDOM = function _creatDOM() {
     var btnsTpl = {
-      minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\" \n                  title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
-      maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\" \n                  title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
-      close: "<button class=\"" + NS + "-button " + NS + "-button-close\" \n              title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
-      zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\" \n                title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
-      zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\" \n                title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
-      prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\" \n              title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
-      next: "<button class=\"" + NS + "-button " + NS + "-button-next\" \n              title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
-      fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\" \n                    title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
-      actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" \n                    title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
-      rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" \n                    title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
-      rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" \n                      title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
+      minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\"\n                  title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
+      maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\"\n                  title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
+      close: "<button class=\"" + NS + "-button " + NS + "-button-close\"\n              title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
+      zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\"\n                title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
+      zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\"\n                title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
+      prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\"\n              title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
+      next: "<button class=\"" + NS + "-button " + NS + "-button-next\"\n              title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
+      fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\"\n                    title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
+      actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\"\n                    title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
+      rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\"\n                    title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
+      rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\"\n                      title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
     }; // photoviewer base HTML
 
     var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._creatBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._creatTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._creatBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
@@ -911,8 +916,9 @@ function () {
   };
 
   _proto.setModalSize = function setModalSize(img) {
-    var self = this,
-        winWidth = $W.width(),
+    var _this = this;
+
+    var winWidth = $W.width(),
         winHeight = $W.height(),
         scrollLeft = $D.scrollLeft(),
         scrollTop = $D.scrollTop(); // stage css value
@@ -946,7 +952,7 @@ function () {
 
     if (this.options.initAnimation) {
       this.$photoviewer.animate(modalCSSObj, function () {
-        self.setImageSize(img);
+        _this.setImageSize(img);
       });
     } else {
       this.$photoviewer.css(modalCSSObj);
@@ -998,46 +1004,61 @@ function () {
     }, {
       w: this.$stage.width(),
       h: this.$stage.height()
-    }, this.$stage, this.isRotated); // loader end
+    }, this.$stage, this.isRotated);
+    this.$stage.removeClass('stage-ready');
+    this.$image.removeClass('image-ready'); // loader end
 
     this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Add image init animation
 
-    if (this.options.initAnimation) {
+    if (this.options.initAnimation && !this.options.progressiveLoading) {
       this.$image.fadeIn();
     }
   };
 
-  _proto.loadImg = function loadImg(imgSrc) {
-    var self = this;
+  _proto.loadImg = function loadImg(imgSrc, fn, err) {
+    var _this2 = this;
+
     var loaderHTML = "<div class=\"" + NS + "-loader\"></div>"; // loader start
 
-    this.$photoviewer.append(loaderHTML);
+    this.$photoviewer.append(loaderHTML); // Add class before image loaded
 
-    if (this.options.initAnimation) {
+    this.$stage.addClass('stage-ready');
+    this.$image.addClass('image-ready'); // Reset image
+
+    this.$image.removeAttr('style').attr('src', '');
+
+    if (this.options.initAnimation && !this.options.progressiveLoading) {
       this.$image.hide();
     }
 
     this.$image.attr('src', imgSrc);
     preloadImg(imgSrc, function (img) {
       // Store HTMLImageElement
-      self.img = img; // Store original data
+      _this2.img = img; // Store original data
 
-      self.imageData = {
+      _this2.imageData = {
         originalWidth: img.width,
         originalHeight: img.height
       };
 
-      if (self.isMaximized || self.isOpened && self.options.fixedModalPos) {
-        self.setImageSize(img);
+      if (_this2.isMaximized || _this2.isOpened && _this2.options.fixedModalPos) {
+        _this2.setImageSize(img);
       } else {
-        self.setModalSize(img);
-      }
+        _this2.setModalSize(img);
+      } // callback of image loaded successfully
 
-      self.$stage.removeClass('stage-ready');
-      self.$image.removeClass('image-ready');
+
+      if (fn) {
+        fn.call();
+      }
     }, function () {
       // loader end
-      self.$photoviewer.find(CLASS_NS + '-loader').remove();
+      _this2.$photoviewer.find(CLASS_NS + '-loader').remove(); // callback of image loading failed
+
+
+      if (err) {
+        err.call();
+      }
     });
 
     if (this.options.title) {
@@ -1050,12 +1071,16 @@ function () {
     this.$title.html(title);
   };
 
-  _proto.jump = function jump(index) {
-    this.groupIndex = this.groupIndex + index;
+  _proto.jump = function jump(step) {
+    this._triggerHook('beforeChange', this.groupIndex);
+
+    this.groupIndex = this.groupIndex + step;
     this.jumpTo(this.groupIndex);
   };
 
   _proto.jumpTo = function jumpTo(index) {
+    var _this3 = this;
+
     index = index % this.groupData.length;
 
     if (index >= 0) {
@@ -1065,12 +1090,11 @@ function () {
     }
 
     this.groupIndex = index;
-
-    this._triggerHook('beforeChange', index);
-
-    this.loadImg(this.groupData[index].src);
-
-    this._triggerHook('changed', index);
+    this.loadImg(this.groupData[index].src, function () {
+      _this3._triggerHook('changed', index);
+    }, function () {
+      _this3._triggerHook('changed', index);
+    });
   };
 
   _proto.wheel = function wheel(e) {
@@ -1208,18 +1232,19 @@ function () {
   };
 
   _proto.resize = function resize() {
-    var self = this;
+    var _this4 = this;
+
     var resizeHandler = throttle(function () {
-      if (self.isOpened) {
-        if (self.isMaximized) {
-          self.setImageSize({
-            width: self.imageData.originalWidth,
-            height: self.imageData.originalHeight
+      if (_this4.isOpened) {
+        if (_this4.isMaximized) {
+          _this4.setImageSize({
+            width: _this4.imageData.originalWidth,
+            height: _this4.imageData.originalHeight
           });
         } else {
-          self.setModalSize({
-            width: self.imageData.originalWidth,
-            height: self.imageData.originalHeight
+          _this4.setModalSize({
+            width: _this4.imageData.originalWidth,
+            height: _this4.imageData.originalHeight
           });
         }
       }
@@ -1228,7 +1253,6 @@ function () {
   };
 
   _proto.maximize = function maximize() {
-
     if (!this.isMaximized) {
       // Store modal data before maximize
       this.modalData = {
@@ -1267,8 +1291,6 @@ function () {
   };
 
   _proto.keydown = function keydown(e) {
-    var self = this;
-
     if (!this.options.keyboard) {
       return false;
     }
@@ -1280,52 +1302,52 @@ function () {
     switch (keyCode) {
       // ←
       case 37:
-        self.jump(-1);
+        this.jump(-1);
         break;
       // →
 
       case 39:
-        self.jump(1);
+        this.jump(1);
         break;
       // +
 
       case 187:
-        self.zoom(self.options.ratioThreshold * 3, {
-          x: self.$stage.width() / 2,
-          y: self.$stage.height() / 2
+        this.zoom(this.options.ratioThreshold * 3, {
+          x: this.$stage.width() / 2,
+          y: this.$stage.height() / 2
         }, e);
         break;
       // -
 
       case 189:
-        self.zoom(-self.options.ratioThreshold * 3, {
-          x: self.$stage.width() / 2,
-          y: self.$stage.height() / 2
+        this.zoom(-this.options.ratioThreshold * 3, {
+          x: this.$stage.width() / 2,
+          y: this.$stage.height() / 2
         }, e);
         break;
       // + Firefox
 
       case 61:
-        self.zoom(self.options.ratioThreshold * 3, {
-          x: self.$stage.width() / 2,
-          y: self.$stage.height() / 2
+        this.zoom(this.options.ratioThreshold * 3, {
+          x: this.$stage.width() / 2,
+          y: this.$stage.height() / 2
         }, e);
         break;
       // - Firefox
 
       case 173:
-        self.zoom(-self.options.ratioThreshold * 3, {
-          x: self.$stage.width() / 2,
-          y: self.$stage.height() / 2
+        this.zoom(-this.options.ratioThreshold * 3, {
+          x: this.$stage.width() / 2,
+          y: this.$stage.height() / 2
         }, e);
         break;
       // ctrl + alt + 0
 
       case 48:
         if (ctrlKey && altKey) {
-          self.zoomTo(1, {
-            x: self.$stage.width() / 2,
-            y: self.$stage.height() / 2
+          this.zoomTo(1, {
+            x: this.$stage.width() / 2,
+            y: this.$stage.height() / 2
           }, e);
         }
 
@@ -1334,7 +1356,7 @@ function () {
 
       case 188:
         if (ctrlKey) {
-          self.rotate(-90);
+          this.rotate(-90);
         }
 
         break;
@@ -1342,7 +1364,7 @@ function () {
 
       case 190:
         if (ctrlKey) {
-          self.rotate(90);
+          this.rotate(90);
         }
 
         break;
@@ -1352,53 +1374,54 @@ function () {
   };
 
   _proto.addEvents = function addEvents() {
-    var self = this;
+    var _this5 = this;
+
     this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-      self.close();
+      _this5.close();
     });
     this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, function (e) {
-      self.wheel(e);
+      _this5.wheel(e);
     });
     this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-      self.zoom(self.options.ratioThreshold * 3, {
-        x: self.$stage.width() / 2,
-        y: self.$stage.height() / 2
+      _this5.zoom(_this5.options.ratioThreshold * 3, {
+        x: _this5.$stage.width() / 2,
+        y: _this5.$stage.height() / 2
       }, e);
     });
     this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-      self.zoom(-self.options.ratioThreshold * 3, {
-        x: self.$stage.width() / 2,
-        y: self.$stage.height() / 2
+      _this5.zoom(-_this5.options.ratioThreshold * 3, {
+        x: _this5.$stage.width() / 2,
+        y: _this5.$stage.height() / 2
       }, e);
     });
     this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-      self.zoomTo(1, {
-        x: self.$stage.width() / 2,
-        y: self.$stage.height() / 2
+      _this5.zoomTo(1, {
+        x: _this5.$stage.width() / 2,
+        y: _this5.$stage.height() / 2
       }, e);
     });
     this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-      self.jump(-1);
+      _this5.jump(-1);
     });
     this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-      self.fullscreen();
+      _this5.fullscreen();
     });
     this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-      self.jump(1);
+      _this5.jump(1);
     });
     this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-      self.rotate(-90);
+      _this5.rotate(-90);
     });
     this.$rotateRight.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-      self.rotate(90);
+      _this5.rotate(90);
     });
     this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-      self.maximize();
+      _this5.maximize();
     });
     $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
-      self.keydown(e);
+      _this5.keydown(e);
     });
-    $W.on(RESIZE_EVENT + EVENT_NS, self.resize());
+    $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
   };
 
   _proto._triggerHook = function _triggerHook(e, data) {

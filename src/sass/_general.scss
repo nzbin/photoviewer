@@ -125,6 +125,15 @@
 
   &.stage-ready {
     text-align: center;
+    font-size: 0;
+
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      overflow: hidden;
+    }
   }
 }
 
@@ -135,6 +144,7 @@
   &.image-ready {
     max-width: 100%;
     max-height: 100%;
+    vertical-align: middle;
   }
 }
 

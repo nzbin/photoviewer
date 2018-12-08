@@ -32,8 +32,6 @@ export default {
    */
   resizable(modal, stage, image, minWidth, minHeight) {
 
-    let self = this;
-
     let resizableHandleE = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-e"></div>`),
       resizableHandleW = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-w"></div>`),
       resizableHandleS = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-s"></div>`),
@@ -265,7 +263,7 @@ export default {
       return opts[dir];
     };
 
-    let dragStart = function (dir, e) {
+    let dragStart = (dir, e) => {
 
       e = e || window.event;
 
@@ -304,13 +302,13 @@ export default {
       };
 
       // δ is the difference between image width and height
-      δ = !self.isRotated
+      δ = !this.isRotated
         ? 0
         : (imageData.w - imageData.h) / 2;
-      imgWidth = !self.isRotated
+      imgWidth = !this.isRotated
         ? imageData.w
         : imageData.h;
-      imgHeight = !self.isRotated
+      imgHeight = !this.isRotated
         ? imageData.h
         : imageData.w;
 
@@ -324,13 +322,13 @@ export default {
 
     };
 
-    let dragMove = function (e) {
+    let dragMove = (e) => {
 
       e = e || window.event;
 
       e.preventDefault();
 
-      if (isDragging && !self.isMaximized) {
+      if (isDragging && !this.isMaximized) {
 
         let endX = e.type === 'touchmove'
           ? e.originalEvent.targetTouches[0].pageX
@@ -350,13 +348,13 @@ export default {
 
         $(image).css(imageOpts);
 
-        self.isDoResize = true;
+        this.isDoResize = true;
 
       }
 
     };
 
-    let dragEnd = function () {
+    let dragEnd = () => {
 
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
         .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
@@ -383,16 +381,16 @@ export default {
       $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
       // Update image initial data
-      let scale = self.getImageScaleToStage(
+      let scale = this.getImageScaleToStage(
         $(stage).width(),
         $(stage).height()
       );
 
-      $.extend(self.imageData, {
-        initWidth: self.img.width * scale,
-        initHeight: self.img.height * scale,
-        initLeft: ($(stage).width() - self.img.width * scale) / 2,
-        initTop: ($(stage).height() - self.img.height * scale) / 2
+      $.extend(this.imageData, {
+        initWidth: this.img.width * scale,
+        initHeight: this.img.height * scale,
+        initLeft: ($(stage).width() - this.img.width * scale) / 2,
+        initTop: ($(stage).height() - this.img.height * scale) / 2
       });
 
     };

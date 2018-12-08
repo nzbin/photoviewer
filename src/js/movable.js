@@ -26,8 +26,6 @@ export default {
    */
   movable(stage, image) {
 
-    let self = this;
-
     let isDragging = false;
 
     let startX = 0,
@@ -41,7 +39,7 @@ export default {
 
       δ = 0;
 
-    let dragStart = function (e) {
+    let dragStart = (e) => {
 
       e = e || window.event;
 
@@ -60,13 +58,13 @@ export default {
         : e.clientY;
 
       // δ is the difference between image width and height
-      δ = !self.isRotated ? 0 : (imageWidth - imageHeight) / 2;
+      δ = !this.isRotated ? 0 : (imageWidth - imageHeight) / 2;
 
       // Width or height difference can be use to limit image right or top position
-      widthDiff = !self.isRotated
+      widthDiff = !this.isRotated
         ? (imageWidth - stageWidth)
         : (imageHeight - stageWidth);
-      heightDiff = !self.isRotated
+      heightDiff = !this.isRotated
         ? (imageHeight - stageHeight)
         : (imageWidth - stageHeight);
 
@@ -89,7 +87,7 @@ export default {
 
     };
 
-    let dragMove = function (e) {
+    let dragMove = (e) => {
 
       e = e || window.event;
 
@@ -141,7 +139,7 @@ export default {
         });
 
         // Update image initial data
-        $.extend(self.imageData, {
+        $.extend(this.imageData, {
           left: newLeft,
           top: newTop
         });
@@ -150,7 +148,7 @@ export default {
 
     };
 
-    let dragEnd = function () {
+    let dragEnd = () => {
 
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
         .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);

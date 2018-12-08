@@ -166,6 +166,9 @@ export default {
   },
 
   // Start images index
-  index: 0
+  index: 0,
+
+  // Load the image progressively
+  progressiveLoading: true
 
 }
