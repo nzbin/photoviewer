@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.1.3
+ * photoviewer - v2.2.0
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *

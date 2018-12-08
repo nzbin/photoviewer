@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.1.3
+ * photoviewer - v2.2.0
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -274,7 +274,8 @@
      * @param  {[Object]} dragCancel  [the cancel element when dragging]
      */
     draggable: function draggable(modal, dragHandle, dragCancel) {
-      var self = this;
+      var _this = this;
+
       var isDragging = false;
       var startX = 0,
           startY = 0,
@@ -285,7 +286,7 @@
         e = e || window.event; // Must be removed
         // e.preventDefault();
 
-        if (self.options.multiInstances) {
+        if (_this.options.multiInstances) {
           modal.css('z-index', ++PUBLIC_VARS['zIndex']);
         } // Get clicked button
 
@@ -308,7 +309,7 @@
         e = e || window.event;
         e.preventDefault();
 
-        if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !self.isMaximized) {
+        if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !_this.isMaximized) {
           var endX = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageX : e.clientX,
               endY = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageY : e.clientY,
               relativeX = endX - startX,
@@ -344,7 +345,8 @@
      * @param  {[Object]} image   [the image element]
      */
     movable: function movable(stage, image) {
-      var self = this;
+      var _this = this;
+
       var isDragging = false;
       var startX = 0,
           startY = 0,
@@ -364,10 +366,10 @@
         startX = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageX : e.clientX;
         startY = e.type === 'touchstart' ? e.originalEvent.targetTouches[0].pageY : e.clientY; // δ is the difference between image width and height
 
-        δ = !self.isRotated ? 0 : (imageWidth - imageHeight) / 2; // Width or height difference can be use to limit image right or top position
+        δ = !_this.isRotated ? 0 : (imageWidth - imageHeight) / 2; // Width or height difference can be use to limit image right or top position
 
-        widthDiff = !self.isRotated ? imageWidth - stageWidth : imageHeight - stageWidth;
-        heightDiff = !self.isRotated ? imageHeight - stageHeight : imageWidth - stageHeight; // Modal can be dragging if image is smaller to stage
+        widthDiff = !_this.isRotated ? imageWidth - stageWidth : imageHeight - stageWidth;
+        heightDiff = !_this.isRotated ? imageHeight - stageHeight : imageWidth - stageHeight; // Modal can be dragging if image is smaller to stage
 
         isDragging = widthDiff > 0 || heightDiff > 0 ? true : false;
         PUBLIC_VARS['isMoving'] = widthDiff > 0 || heightDiff > 0 ? true : false; // Reclac the element position when mousedown
@@ -421,7 +423,7 @@
             top: newTop + 'px'
           }); // Update image initial data
 
-          $.extend(self.imageData, {
+          $.extend(_this.imageData, {
             left: newLeft,
             top: newTop
           });
@@ -457,7 +459,8 @@
      * @param  {[Number]} minHeight   [the option of modalHeight]
      */
     resizable: function resizable(modal, stage, image, minWidth, minHeight) {
-      var self = this;
+      var _this = this;
+
       var resizableHandleE = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-e\"></div>"),
           resizableHandleW = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-w\"></div>"),
           resizableHandleS = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-s\"></div>"),
@@ -620,9 +623,9 @@
           t: $(image).position().top
         }; // δ is the difference between image width and height
 
-        δ = !self.isRotated ? 0 : (imageData.w - imageData.h) / 2;
-        imgWidth = !self.isRotated ? imageData.w : imageData.h;
-        imgHeight = !self.isRotated ? imageData.h : imageData.w;
+        δ = !_this.isRotated ? 0 : (imageData.w - imageData.h) / 2;
+        imgWidth = !_this.isRotated ? imageData.w : imageData.h;
+        imgHeight = !_this.isRotated ? imageData.h : imageData.w;
         direction = dir; // Add resizable cursor
 
         $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
@@ -633,7 +636,7 @@
         e = e || window.event;
         e.preventDefault();
 
-        if (isDragging && !self.isMaximized) {
+        if (isDragging && !_this.isMaximized) {
           var endX = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageX : e.clientX,
               endY = e.type === 'touchmove' ? e.originalEvent.targetTouches[0].pageY : e.clientY,
               relativeX = endX - startX,
@@ -642,7 +645,7 @@
           $(modal).css(modalOpts);
           var imageOpts = getImageOpts(direction, relativeX, relativeY);
           $(image).css(imageOpts);
-          self.isDoResize = true;
+          _this.isDoResize = true;
         }
       };
 
@@ -664,12 +667,13 @@
 
         $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', ''); // Update image initial data
 
-        var scale = self.getImageScaleToStage($(stage).width(), $(stage).height());
-        $.extend(self.imageData, {
-          initWidth: self.img.width * scale,
-          initHeight: self.img.height * scale,
-          initLeft: ($(stage).width() - self.img.width * scale) / 2,
-          initTop: ($(stage).height() - self.img.height * scale) / 2
+        var scale = _this.getImageScaleToStage($(stage).width(), $(stage).height());
+
+        $.extend(_this.imageData, {
+          initWidth: _this.img.width * scale,
+          initHeight: _this.img.height * scale,
+          initLeft: ($(stage).width() - _this.img.width * scale) / 2,
+          initTop: ($(stage).height() - _this.img.height * scale) / 2
         });
       };
 
