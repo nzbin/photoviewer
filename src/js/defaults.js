@@ -1,3 +1,4 @@
+import { D as $ } from './domq/index';
 export default {
 
   // Enable modal to drag

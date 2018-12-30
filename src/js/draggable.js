@@ -1,3 +1,4 @@
+import { D as $ } from './domq/index';
 import {
   $D,
   TOUCH_START_EVENT,
@@ -46,10 +47,10 @@ export default {
       isDragging = true;
 
       startX = e.type === 'touchstart'
-        ? e.originalEvent.targetTouches[0].pageX
+        ? e.targetTouches[0].pageX
         : e.clientX;
       startY = e.type === 'touchstart'
-        ? e.originalEvent.targetTouches[0].pageY
+        ? e.targetTouches[0].pageY
         : e.clientY;
 
       left = $(modal).offset().left;
@@ -69,10 +70,10 @@ export default {
       if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !this.isMaximized) {
 
         let endX = e.type === 'touchmove'
-          ? e.originalEvent.targetTouches[0].pageX
+          ? e.targetTouches[0].pageX
           : e.clientX,
           endY = e.type === 'touchmove'
-            ? e.originalEvent.targetTouches[0].pageY
+            ? e.targetTouches[0].pageY
             : e.clientY,
 
           relativeX = endX - startX,

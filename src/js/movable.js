@@ -1,3 +1,4 @@
+import { D as $ } from './domq/index';
 import {
   $D,
   TOUCH_START_EVENT,
@@ -51,10 +52,10 @@ export default {
         stageHeight = $(stage).height();
 
       startX = e.type === 'touchstart'
-        ? e.originalEvent.targetTouches[0].pageX
+        ? e.targetTouches[0].pageX
         : e.clientX;
       startY = e.type === 'touchstart'
-        ? e.originalEvent.targetTouches[0].pageY
+        ? e.targetTouches[0].pageY
         : e.clientY;
 
       // δ is the difference between image width and height
@@ -96,10 +97,10 @@ export default {
       if (isDragging) {
 
         let endX = e.type === 'touchmove'
-          ? e.originalEvent.targetTouches[0].pageX
+          ? e.targetTouches[0].pageX
           : e.clientX,
           endY = e.type === 'touchmove'
-            ? e.originalEvent.targetTouches[0].pageY
+            ? e.targetTouches[0].pageY
             : e.clientY,
 
           relativeX = endX - startX,
