@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v2.2.0
+ * photoviewer - v2.2.1
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -1028,6 +1028,8 @@
       this.$image.addClass('image-ready'); // Reset image
 
       this.$image.removeAttr('style').attr('src', '');
+      this.isRotated = false;
+      this.rotateAngle = 0;
 
       if (this.options.initAnimation && !this.options.progressiveLoading) {
         this.$image.hide();
