@@ -1326,6 +1326,8 @@ D.fn.triggerHandler = function (event, args) {
   };
 });
 
+var $ = D;
+
 var DEFAULTS = {
   // Enable modal to drag
   draggable: true,
@@ -1399,12 +1401,12 @@ var DEFAULTS = {
   dragHandle: false,
   // Callback events
   callbacks: {
-    beforeOpen: D.noop,
-    opened: D.noop,
-    beforeClose: D.noop,
-    closed: D.noop,
-    beforeChange: D.noop,
-    changed: D.noop
+    beforeOpen: $.noop,
+    opened: $.noop,
+    beforeClose: $.noop,
+    closed: $.noop,
+    beforeChange: $.noop,
+    changed: $.noop
   },
   // Start images index
   index: 0,
@@ -1419,7 +1421,7 @@ var DEFAULTS = {
 
 function getImgSrc(el) {
   // Get data-src as image src at first
-  var src = D(el).attr('data-src') ? D(el).attr('data-src') : D(el).attr('href');
+  var src = $(el).attr('data-src') ? $(el).attr('data-src') : $(el).attr('href');
   return src;
 }
 /**
@@ -1549,8 +1551,8 @@ function supportTouch() {
   return !!('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
 }
 
-var $W = D(window);
-var $D = D(document);
+var $W = $(window);
+var $D = $(document);
 var CLICK_EVENT = 'click';
 var RESIZE_EVENT = 'resize';
 var KEYDOWN_EVENT = 'keydown';
@@ -1595,7 +1597,7 @@ var draggable = {
       } // Get clicked button
 
 
-      var elemCancel = D(e.target).closest(dragCancel); // Stop modal moving when click buttons
+      var elemCancel = $(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
       if (elemCancel.length) {
         return true;
@@ -1604,8 +1606,8 @@ var draggable = {
       isDragging = true;
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
-      left = D(modal).offset().left;
-      top = D(modal).offset().top;
+      left = $(modal).offset().left;
+      top = $(modal).offset().top;
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
     };
 
@@ -1618,7 +1620,7 @@ var draggable = {
             endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY,
             relativeX = endX - startX,
             relativeY = endY - startY;
-        D(modal).css({
+        $(modal).css({
           left: relativeX + left + 'px',
           top: relativeY + top + 'px'
         });
@@ -1630,7 +1632,7 @@ var draggable = {
       isDragging = false;
     };
 
-    D(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
+    $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
   }
 };
 
@@ -1663,10 +1665,10 @@ var movable = {
     var dragStart = function dragStart(e) {
       e = e || window.event;
       e.preventDefault();
-      var imageWidth = D(image).width(),
-          imageHeight = D(image).height(),
-          stageWidth = D(stage).width(),
-          stageHeight = D(stage).height();
+      var imageWidth = $(image).width(),
+          imageHeight = $(image).height(),
+          stageWidth = $(stage).width(),
+          stageHeight = $(stage).height();
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // δ is the difference between image width and height
 
@@ -1679,11 +1681,11 @@ var movable = {
       PUBLIC_VARS['isMoving'] = widthDiff > 0 || heightDiff > 0 ? true : false; // Reclac the element position when mousedown
       // Fixed the issue of stage with a border
 
-      left = D(image).position().left - δ;
-      top = D(image).position().top + δ; // Add grabbing cursor
+      left = $(image).position().left - δ;
+      top = $(image).position().top + δ; // Add grabbing cursor
 
       if (stage.hasClass('is-grab')) {
-        D(ELEMS_WITH_GRABBING_CURSOR).addClass('is-grabbing');
+        $(ELEMS_WITH_GRABBING_CURSOR).addClass('is-grabbing');
       }
 
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
@@ -1722,12 +1724,12 @@ var movable = {
           newLeft = left;
         }
 
-        D(image).css({
+        $(image).css({
           left: newLeft + 'px',
           top: newTop + 'px'
         }); // Update image initial data
 
-        D.extend(_this.imageData, {
+        $.extend(_this.imageData, {
           left: newLeft,
           top: newTop
         });
@@ -1739,10 +1741,10 @@ var movable = {
       isDragging = false;
       PUBLIC_VARS['isMoving'] = false; // Remove grabbing cursor
 
-      D(ELEMS_WITH_GRABBING_CURSOR).removeClass('is-grabbing');
+      $(ELEMS_WITH_GRABBING_CURSOR).removeClass('is-grabbing');
     };
 
-    D(stage).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
+    $(stage).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
   }
 };
 
@@ -1765,14 +1767,14 @@ var resizable = {
   resizable: function resizable(modal, stage, image, minWidth, minHeight) {
     var _this = this;
 
-    var resizableHandleE = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-e\"></div>"),
-        resizableHandleW = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-w\"></div>"),
-        resizableHandleS = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-s\"></div>"),
-        resizableHandleN = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-n\"></div>"),
-        resizableHandleSE = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-se\"></div>"),
-        resizableHandleSW = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-sw\"></div>"),
-        resizableHandleNE = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-ne\"></div>"),
-        resizableHandleNW = D("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-nw\"></div>");
+    var resizableHandleE = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-e\"></div>"),
+        resizableHandleW = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-w\"></div>"),
+        resizableHandleS = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-s\"></div>"),
+        resizableHandleN = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-n\"></div>"),
+        resizableHandleSE = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-se\"></div>"),
+        resizableHandleSW = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-sw\"></div>"),
+        resizableHandleNE = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-ne\"></div>"),
+        resizableHandleNW = $("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-nw\"></div>");
     var resizableHandles = {
       'e': resizableHandleE,
       's': resizableHandleS,
@@ -1783,7 +1785,7 @@ var resizable = {
       'ne': resizableHandleNE,
       'sw': resizableHandleSW
     };
-    D(modal).append(resizableHandleE, resizableHandleW, resizableHandleS, resizableHandleN, resizableHandleSE, resizableHandleSW, resizableHandleNE, resizableHandleNW);
+    $(modal).append(resizableHandleE, resizableHandleW, resizableHandleS, resizableHandleN, resizableHandleSE, resizableHandleSW, resizableHandleNE, resizableHandleNW);
     var isDragging = false;
     var startX = 0,
         startY = 0,
@@ -1863,10 +1865,10 @@ var resizable = {
           widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ,
           heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ; // Get image position in dragging
 
-      var imgLeft = (widthDiff > 0 ? D(image).position().left : D(image).position().left < 0 ? D(image).position().left : 0) - δ,
-          imgTop = (heightDiff > 0 ? D(image).position().top : D(image).position().top < 0 ? D(image).position().top : 0) + δ,
-          imgLeft2 = (widthDiff2 > 0 ? D(image).position().left : D(image).position().left < 0 ? D(image).position().left : 0) - δ,
-          imgTop2 = (heightDiff2 > 0 ? D(image).position().top : D(image).position().top < 0 ? D(image).position().top : 0) + δ;
+      var imgLeft = (widthDiff > 0 ? $(image).position().left : $(image).position().left < 0 ? $(image).position().left : 0) - δ,
+          imgTop = (heightDiff > 0 ? $(image).position().top : $(image).position().top < 0 ? $(image).position().top : 0) + δ,
+          imgLeft2 = (widthDiff2 > 0 ? $(image).position().left : $(image).position().left < 0 ? $(image).position().left : 0) - δ,
+          imgTop2 = (heightDiff2 > 0 ? $(image).position().top : $(image).position().top < 0 ? $(image).position().top : 0) + δ;
       var opts = {
         'e': {
           left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
@@ -1909,22 +1911,22 @@ var resizable = {
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // Reclac the modal data when mousedown
 
       modalData = {
-        w: D(modal).width(),
-        h: D(modal).height(),
-        l: D(modal).offset().left,
-        t: D(modal).offset().top
+        w: $(modal).width(),
+        h: $(modal).height(),
+        l: $(modal).offset().left,
+        t: $(modal).offset().top
       };
       stageData = {
-        w: D(stage).width(),
-        h: D(stage).height(),
-        l: D(stage).offset().left,
-        t: D(stage).offset().top
+        w: $(stage).width(),
+        h: $(stage).height(),
+        l: $(stage).offset().left,
+        t: $(stage).offset().top
       };
       imageData = {
-        w: D(image).width(),
-        h: D(image).height(),
-        l: D(image).position().left,
-        t: D(image).position().top
+        w: $(image).width(),
+        h: $(image).height(),
+        l: $(image).position().left,
+        t: $(image).position().top
       }; // δ is the difference between image width and height
 
       δ = !_this.isRotated ? 0 : (imageData.w - imageData.h) / 2;
@@ -1932,7 +1934,7 @@ var resizable = {
       imgHeight = !_this.isRotated ? imageData.h : imageData.w;
       direction = dir; // Add resizable cursor
 
-      D(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
+      $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
     };
 
@@ -1946,9 +1948,9 @@ var resizable = {
             relativeX = endX - startX,
             relativeY = endY - startY;
         var modalOpts = getModalOpts(direction, relativeX, relativeY);
-        D(modal).css(modalOpts);
+        $(modal).css(modalOpts);
         var imageOpts = getImageOpts(direction, relativeX, relativeY);
-        D(image).css(imageOpts);
+        $(image).css(imageOpts);
         _this.isDoResize = true;
       }
     };
@@ -1961,27 +1963,27 @@ var resizable = {
           w: imgWidth,
           h: imgHeight
         }, {
-          w: D(stage).width(),
-          h: D(stage).height()
+          w: $(stage).width(),
+          h: $(stage).height()
         }, stage);
       }
 
       isDragging = false;
       PUBLIC_VARS['isResizing'] = false; // Remove resizable cursor
 
-      D(ELEMS_WITH_RESIZE_CURSOR).css('cursor', ''); // Update image initial data
+      $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', ''); // Update image initial data
 
-      var scale = _this.getImageScaleToStage(D(stage).width(), D(stage).height());
+      var scale = _this.getImageScaleToStage($(stage).width(), $(stage).height());
 
-      D.extend(_this.imageData, {
+      $.extend(_this.imageData, {
         initWidth: _this.img.width * scale,
         initHeight: _this.img.height * scale,
-        initLeft: (D(stage).width() - _this.img.width * scale) / 2,
-        initTop: (D(stage).height() - _this.img.height * scale) / 2
+        initLeft: ($(stage).width() - _this.img.width * scale) / 2,
+        initTop: ($(stage).height() - _this.img.height * scale) / 2
       });
     };
 
-    D.each(resizableHandles, function (dir, handle) {
+    $.each(resizableHandles, function (dir, handle) {
       handle.on(TOUCH_START_EVENT + EVENT_NS, function (e) {
         dragStart(dir, e);
       });
@@ -1997,18 +1999,18 @@ var PhotoViewer =
 /*#__PURE__*/
 function () {
   function PhotoViewer(items, options, el) {
-    this.options = D.extend(true, {}, DEFAULTS, options);
+    this.options = $.extend(true, {}, DEFAULTS, options);
 
-    if (options && D.isArray(options.footToolbar)) {
+    if (options && $.isArray(options.footToolbar)) {
       this.options.footToolbar = options.footToolbar;
     }
 
-    if (options && D.isArray(options.headToolbar)) {
+    if (options && $.isArray(options.headToolbar)) {
       this.options.headToolbar = options.headToolbar;
     } // Store element of clicked
 
 
-    this.$el = D(el); // As we have multiple instances,
+    this.$el = $(el); // As we have multiple instances,
     // so every instance has following variables.
     // modal open flag
 
@@ -2058,7 +2060,7 @@ function () {
 
   _proto._creatBtns = function _creatBtns(toolbar, btns) {
     var btnsStr = '';
-    D.each(toolbar, function (index, item) {
+    $.each(toolbar, function (index, item) {
       btnsStr += btns[item];
     });
     return btnsStr;
@@ -2092,7 +2094,7 @@ function () {
     var photoviewerHTML = this._creatDOM(); // Make photoviewer HTML string to jQuery element
 
 
-    var $photoviewer = D(photoviewerHTML); // Get all photoviewer element
+    var $photoviewer = $(photoviewerHTML); // Get all photoviewer element
 
     this.$photoviewer = $photoviewer;
     this.$header = $photoviewer.find(CLASS_NS + '-header');
@@ -2128,12 +2130,12 @@ function () {
 
   _proto.open = function open() {
     if (!this.options.multiInstances) {
-      D(CLASS_NS + '-modal').eq(0).remove();
+      $(CLASS_NS + '-modal').eq(0).remove();
     } // Fixed modal position bug
 
 
-    if (!D(CLASS_NS + '-modal').length && this.options.fixedContent) {
-      D('html').css({
+    if (!$(CLASS_NS + '-modal').length && this.options.fixedContent) {
+      $('html').css({
         'overflow': 'hidden'
       });
 
@@ -2141,7 +2143,7 @@ function () {
         var scrollbarWidth = getScrollbarWidth();
 
         if (scrollbarWidth) {
-          D('html').css({
+          $('html').css({
             'padding-right': scrollbarWidth
           });
         }
@@ -2153,7 +2155,7 @@ function () {
     this._triggerHook('beforeOpen', this.$el); // Add PhotoViewer to DOM
 
 
-    D('body').append(this.$photoviewer);
+    $('body').append(this.$photoviewer);
     this.addEvents();
     this.setModalPos(this.$photoviewer);
 
@@ -2169,10 +2171,10 @@ function () {
     this.isMaximized = false;
     this.isRotated = false;
     this.rotateAngle = 0;
-    var zeroModal = !D(CLASS_NS + '-modal').length; // Fixed modal position bug
+    var zeroModal = !$(CLASS_NS + '-modal').length; // Fixed modal position bug
 
     if (zeroModal && this.options.fixedContent) {
-      D('html').css({
+      $('html').css({
         'overflow': '',
         'padding-right': ''
       });
@@ -2184,7 +2186,7 @@ function () {
     } // off events
 
 
-    if (!D(CLASS_NS + '-modal').length) {
+    if (!$(CLASS_NS + '-modal').length) {
       $D.off(KEYDOWN_EVENT + EVENT_NS);
       $W.off(RESIZE_EVENT + EVENT_NS);
     }
@@ -2293,7 +2295,7 @@ function () {
       top: (stageData.h - Math.ceil(img.height * scale)) / 2 + 'px'
     }); // Store image initial data
 
-    D.extend(this.imageData, {
+    $.extend(this.imageData, {
       initWidth: img.width * scale,
       initHeight: img.height * scale,
       initLeft: (stageData.w - img.width * scale) / 2,
@@ -2330,8 +2332,7 @@ function () {
 
     this.$stage.addClass('stage-ready');
     this.$image.addClass('image-ready'); // Reset image
-
-    this.$image.removeAttr('style').attr('src', '');
+    // this.$image.removeAttr('style').attr('src', '');
 
     if (this.options.initAnimation && !this.options.progressiveLoading) {
       this.$image.hide();
@@ -2505,7 +2506,7 @@ function () {
     } // Update image initial data
 
 
-    D.extend(this.imageData, {
+    $.extend(this.imageData, {
       width: newWidth,
       height: newHeight,
       left: newLeft,
@@ -2732,7 +2733,7 @@ function () {
 
   _proto._triggerHook = function _triggerHook(e, data) {
     if (this.options.callbacks[e]) {
-      this.options.callbacks[e].apply(this, D.isArray(data) ? data : [data]);
+      this.options.callbacks[e].apply(this, $.isArray(data) ? data : [data]);
     }
   };
 
@@ -2743,7 +2744,7 @@ function () {
  */
 
 
-D.extend(PhotoViewer.prototype, draggable, movable, resizable);
+$.extend(PhotoViewer.prototype, draggable, movable, resizable);
 /**
  * Add PhotoViewer to globle
  */
@@ -2756,19 +2757,19 @@ window.PhotoViewer = PhotoViewer;
 var jqEl = null,
     getImgGroup = function getImgGroup(list, groupName) {
   var items = [];
-  D(list).each(function () {
+  $(list).each(function () {
     var src = getImgSrc(this);
     items.push({
       src: src,
-      title: D(this).attr('data-title'),
+      title: $(this).attr('data-title'),
       groupName: groupName
     });
   });
   return items;
 };
 
-D.fn.photoviewer = function (options) {
-  jqEl = D(this);
+$.fn.photoviewer = function (options) {
+  jqEl = $(this);
   options = options ? options : {}; // Convert a numeric string into a number
 
   for (var key in options) {
@@ -2778,7 +2779,7 @@ D.fn.photoviewer = function (options) {
   } // Get init event, 'click' or 'dblclick'
 
 
-  var opts = D.extend(true, {}, DEFAULTS, options); // We should get zIndex of options before plugin's init.
+  var opts = $.extend(true, {}, DEFAULTS, options); // We should get zIndex of options before plugin's init.
 
   PUBLIC_VARS['zIndex'] = opts.zIndex;
 
@@ -2789,18 +2790,18 @@ D.fn.photoviewer = function (options) {
       e.stopPropagation(); // Get image group
 
       var items = [],
-          currentGroupName = D(this).attr('data-group'),
+          currentGroupName = $(this).attr('data-group'),
           groupList = $D.find('[data-group="' + currentGroupName + '"]');
 
       if (currentGroupName !== undefined) {
         items = getImgGroup(groupList, currentGroupName);
-        options['index'] = D(this).index('[data-group="' + currentGroupName + '"]');
+        options['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
       } else {
         items = getImgGroup(jqEl.not('[data-group]'));
-        options['index'] = D(this).index();
+        options['index'] = $(this).index();
       }
 
-      D(this).data(NS, new PhotoViewer(items, options, this));
+      $(this).data(NS, new PhotoViewer(items, options, this));
     });
   }
 
@@ -2812,22 +2813,22 @@ D.fn.photoviewer = function (options) {
 
 
 $D.on(CLICK_EVENT + EVENT_NS, '[data-' + NS + ']', function (e) {
-  jqEl = D('[data-' + NS + ']');
+  jqEl = $('[data-' + NS + ']');
   e.preventDefault(); // Get image group
 
   var items = [],
-      currentGroupName = D(this).attr('data-group'),
+      currentGroupName = $(this).attr('data-group'),
       groupList = $D.find('[data-group="' + currentGroupName + '"]');
 
   if (currentGroupName !== undefined) {
     items = getImgGroup(groupList, currentGroupName);
-    DEFAULTS['index'] = D(this).index('[data-group="' + currentGroupName + '"]');
+    DEFAULTS['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
   } else {
     items = getImgGroup(jqEl.not('[data-group]'));
-    DEFAULTS['index'] = D(this).index();
+    DEFAULTS['index'] = $(this).index();
   }
 
-  D(this).data(NS, new PhotoViewer(items, DEFAULTS, this));
+  $(this).data(NS, new PhotoViewer(items, DEFAULTS, this));
 });
 
 export default PhotoViewer;

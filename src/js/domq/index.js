@@ -2,6 +2,8 @@ import D from './d-class';
 import './core';
 import './event';
 
-// window.D = window.$ = D;
+window.D = D;
 
-export { D };
+const $ = D;
+
+export default $;

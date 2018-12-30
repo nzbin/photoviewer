@@ -1,4 +1,4 @@
-import { D as $ } from './domq/index';
+import $ from './domq/index';
 import defaults from './defaults';
 import { supportTouch } from './utilities';
 

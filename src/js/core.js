@@ -1,7 +1,5 @@
-import { D as $ } from './domq/index';
-
+import $ from './domq/index';
 import DEFAULTS from './defaults';
-
 import {
   $W,
   $D,

@@ -1,4 +1,4 @@
-import { D as $ } from './domq/index';
+import $ from './domq/index';
 export default {
 
   // Enable modal to drag

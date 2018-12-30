@@ -1,4 +1,4 @@
-import { D as $ } from './domq/index';
+import $ from './domq/index';
 import {
   $D,
   TOUCH_START_EVENT,
