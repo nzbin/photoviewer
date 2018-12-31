@@ -1608,7 +1608,6 @@
      * @param  {[Number]} delay [description]
      * @return {Function}       [description]
      */
-
     function throttle(fn, delay) {
       var timer = null;
       return function () {

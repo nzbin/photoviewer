@@ -14,7 +14,6 @@ import {
 } from './constants';
 
 import {
-  getImgSrc,
   throttle,
   preloadImg,
   requestFullscreen,

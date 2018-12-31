@@ -1,17 +1,3 @@
-import $ from './domq/index';
-
-/**
- * [getImgSrc]
- * @param {[Object]}  el    [description]
- */
-export function getImgSrc(el) {
-  // Get data-src as image src at first
-  let src = $(el).attr('data-src')
-    ? $(el).attr('data-src')
-    : $(el).attr('href');
-  return src;
-}
-
 /**
  * [throttle]
  * @param  {Function} fn    [description]
