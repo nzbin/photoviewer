@@ -1,24 +1,34 @@
 import D from './d-class';
+import { isFunction } from './utils';
+import { document, slice } from './vars';
 
-import {
-  slice,
-  handlers,
-  specialEvents,
-  focusinSupported,
-  focus,
-  hover,
-  ignoreProperties,
-  eventMethods,
-} from './vars';
+var _zid = 1,
+  handlers = {},
+  specialEvents = {
+    click: 'MouseEvents',
+    mousedown: 'MouseEvents',
+    mouseup: 'MouseEvents',
+    mousemove: 'MouseEvents',
+  },
+  focusinSupported = 'onfocusin' in window,
+  focus = { focus: 'focusin', blur: 'focusout' },
+  hover = { mouseenter: 'mouseover', mouseleave: 'mouseout' },
+  ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
+  eventMethods = {
+    preventDefault: 'isDefaultPrevented',
+    stopImmediatePropagation: 'isImmediatePropagationStopped',
+    stopPropagation: 'isPropagationStopped'
+  };
 
-import {
-  isFunction,
-  isString,
-  returnTrue,
-  returnFalse
-} from './utils';
-
-var _zid = 1;
+function isString(obj) {
+  return typeof obj == 'string'
+}
+function returnTrue() {
+  return true
+}
+function returnFalse() {
+  return false
+}
 function zid(element) {
   return element._zid || (element._zid = _zid++)
 }

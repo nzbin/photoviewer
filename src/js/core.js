@@ -22,7 +22,8 @@ import {
   getNumFromCSSValue,
   hasScrollbar,
   getScrollbarWidth,
-  setGrabCursor
+  setGrabCursor,
+  fadeIn
 } from './utilities';
 
 import draggable from './draggable';
@@ -488,7 +489,7 @@ class PhotoViewer {
 
     // Add image init animation
     if (this.options.initAnimation && !this.options.progressiveLoading) {
-      this.$image.fadeIn();
+      fadeIn(this.$image[0]);
     }
 
   }
@@ -510,7 +511,7 @@ class PhotoViewer {
     this.rotateAngle = 0;
 
     if (this.options.initAnimation && !this.options.progressiveLoading) {
-      this.$image.hide();
+      this.$image.css({ 'opacity': 0, 'filter': '' });
     }
 
     this.$image.attr('src', imgSrc);
@@ -994,7 +995,6 @@ class PhotoViewer {
     }
   }
 
-
 }
 
 /**
@@ -1006,110 +1006,5 @@ $.extend(PhotoViewer.prototype, draggable, movable, resizable);
  * Add PhotoViewer to globle
  */
 window.PhotoViewer = PhotoViewer;
-
-/**
- * jQuery plugin
- */
-
-let jqEl = null,
-  getImgGroup = function (list, groupName) {
-
-    let items = [];
-
-    $(list).each(function () {
-
-      let src = getImgSrc(this);
-
-      items.push({
-        src: src,
-        title: $(this).attr('data-title'),
-        groupName: groupName
-      });
-
-    });
-
-    return items;
-
-  }
-
-$.fn.photoviewer = function (options) {
-
-  jqEl = $(this);
-
-  options = options ? options : {};
-
-  // Convert a numeric string into a number
-  for (let key in options) {
-    if (typeof (options[key]) === 'string' && !isNaN(options[key])) {
-      options[key] = parseFloat(options[key])
-    }
-  }
-
-  // Get init event, 'click' or 'dblclick'
-  let opts = $.extend(true, {}, DEFAULTS, options);
-
-  // We should get zIndex of options before plugin's init.
-  PUBLIC_VARS['zIndex'] = opts.zIndex;
-
-  if (typeof options === 'string') {
-
-    // $(this).data('photoviewer')[options]();
-
-  } else {
-
-    jqEl.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-
-      e.preventDefault();
-      // This will stop triggering data-api event
-      e.stopPropagation();
-
-      // Get image group
-      let items = [],
-        currentGroupName = $(this).attr('data-group'),
-        groupList = $D.find('[data-group="' + currentGroupName + '"]');
-
-      if (currentGroupName !== undefined) {
-        items = getImgGroup(groupList, currentGroupName);
-        options['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
-      } else {
-        items = getImgGroup(jqEl.not('[data-group]'));
-        options['index'] = $(this).index();
-      }
-
-      $(this).data(NS, new PhotoViewer(items, options, this));
-
-    });
-
-  }
-
-  return jqEl;
-
-};
-
-/**
- * PhotoViewer DATA-API
- */
-$D.on(CLICK_EVENT + EVENT_NS, '[data-' + NS + ']', function (e) {
-
-  jqEl = $('[data-' + NS + ']');
-
-  e.preventDefault();
-
-  // Get image group
-  let items = [],
-    currentGroupName = $(this).attr('data-group'),
-    groupList = $D.find('[data-group="' + currentGroupName + '"]');
-
-  if (currentGroupName !== undefined) {
-    items = getImgGroup(groupList, currentGroupName);
-    DEFAULTS['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
-  } else {
-    items = getImgGroup(jqEl.not('[data-group]'));
-    DEFAULTS['index'] = $(this).index();
-  }
-
-  $(this).data(NS, new PhotoViewer(items, DEFAULTS, this));
-
-});
 
 export default PhotoViewer;

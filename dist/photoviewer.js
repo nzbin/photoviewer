@@ -46,7 +46,6 @@
         singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
         tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
         rootNodeRE = /^(?:body|html)$/i,
-        capitalRE = /([A-Z])/g,
         // special attributes that should be get/set via method calls
     methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
         adjacencyOperators = ['after', 'prepend', 'before', 'append'],
@@ -82,29 +81,6 @@
     },
         isArray = Array.isArray || function (arg) {
       return Object.prototype.toString.call(arg) === '[object Array]';
-    },
-        // Using in Event
-    handlers = {},
-        specialEvents = {
-      click: 'MouseEvents',
-      mousedown: 'MouseEvents',
-      mouseup: 'MouseEvents',
-      mousemove: 'MouseEvents'
-    },
-        focusinSupported = 'onfocusin' in window,
-        focus = {
-      focus: 'focusin',
-      blur: 'focusout'
-    },
-        hover = {
-      mouseenter: 'mouseover',
-      mouseleave: 'mouseout'
-    },
-        ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
-        eventMethods = {
-      preventDefault: 'isDefaultPrevented',
-      stopImmediatePropagation: 'isImmediatePropagationStopped',
-      stopPropagation: 'isPropagationStopped'
     };
 
     function type(obj) {
@@ -191,22 +167,6 @@
         if (node.nodeType == 1) return node;
       });
     } // "true"  => true
-    // "false" => false
-    // "null"  => null
-    // "42"    => 42
-    // "42.5"  => 42.5
-    // "08"    => "08"
-    // JSON    => parse if valid
-    // String  => self
-
-
-    function deserializeValue(value) {
-      try {
-        return value ? value == "true" || (value == "false" ? false : value == "null" ? null : +value + "" == value ? +value : /^[\[\{]/.test(value) ? JSON.parse(value) : value) : value;
-      } catch (e) {
-        return value;
-      }
-    }
 
     function filtered(nodes, selector) {
       return selector == null ? D(nodes) : D(nodes).filter(selector);
@@ -226,20 +186,6 @@
           svg = klass && klass.baseVal !== undefined;
       if (value === undefined) return svg ? klass.baseVal : klass;
       svg ? klass.baseVal = value : node.className = value;
-    }
-    /*  Event Usage */
-
-
-    function isString(obj) {
-      return typeof obj == 'string';
-    }
-
-    function returnTrue() {
-      return true;
-    }
-
-    function returnFalse() {
-      return false;
     }
 
     D.fn = D.prototype = {
@@ -528,7 +474,7 @@
     }); // Methods in Prototype
 
     D.fn.extend({
-      // 💔 Modify the collection by adding elements to it
+      // Modify the collection by adding elements to it
       concat: function concat$$1() {
         var i,
             value,
@@ -541,20 +487,90 @@
 
         return concat.apply(D.isD(this) ? this.toArray() : this, args);
       },
-      // 💔 `pluck` is borrowed from Prototype.js
+      // `pluck` is borrowed from Prototype.js
       pluck: function pluck(property) {
         return D.map(this, function (el) {
           return el[property];
         });
       },
-
-      /* Traversing */
       // Filtering
+      eq: function eq(idx) {
+        return idx === -1 ? this.slice(idx) : this.slice(idx, +idx + 1);
+      },
+      first: function first() {
+        var el = this[0];
+        return el && !isObject(el) ? el : D(el);
+      },
+      last: function last() {
+        var el = this[this.length - 1];
+        return el && !isObject(el) ? el : D(el);
+      },
+      slice: function slice$$1() {
+        return D(slice.apply(this, arguments));
+      },
+
+      /* Miscellaneous */
+      toArray: function toArray() {
+        return this.get();
+      },
+      each: function each(callback) {
+        emptyArray.every.call(this, function (el, idx) {
+          return callback.call(el, idx, el) !== false;
+        });
+        return this;
+      },
+      map: function map(fn) {
+        return D(D.map(this, function (el, i) {
+          return fn.call(el, i, el);
+        }));
+      },
+      get: function get(idx) {
+        return idx === undefined ? slice.call(this) : this[idx >= 0 ? idx : idx + this.length];
+      },
+      size: function size() {
+        return this.length;
+      },
+      index: function index(element) {
+        return element ? this.indexOf(D(element)[0]) : this.parent().children().indexOf(this[0]);
+      },
+
+      /* Effects */
+      show: function show() {
+        return this.each(function () {
+          this.style.display == "none" && (this.style.display = '');
+          if (getComputedStyle(this, '').getPropertyValue("display") == "none") this.style.display = defaultDisplay(this.nodeName);
+        });
+      },
+      hide: function hide() {
+        return this.css("display", "none");
+      }
+    });
+    D.fn.init.prototype = D.fn;
+
+    D.fn.extend({
+      find: function find(selector) {
+        var result,
+            $this = this;
+        if (!selector) result = D();else if (typeof selector == 'object') result = D(selector).filter(function () {
+          var node = this;
+          return emptyArray.some.call($this, function (parent) {
+            return D.contains(parent, node);
+          });
+        });else if (this.length == 1) result = D(D.qsa(this[0], selector));else result = this.map(function () {
+          return D.qsa(this, selector);
+        });
+        return result;
+      },
       filter: function filter$$1(selector) {
         if (isFunction(selector)) return this.not(this.not(selector));
         return D(filter.call(this, function (element) {
           return D.matches(element, selector);
         }));
+      },
+      has: function has(selector) {
+        return this.filter(function () {
+          return isObject(selector) ? D.contains(this, selector) : D(this).find(selector).size();
+        });
       },
       not: function not(selector) {
         var nodes = [];
@@ -571,39 +587,6 @@
       is: function is(selector) {
         return typeof selector == 'string' ? this.length > 0 && D.matches(this[0], selector) : selector && this.selector == selector.selector;
       },
-      has: function has(selector) {
-        return this.filter(function () {
-          return isObject(selector) ? D.contains(this, selector) : D(this).find(selector).size();
-        });
-      },
-      eq: function eq(idx) {
-        return idx === -1 ? this.slice(idx) : this.slice(idx, +idx + 1);
-      },
-      first: function first() {
-        var el = this[0];
-        return el && !isObject(el) ? el : D(el);
-      },
-      last: function last() {
-        var el = this[this.length - 1];
-        return el && !isObject(el) ? el : D(el);
-      },
-      slice: function slice$$1() {
-        return D(slice.apply(this, arguments));
-      },
-      find: function find(selector) {
-        var result,
-            $this = this;
-        if (!selector) result = D();else if (typeof selector == 'object') result = D(selector).filter(function () {
-          var node = this;
-          return emptyArray.some.call($this, function (parent) {
-            return D.contains(parent, node);
-          });
-        });else if (this.length == 1) result = D(D.qsa(this[0], selector));else result = this.map(function () {
-          return D.qsa(this, selector);
-        });
-        return result;
-      },
-      // Miscellaneous Traversing
       add: function add(selector, context) {
         return D(uniq(this.concat(D(selector, context))));
       },
@@ -612,7 +595,6 @@
           return this.contentDocument || slice.call(this.childNodes);
         });
       },
-      // Tree Traversal
       closest: function closest(selector, context) {
         var nodes = [],
             collection = typeof selector == 'object' && D(selector);
@@ -655,126 +637,15 @@
           });
         }), selector);
       },
-      offsetParent: function offsetParent() {
-        return this.map(function () {
-          var parent = this.offsetParent || document$1.body;
-
-          while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css("position") == "static") {
-            parent = parent.offsetParent;
-          }
-
-          return parent;
-        });
-      },
       prev: function prev(selector) {
         return D(this.pluck('previousElementSibling')).filter(selector || '*');
       },
       next: function next(selector) {
         return D(this.pluck('nextElementSibling')).filter(selector || '*');
-      },
+      }
+    });
 
-      /* Attribute */
-      // General Attributes
-      attr: function attr(name, value) {
-        var result;
-        return typeof name == 'string' && !(1 in arguments) ? 0 in this && this[0].nodeType == 1 && (result = this[0].getAttribute(name)) != null ? result : undefined : this.each(function (idx) {
-          if (this.nodeType !== 1) return;
-          if (isObject(name)) for (var key in name) {
-            setAttribute(this, key, name[key]);
-          } else setAttribute(this, name, funcArg(this, value, idx, this.getAttribute(name)));
-        });
-      },
-      removeAttr: function removeAttr(name) {
-        return this.each(function () {
-          this.nodeType === 1 && name.split(' ').forEach(function (attribute) {
-            setAttribute(this, attribute);
-          }, this);
-        });
-      },
-      prop: function prop(name, value) {
-        name = propMap[name] || name;
-        return typeof name == 'string' && !(1 in arguments) ? this[0] && this[0][name] : this.each(function (idx) {
-          if (isObject(name)) for (var key in name) {
-            this[propMap[key] || key] = name[key];
-          } else this[name] = funcArg(this, value, idx, this[name]);
-        });
-      },
-      removeProp: function removeProp(name) {
-        name = propMap[name] || name;
-        return this.each(function () {
-          delete this[name];
-        });
-      },
-      val: function val(value) {
-        if (0 in arguments) {
-          if (value == null) value = "";
-          return this.each(function (idx) {
-            this.value = funcArg(this, value, idx, this.value);
-          });
-        } else {
-          return this[0] && (this[0].multiple ? D(this[0]).find('option').filter(function () {
-            return this.selected;
-          }).pluck('value') : this[0].value);
-        }
-      },
-      // Class Attributes
-      hasClass: function hasClass(name) {
-        if (!name) return false;
-        return emptyArray.some.call(this, function (el) {
-          return this.test(className(el));
-        }, classRE(name));
-      },
-      addClass: function addClass(name) {
-        var classList = [];
-        if (!name) return this;
-        return this.each(function (idx) {
-          if (!('className' in this)) return;
-          classList = [];
-          var cls = className(this),
-              newName = funcArg(this, name, idx, cls);
-          newName.split(/\s+/g).forEach(function (klass) {
-            if (!D(this).hasClass(klass)) classList.push(klass);
-          }, this);
-          classList.length && className(this, cls + (cls ? " " : "") + classList.join(" "));
-        });
-      },
-      removeClass: function removeClass(name) {
-        var classList = [];
-        return this.each(function (idx) {
-          if (!('className' in this)) return;
-          if (name === undefined) return className(this, '');
-          classList = className(this);
-          funcArg(this, name, idx, classList).split(/\s+/g).forEach(function (klass) {
-            classList = classList.replace(classRE(klass), " ");
-          });
-          className(this, classList.trim());
-        });
-      },
-      toggleClass: function toggleClass(name, when) {
-        if (!name) return this;
-        return this.each(function (idx) {
-          var $this = D(this),
-              names = funcArg(this, name, idx, className(this));
-          names.split(/\s+/g).forEach(function (klass) {
-            (when === undefined ? !$this.hasClass(klass) : when) ? $this.addClass(klass) : $this.removeClass(klass);
-          });
-        });
-      },
-      // DOM Insertion
-      html: function html(_html) {
-        return 0 in arguments ? this.each(function (idx) {
-          var originHtml = this.innerHTML;
-          D(this).empty().append(funcArg(this, _html, idx, originHtml));
-        }) : 0 in this ? this[0].innerHTML : null;
-      },
-      text: function text(_text) {
-        return 0 in arguments ? this.each(function (idx) {
-          var newText = funcArg(this, _text, idx, this.textContent);
-          this.textContent = newText == null ? '' : '' + newText;
-        }) : 0 in this ? this.pluck('textContent').join("") : null;
-      },
-
-      /* CSS */
+    D.fn.extend({
       css: function css(property, value) {
         if (arguments.length < 2) {
           var element = this[0];
@@ -818,7 +689,55 @@
         return this.each(function () {
           this.style.cssText += ';' + css;
         });
+      }
+    });
+
+    D.fn.extend({
+      hasClass: function hasClass(name) {
+        if (!name) return false;
+        return emptyArray.some.call(this, function (el) {
+          return this.test(className(el));
+        }, classRE(name));
       },
+      addClass: function addClass(name) {
+        var classList = [];
+        if (!name) return this;
+        return this.each(function (idx) {
+          if (!('className' in this)) return;
+          classList = [];
+          var cls = className(this),
+              newName = funcArg(this, name, idx, cls);
+          newName.split(/\s+/g).forEach(function (klass) {
+            if (!D(this).hasClass(klass)) classList.push(klass);
+          }, this);
+          classList.length && className(this, cls + (cls ? " " : "") + classList.join(" "));
+        });
+      },
+      removeClass: function removeClass(name) {
+        var classList = [];
+        return this.each(function (idx) {
+          if (!('className' in this)) return;
+          if (name === undefined) return className(this, '');
+          classList = className(this);
+          funcArg(this, name, idx, classList).split(/\s+/g).forEach(function (klass) {
+            classList = classList.replace(classRE(klass), " ");
+          });
+          className(this, classList.trim());
+        });
+      },
+      toggleClass: function toggleClass(name, when) {
+        if (!name) return this;
+        return this.each(function (idx) {
+          var $this = D(this),
+              names = funcArg(this, name, idx, className(this));
+          names.split(/\s+/g).forEach(function (klass) {
+            (when === undefined ? !$this.hasClass(klass) : when) ? $this.addClass(klass) : $this.removeClass(klass);
+          });
+        });
+      }
+    });
+
+    D.fn.extend({
       offset: function offset(coordinates) {
         if (coordinates) return this.each(function (index) {
           var $this = D(this),
@@ -889,23 +808,71 @@
           this.scrollTo(value, this.scrollY);
         });
       },
-
-      /* DOM */
-      remove: function remove() {
-        return this.each(function () {
-          if (this.parentNode != null) this.parentNode.removeChild(this);
-        });
-      },
-      empty: function empty() {
-        return this.each(function () {
-          this.innerHTML = '';
-        });
-      },
-      clone: function clone() {
+      offsetParent: function offsetParent() {
         return this.map(function () {
-          return this.cloneNode(true);
+          var parent = this.offsetParent || document$1.body;
+
+          while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css("position") == "static") {
+            parent = parent.offsetParent;
+          }
+
+          return parent;
+        });
+      }
+    });
+
+    D.fn.extend({
+      attr: function attr(name, value) {
+        var result;
+        return typeof name == 'string' && !(1 in arguments) ? 0 in this && this[0].nodeType == 1 && (result = this[0].getAttribute(name)) != null ? result : undefined : this.each(function (idx) {
+          if (this.nodeType !== 1) return;
+          if (isObject(name)) for (var key in name) {
+            setAttribute(this, key, name[key]);
+          } else setAttribute(this, name, funcArg(this, value, idx, this.getAttribute(name)));
         });
       },
+      removeAttr: function removeAttr(name) {
+        return this.each(function () {
+          this.nodeType === 1 && name.split(' ').forEach(function (attribute) {
+            setAttribute(this, attribute);
+          }, this);
+        });
+      }
+    });
+
+    D.fn.extend({
+      prop: function prop(name, value) {
+        name = propMap[name] || name;
+        return typeof name == 'string' && !(1 in arguments) ? this[0] && this[0][name] : this.each(function (idx) {
+          if (isObject(name)) for (var key in name) {
+            this[propMap[key] || key] = name[key];
+          } else this[name] = funcArg(this, value, idx, this[name]);
+        });
+      },
+      removeProp: function removeProp(name) {
+        name = propMap[name] || name;
+        return this.each(function () {
+          delete this[name];
+        });
+      }
+    });
+
+    D.fn.extend({
+      val: function val(value) {
+        if (0 in arguments) {
+          if (value == null) value = "";
+          return this.each(function (idx) {
+            this.value = funcArg(this, value, idx, this.value);
+          });
+        } else {
+          return this[0] && (this[0].multiple ? D(this[0]).find('option').filter(function () {
+            return this.selected;
+          }).pluck('value') : this[0].value);
+        }
+      }
+    });
+
+    D.fn.extend({
       wrap: function wrap(structure) {
         var func = isFunction(structure);
         if (this[0] && !func) var dom = D(structure).get(0),
@@ -942,72 +909,13 @@
           D(this).replaceWith(D(this).children());
         });
         return this;
-      },
-      replaceWith: function replaceWith(newContent) {
-        return this.before(newContent).remove();
-      },
-
-      /* Miscellaneous */
-      toArray: function toArray() {
-        return this.get();
-      },
-      each: function each(callback) {
-        emptyArray.every.call(this, function (el, idx) {
-          return callback.call(el, idx, el) !== false;
-        });
-        return this;
-      },
-      map: function map(fn) {
-        return D(D.map(this, function (el, i) {
-          return fn.call(el, i, el);
-        }));
-      },
-      get: function get(idx) {
-        return idx === undefined ? slice.call(this) : this[idx >= 0 ? idx : idx + this.length];
-      },
-      size: function size() {
-        return this.length;
-      },
-      index: function index(element) {
-        return element ? this.indexOf(D(element)[0]) : this.parent().children().indexOf(this[0]);
-      },
-
-      /* Events */
-      ready: function ready(callback) {
-        // don't use "interactive" on IE <= 10 (it can fired premature)
-        if (document$1.readyState === "complete" || document$1.readyState !== "loading" && !document$1.documentElement.doScroll) setTimeout(function () {
-          callback(D);
-        }, 0);else {
-          var handler = function handler() {
-            document$1.removeEventListener("DOMContentLoaded", handler, false);
-            window.removeEventListener("load", handler, false);
-            callback(D);
-          };
-
-          document$1.addEventListener("DOMContentLoaded", handler, false);
-          window.addEventListener("load", handler, false);
-        }
-        return this;
-      },
-
-      /* Data */
-      data: function data(name, value) {
-        var attrName = 'data-' + name.replace(capitalRE, '-$1').toLowerCase();
-        var data = 1 in arguments ? this.attr(attrName, value) : this.attr(attrName);
-        return data !== null ? deserializeValue(data) : undefined;
-      },
-
-      /* Effects */
-      show: function show() {
-        return this.each(function () {
-          this.style.display == "none" && (this.style.display = '');
-          if (getComputedStyle(this, '').getPropertyValue("display") == "none") this.style.display = defaultDisplay(this.nodeName);
-        });
-      },
-      hide: function hide() {
-        return this.css("display", "none");
       }
     });
+
+    function subtract(el, dimen) {
+      return el.css('box-sizing') === 'border-box' ? dimen === 'width' ? parseFloat(el.css(dimen)) - parseFloat(el.css('padding-left')) - parseFloat(el.css('padding-right')) - parseFloat(el.css('border-left')) - parseFloat(el.css('border-right')) : parseFloat(el.css(dimen)) - parseFloat(el.css('padding-top')) - parseFloat(el.css('padding-bottom')) - parseFloat(el.css('border-top')) - parseFloat(el.css('border-bottom')) : parseFloat(el.css(dimen));
+    }
+
     dimensions.forEach(function (dimension) {
       var dimensionProperty = dimension.replace(/./, function (m) {
         return m[0].toUpperCase();
@@ -1015,11 +923,44 @@
 
       D.fn[dimension] = function (value) {
         var el = this[0];
-        if (value === undefined) return isWindow(el) ? el['inner' + dimensionProperty] : isDocument(el) ? el.documentElement['scroll' + dimensionProperty] : parseFloat(this.css(dimension));else return this.each(function (idx) {
+        if (value === undefined) return isWindow(el) ? el['inner' + dimensionProperty] : isDocument(el) ? el.documentElement['scroll' + dimensionProperty] : subtract(this, dimension);else return this.each(function (idx) {
           el = D(this);
           el.css(dimension, funcArg(this, value, idx, el[dimension]()));
         });
       };
+    });
+
+    D.fn.extend({
+      remove: function remove() {
+        return this.each(function () {
+          if (this.parentNode != null) this.parentNode.removeChild(this);
+        });
+      },
+      empty: function empty() {
+        return this.each(function () {
+          this.innerHTML = '';
+        });
+      },
+      clone: function clone() {
+        return this.map(function () {
+          return this.cloneNode(true);
+        });
+      },
+      html: function html(_html) {
+        return 0 in arguments ? this.each(function (idx) {
+          var originHtml = this.innerHTML;
+          D(this).empty().append(funcArg(this, _html, idx, originHtml));
+        }) : 0 in this ? this[0].innerHTML : null;
+      },
+      text: function text(_text) {
+        return 0 in arguments ? this.each(function (idx) {
+          var newText = funcArg(this, _text, idx, this.textContent);
+          this.textContent = newText == null ? '' : '' + newText;
+        }) : 0 in this ? this.pluck('textContent').join("") : null;
+      },
+      replaceWith: function replaceWith(newContent) {
+        return this.before(newContent).remove();
+      }
     });
 
     function traverseNode(node, fn) {
@@ -1090,9 +1031,42 @@
         return this;
       };
     });
-    D.fn.init.prototype = D.fn;
 
-    var _zid = 1;
+    var _zid = 1,
+        handlers = {},
+        specialEvents = {
+      click: 'MouseEvents',
+      mousedown: 'MouseEvents',
+      mouseup: 'MouseEvents',
+      mousemove: 'MouseEvents'
+    },
+        focusinSupported = 'onfocusin' in window,
+        focus = {
+      focus: 'focusin',
+      blur: 'focusout'
+    },
+        hover = {
+      mouseenter: 'mouseover',
+      mouseleave: 'mouseout'
+    },
+        ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
+        eventMethods = {
+      preventDefault: 'isDefaultPrevented',
+      stopImmediatePropagation: 'isImmediatePropagationStopped',
+      stopPropagation: 'isPropagationStopped'
+    };
+
+    function isString(obj) {
+      return typeof obj == 'string';
+    }
+
+    function returnTrue() {
+      return true;
+    }
+
+    function returnFalse() {
+      return false;
+    }
 
     function zid(element) {
       return element._zid || (element._zid = _zid++);
@@ -1130,7 +1104,7 @@
       var id = zid(element),
           set = handlers[id] || (handlers[id] = []);
       events.split(/\s/).forEach(function (event) {
-        if (event == 'ready') return D(document).ready(fn);
+        if (event == 'ready') return D(document$1).ready(fn);
         var handler = parse(event);
         handler.fn = fn;
         handler.sel = selector; // emulate mouseenter, mouseleave
@@ -1211,7 +1185,7 @@
 
     D.Event = function (type$$1, props) {
       if (!isString(type$$1)) props = type$$1, type$$1 = props.type;
-      var event = document.createEvent(specialEvents[type$$1] || 'Events'),
+      var event = document$1.createEvent(specialEvents[type$$1] || 'Events'),
           bubbles = true;
       if (props) for (var name in props) {
         name == 'bubbles' ? bubbles = !!props[name] : event[name] = props[name];
@@ -1339,7 +1313,7 @@
       Moz: '',
       O: 'o'
     },
-        testEl = document.createElement('div'),
+        testEl = document$1.createElement('div'),
         supportedTransforms = /^((translate|rotate|scale)(X|Y|Z|3d)?|matrix(3d)?|perspective|skew(X|Y)?)$/i,
         transform,
         transitionProperty,
@@ -1468,7 +1442,7 @@
     window.D = D;
     var $ = D;
 
-    var DEFAULTS = {
+    var defaults = {
       // Enable modal to drag
       draggable: true,
       // Enable modal to resize
@@ -1554,16 +1528,6 @@
       progressiveLoading: true
     };
 
-    /**
-     * [getImgSrc]
-     * @param {[Object]}  el    [description]
-     */
-
-    function getImgSrc(el) {
-      // Get data-src as image src at first
-      var src = $(el).attr('data-src') ? $(el).attr('data-src') : $(el).attr('href');
-      return src;
-    }
     /**
      * [throttle]
      * @param  {Function} fn    [description]
@@ -1690,6 +1654,29 @@
     function supportTouch() {
       return !!('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
     }
+    /**
+     * [fadeIn]
+     */
+
+    function fadeIn(el) {
+      var opacity = 0;
+      el.style.opacity = 0;
+      el.style.filter = '';
+      var last = +new Date();
+
+      var tick = function tick() {
+        opacity += (new Date() - last) / 400;
+        el.style.opacity = opacity;
+        el.style.filter = 'alpha(opacity=' + 100 * opacity | 0 + ')';
+        last = +new Date();
+
+        if (opacity < 1) {
+          window.requestAnimationFrame && requestAnimationFrame(tick) || setTimeout(tick, 16);
+        }
+      };
+
+      tick();
+    }
 
     var $W = $(window);
     var $D = $(document);
@@ -1709,7 +1696,7 @@
       // modal resizing flag
       isResizing: false,
       // modal z-index setting
-      zIndex: DEFAULTS.zIndex
+      zIndex: defaults.zIndex
     };
 
     var draggable = {
@@ -2139,7 +2126,7 @@
     /*#__PURE__*/
     function () {
       function PhotoViewer(items, options, el) {
-        this.options = $.extend(true, {}, DEFAULTS, options);
+        this.options = $.extend(true, {}, defaults, options);
 
         if (options && $.isArray(options.footToolbar)) {
           this.options.footToolbar = options.footToolbar;
@@ -2427,7 +2414,6 @@
           w: this.$stage.width(),
           h: this.$stage.height()
         };
-        console.log(stageData);
         var scale = this.getImageScaleToStage(stageData.w, stageData.h);
         this.$image.css({
           width: Math.ceil(img.width * scale) + 'px',
@@ -2460,7 +2446,7 @@
         this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Add image init animation
 
         if (this.options.initAnimation && !this.options.progressiveLoading) {
-          this.$image.fadeIn();
+          fadeIn(this.$image[0]);
         }
       };
 
@@ -2479,7 +2465,10 @@
         this.rotateAngle = 0;
 
         if (this.options.initAnimation && !this.options.progressiveLoading) {
-          this.$image.hide();
+          this.$image.css({
+            'opacity': 0,
+            'filter': ''
+          });
         }
 
         this.$image.attr('src', imgSrc);
@@ -2894,86 +2883,6 @@
      */
 
     window.PhotoViewer = PhotoViewer;
-    /**
-     * jQuery plugin
-     */
-
-    var jqEl = null,
-        getImgGroup = function getImgGroup(list, groupName) {
-      var items = [];
-      $(list).each(function () {
-        var src = getImgSrc(this);
-        items.push({
-          src: src,
-          title: $(this).attr('data-title'),
-          groupName: groupName
-        });
-      });
-      return items;
-    };
-
-    $.fn.photoviewer = function (options) {
-      jqEl = $(this);
-      options = options ? options : {}; // Convert a numeric string into a number
-
-      for (var key in options) {
-        if (typeof options[key] === 'string' && !isNaN(options[key])) {
-          options[key] = parseFloat(options[key]);
-        }
-      } // Get init event, 'click' or 'dblclick'
-
-
-      var opts = $.extend(true, {}, DEFAULTS, options); // We should get zIndex of options before plugin's init.
-
-      PUBLIC_VARS['zIndex'] = opts.zIndex;
-
-      if (typeof options === 'string') ; else {
-        jqEl.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-          e.preventDefault(); // This will stop triggering data-api event
-
-          e.stopPropagation(); // Get image group
-
-          var items = [],
-              currentGroupName = $(this).attr('data-group'),
-              groupList = $D.find('[data-group="' + currentGroupName + '"]');
-
-          if (currentGroupName !== undefined) {
-            items = getImgGroup(groupList, currentGroupName);
-            options['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
-          } else {
-            items = getImgGroup(jqEl.not('[data-group]'));
-            options['index'] = $(this).index();
-          }
-
-          $(this).data(NS, new PhotoViewer(items, options, this));
-        });
-      }
-
-      return jqEl;
-    };
-    /**
-     * PhotoViewer DATA-API
-     */
-
-
-    $D.on(CLICK_EVENT + EVENT_NS, '[data-' + NS + ']', function (e) {
-      jqEl = $('[data-' + NS + ']');
-      e.preventDefault(); // Get image group
-
-      var items = [],
-          currentGroupName = $(this).attr('data-group'),
-          groupList = $D.find('[data-group="' + currentGroupName + '"]');
-
-      if (currentGroupName !== undefined) {
-        items = getImgGroup(groupList, currentGroupName);
-        DEFAULTS['index'] = $(this).index('[data-group="' + currentGroupName + '"]');
-      } else {
-        items = getImgGroup(jqEl.not('[data-group]'));
-        DEFAULTS['index'] = $(this).index();
-      }
-
-      $(this).data(NS, new PhotoViewer(items, DEFAULTS, this));
-    });
 
     return PhotoViewer;
 
