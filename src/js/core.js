@@ -412,7 +412,7 @@ class PhotoViewer {
     if (this.options.initAnimation) {
       this.$photoviewer.animate(modalCSSObj, () => {
         this.setImageSize(img);
-      });
+      }, 300, 'ease-in-out');
     } else {
       this.$photoviewer.css(modalCSSObj);
       this.setImageSize(img);
