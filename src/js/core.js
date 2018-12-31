@@ -22,8 +22,7 @@ import {
   getNumFromCSSValue,
   hasScrollbar,
   getScrollbarWidth,
-  setGrabCursor,
-  fadeIn
+  setGrabCursor
 } from './utilities';
 
 import draggable from './draggable';
@@ -488,8 +487,12 @@ class PhotoViewer {
     this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
     // Add image init animation
-    if (this.options.initAnimation && !this.options.progressiveLoading) {
-      fadeIn(this.$image[0]);
+    if (
+      this.options.initAnimation
+      && !this.options.progressiveLoading
+      && this.$image.css('display') === 'none'
+    ) {
+      this.$image.fadeIn();
     }
 
   }
@@ -511,7 +514,7 @@ class PhotoViewer {
     this.rotateAngle = 0;
 
     if (this.options.initAnimation && !this.options.progressiveLoading) {
-      this.$image.css({ 'opacity': 0, 'filter': '' });
+      this.$image.hide();
     }
 
     this.$image.attr('src', imgSrc);

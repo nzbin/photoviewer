@@ -143,7 +143,7 @@ function classRE(name) {
   return name in classCache ? classCache[name] : classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)');
 }
 
-function defaultDisplay(nodeName) {
+function defaultDisplay$1(nodeName) {
   var element, display;
 
   if (!elementDisplay[nodeName]) {
@@ -534,7 +534,7 @@ D.fn.extend({
   show: function show() {
     return this.each(function () {
       this.style.display == "none" && (this.style.display = '');
-      if (getComputedStyle(this, '').getPropertyValue("display") == "none") this.style.display = defaultDisplay(this.nodeName);
+      if (getComputedStyle(this, '').getPropertyValue("display") == "none") this.style.display = defaultDisplay$1(this.nodeName);
     });
   },
   hide: function hide() {
@@ -542,104 +542,6 @@ D.fn.extend({
   }
 });
 D.fn.init.prototype = D.fn;
-
-D.fn.extend({
-  find: function find(selector) {
-    var result,
-        $this = this;
-    if (!selector) result = D();else if (typeof selector == 'object') result = D(selector).filter(function () {
-      var node = this;
-      return emptyArray.some.call($this, function (parent) {
-        return D.contains(parent, node);
-      });
-    });else if (this.length == 1) result = D(D.qsa(this[0], selector));else result = this.map(function () {
-      return D.qsa(this, selector);
-    });
-    return result;
-  },
-  filter: function filter$$1(selector) {
-    if (isFunction(selector)) return this.not(this.not(selector));
-    return D(filter.call(this, function (element) {
-      return D.matches(element, selector);
-    }));
-  },
-  has: function has(selector) {
-    return this.filter(function () {
-      return isObject(selector) ? D.contains(this, selector) : D(this).find(selector).size();
-    });
-  },
-  not: function not(selector) {
-    var nodes = [];
-    if (isFunction(selector) && selector.call !== undefined) this.each(function (idx) {
-      if (!selector.call(this, idx)) nodes.push(this);
-    });else {
-      var excludes = typeof selector == 'string' ? this.filter(selector) : likeArray(selector) && isFunction(selector.item) ? slice.call(selector) : D(selector);
-      this.forEach(function (el) {
-        if (excludes.indexOf(el) < 0) nodes.push(el);
-      });
-    }
-    return D(nodes);
-  },
-  is: function is(selector) {
-    return typeof selector == 'string' ? this.length > 0 && D.matches(this[0], selector) : selector && this.selector == selector.selector;
-  },
-  add: function add(selector, context) {
-    return D(uniq(this.concat(D(selector, context))));
-  },
-  contents: function contents() {
-    return this.map(function () {
-      return this.contentDocument || slice.call(this.childNodes);
-    });
-  },
-  closest: function closest(selector, context) {
-    var nodes = [],
-        collection = typeof selector == 'object' && D(selector);
-    this.each(function (_, node) {
-      while (node && !(collection ? collection.indexOf(node) >= 0 : D.matches(node, selector))) {
-        node = node !== context && !isDocument(node) && node.parentNode;
-      }
-
-      if (node && nodes.indexOf(node) < 0) nodes.push(node);
-    });
-    return D(nodes);
-  },
-  parents: function parents(selector) {
-    var ancestors = [],
-        nodes = this;
-
-    while (nodes.length > 0) {
-      nodes = D.map(nodes, function (node) {
-        if ((node = node.parentNode) && !isDocument(node) && ancestors.indexOf(node) < 0) {
-          ancestors.push(node);
-          return node;
-        }
-      });
-    }
-
-    return filtered(ancestors, selector);
-  },
-  parent: function parent(selector) {
-    return filtered(uniq(this.pluck('parentNode')), selector);
-  },
-  children: function children$$1(selector) {
-    return filtered(this.map(function () {
-      return children(this);
-    }), selector);
-  },
-  siblings: function siblings(selector) {
-    return filtered(this.map(function (i, el) {
-      return filter.call(children(el.parentNode), function (child) {
-        return child !== el;
-      });
-    }), selector);
-  },
-  prev: function prev(selector) {
-    return D(this.pluck('previousElementSibling')).filter(selector || '*');
-  },
-  next: function next(selector) {
-    return D(this.pluck('nextElementSibling')).filter(selector || '*');
-  }
-});
 
 D.fn.extend({
   css: function css(property, value) {
@@ -905,6 +807,104 @@ D.fn.extend({
       D(this).replaceWith(D(this).children());
     });
     return this;
+  }
+});
+
+D.fn.extend({
+  find: function find(selector) {
+    var result,
+        $this = this;
+    if (!selector) result = D();else if (typeof selector == 'object') result = D(selector).filter(function () {
+      var node = this;
+      return emptyArray.some.call($this, function (parent) {
+        return D.contains(parent, node);
+      });
+    });else if (this.length == 1) result = D(D.qsa(this[0], selector));else result = this.map(function () {
+      return D.qsa(this, selector);
+    });
+    return result;
+  },
+  filter: function filter$$1(selector) {
+    if (isFunction(selector)) return this.not(this.not(selector));
+    return D(filter.call(this, function (element) {
+      return D.matches(element, selector);
+    }));
+  },
+  has: function has(selector) {
+    return this.filter(function () {
+      return isObject(selector) ? D.contains(this, selector) : D(this).find(selector).size();
+    });
+  },
+  not: function not(selector) {
+    var nodes = [];
+    if (isFunction(selector) && selector.call !== undefined) this.each(function (idx) {
+      if (!selector.call(this, idx)) nodes.push(this);
+    });else {
+      var excludes = typeof selector == 'string' ? this.filter(selector) : likeArray(selector) && isFunction(selector.item) ? slice.call(selector) : D(selector);
+      this.forEach(function (el) {
+        if (excludes.indexOf(el) < 0) nodes.push(el);
+      });
+    }
+    return D(nodes);
+  },
+  is: function is(selector) {
+    return typeof selector == 'string' ? this.length > 0 && D.matches(this[0], selector) : selector && this.selector == selector.selector;
+  },
+  add: function add(selector, context) {
+    return D(uniq(this.concat(D(selector, context))));
+  },
+  contents: function contents() {
+    return this.map(function () {
+      return this.contentDocument || slice.call(this.childNodes);
+    });
+  },
+  closest: function closest(selector, context) {
+    var nodes = [],
+        collection = typeof selector == 'object' && D(selector);
+    this.each(function (_, node) {
+      while (node && !(collection ? collection.indexOf(node) >= 0 : D.matches(node, selector))) {
+        node = node !== context && !isDocument(node) && node.parentNode;
+      }
+
+      if (node && nodes.indexOf(node) < 0) nodes.push(node);
+    });
+    return D(nodes);
+  },
+  parents: function parents(selector) {
+    var ancestors = [],
+        nodes = this;
+
+    while (nodes.length > 0) {
+      nodes = D.map(nodes, function (node) {
+        if ((node = node.parentNode) && !isDocument(node) && ancestors.indexOf(node) < 0) {
+          ancestors.push(node);
+          return node;
+        }
+      });
+    }
+
+    return filtered(ancestors, selector);
+  },
+  parent: function parent(selector) {
+    return filtered(uniq(this.pluck('parentNode')), selector);
+  },
+  children: function children$$1(selector) {
+    return filtered(this.map(function () {
+      return children(this);
+    }), selector);
+  },
+  siblings: function siblings(selector) {
+    return filtered(this.map(function (i, el) {
+      return filter.call(children(el.parentNode), function (child) {
+        return child !== el;
+      });
+    }), selector);
+  },
+  prev: function prev(selector) {
+    return D(this.pluck('previousElementSibling')).filter(selector || '*');
+  },
+  next: function next(selector) {
+    return D(this.pluck('nextElementSibling')).filter(selector || '*');
   }
 });
 
@@ -1435,6 +1435,80 @@ D.fn.anim = function (properties, duration, ease, callback, delay) {
 
 testEl = null;
 
+D.fn.extend({
+  show: function show() {
+    return this.each(function () {
+      this.style.display == "none" && (this.style.display = '');
+      if (getComputedStyle(this, '').getPropertyValue("display") == "none") this.style.display = defaultDisplay(this.nodeName);
+    });
+  },
+  hide: function hide() {
+    return this.css("display", "none");
+  }
+});
+var origShow = D.fn.show,
+    origHide = D.fn.hide,
+    origToggle = D.fn.toggle;
+
+function anim(el, speed, opacity, scale, callback) {
+  if (typeof speed == 'function' && !callback) callback = speed, speed = undefined;
+  var props = {
+    opacity: opacity
+  };
+
+  if (scale) {
+    props.scale = scale;
+    el.css(D.fx.cssPrefix + 'transform-origin', '0 0');
+  }
+
+  return el.animate(props, speed, null, callback);
+}
+
+function hide(el, speed, scale, callback) {
+  return anim(el, speed, 0, scale, function () {
+    origHide.call(D(this));
+    callback && callback.call(this);
+  });
+}
+
+D.fn.show = function (speed, callback) {
+  origShow.call(this);
+  if (speed === undefined) speed = 0;else this.css('opacity', 0);
+  return anim(this, speed, 1, '1,1', callback);
+};
+
+D.fn.hide = function (speed, callback) {
+  if (speed === undefined) return origHide.call(this);else return hide(this, speed, '0,0', callback);
+};
+
+D.fn.toggle = function (speed, callback) {
+  if (speed === undefined || typeof speed == 'boolean') return origToggle.call(this, speed);else return this.each(function () {
+    var el = D(this);
+    el[el.css('display') == 'none' ? 'show' : 'hide'](speed, callback);
+  });
+};
+
+D.fn.fadeTo = function (speed, opacity, callback) {
+  return anim(this, speed, opacity, null, callback);
+};
+
+D.fn.fadeIn = function (speed, callback) {
+  var target = this.css('opacity');
+  if (target > 0) this.css('opacity', 0);else target = 1;
+  return origShow.call(this).fadeTo(speed, target, callback);
+};
+
+D.fn.fadeOut = function (speed, callback) {
+  return hide(this, speed, null, callback);
+};
+
+D.fn.fadeToggle = function (speed, callback) {
+  return this.each(function () {
+    var el = D(this);
+    el[el.css('opacity') == 0 || el.css('display') == 'none' ? 'fadeIn' : 'fadeOut'](speed, callback);
+  });
+};
+
 window.D = D;
 var $ = D;
 
@@ -1649,29 +1723,6 @@ function setGrabCursor(imageData, stageData, stage, isRotated) {
 
 function supportTouch() {
   return !!('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
-}
-/**
- * [fadeIn]
- */
-
-function fadeIn(el) {
-  var opacity = 0;
-  el.style.opacity = 0;
-  el.style.filter = '';
-  var last = +new Date();
-
-  var tick = function tick() {
-    opacity += (new Date() - last) / 400;
-    el.style.opacity = opacity;
-    el.style.filter = 'alpha(opacity=' + 100 * opacity | 0 + ')';
-    last = +new Date();
-
-    if (opacity < 1) {
-      window.requestAnimationFrame && requestAnimationFrame(tick) || setTimeout(tick, 16);
-    }
-  };
-
-  tick();
 }
 
 var $W = $(window);
@@ -2441,8 +2492,8 @@ function () {
 
     this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Add image init animation
 
-    if (this.options.initAnimation && !this.options.progressiveLoading) {
-      fadeIn(this.$image[0]);
+    if (this.options.initAnimation && !this.options.progressiveLoading && this.$image.css('display') === 'none') {
+      this.$image.fadeIn();
     }
   };
 
@@ -2461,10 +2512,7 @@ function () {
     this.rotateAngle = 0;
 
     if (this.options.initAnimation && !this.options.progressiveLoading) {
-      this.$image.css({
-        'opacity': 0,
-        'filter': ''
-      });
+      this.$image.hide();
     }
 
     this.$image.attr('src', imgSrc);
