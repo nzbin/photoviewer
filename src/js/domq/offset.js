@@ -1,6 +1,6 @@
 import D from './d-class';
 import { document, rootNodeRE } from './vars';
-import { funcArg } from './utils';
+import { funcArg, isWindow } from './utils';
 
 D.fn.extend({
     offset: function (coordinates) {
@@ -56,7 +56,11 @@ D.fn.extend({
     scrollTop: function (value) {
         if (!this.length) return
         var hasScrollTop = 'scrollTop' in this[0]
-        if (value === undefined) return hasScrollTop ? this[0].scrollTop : this[0].pageYOffset
+        if (value === undefined) return hasScrollTop
+            ? this[0].scrollTop
+            : isWindow(this[0])
+                ? this[0].pageYOffset
+                : this[0].defaultView.pageYOffset;
         return this.each(hasScrollTop ?
             function () { this.scrollTop = value } :
             function () { this.scrollTo(this.scrollX, value) })
@@ -64,7 +68,11 @@ D.fn.extend({
     scrollLeft: function (value) {
         if (!this.length) return
         var hasScrollLeft = 'scrollLeft' in this[0]
-        if (value === undefined) return hasScrollLeft ? this[0].scrollLeft : this[0].pageXOffset
+        if (value === undefined) return hasScrollLeft
+            ? this[0].scrollLeft
+            : isWindow(this[0])
+                ? this[0].pageXOffset
+                : this[0].defaultView.pageXOffset;
         return this.each(hasScrollLeft ?
             function () { this.scrollLeft = value } :
             function () { this.scrollTo(value, this.scrollY) })
@@ -72,7 +80,7 @@ D.fn.extend({
     offsetParent: function () {
         return this.map(function () {
             var parent = this.offsetParent || document.body
-            while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css("position") == "static")
+            while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css('position') == 'static')
                 parent = parent.offsetParent
             return parent
         })

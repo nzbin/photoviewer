@@ -20,7 +20,7 @@ D.fn.extend({
             newName.split(/\s+/g).forEach(function (klass) {
                 if (!D(this).hasClass(klass)) classList.push(klass)
             }, this)
-            classList.length && className(this, cls + (cls ? " " : "") + classList.join(" "))
+            classList.length && className(this, cls + (cls ? ' ' : '') + classList.join(' '))
         })
     },
     removeClass: function (name) {
@@ -30,7 +30,7 @@ D.fn.extend({
             if (name === undefined) return className(this, '')
             classList = className(this)
             funcArg(this, name, idx, classList).split(/\s+/g).forEach(function (klass) {
-                classList = classList.replace(classRE(klass), " ")
+                classList = classList.replace(classRE(klass), ' ')
             })
             className(this, classList.trim())
         })
@@ -41,8 +41,9 @@ D.fn.extend({
             var $this = D(this),
                 names = funcArg(this, name, idx, className(this))
             names.split(/\s+/g).forEach(function (klass) {
-                (when === undefined ? !$this.hasClass(klass) : when) ?
-                    $this.addClass(klass) : $this.removeClass(klass)
+                (when === undefined ? !$this.hasClass(klass) : when)
+                    ? $this.addClass(klass)
+                    : $this.removeClass(klass)
             })
         })
     }

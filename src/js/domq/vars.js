@@ -1,8 +1,8 @@
-var emptyArray = [],
+var document = window.document,
+  emptyArray = [],
   concat = emptyArray.concat,
   filter = emptyArray.filter,
   slice = emptyArray.slice,
-  document = window.document,
   elementDisplay = {},
   classCache = {},
   cssNumber = {
@@ -22,9 +22,6 @@ var emptyArray = [],
 
   // special attributes that should be get/set via method calls
   methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
-
-  adjacencyOperators = ['after', 'prepend', 'before', 'append'],
-  dimensions= ['width', 'height'],
 
   table = document.createElement('table'),
   tableRow = document.createElement('tr'),
@@ -60,11 +57,11 @@ var emptyArray = [],
   };
 
 export {
+  document,
   emptyArray,
   concat,
   filter,
   slice,
-  document,
   elementDisplay,
   classCache,
   cssNumber,
@@ -74,8 +71,6 @@ export {
   rootNodeRE,
   capitalRE,
   methodAttributes,
-  adjacencyOperators,
-  dimensions,
   containers,
   simpleSelectorRE,
   class2type,
@@ -84,5 +79,3 @@ export {
   propMap,
   isArray
 }
-
-

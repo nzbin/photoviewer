@@ -13,11 +13,11 @@ import {
 function type(obj) {
   return obj == null
     ? String(obj)
-    : class2type[toString.call(obj)] || "object"
+    : class2type[toString.call(obj)] || 'object'
 }
 
 function isFunction(value) {
-  return type(value) == "function"
+  return type(value) == 'function'
 }
 
 function isWindow(obj) {
@@ -29,7 +29,7 @@ function isDocument(obj) {
 }
 
 function isObject(obj) {
-  return type(obj) == "object"
+  return type(obj) == 'object'
 }
 
 function isPlainObject(obj) {
@@ -65,7 +65,7 @@ function dasherize(str) {
 }
 
 function maybeAddPx(name, value) {
-  return (typeof value == "number" && !cssNumber[dasherize(name)]) ? value + "px" : value
+  return (typeof value == 'number' && !cssNumber[dasherize(name)]) ? value + 'px' : value
 }
 
 function uniq(array) {
@@ -90,9 +90,9 @@ function defaultDisplay(nodeName) {
   if (!elementDisplay[nodeName]) {
     element = document.createElement(nodeName)
     document.body.appendChild(element)
-    display = getComputedStyle(element, '').getPropertyValue("display")
+    display = getComputedStyle(element, '').getPropertyValue('display')
     element.parentNode.removeChild(element)
-    display == "none" && (display = "block")
+    display == 'none' && (display = 'block')
     elementDisplay[nodeName] = display
   }
   return elementDisplay[nodeName]
@@ -106,21 +106,21 @@ function children(element) {
     })
 }
 
-// "true"  => true
-// "false" => false
-// "null"  => null
-// "42"    => 42
-// "42.5"  => 42.5
-// "08"    => "08"
+// 'true'  => true
+// 'false' => false
+// 'null'  => null
+// '42'    => 42
+// '42.5'  => 42.5
+// '08'    => '08'
 // JSON    => parse if valid
 // String  => self
 function deserializeValue(value) {
   try {
     return value ?
-      value == "true" ||
-      (value == "false" ? false :
-        value == "null" ? null :
-          +value + "" == value ? +value :
+      value == 'true' ||
+      (value == 'false' ? false :
+        value == 'null' ? null :
+          +value + '' == value ? +value :
             /^[\[\{]/.test(value) ? JSON.parse(value) :
               value) :
       value

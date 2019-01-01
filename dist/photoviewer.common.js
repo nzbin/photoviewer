@@ -22,12 +22,11 @@ var D = function D(selector, context) {
   return new D.fn.init(selector, context);
 };
 
-var emptyArray = [],
+var document$1 = window.document,
+    emptyArray = [],
     concat = emptyArray.concat,
     filter = emptyArray.filter,
     slice = emptyArray.slice,
-    document$1 = window.document,
-    elementDisplay = {},
     classCache = {},
     cssNumber = {
   'column-count': 1,
@@ -44,8 +43,6 @@ var emptyArray = [],
     rootNodeRE = /^(?:body|html)$/i,
     // special attributes that should be get/set via method calls
 methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
-    adjacencyOperators = ['after', 'prepend', 'before', 'append'],
-    dimensions = ['width', 'height'],
     table = document$1.createElement('table'),
     tableRow = document$1.createElement('tr'),
     containers = {
@@ -80,11 +77,11 @@ methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'of
 };
 
 function type(obj) {
-  return obj == null ? String(obj) : class2type[toString.call(obj)] || "object";
+  return obj == null ? String(obj) : class2type[toString.call(obj)] || 'object';
 }
 
 function isFunction(value) {
-  return type(value) == "function";
+  return type(value) == 'function';
 }
 
 function isWindow(obj) {
@@ -96,7 +93,7 @@ function isDocument(obj) {
 }
 
 function isObject(obj) {
-  return type(obj) == "object";
+  return type(obj) == 'object';
 }
 
 function isPlainObject(obj) {
@@ -124,7 +121,7 @@ function dasherize(str) {
 }
 
 function maybeAddPx(name, value) {
-  return typeof value == "number" && !cssNumber[dasherize(name)] ? value + "px" : value;
+  return typeof value == 'number' && !cssNumber[dasherize(name)] ? value + 'px' : value;
 }
 
 function uniq(array) {
@@ -143,26 +140,11 @@ function classRE(name) {
   return name in classCache ? classCache[name] : classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)');
 }
 
-function defaultDisplay$1(nodeName) {
-  var element, display;
-
-  if (!elementDisplay[nodeName]) {
-    element = document$1.createElement(nodeName);
-    document$1.body.appendChild(element);
-    display = getComputedStyle(element, '').getPropertyValue("display");
-    element.parentNode.removeChild(element);
-    display == "none" && (display = "block");
-    elementDisplay[nodeName] = display;
-  }
-
-  return elementDisplay[nodeName];
-}
-
 function children(element) {
   return 'children' in element ? slice.call(element.children) : D.map(element.childNodes, function (node) {
     if (node.nodeType == 1) return node;
   });
-} // "true"  => true
+} // 'true'  => true
 
 function filtered(nodes, selector) {
   return selector == null ? D(nodes) : D(nodes).filter(selector);
@@ -258,7 +240,7 @@ D.extend = D.fn.extend = function () {
       length = arguments.length,
       deep = false; // Handle a deep copy situation
 
-  if (typeof target === "boolean") {
+  if (typeof target === 'boolean') {
     deep = target; // Skip the boolean and the target
 
     target = arguments[i] || {};
@@ -266,7 +248,7 @@ D.extend = D.fn.extend = function () {
   } // Handle case when target is a string or something (possible in deep copy)
 
 
-  if (typeof target !== "object" && !isFunction(target)) {
+  if (typeof target !== 'object' && !isFunction(target)) {
     target = {};
   } // Extend D itself if only one argument is passed
 
@@ -335,7 +317,7 @@ D.extend({
     return emptyArray.indexOf.call(array, elem, i);
   },
   trim: function trim(str) {
-    return str == null ? "" : String.prototype.trim.call(str);
+    return str == null ? '' : String.prototype.trim.call(str);
   },
   noop: function noop() {},
   map: function map(elements, callback) {
@@ -370,17 +352,6 @@ D.extend({
   grep: function grep(elements, callback) {
     return filter.call(elements, callback);
   },
-  contains: function contains() {
-    return document$1.documentElement.contains ? function (parent, node) {
-      return parent !== node && parent.contains(node);
-    } : function (parent, node) {
-      while (node && (node = node.parentNode)) {
-        if (node === parent) return true;
-      }
-
-      return false;
-    };
-  },
   // Make DOM Array
   makeArray: function makeArray(dom, selector, me) {
     var i,
@@ -404,7 +375,7 @@ D.extend({
 
     if (!dom) {
       if (html.replace) {
-        html = html.replace(tagExpanderRE, "<$1></$2>");
+        html = html.replace(tagExpanderRE, '<$1></$2>');
       }
 
       if (name === undefined) {
@@ -463,10 +434,19 @@ D.extend({
     temp && tempParent.removeChild(element);
     return match;
   }
-}); // Populate the class2type map
+});
+D.contains = document$1.documentElement.contains ? function (parent, node) {
+  return parent !== node && parent.contains(node);
+} : function (parent, node) {
+  while (node && (node = node.parentNode)) {
+    if (node === parent) return true;
+  }
 
-D.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function (i, name) {
-  class2type["[object " + name + "]"] = name.toLowerCase();
+  return false;
+}; // Populate the class2type map
+
+D.each('Boolean Number String Function Array Date RegExp Object Error'.split(' '), function (i, name) {
+  class2type['[object ' + name + ']'] = name.toLowerCase();
 }); // Methods in Prototype
 
 D.fn.extend({
@@ -528,17 +508,6 @@ D.fn.extend({
   },
   index: function index(element) {
     return element ? this.indexOf(D(element)[0]) : this.parent().children().indexOf(this[0]);
-  },
-
-  /* Effects */
-  show: function show() {
-    return this.each(function () {
-      this.style.display == "none" && (this.style.display = '');
-      if (getComputedStyle(this, '').getPropertyValue("display") == "none") this.style.display = defaultDisplay$1(this.nodeName);
-    });
-  },
-  hide: function hide() {
-    return this.css("display", "none");
   }
 });
 D.fn.init.prototype = D.fn;
@@ -608,7 +577,7 @@ D.fn.extend({
       newName.split(/\s+/g).forEach(function (klass) {
         if (!D(this).hasClass(klass)) classList.push(klass);
       }, this);
-      classList.length && className(this, cls + (cls ? " " : "") + classList.join(" "));
+      classList.length && className(this, cls + (cls ? ' ' : '') + classList.join(' '));
     });
   },
   removeClass: function removeClass(name) {
@@ -618,7 +587,7 @@ D.fn.extend({
       if (name === undefined) return className(this, '');
       classList = className(this);
       funcArg(this, name, idx, classList).split(/\s+/g).forEach(function (klass) {
-        classList = classList.replace(classRE(klass), " ");
+        classList = classList.replace(classRE(klass), ' ');
       });
       className(this, classList.trim());
     });
@@ -710,7 +679,7 @@ D.fn.extend({
     return this.map(function () {
       var parent = this.offsetParent || document$1.body;
 
-      while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css("position") == "static") {
+      while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css('position') == 'static') {
         parent = parent.offsetParent;
       }
 
@@ -758,7 +727,7 @@ D.fn.extend({
 D.fn.extend({
   val: function val(value) {
     if (0 in arguments) {
-      if (value == null) value = "";
+      if (value == null) value = '';
       return this.each(function (idx) {
         this.value = funcArg(this, value, idx, this.value);
       });
@@ -911,8 +880,7 @@ D.fn.extend({
 function subtract(el, dimen) {
   return el.css('box-sizing') === 'border-box' ? dimen === 'width' ? parseFloat(el.css(dimen)) - parseFloat(el.css('padding-left')) - parseFloat(el.css('padding-right')) - parseFloat(el.css('border-left')) - parseFloat(el.css('border-right')) : parseFloat(el.css(dimen)) - parseFloat(el.css('padding-top')) - parseFloat(el.css('padding-bottom')) - parseFloat(el.css('border-top')) - parseFloat(el.css('border-bottom')) : parseFloat(el.css(dimen));
 }
-
-dimensions.forEach(function (dimension) {
+['width', 'height'].forEach(function (dimension) {
   var dimensionProperty = dimension.replace(/./, function (m) {
     return m[0].toUpperCase();
   });
@@ -925,6 +893,53 @@ dimensions.forEach(function (dimension) {
     });
   };
 });
+
+var traverseNode = function traverseNode(node, fn) {
+  fn(node);
+
+  for (var i = 0, len = node.childNodes.length; i < len; i++) {
+    traverseNode(node.childNodes[i], fn);
+  }
+}; // inside => append, prepend
+
+
+var domMani = function domMani(elem, args, fn, inside) {
+  // arguments can be nodes, arrays of nodes, D objects and HTML strings
+  var argType,
+      nodes = D.map(args, function (arg) {
+    var arr = [];
+    argType = type(arg);
+
+    if (argType == 'array') {
+      arg.forEach(function (el) {
+        if (el.nodeType !== undefined) return arr.push(el);else if (D.isD(el)) return arr = arr.concat(el.get());
+        arr = arr.concat(D.fragment(el));
+      });
+      return arr;
+    }
+
+    return argType == 'object' || arg == null ? arg : D.fragment(arg);
+  }),
+      copyByClone = elem.length > 1;
+  if (nodes.length < 1) return elem;
+  return elem.each(function (_, target) {
+    parent = inside ? target : target.parentNode;
+    var parentInDocument = D.contains(document$1.documentElement, parent);
+    nodes.forEach(function (node) {
+      if (copyByClone) node = node.cloneNode(true);else if (!parent) return D(node).remove();
+      fn.call(target, node);
+
+      if (parentInDocument) {
+        traverseNode(node, function (el) {
+          if (el.nodeName != null && el.nodeName.toUpperCase() === 'SCRIPT' && (!el.type || el.type === 'text/javascript') && !el.src) {
+            var target = el.ownerDocument ? el.ownerDocument.defaultView : window;
+            target['eval'].call(target, el.innerHTML);
+          }
+        });
+      }
+    });
+  });
+};
 
 D.fn.extend({
   remove: function remove() {
@@ -952,78 +967,41 @@ D.fn.extend({
     return 0 in arguments ? this.each(function (idx) {
       var newText = funcArg(this, _text, idx, this.textContent);
       this.textContent = newText == null ? '' : '' + newText;
-    }) : 0 in this ? this.pluck('textContent').join("") : null;
+    }) : 0 in this ? this.pluck('textContent').join('') : null;
   },
   replaceWith: function replaceWith(newContent) {
     return this.before(newContent).remove();
+  },
+  append: function append() {
+    return domMani(this, arguments, function (elem) {
+      this.insertBefore(elem, null);
+    }, true);
+  },
+  prepend: function prepend() {
+    return domMani(this, arguments, function (elem) {
+      this.insertBefore(elem, this.firstChild);
+    }, true);
+  },
+  after: function after() {
+    return domMani(this, arguments, function (elem) {
+      this.parentNode.insertBefore(elem, this.nextSibling);
+    }, false);
+  },
+  before: function before() {
+    return domMani(this, arguments, function (elem) {
+      this.parentNode.insertBefore(elem, this);
+    }, false);
   }
 });
-
-function traverseNode(node, fn) {
-  fn(node);
-
-  for (var i = 0, len = node.childNodes.length; i < len; i++) {
-    traverseNode(node.childNodes[i], fn);
-  }
-} // Generate the `after`, `prepend`, `before`, `append`,
-// `insertAfter`, `insertBefore`, `appendTo`, and `prependTo` methods.
-
-
-adjacencyOperators.forEach(function (operator, operatorIndex) {
-  var inside = operatorIndex % 2; //=> prepend, append
-
-  D.fn[operator] = function () {
-    // arguments can be nodes, arrays of nodes, D objects and HTML strings
-    var argType,
-        nodes = D.map(arguments, function (arg) {
-      var arr = [];
-      argType = type(arg);
-
-      if (argType == "array") {
-        arg.forEach(function (el) {
-          if (el.nodeType !== undefined) return arr.push(el);else if (D.isD(el)) return arr = arr.concat(el.get());
-          arr = arr.concat(D.fragment(el));
-        });
-        return arr;
-      }
-
-      return argType == "object" || arg == null ? arg : D.fragment(arg);
-    }),
-        parent,
-        copyByClone = this.length > 1;
-    if (nodes.length < 1) return this;
-    return this.each(function (_, target) {
-      parent = inside ? target : target.parentNode; // convert all methods to a "before" operation
-
-      target = operatorIndex == 0 ? target.nextSibling : operatorIndex == 1 ? target.firstChild : operatorIndex == 2 ? target : null;
-      var parentInDocument = D.contains(document$1.documentElement, parent);
-      nodes.forEach(function (node) {
-        if (copyByClone) {
-          node = node.cloneNode(true);
-        } else if (!parent) {
-          return D(node).remove();
-        }
-
-        parent.insertBefore(node, target);
-
-        if (parentInDocument) {
-          traverseNode(node, function (el) {
-            if (el.nodeName != null && el.nodeName.toUpperCase() === 'SCRIPT' && (!el.type || el.type === 'text/javascript') && !el.src) {
-              var target = el.ownerDocument ? el.ownerDocument.defaultView : window;
-              target['eval'].call(target, el.innerHTML);
-            }
-          });
-        }
-      });
-    });
-  }; // after    => insertAfter
-  // prepend  => prependTo
-  // before   => insertBefore
-  // append   => appendTo
-
-
-  D.fn[inside ? operator + 'To' : 'insert' + (operatorIndex ? 'Before' : 'After')] = function (html) {
-    D(html)[operator](this);
+D.each({
+  appendTo: 'append',
+  prependTo: 'prepend',
+  insertBefore: 'before',
+  insertAfter: 'after',
+  replaceAll: 'replaceWith'
+}, function (name, original) {
+  D.fn[name] = function (html) {
+    D(html)[original](this);
     return this;
   };
 });
@@ -1208,7 +1186,7 @@ D.proxy = function (fn, context) {
       return D.proxy(fn[context], fn);
     }
   } else {
-    throw new TypeError("expected function");
+    throw new TypeError('expected function');
   }
 };
 
@@ -1274,7 +1252,7 @@ D.fn.trigger = function (event, args) {
   event._args = args;
   return this.each(function () {
     // handle focus(), blur() by calling them directly
-    if (event.type in focus && typeof this[event.type] == "function") this[event.type](); // items in the collection might not be DOM elements
+    if (event.type in focus && typeof this[event.type] == 'function') this[event.type](); // items in the collection might not be DOM elements
     else if ('dispatchEvent' in this) this.dispatchEvent(event);else D(this).triggerHandler(event, args);
   });
 }; // triggers event handlers on current element just as if an event occurred,

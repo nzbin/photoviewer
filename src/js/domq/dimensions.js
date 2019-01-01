@@ -1,5 +1,4 @@
 import D from './d-class';
-import { dimensions } from './vars';
 import { funcArg, isDocument, isWindow } from './utils';
 
 function subtract(el, dimen) {
@@ -16,11 +15,11 @@ function subtract(el, dimen) {
                 - parseFloat(el.css('border-top'))
                 - parseFloat(el.css('border-bottom')))
         : parseFloat(el.css(dimen))
-}
+};
 
-dimensions.forEach(function (dimension) {
+['width', 'height'].forEach(function (dimension) {
     var dimensionProperty =
-        dimension.replace(/./, function (m) { return m[0].toUpperCase() })
+        dimension.replace(/./, function (m) { return m[0].toUpperCase() });
 
     D.fn[dimension] = function (value) {
         var el = this[0]

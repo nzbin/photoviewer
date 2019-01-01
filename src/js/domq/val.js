@@ -4,7 +4,7 @@ import { funcArg } from './utils';
 D.fn.extend({
     val: function (value) {
         if (0 in arguments) {
-            if (value == null) value = ""
+            if (value == null) value = ''
             return this.each(function (idx) {
                 this.value = funcArg(this, value, idx, this.value)
             })

@@ -96,5 +96,5 @@ D.fn.extend({
     },
     next: function (selector) {
         return D(this.pluck('nextElementSibling')).filter(selector || '*')
-    },
+    }
 });

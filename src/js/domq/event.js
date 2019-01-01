@@ -1,6 +1,6 @@
 import D from './d-class';
-import { isFunction } from './utils';
 import { document, slice } from './vars';
+import { isFunction } from './utils';
 
 var _zid = 1,
   handlers = {},
@@ -158,7 +158,7 @@ D.proxy = function (fn, context) {
       return D.proxy(fn[context], fn)
     }
   } else {
-    throw new TypeError("expected function")
+    throw new TypeError('expected function')
   }
 }
 
@@ -224,7 +224,7 @@ D.fn.trigger = function (event, args) {
   event._args = args
   return this.each(function () {
     // handle focus(), blur() by calling them directly
-    if (event.type in focus && typeof this[event.type] == "function") this[event.type]()
+    if (event.type in focus && typeof this[event.type] == 'function') this[event.type]()
     // items in the collection might not be DOM elements
     else if ('dispatchEvent' in this) this.dispatchEvent(event)
     else D(this).triggerHandler(event, args)
@@ -252,8 +252,8 @@ D.fn.triggerHandler = function (event, args) {
     'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave ' +
     'change select keydown keypress keyup error').split(' ').forEach(function (event) {
       D.fn[event] = function (callback) {
-        return (0 in arguments) ?
-          this.on(event, callback) :
-          this.trigger(event)
+        return (0 in arguments)
+          ? this.on(event, callback)
+          : this.trigger(event)
       }
     })
