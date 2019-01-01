@@ -662,7 +662,7 @@
       scrollTop: function scrollTop(value) {
         if (!this.length) return;
         var hasScrollTop = 'scrollTop' in this[0];
-        if (value === undefined) return hasScrollTop ? this[0].scrollTop : this[0].pageYOffset;
+        if (value === undefined) return hasScrollTop ? this[0].scrollTop : isWindow(this[0]) ? this[0].pageYOffset : this[0].defaultView.pageYOffset;
         return this.each(hasScrollTop ? function () {
           this.scrollTop = value;
         } : function () {
@@ -672,7 +672,7 @@
       scrollLeft: function scrollLeft(value) {
         if (!this.length) return;
         var hasScrollLeft = 'scrollLeft' in this[0];
-        if (value === undefined) return hasScrollLeft ? this[0].scrollLeft : this[0].pageXOffset;
+        if (value === undefined) return hasScrollLeft ? this[0].scrollLeft : isWindow(this[0]) ? this[0].pageXOffset : this[0].defaultView.pageXOffset;
         return this.each(hasScrollLeft ? function () {
           this.scrollLeft = value;
         } : function () {
