@@ -2,7 +2,13 @@
   "name": "photoviewer",
   "version": "2.2.1",
   "description": "A JS plugin to view images just like in Windows",
-  "main": "dist/photoviewer.js",
+  "main": "dist/photoviewer.common.js",
+  "module": "dist/photoviewer.esm.js",
+  "browser": "dist/photoviewer.js",
+  "files": [
+    "dist",
+    "src"
+  ],
   "homepage": "https://github.com/nzbin/photoviewer#readme",
   "author": "nzbin",
   "license": "MIT",
@@ -70,7 +76,7 @@
     "stylelint-scss": "^3.1.0",
     "uglify-js": "^3.1.10"
   },
-  "peerDependencies": {
-    "jquery": "^3.3.1"
+  "dependencies": {
+    "domq.js": "^0.4.1"
   }
 }
