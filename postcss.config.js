@@ -18,7 +18,6 @@ const banner = `
  */
 `;
 
-
 module.exports = ctx => ({
   map: ctx.options.map,
   plugins: {
