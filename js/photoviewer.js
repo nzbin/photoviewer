@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v3.0.0-beta.0
+ * photoviewer - v3.0.0-beta.1
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -27,10 +27,10 @@
     };
 
     var document$1 = window.document,
-      emptyArray = [],
-      concat = emptyArray.concat,
-      filter = emptyArray.filter,
-      slice = emptyArray.slice,
+      emptyArray$1 = [],
+      concat = emptyArray$1.concat,
+      filter = emptyArray$1.filter,
+      slice = emptyArray$1.slice,
       classCache = {},
       cssNumber = {
         'column-count': 1,
@@ -79,7 +79,16 @@
       },
       isArray = Array.isArray || function (arg) {
         return Object.prototype.toString.call(arg) === '[object Array]';
-      };
+      },
+      contains = document$1.documentElement.contains
+        ? function (parent, node) {
+          return parent !== node && parent.contains(node)
+        }
+        : function (parent, node) {
+          while (node && (node = node.parentNode))
+            if (node === parent) return true
+          return false
+        };
 
     function type(obj) {
       return obj == null
@@ -123,10 +132,6 @@
       })
     }
 
-    function flatten(array) {
-      return array.length > 0 ? D.fn.concat.apply([], array) : array
-    }
-
     function dasherize(str) {
       return str.replace(/::/g, '/')
         .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
@@ -156,6 +161,10 @@
         classCache[name] : (classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)'))
     }
 
+    function flatten(array) {
+      return array.length > 0 ? D.fn.concat.apply([], array) : array
+    }
+
     function children(element) {
       return 'children' in element ?
         slice.call(element.children) :
@@ -163,6 +172,11 @@
           if (node.nodeType == 1) return node
         })
     }
+
+    function isD(object) {
+      return object instanceof D
+    }
+
     function filtered(nodes, selector) {
       return selector == null ? D(nodes) : D(nodes).filter(selector)
     }
@@ -184,17 +198,39 @@
       svg ? (klass.baseVal = value) : (node.className = value);
     }
 
+    function isEmptyObject(obj) {
+      var name;
+      for (name in obj) return false
+      return true
+    }
+
+    function isNumeric(val) {
+      var num = Number(val),
+          type = typeof val;
+      return val != null && type != 'boolean' &&
+          (type != 'string' || val.length) &&
+          !isNaN(num) && isFinite(num) || false
+    }
+
+    function inArray(elem, array, i) {
+      return emptyArray.indexOf.call(array, elem, i)
+    }
+
+    function trim(str) {
+      return str == null ? '' : String.prototype.trim.call(str)
+    }
+
     D.fn = D.prototype = {
         constuctor: D,
         length: 0,
         // Because a collection acts like an array
         // copy over these useful array functions.
-        forEach: emptyArray.forEach,
-        reduce: emptyArray.reduce,
-        push: emptyArray.push,
-        sort: emptyArray.sort,
-        splice: emptyArray.splice,
-        indexOf: emptyArray.indexOf,
+        forEach: emptyArray$1.forEach,
+        reduce: emptyArray$1.reduce,
+        push: emptyArray$1.push,
+        sort: emptyArray$1.sort,
+        splice: emptyArray$1.splice,
+        indexOf: emptyArray$1.indexOf,
         // D's counterpart to jQuery's `$.fn.init` and
         // takes a CSS selector and an optional context (and handles various
         // special cases).
@@ -229,7 +265,7 @@
                 return D(document$1).ready(selector)
             }
             // If a D collection is given, just return it
-            else if (D.isD(selector)) {
+            else if (isD(selector)) {
                 return selector
             }
             // normalize array if an array of nodes is given
@@ -257,9 +293,9 @@
             var i, value, args = [];
             for (i = 0; i < arguments.length; i++) {
                 value = arguments[i];
-                args[i] = D.isD(value) ? value.toArray() : value;
+                args[i] = isD(value) ? value.toArray() : value;
             }
-            return concat.apply(D.isD(this) ? this.toArray() : this, args)
+            return concat.apply(isD(this) ? this.toArray() : this, args)
         },
         // `pluck` is borrowed from Prototype.js
         pluck: function (property) {
@@ -269,21 +305,21 @@
             return this.get()
         },
         get: function (idx) {
-            return idx === undefined ? slice.call(this) : this[idx >= 0 ? idx : idx + this.length]
+            return idx === undefined
+                ? slice.call(this)
+                : this[idx >= 0 ? idx : idx + this.length]
         },
         size: function () {
             return this.length
         },
         each: function (callback) {
-            emptyArray.every.call(this, function (el, idx) {
+            emptyArray$1.every.call(this, function (el, idx) {
                 return callback.call(el, idx, el) !== false
             });
             return this
         },
         map: function (fn) {
-            return D(
-                D.map(this, function (el, i) { return fn.call(el, i, el) })
-            )
+            return D(D.map(this, function (el, i) { return fn.call(el, i, el) }))
         },
         slice: function () {
             return D(slice.apply(this, arguments))
@@ -298,7 +334,7 @@
         },
         eq: function (idx) {
             return idx === -1 ? this.slice(idx) : this.slice(idx, +idx + 1)
-        },
+        }
     };
 
     D.extend = D.fn.extend = function () {
@@ -359,61 +395,6 @@
     };
 
     D.extend({
-        type: type,
-        isFunction: isFunction,
-        isWindow: isWindow,
-        isPlainObject: isPlainObject,
-        camelCase: camelize,
-        isArray: isArray,
-        isEmptyObject: function (obj) {
-            var name;
-            for (name in obj) return false
-            return true
-        },
-        isNumeric: function (val) {
-            var num = Number(val),
-                type$$1 = typeof val;
-            return val != null && type$$1 != 'boolean' &&
-                (type$$1 != 'string' || val.length) &&
-                !isNaN(num) && isFinite(num) || false
-        },
-        inArray: function (elem, array, i) {
-            return emptyArray.indexOf.call(array, elem, i)
-        },
-        trim: function (str) {
-            return str == null ? '' : String.prototype.trim.call(str)
-        },
-        each: function (elements, callback) {
-            var i, key;
-            if (likeArray(elements)) {
-                for (i = 0; i < elements.length; i++)
-                    if (callback.call(elements[i], i, elements[i]) === false) return elements
-            } else {
-                for (key in elements)
-                    if (callback.call(elements[key], key, elements[key]) === false) return elements
-            }
-
-            return elements
-        },
-        map: function (elements, callback) {
-            var value, values = [],
-                i, key;
-            if (likeArray(elements))
-                for (i = 0; i < elements.length; i++) {
-                    value = callback(elements[i], i);
-                    if (value != null) values.push(value);
-                }
-            else
-                for (key in elements) {
-                    value = callback(elements[key], key);
-                    if (value != null) values.push(value);
-                }
-            return flatten(values)
-        },
-        grep: function (elements, callback) {
-            return filter.call(elements, callback)
-        },
-        noop: function () { },
         // Make DOM Array
         makeArray: function (dom, selector, me) {
             var i, len = dom ? dom.length : 0;
@@ -421,6 +402,34 @@
             me.length = len;
             me.selector = selector || '';
             return me;
+        },
+        // D's CSS selector
+        qsa: function (element, selector) {
+            var found,
+                maybeID = selector[0] == '#',
+                maybeClass = !maybeID && selector[0] == '.',
+                // Ensure that a 1 char tag name still gets checked
+                nameOnly = maybeID || maybeClass ? selector.slice(1) : selector,
+                isSimple = simpleSelectorRE.test(nameOnly);
+            return (
+                // Safari DocumentFragment doesn't have getElementById
+                element.getElementById && isSimple && maybeID)
+                ? (found = element.getElementById(nameOnly))
+                    ? [found]
+                    : []
+                : element.nodeType !== 1 && element.nodeType !== 9 && element.nodeType !== 11
+                    ? []
+                    : slice.call(
+                        // DocumentFragment doesn't have getElementsByClassName/TagName
+                        isSimple && !maybeID && element.getElementsByClassName
+                            ? maybeClass
+                                // If it's simple, it could be a class
+                                ? element.getElementsByClassName(nameOnly)
+                                // Or a tag
+                                : element.getElementsByTagName(selector)
+                            // Or it's not simple, and we need to query all
+                            : element.querySelectorAll(selector)
+                    )
         },
         // Html -> Node
         fragment: function (html, name, properties) {
@@ -451,37 +460,6 @@
 
             return dom
         },
-        // D's CSS selector
-        qsa: function (element, selector) {
-            var found,
-                maybeID = selector[0] == '#',
-                maybeClass = !maybeID && selector[0] == '.',
-                // Ensure that a 1 char tag name still gets checked
-                nameOnly = maybeID || maybeClass ? selector.slice(1) : selector,
-                isSimple = simpleSelectorRE.test(nameOnly);
-            return (
-                // Safari DocumentFragment doesn't have getElementById
-                element.getElementById && isSimple && maybeID)
-                ? (found = element.getElementById(nameOnly))
-                    ? [found]
-                    : []
-                : element.nodeType !== 1 && element.nodeType !== 9 && element.nodeType !== 11
-                    ? []
-                    : slice.call(
-                        // DocumentFragment doesn't have getElementsByClassName/TagName
-                        isSimple && !maybeID && element.getElementsByClassName
-                            ? maybeClass
-                                // If it's simple, it could be a class
-                                ? element.getElementsByClassName(nameOnly)
-                                // Or a tag
-                                : element.getElementsByTagName(selector)
-                            // Or it's not simple, and we need to query all
-                            : element.querySelectorAll(selector)
-                    )
-        },
-        isD: function (object) {
-            return object instanceof D
-        },
         matches: function (element, selector) {
             if (!selector || !element || element.nodeType !== 1) return false
             var matchesSelector = element.matches || element.webkitMatchesSelector ||
@@ -495,18 +473,35 @@
             match = ~D.qsa(parent, selector).indexOf(element);
             temp && tempParent.removeChild(element);
             return match
+        },
+        each: function (elements, callback) {
+            var i, key;
+            if (likeArray(elements)) {
+                for (i = 0; i < elements.length; i++)
+                    if (callback.call(elements[i], i, elements[i]) === false) return elements
+            } else {
+                for (key in elements)
+                    if (callback.call(elements[key], key, elements[key]) === false) return elements
+            }
+
+            return elements
+        },
+        map: function (elements, callback) {
+            var value, values = [],
+                i, key;
+            if (likeArray(elements))
+                for (i = 0; i < elements.length; i++) {
+                    value = callback(elements[i], i);
+                    if (value != null) values.push(value);
+                }
+            else
+                for (key in elements) {
+                    value = callback(elements[key], key);
+                    if (value != null) values.push(value);
+                }
+            return flatten(values)
         }
     });
-
-    D.contains = document$1.documentElement.contains
-        ? function (parent, node) {
-            return parent !== node && parent.contains(node)
-        }
-        : function (parent, node) {
-            while (node && (node = node.parentNode))
-                if (node === parent) return true
-            return false
-        };
 
     // Populate the class2type map
     D.each('Boolean Number String Function Array Date RegExp Object Error'.split(' '), function (i, name) {
@@ -514,6 +509,30 @@
     });
 
     D.fn.init.prototype = D.fn;
+
+    // Export Static Methods
+    function grep(elements, callback) {
+        return filter.call(elements, callback)
+    }
+
+    function noop() {
+    }
+
+    var core = /*#__PURE__*/Object.freeze({
+        type: type,
+        contains: contains,
+        camelCase: camelize,
+        isFunction: isFunction,
+        isWindow: isWindow,
+        isPlainObject: isPlainObject,
+        isEmptyObject: isEmptyObject,
+        isNumeric: isNumeric,
+        isArray: isArray,
+        inArray: inArray,
+        trim: trim,
+        grep: grep,
+        noop: noop
+    });
 
     function css(property, value) {
         if (arguments.length < 2) {
@@ -560,7 +579,7 @@
 
     function hasClass(name) {
         if (!name) return false
-        return emptyArray.some.call(this, function (el) {
+        return emptyArray$1.some.call(this, function (el) {
             return this.test(className(el))
         }, classRE(name))
     }
@@ -627,7 +646,7 @@
             $this.css(props);
         })
         if (!this.length) return null
-        if (document$1.documentElement !== this[0] && !D.contains(document$1.documentElement, this[0]))
+        if (document$1.documentElement !== this[0] && !contains(document$1.documentElement, this[0]))
             return { top: 0, left: 0 }
         var obj = this[0].getBoundingClientRect();
         return {
@@ -826,8 +845,8 @@
         else if (typeof selector == 'object')
             result = D(selector).filter(function () {
                 var node = this;
-                return emptyArray.some.call($this, function (parent) {
-                    return D.contains(parent, node)
+                return emptyArray$1.some.call($this, function (parent) {
+                    return contains(parent, node)
                 })
             });
         else if (this.length == 1) result = D(D.qsa(this[0], selector));
@@ -844,9 +863,9 @@
 
     function has(selector) {
         return this.filter(function () {
-            return isObject(selector) ?
-                D.contains(this, selector) :
-                D(this).find(selector).size()
+            return isObject(selector)
+                ? contains(this, selector)
+                : D(this).find(selector).size()
         })
     }
 
@@ -963,22 +982,34 @@
                     - parseFloat(el.css('border-bottom')))
             : parseFloat(el.css(dimen))
     }
-    ['width', 'height'].forEach(function (dimension) {
+    function calc(dimension, value) {
         var dimensionProperty =
             dimension.replace(/./, function (m) { return m[0].toUpperCase() });
 
-        D.fn[dimension] = function (value) {
-            var el = this[0];
-            if (value === undefined) return isWindow(el)
-                ? el['inner' + dimensionProperty]
-                : isDocument(el)
-                    ? el.documentElement['scroll' + dimensionProperty]
-                    : subtract(this, dimension)
-            else return this.each(function (idx) {
-                el = D(this);
-                el.css(dimension, funcArg(this, value, idx, el[dimension]()));
-            });
-        };
+        var el = this[0];
+        if (value === undefined) return isWindow(el)
+            ? el['inner' + dimensionProperty]
+            : isDocument(el)
+                ? el.documentElement['scroll' + dimensionProperty]
+                : subtract(this, dimension)
+        else return this.each(function (idx) {
+            el = D(this);
+            el.css(dimension, funcArg(this, value, idx, el[dimension]()));
+        });
+    }
+
+    // Export
+    function width(value) {
+        return calc.call(this, 'width', value);
+    }
+
+    function height(value) {
+        return calc.call(this, 'height', value);
+    }
+
+    var dimensions = /*#__PURE__*/Object.freeze({
+        width: width,
+        height: height
     });
 
     var traverseNode = function (node, fn) {
@@ -997,7 +1028,7 @@
                 if (argType == 'array') {
                     arg.forEach(function (el) {
                         if (el.nodeType !== undefined) return arr.push(el)
-                        else if (D.isD(el)) return arr = arr.concat(el.get())
+                        else if (isD(el)) return arr = arr.concat(el.get())
                         arr = arr.concat(D.fragment(el));
                     });
                     return arr
@@ -1010,7 +1041,7 @@
 
         return elem.each(function (_, target) {
             parent = inside ? target : target.parentNode;
-            var parentInDocument = D.contains(document$1.documentElement, parent);
+            var parentInDocument = contains(document$1.documentElement, parent);
 
             nodes.forEach(function (node) {
                 if (copyByClone) node = node.cloneNode(true);
@@ -1031,71 +1062,114 @@
         });
     };
 
-    D.fn.extend({
-        remove: function () {
-            return this.each(function () {
-                if (this.parentNode != null)
-                    this.parentNode.removeChild(this);
-            })
-        },
-        empty: function () {
-            return this.each(function () { this.innerHTML = ''; })
-        },
-        clone: function () {
-            return this.map(function () { return this.cloneNode(true) })
-        },
-        html: function (html) {
-            return 0 in arguments
-                ? this.each(function (idx) {
-                    var originHtml = this.innerHTML;
-                    D(this).empty().append(funcArg(this, html, idx, originHtml));
-                })
-                : (0 in this ? this[0].innerHTML : null)
-        },
-        text: function (text) {
-            return 0 in arguments
-                ? this.each(function (idx) {
-                    var newText = funcArg(this, text, idx, this.textContent);
-                    this.textContent = newText == null ? '' : '' + newText;
-                })
-                : (0 in this ? this.pluck('textContent').join('') : null)
-        },
-        replaceWith: function (newContent) {
-            return this.before(newContent).remove()
-        },
-        append: function () {
-            return domMani(this, arguments, function (elem) {
-                this.insertBefore(elem, null);
-            }, true);
-        },
-        prepend: function () {
-            return domMani(this, arguments, function (elem) {
-                this.insertBefore(elem, this.firstChild);
-            }, true);
-        },
-        after: function () {
-            return domMani(this, arguments, function (elem) {
-                this.parentNode.insertBefore(elem, this.nextSibling);
-            }, false);
-        },
-        before: function () {
-            return domMani(this, arguments, function (elem) {
-                this.parentNode.insertBefore(elem, this);
-            }, false);
-        }
-    });
+    // Export
+    function remove() {
+        return this.each(function () {
+            if (this.parentNode != null)
+                this.parentNode.removeChild(this);
+        })
+    }
 
-    D.each({
-        appendTo: 'append',
-        prependTo: 'prepend',
-        insertBefore: 'before',
-        insertAfter: 'after',
-        replaceAll: 'replaceWith'
-    }, function (name, original) {
-        D.fn[name] = function (html) {
-            D(html)[original](this);
-            return this;
-        };
+    function empty() {
+        return this.each(function () { this.innerHTML = ''; })
+    }
+
+    function clone() {
+        return this.map(function () { return this.cloneNode(true) })
+    }
+
+    function html(html) {
+        return 0 in arguments
+            ? this.each(function (idx) {
+                var originHtml = this.innerHTML;
+                D(this).empty().append(funcArg(this, html, idx, originHtml));
+            })
+            : (0 in this ? this[0].innerHTML : null)
+    }
+
+    function text(text) {
+        return 0 in arguments
+            ? this.each(function (idx) {
+                var newText = funcArg(this, text, idx, this.textContent);
+                this.textContent = newText == null ? '' : '' + newText;
+            })
+            : (0 in this ? this.pluck('textContent').join('') : null)
+    }
+
+    function replaceWith(newContent) {
+        return this.before(newContent).remove()
+    }
+
+    function append() {
+        return domMani(this, arguments, function (elem) {
+            this.insertBefore(elem, null);
+        }, true);
+    }
+
+    function prepend() {
+        return domMani(this, arguments, function (elem) {
+            this.insertBefore(elem, this.firstChild);
+        }, true);
+    }
+
+    function after() {
+        return domMani(this, arguments, function (elem) {
+            this.parentNode.insertBefore(elem, this.nextSibling);
+        }, false);
+    }
+
+    function before() {
+        return domMani(this, arguments, function (elem) {
+            this.parentNode.insertBefore(elem, this);
+        }, false);
+    }
+
+    // appendTo -> append
+    // prependTo -> prepend
+    // insertBefore -> before
+    // insertAfter -> after
+    // replaceAll -> replaceWith
+    function appendTo(html){
+        D(html)['append'](this);
+        return this;
+    }
+
+    function prependTo(html){
+        D(html)['prepend'](this);
+        return this;
+    }
+
+    function insertAfter(html){
+        D(html)['after'](this);
+        return this;
+    }
+
+    function insertBefore(html){
+        D(html)['before'](this);
+        return this;
+    }
+
+    function replaceAll(html){
+        D(html)['replaceWith'](this);
+        return this;
+    }
+
+    var manipulation = /*#__PURE__*/Object.freeze({
+        remove: remove,
+        empty: empty,
+        clone: clone,
+        html: html,
+        text: text,
+        replaceWith: replaceWith,
+        append: append,
+        prepend: prepend,
+        after: after,
+        before: before,
+        appendTo: appendTo,
+        prependTo: prependTo,
+        insertAfter: insertAfter,
+        insertBefore: insertBefore,
+        replaceAll: replaceAll
     });
 
     var _zid = 1,
@@ -1167,7 +1241,7 @@
         // emulate mouseenter, mouseleave
         if (handler.e in hover) fn = function (e) {
           var related = e.relatedTarget;
-          if (!related || (related !== this && !D.contains(this, related)))
+          if (!related || (related !== this && !contains(this, related)))
             return handler.fn.apply(this, arguments)
         };
         handler.del = delegator;
@@ -1186,7 +1260,7 @@
           element.addEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture));
       });
     }
-    function remove(element, events, fn, selector, capture) {
+    function remove$1(element, events, fn, selector, capture) {
       var id = zid(element)
         ; (events || '').split(/\s/).forEach(function (event) {
           findHandlers(element, event, fn, selector).forEach(function (handler) {
@@ -1230,7 +1304,7 @@
       return compatible(proxy, event)
     }
 
-    D.event = { add: add$1, remove: remove };
+    D.event = { add: add$1, remove: remove$1 };
 
     D.Event = function (type$$1, props) {
       if (!isString(type$$1)) props = type$$1, type$$1 = props.type;
@@ -1258,11 +1332,12 @@
       }
     };
 
-    D.fn.one = function (event, selector, data, callback) {
+    // Export
+    var one = function (event, selector, data, callback) {
       return this.on(event, selector, data, callback, 1)
     };
 
-    D.fn.on = function (event, selector, data, callback, one) {
+    var on = function (event, selector, data, callback, one) {
       var autoRemove, delegator, $this = this;
       if (event && !isString(event)) {
         D.each(event, function (type$$1, fn) {
@@ -1280,7 +1355,7 @@
 
       return $this.each(function (_, element) {
         if (one) autoRemove = function (e) {
-          remove(element, e.type, callback);
+          remove$1(element, e.type, callback);
           return callback.apply(this, arguments)
         };
 
@@ -1296,7 +1371,7 @@
       })
     };
 
-    D.fn.off = function (event, selector, callback) {
+    var off = function (event, selector, callback) {
       var $this = this;
       if (event && !isString(event)) {
         D.each(event, function (type$$1, fn) {
@@ -1311,12 +1386,12 @@
       if (callback === false) callback = returnFalse;
 
       return $this.each(function () {
-        remove(this, event, callback, selector);
+        remove$1(this, event, callback, selector);
       })
     };
 
-    D.fn.trigger = function (event, args) {
-      event = (isString(event) || D.isPlainObject(event)) ? D.Event(event) : compatible(event);
+    var trigger = function (event, args) {
+      event = (isString(event) || isPlainObject(event)) ? D.Event(event) : compatible(event);
       event._args = args;
       return this.each(function () {
         // handle focus(), blur() by calling them directly
@@ -1329,7 +1404,7 @@
 
     // triggers event handlers on current element just as if an event occurred,
     // doesn't trigger an actual event, doesn't bubble
-    D.fn.triggerHandler = function (event, args) {
+    var triggerHandler = function (event, args) {
       var e, result;
       this.each(function (i, element) {
         e = createProxy(isString(event) ? D.Event(event) : event);
@@ -1353,6 +1428,14 @@
               : this.trigger(event)
           };
         });
+
+    var event = /*#__PURE__*/Object.freeze({
+        one: one,
+        on: on,
+        off: off,
+        trigger: trigger,
+        triggerHandler: triggerHandler
+    });
 
     var prefix = '', eventPrefix,
       vendors = { Webkit: 'webkit', Moz: '', O: 'o' },
@@ -1392,12 +1475,12 @@
       animationEnd: normalizeEvent('AnimationEnd')
     };
 
-    D.fn.animate = function (properties, duration, ease, callback, delay) {
-      if (D.isFunction(duration))
+    var animate = function (properties, duration, ease, callback, delay) {
+      if (isFunction(duration))
         callback = duration, ease = undefined, duration = undefined;
-      if (D.isFunction(ease))
+      if (isFunction(ease))
         callback = ease, ease = undefined;
-      if (D.isPlainObject(duration))
+      if (isPlainObject(duration))
         ease = duration.easing, callback = duration.complete, delay = duration.delay, duration = duration.duration;
       if (duration) duration = (typeof duration == 'number' ? duration :
         (D.fx.speeds[duration] || D.fx.speeds._default)) / 1000;
@@ -1405,7 +1488,7 @@
       return this.anim(properties, duration, ease, callback, delay)
     };
 
-    D.fn.anim = function (properties, duration, ease, callback, delay) {
+    var anim = function (properties, duration, ease, callback, delay) {
       var key, cssValues = {}, cssProperties, transforms = '',
         that = this, wrappedCallback, endEvent = D.fx.transitionEnd,
         fired = false;
@@ -1472,22 +1555,33 @@
 
     testEl = null;
 
-    D.fn.extend({
-      show: function () {
-        return this.each(function () {
-          this.style.display == "none" && (this.style.display = '');
-          if (getComputedStyle(this, '').getPropertyValue("display") == "none")
-            this.style.display = defaultDisplay(this.nodeName);
-        })
-      },
-      hide: function () {
-        return this.css("display", "none")
-      }
+    var animate$1 = /*#__PURE__*/Object.freeze({
+        animate: animate,
+        anim: anim
     });
 
-    var origShow = D.fn.show, origHide = D.fn.hide, origToggle = D.fn.toggle;
+    var origShow = function () {
+      return this.each(function () {
+        this.style.display == "none" && (this.style.display = '');
+        if (getComputedStyle(this, '').getPropertyValue("display") == "none")
+          this.style.display = defaultDisplay(this.nodeName);
+      })
+    };
 
-    function anim(el, speed, opacity, scale, callback) {
+    var origHide = function () {
+      return this.css("display", "none")
+    };
+
+    var origToggle = function (setting) {
+      return this.each(function () {
+        var el = $(this)
+          ; (setting === undefined ? el.css("display") == "none" : setting)
+            ? el.show()
+            : el.hide();
+      })
+    };
+
+    function anim$1(el, speed, opacity, scale, callback) {
       if (typeof speed == 'function' && !callback) callback = speed, speed = undefined;
       var props = { opacity: opacity };
       if (scale) {
@@ -1497,26 +1591,27 @@
       return el.animate(props, speed, null, callback)
     }
 
-    function hide(el, speed, scale, callback) {
-      return anim(el, speed, 0, scale, function () {
+    function hideHelper(el, speed, scale, callback) {
+      return anim$1(el, speed, 0, scale, function () {
         origHide.call(D(this));
         callback && callback.call(this);
       })
     }
 
-    D.fn.show = function (speed, callback) {
+    // Export
+    var show = function (speed, callback) {
       origShow.call(this);
       if (speed === undefined) speed = 0;
       else this.css('opacity', 0);
-      return anim(this, speed, 1, '1,1', callback)
+      return anim$1(this, speed, 1, '1,1', callback)
     };
 
-    D.fn.hide = function (speed, callback) {
+    var hide = function (speed, callback) {
       if (speed === undefined) return origHide.call(this)
-      else return hide(this, speed, '0,0', callback)
+      else return hideHelper(this, speed, '0,0', callback)
     };
 
-    D.fn.toggle = function (speed, callback) {
+    var toggle = function (speed, callback) {
       if (speed === undefined || typeof speed == 'boolean')
         return origToggle.call(this, speed)
       else return this.each(function () {
@@ -1525,22 +1620,22 @@
       })
     };
 
-    D.fn.fadeTo = function (speed, opacity, callback) {
-      return anim(this, speed, opacity, null, callback)
+    var fadeTo = function (speed, opacity, callback) {
+      return anim$1(this, speed, opacity, null, callback)
     };
 
-    D.fn.fadeIn = function (speed, callback) {
+    var fadeIn = function (speed, callback) {
       var target = this.css('opacity');
       if (target > 0) this.css('opacity', 0);
       else target = 1;
       return origShow.call(this).fadeTo(speed, target, callback)
     };
 
-    D.fn.fadeOut = function (speed, callback) {
-      return hide(this, speed, null, callback)
+    var fadeOut = function (speed, callback) {
+      return hideHelper(this, speed, null, callback)
     };
 
-    D.fn.fadeToggle = function (speed, callback) {
+    var fadeToggle = function (speed, callback) {
       return this.each(function () {
         var el = D(this);
         el[
@@ -1549,7 +1644,37 @@
       })
     };
 
-    D.extend(D.fn, css$1, classes, offset$1, attr$1, prop$1, val$1, wrap$1, traversing);
+    var effects = /*#__PURE__*/Object.freeze({
+        show: show,
+        hide: hide,
+        toggle: toggle,
+        fadeTo: fadeTo,
+        fadeIn: fadeIn,
+        fadeOut: fadeOut,
+        fadeToggle: fadeToggle
+    });
+
+    D.extend(
+        D,
+        core
+    );
+
+    D.extend(
+        D.fn,
+        css$1,
+        classes,
+        offset$1,
+        attr$1,
+        prop$1,
+        val$1,
+        wrap$1,
+        traversing,
+        dimensions,
+        manipulation,
+        event,
+        animate$1,
+        effects
+    );
 
     window.D = D;
 
@@ -2971,4 +3096,3 @@
     return PhotoViewer;
 
 })));
-//# sourceMappingURL=photoviewer.js.map
