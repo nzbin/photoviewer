@@ -88,8 +88,6 @@ var viewer = new PhotoViewer(items, options);
 
     <!-- Initializing form a list of links -->
     <h3>Initializing form a list of links</h3>
-    <p>There have 2 ways to initializing the plugin form a list of links.</p>
-    <h4>Way 1: Bind event to links manually</h4>
     <p>The default DOM structure as following:</p>
     <pre class="prettyprint">
 &lt;a data-gallery=&quot;manual&quot; href=&quot;big-1.jpg&quot;&gt;
@@ -130,6 +128,16 @@ $('[data-gallery=manual]').click(function (e) {
 
     <p>Look at the following example:</p>
     <div class="image-set">
+      <a data-gallery="manual" data-title="Slipping Away by Jerry Fryer" data-group="a" href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
+        <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
+      </a>
+      <a data-gallery="manual" data-title="Mi Fuego by albert dros" data-group="a" href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
+        <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
+      </a>
+      <a data-gallery="manual" data-title="Winter Fairytale by Achim Thomae" data-group="a" href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
+        <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
+      </a>
+
       <a data-gallery="manual" href="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg" data-group="b">
         <img src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
       </a>
@@ -138,63 +146,6 @@ $('[data-gallery=manual]').click(function (e) {
       </a>
       <a data-gallery="manual" href="https://farm1.staticflickr.com/512/32967783396_a6b4babd92_z.jpg" data-group="b">
         <img src="https://farm1.staticflickr.com/512/32967783396_a6b4babd92_s.jpg" alt="">
-      </a>
-    </div>
-
-    <h4>Way 2: Initializing as jQuery plugin</h4>
-    <p>If you use PhotoViewer as a jQuery plugin, it's just same to
-      <a href="https://github.com/nzbin/magnify" target="_blank">Magnify</a> except namespace.</p>
-    <p>You can make DOM structure like this</p>
-    <pre class="prettyprint">
-&lt;a data-gallery=&quot;jquery&quot; href=&quot;big-1.jpg&quot;&gt;
-  &lt;img src=&quot;small-1.jpg&quot;&gt;
-&lt;/a&gt;
-&lt;a data-gallery=&quot;jquery&quot; href=&quot;big-2.jpg&quot;&gt;
-  &lt;img src=&quot;small-2.jpg&quot;&gt;
-&lt;/a&gt;
-&lt;a data-gallery=&quot;jquery&quot; href=&quot;big-3.jpg&quot;&gt;
-  &lt;img src=&quot;small-3.jpg&quot;&gt;
-&lt;/a&gt;
-</pre>
-    <p>or</p>
-    <pre class="prettyprint">
-&lt;img data-gallery=&quot;jquery&quot; data-src=&quot;big-1.jpg&quot; src=&quot;small-1.jpg&quot;&gt;
-&lt;img data-gallery=&quot;jquery&quot; data-src=&quot;big-2.jpg&quot; src=&quot;small-2.jpg&quot;&gt;
-&lt;img data-gallery=&quot;jquery&quot; data-src=&quot;big-3.jpg&quot; src=&quot;small-3.jpg&quot;&gt;
-</pre>
-
-    <p>All structures above have optional attributes as below:</p>
-    <ul>
-      <li>Add a
-        <code>data-src</code> attribute to link big image if you do not want to use a
-        <code>&lt;a&gt;</code> tag. If you use it in a
-        <code>&lt;a&gt;</code> tag, it will override the image link in
-        <code>href</code> attribute.</li>
-      <li>Add a
-        <code>data-title</code> attribute if you want to show a title. If you are not using this attribute, it will show the image name in the
-        url when you set the
-        <code>title</code> option
-        <code>true</code>.</li>
-      <li>Add a
-        <code>data-group</code> attribute if you want to set the images in groups.
-      </li>
-    </ul>
-
-    <p>Initializing as jQuery plugin is the simplest.</p>
-    <pre class="prettyprint">
-$('[data-gallery=jquery]').photoviewer(options);
-</pre>
-    <p>If you add attribute
-      <code>data-photoviewer</code>, you can write none of js, it will initialize automaticlly.</p>
-    <div class="image-set">
-      <a data-gallery="jquery" data-title="Slipping Away by Jerry Fryer" data-group="a" href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
-        <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
-      </a>
-      <a data-gallery="jquery" data-title="Mi Fuego by albert dros" data-group="a" href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
-        <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
-      </a>
-      <a data-gallery="jquery" data-title="Winter Fairytale by Achim Thomae" data-group="a" href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
-        <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
       </a>
     </div>
 
@@ -448,18 +399,15 @@ $('[data-gallery=jquery]').photoviewer(options);
         };
 
       $('[data-gallery=manual]').each(function () {
-        var src = $(this).attr('href');
         items.push({
-          src: src
+          src: $(this).attr('href'),
+          title: $(this).attr('data-title')
         });
       });
 
       new PhotoViewer(items, options);
 
     });
-
-    // jQuery plugin
-    $('[data-gallery=jquery]').photoviewer();
 
   </script>
 </body>
