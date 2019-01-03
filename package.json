@@ -5,6 +5,7 @@
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
   "browser": "dist/photoviewer.js",
+  "style": "dist/photoviewer.css",
   "files": [
     "dist",
     "src"
@@ -43,7 +44,7 @@
     "build:js": "rollup -c",
     "compress": "run-s compress:css compress:js",
     "compress:css": "run-s sassmin postcss",
-    "compress:js": "uglifyjs dist/photoviewer.js -o dist/photoviewer.min.js -c -m --comments /^!/ --source-map",
+    "compress:js": "uglifyjs dist/photoviewer.js -o dist/photoviewer.min.js -c -m --comments /^!/",
     "copy": "run-s copy:css copy:js",
     "copy:css": "cpy dist/photoviewer.css docs/css",
     "copy:js": "cpy dist/photoviewer.js docs/js",
@@ -77,6 +78,6 @@
     "uglify-js": "^3.1.10"
   },
   "dependencies": {
-    "domq.js": "^0.4.1"
+    "domq.js": "^0.5.0"
   }
 }
