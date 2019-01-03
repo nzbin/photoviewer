@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0-beta.1",
   "description": "A JS plugin to view images just like in Windows",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
@@ -38,7 +38,7 @@
   "scripts": {
     "sass": "node-sass --output-style expanded src/sass/photoviewer.scss dist/photoviewer.css",
     "sassmin": "node-sass --output-style compressed src/sass/photoviewer.scss dist/photoviewer.min.css",
-    "postcss": "postcss -r dist/*.css --map",
+    "postcss": "postcss -r dist/*.css",
     "build": "run-s build:css build:js",
     "build:css": "run-s sass",
     "build:js": "rollup -c",
