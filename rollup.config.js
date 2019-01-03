@@ -21,34 +21,26 @@ const banner = `
  */
 `;
 
-
 export default [
   {
     input: 'src/js/core.js',
-    external: ['jquery'],
     output: [
       {
         name: 'photoviewer',
         banner,
-        globals: {
-          jquery: 'jQuery',
-        },
         file: "dist/photoviewer.js",
-        format: 'umd',
-        sourcemap: true
+        format: 'umd'
       },
       {
         file: 'dist/photoviewer.common.js',
         banner,
-        format: 'cjs',
-        sourcemap: true
+        format: 'cjs'
 
       },
       {
         file: 'dist/photoviewer.esm.js',
         banner,
-        format: 'es',
-        sourcemap: true
+        format: 'es'
       }
     ],
     plugins: [
