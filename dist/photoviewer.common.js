@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v3.0.0-beta.1
+ * photoviewer - v3.0.0-beta.2
  * A JS plugin to view images just like in Windows
  * https://github.com/nzbin/photoviewer#readme
  *
@@ -919,7 +919,7 @@ function parents(selector) {
     return filtered(ancestors, selector)
 }
 
-function parent$1(selector) {
+function parent(selector) {
     return filtered(uniq(this.pluck('parentNode')), selector)
 }
 
@@ -955,7 +955,7 @@ var traversing = /*#__PURE__*/Object.freeze({
     contents: contents,
     closest: closest,
     parents: parents,
-    parent: parent$1,
+    parent: parent,
     children: children$1,
     siblings: siblings,
     prev: prev,
@@ -969,15 +969,16 @@ function subtract(el, dimen) {
             ? (parseFloat(el.css(dimen))
                 - parseFloat(el.css('padding-left'))
                 - parseFloat(el.css('padding-right'))
-                - parseFloat(el.css('border-left'))
-                - parseFloat(el.css('border-right')))
+                - parseFloat(el.css('border-left-width'))
+                - parseFloat(el.css('border-right-width')))
             : (parseFloat(el.css(dimen))
                 - parseFloat(el.css('padding-top'))
                 - parseFloat(el.css('padding-bottom'))
-                - parseFloat(el.css('border-top'))
-                - parseFloat(el.css('border-bottom')))
+                - parseFloat(el.css('border-top-width'))
+                - parseFloat(el.css('border-bottom-width')))
         : parseFloat(el.css(dimen))
 }
+
 function calc(dimension, value) {
     var dimensionProperty =
         dimension.replace(/./, function (m) { return m[0].toUpperCase() });
@@ -1031,6 +1032,7 @@ var domMani = function (elem, args, fn, inside) {
             }
             return argType == 'object' || arg == null ? arg : D.fragment(arg)
         }),
+        parent,
         copyByClone = elem.length > 1;
 
     if (nodes.length < 1) return elem
@@ -1156,11 +1158,11 @@ var manipulation = /*#__PURE__*/Object.freeze({
     clone: clone,
     html: html,
     text: text,
-    replaceWith: replaceWith,
     append: append,
     prepend: prepend,
     after: after,
     before: before,
+    replaceWith: replaceWith,
     appendTo: appendTo,
     prependTo: prependTo,
     insertAfter: insertAfter,
@@ -1189,15 +1191,19 @@ var _zid = 1,
 function isString(obj) {
   return typeof obj == 'string'
 }
+
 function returnTrue() {
   return true
 }
+
 function returnFalse() {
   return false
 }
+
 function zid(element) {
   return element._zid || (element._zid = _zid++)
 }
+
 function findHandlers(element, event, fn, selector) {
   event = parse(event);
   if (event.ns) var matcher = matcherFor(event.ns);
@@ -1209,6 +1215,7 @@ function findHandlers(element, event, fn, selector) {
       && (!selector || handler.sel == selector)
   })
 }
+
 function parse(event) {
   var parts = ('' + event).split('.');
   return { e: parts[0], ns: parts.slice(1).sort().join(' ') }
@@ -1256,6 +1263,7 @@ function add$1(element, events, fn, data, selector, delegator, capture) {
       element.addEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture));
   });
 }
+
 function remove$1(element, events, fn, selector, capture) {
   var id = zid(element)
     ; (events || '').split(/\s/).forEach(function (event) {
@@ -1412,18 +1420,7 @@ var triggerHandler = function (event, args) {
     });
   });
   return result
-}
-
-  // shortcut methods for `.on(event, fn)` for each event type
-  ; ('focusin focusout focus blur load resize scroll unload click dblclick ' +
-    'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave ' +
-    'change select keydown keypress keyup error').split(' ').forEach(function (event) {
-      D.fn[event] = function (callback) {
-        return (0 in arguments)
-          ? this.on(event, callback)
-          : this.trigger(event)
-      };
-    });
+};
 
 var event = /*#__PURE__*/Object.freeze({
     one: one,
@@ -1432,6 +1429,19 @@ var event = /*#__PURE__*/Object.freeze({
     trigger: trigger,
     triggerHandler: triggerHandler
 });
+
+var events = {};
+
+// shortcut methods for `.on(event, fn)` for each event type
+('focusin focusout focus blur load resize scroll unload click dblclick ' +
+  'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave ' +
+  'change select keydown keypress keyup error').split(' ').forEach(function (event) {
+    events[event] = function (callback) {
+      return (0 in arguments)
+        ? this.on(event, callback)
+        : this.trigger(event)
+    };
+  });
 
 var prefix = '', eventPrefix,
   vendors = { Webkit: 'webkit', Moz: '', O: 'o' },
@@ -1669,7 +1679,8 @@ D.extend(
     manipulation,
     event,
     animate$1,
-    effects
+    effects,
+    events
 );
 
 window.D = D;
@@ -2532,8 +2543,8 @@ function () {
   _proto.setModalPos = function setModalPos(modal) {
     var winWidth = $W.width(),
         winHeight = $W.height(),
-        scrollLeft = document.documentElement.scrollLeft,
-        scrollTop = document.documentElement.scrollTop;
+        scrollLeft = $D.scrollLeft(),
+        scrollTop = $D.scrollTop();
     var modalWidth = this.options.modalWidth,
         modalHeight = this.options.modalHeight; // Set modal maximized when init
 
@@ -2563,8 +2574,8 @@ function () {
 
     var winWidth = $W.width(),
         winHeight = $W.height(),
-        scrollLeft = document.documentElement.scrollLeft,
-        scrollTop = document.documentElement.scrollTop; // stage css value
+        scrollLeft = $D.scrollLeft(),
+        scrollTop = $D.scrollTop(); // stage css value
 
     var stageCSS = {
       left: this.$stage.css('left'),
@@ -2758,8 +2769,8 @@ function () {
     var ratio = -delta * this.options.ratioThreshold; // mouse point position relative to stage
 
     var pointer = {
-      x: e.clientX - this.$stage.offset().left + document.documentElement.scrollLeft,
-      y: e.clientY - this.$stage.offset().top + document.documentElement.scrollTop
+      x: e.clientX - this.$stage.offset().left + $D.scrollLeft(),
+      y: e.clientY - this.$stage.offset().top + $D.scrollTop()
     };
     this.zoom(ratio, pointer, e);
   };
@@ -2919,8 +2930,8 @@ function () {
       this.$photoviewer.css({
         width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
         height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
-        left: this.modalData.left ? this.modalData.left : ($W.width() - this.options.modalWidth) / 2 + document.documentElement.scrollLeft,
-        top: this.modalData.top ? this.modalData.top : ($W.height() - this.options.modalHeight) / 2 + document.documentElement.scrollTop
+        left: this.modalData.left ? this.modalData.left : ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft(),
+        top: this.modalData.top ? this.modalData.top : ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop()
       });
       this.isMaximized = false;
     }

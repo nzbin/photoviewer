@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "description": "A JS plugin to view images just like in Windows",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
@@ -43,12 +43,12 @@
     "build:css": "run-s sass",
     "build:js": "rollup -c",
     "compress": "run-s compress:css compress:js",
-    "compress:css": "run-s sassmin postcss",
+    "compress:css": "run-s sassmin",
     "compress:js": "uglifyjs dist/photoviewer.js -o dist/photoviewer.min.js -c -m --comments /^!/",
     "copy": "run-s copy:css copy:js",
     "copy:css": "cpy dist/photoviewer.css docs/css",
     "copy:js": "cpy dist/photoviewer.js docs/js",
-    "release": "run-s build compress copy",
+    "release": "run-s build compress postcss copy",
     "release:css": "run-s build:css compress:css",
     "release:js": "run-s build:js compress:js",
     "lint": "run-s lint:css lint:js",
@@ -78,6 +78,6 @@
     "uglify-js": "^3.1.10"
   },
   "dependencies": {
-    "domq.js": "^0.5.0"
+    "domq.js": "^0.5.2"
   }
 }
