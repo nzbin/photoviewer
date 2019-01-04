@@ -316,8 +316,8 @@ class PhotoViewer {
 
     let winWidth = $W.width(),
       winHeight = $W.height(),
-      scrollLeft = document.documentElement.scrollLeft,
-      scrollTop = document.documentElement.scrollTop;
+      scrollLeft = $D.scrollLeft(),
+      scrollTop = $D.scrollTop();
 
     let modalWidth = this.options.modalWidth,
       modalHeight = this.options.modalHeight;
@@ -355,8 +355,8 @@ class PhotoViewer {
 
     let winWidth = $W.width(),
       winHeight = $W.height(),
-      scrollLeft = document.documentElement.scrollLeft,
-      scrollTop = document.documentElement.scrollTop;
+      scrollLeft = $D.scrollLeft(),
+      scrollTop = $D.scrollTop();
 
     // stage css value
     let stageCSS = {
@@ -614,8 +614,8 @@ class PhotoViewer {
 
     // mouse point position relative to stage
     let pointer = {
-      x: e.clientX - this.$stage.offset().left + document.documentElement.scrollLeft,
-      y: e.clientY - this.$stage.offset().top + document.documentElement.scrollTop
+      x: e.clientX - this.$stage.offset().left + $D.scrollLeft(),
+      y: e.clientY - this.$stage.offset().top + $D.scrollTop()
     };
 
     this.zoom(ratio, pointer, e);
@@ -825,10 +825,10 @@ class PhotoViewer {
           : this.options.modalHeight,
         left: this.modalData.left
           ? this.modalData.left
-          : ($W.width() - this.options.modalWidth) / 2 + document.documentElement.scrollLeft,
+          : ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft(),
         top: this.modalData.top
           ? this.modalData.top
-          : ($W.height() - this.options.modalHeight) / 2 + document.documentElement.scrollTop
+          : ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop()
       });
 
       this.isMaximized = false;
