@@ -1,4 +1,4 @@
-import { D as $ } from 'domq.js/src';
+import $ from './domq.js';
 import DEFAULTS from './defaults';
 import {
   $W,
