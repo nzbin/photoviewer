@@ -84,18 +84,6 @@ export function getImageNameFromUrl(url) {
 }
 
 /**
- * [getNumFromCSSValue]
- * @param  {[String]} value [description]
- * @return {[Number]}       [description]
- */
-export function getNumFromCSSValue(value) {
-  let reg = /\d+/g,
-    arr = value.match(reg),
-    num = parseFloat(arr[0]);
-  return num;
-}
-
-/**
  * [hasScrollbar]
  * @return {[Boolean]}       [description]
  */
