@@ -48,12 +48,13 @@
     "copy": "run-s copy:css copy:js",
     "copy:css": "cpy dist/photoviewer.css docs/css",
     "copy:js": "cpy dist/photoviewer.js docs/js",
-    "release": "run-s build compress postcss copy",
+    "release": "run-s clean build compress postcss copy",
     "release:css": "run-s build:css compress:css",
     "release:js": "run-s build:js compress:js",
     "lint": "run-s lint:css lint:js",
     "lint:css": "stylelint --syntax scss \"src/**/*.scss\" --fix",
-    "lint:js": "eslint src/js --fix"
+    "lint:js": "eslint src/js --fix",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.53",
@@ -67,6 +68,7 @@
     "onchange": "^3.2.1",
     "postcss-cli": "^4.1.1",
     "postcss-header": "^1.0.0",
+    "rimraf": "^2.6.3",
     "rollup": "^0.62.0",
     "rollup-plugin-babel": "^4.0.0-beta.5",
     "rollup-plugin-commonjs": "^9.1.3",
