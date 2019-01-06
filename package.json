@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0",
   "description": "A JS plugin to view images just like in Windows",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
@@ -80,6 +80,6 @@
     "uglify-js": "^3.1.10"
   },
   "dependencies": {
-    "domq.js": "^0.6.0"
+    "domq.js": "^0.6.2"
   }
 }

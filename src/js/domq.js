@@ -29,7 +29,7 @@ import {
   animate,
   fadeTo,
   fadeIn
-} from 'domq.js/dist/domq.modular';
+} from 'domq.js/src/domq.modular';
 
 const $ = D;
 
