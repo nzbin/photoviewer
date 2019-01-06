@@ -10,15 +10,16 @@ PhotoViewer is a JS plugin to view images just like in windows.
 ## Main Features
 
 - Vanilla JS
-- Modal draggable.
-- Modal resizable.
-- Modal maximizable.
-- Image movable.
-- Image zoomable.
-- Image rotatable.
-- Keyboard control.
-- Fullscreen showing.
-- Multiple instances.
+- Browser support IE9+
+- Modal draggable
+- Modal resizable
+- Modal maximizable
+- Image movable
+- Image zoomable
+- Image rotatable
+- Keyboard control
+- Fullscreen showing
+- Multiple instances
 
 ## Installation
 
