@@ -29,13 +29,13 @@ import {
   animate,
   fadeTo,
   fadeIn
-} from 'domq.js/dist/domq.modular.js';
+} from 'domq.js/dist/domq.modular';
 
 const $ = D;
 
 const methods = {
   isArray,
-  noop,
+  noop
 }
 
 const fnMethods = {
@@ -70,7 +70,5 @@ const fnMethods = {
 
 $.extend(methods);
 $.fn.extend(fnMethods);
-
-window.D =D;
 
 export default $;
