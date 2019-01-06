@@ -1,3 +1,5 @@
+export const document = window.document;
+
 /**
  * [throttle]
  * @param  {Function} fn    [description]
