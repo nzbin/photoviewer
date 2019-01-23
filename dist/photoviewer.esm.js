@@ -7,9 +7,9 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v3.0.0
+ * photoviewer - v3.0.1
  * A JS plugin to view images just like in Windows
- * https://github.com/nzbin/photoviewer#readme
+ * https://nzbin.github.io/photoviewer/
  *
  * Copyright (c) 2018 nzbin
  * Released under MIT License
@@ -2083,9 +2083,9 @@ function () {
     }; // Add modal init animation
 
     if (this.options.initAnimation) {
-      this.$photoviewer.animate(modalCSSObj, function () {
+      this.$photoviewer.animate(modalCSSObj, 400, 'ease-in-out', function () {
         _this.setImageSize(img);
-      }, 300, 'ease-in-out');
+      });
     } else {
       this.$photoviewer.css(modalCSSObj);
       this.setImageSize(img);

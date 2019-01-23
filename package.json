@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A JS plugin to view images just like in Windows",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
@@ -10,7 +10,7 @@
     "dist",
     "src"
   ],
-  "homepage": "https://github.com/nzbin/photoviewer#readme",
+  "homepage": "https://nzbin.github.io/photoviewer/",
   "author": "nzbin",
   "license": "MIT",
   "directories": {
