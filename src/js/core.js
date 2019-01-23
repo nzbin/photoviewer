@@ -408,9 +408,9 @@ class PhotoViewer {
 
     // Add modal init animation
     if (this.options.initAnimation) {
-      this.$photoviewer.animate(modalCSSObj, () => {
+      this.$photoviewer.animate(modalCSSObj, 400, 'ease-in-out', () => {
         this.setImageSize(img);
-      }, 300, 'ease-in-out');
+      });
     } else {
       this.$photoviewer.css(modalCSSObj);
       this.setImageSize(img);
