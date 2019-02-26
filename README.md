@@ -29,9 +29,19 @@ You can install the plugin via npm
 $ npm install photoviewer --save
 ```
 
-## Basic Usage
+## Quick Start
 
 ### Step 1: Include files
+
+```scss
+@import 'photoviewer/dist/photoviewer.css';
+```
+
+```js
+import PhotoViewer from 'photoviewer';
+```
+
+or
 
 ```html
 <!-- Core CSS file -->
