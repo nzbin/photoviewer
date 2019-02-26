@@ -36,16 +36,33 @@
     <!-- Getting Started -->
     <h2 class="b-b-1 p-b-10 p-t-10 m-t-30">Getting Started</h2>
     <p>All the pictures come from Flickr website, copyright to the original author.</p>
-    <!-- Initialization -->
-    <h3>Initialization</h3>
-    <h4>Step 1: Include files</h4>
+    <!-- Installation -->
+    <h3>Installation</h3>
     <pre class="prettyprint">
+$ npm install photoviewer --save
+</pre>
+    <h3>Quick Start</h3>
+    <h4>Step 1: Include files</h4>
+    <p>
+      <pre class="prettyprint">
+@import 'photoviewer/dist/photoviewer.css';
+</pre>
+    </p>
+    <p>
+      <pre class="prettyprint">
+import PhotoViewer from 'photoviewer';
+</pre>
+    </p>
+    <p>or</p>
+    <p>
+      <pre class="prettyprint">
 &lt;!-- Core CSS file --&gt;
 &lt;link href=&quot;/path/to/photoviewer.css&quot; rel=&quot;stylesheet&quot;&gt;
 
 &lt;!-- Core JS file --&gt;
 &lt;script src=&quot;/path/to/photoviewer.js&quot;&gt;&lt;/script&gt;
 </pre>
+    </p>
 
     <h4>Step 2: Initialize</h4>
     <p>The usage of photoviewer is very simple, the
@@ -126,13 +143,16 @@ $('[data-gallery=manual]').click(function (e) {
 
     <p>Look at the following example:</p>
     <div class="image-set">
-      <a data-gallery="manual" data-title="Slipping Away by Jerry Fryer" data-group="a" href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
+      <a data-gallery="manual" data-title="Slipping Away by Jerry Fryer" data-group="a"
+        href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
         <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
       </a>
-      <a data-gallery="manual" data-title="Mi Fuego by albert dros" data-group="a" href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
+      <a data-gallery="manual" data-title="Mi Fuego by albert dros" data-group="a"
+        href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
         <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
       </a>
-      <a data-gallery="manual" data-title="Winter Fairytale by Achim Thomae" data-group="a" href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
+      <a data-gallery="manual" data-title="Winter Fairytale by Achim Thomae" data-group="a"
+        href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
         <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
       </a>
 
@@ -224,7 +244,8 @@ $('[data-gallery=manual]').click(function (e) {
         <code>boolean false</code>
       </small>
     </h3>
-    <p>This option will set photoviewer's size when it opened. If false, the modal initialized size will fit to image size.
+    <p>This option will set photoviewer's size when it opened. If false, the modal initialized size will fit to image
+      size.
       If true, the modal initialized size will be set with modalWidth and modalHeight.</p>
     <h3>
       <code>modalWidth</code>
@@ -300,7 +321,8 @@ $('[data-gallery=manual]').click(function (e) {
         <code>boolean false</code>
       </small>
     </h3>
-    <p>If false, the modal size will be set of image size or what you set with modalWidth and modalHeight. If true, the modal
+    <p>If false, the modal size will be set of image size or what you set with modalWidth and modalHeight. If true, the
+      modal
       size will be set maximized when initialized just like other lightbox.
     </p>
     <h3>
