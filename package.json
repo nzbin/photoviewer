@@ -6,9 +6,11 @@
   "module": "dist/photoviewer.esm.js",
   "browser": "dist/photoviewer.js",
   "style": "dist/photoviewer.css",
+  "types": "types/index.d.ts",
   "files": [
     "dist",
-    "src"
+    "src",
+    "types"
   ],
   "homepage": "https://nzbin.github.io/photoviewer/",
   "author": "nzbin",
