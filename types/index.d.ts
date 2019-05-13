@@ -1,16 +1,4 @@
 declare namespace PhotoViewer {
-  enum toolbarOptions {
-    Maximize = 'maximize',
-    Close = 'close',
-    ZoomIn = 'zoomIn',
-    ZoomOut = 'zoomOut',
-    Prev = 'prev',
-    Fullscreen = 'fullscreen',
-    Next = 'next',
-    ActualSize = 'actualSize',
-    RotateRight = 'rotateRight'
-  }
-
   type toolbarOption =
     | 'maximize'
     | 'close'
@@ -43,8 +31,8 @@ declare namespace PhotoViewer {
     ratioThreshold?: number;
     minRatio?: number;
     maxRatio?: number;
-    headToolbar?: toolbarOption[] | string[];
-    footToolbar?: toolbarOption[] | string[];
+    headToolbar?: toolbarOption[];
+    footToolbar?: toolbarOption[];
     icons?: {
       minimize?: string;
       maximize?: string;
