@@ -107,7 +107,7 @@ class PhotoViewer {
 
   }
 
-  _creatBtns(toolbar, btns) {
+  _createBtns(toolbar, btns) {
 
     let btnsStr = '';
 
@@ -119,11 +119,11 @@ class PhotoViewer {
 
   }
 
-  _creatTitle() {
+  _createTitle() {
     return (this.options.title ? `<div class="${NS}-title"></div>` : '');
   }
 
-  _creatDOM() {
+  render() {
 
     let btnsTpl = {
       minimize: `<button class="${NS}-button ${NS}-button-minimize"
@@ -178,16 +178,16 @@ class PhotoViewer {
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-head">
-              ${this._creatBtns(this.options.headToolbar, btnsTpl)}
+              ${this._createBtns(this.options.headToolbar, btnsTpl)}
             </div>
-            ${this._creatTitle()}
+            ${this._createTitle()}
           </div>
           <div class="${NS}-stage">
             <img class="${NS}-image" src="" alt="" />
           </div>
           <div class="${NS}-footer">
             <div class="${NS}-toolbar ${NS}-toolbar-foot">
-              ${this._creatBtns(this.options.footToolbar, btnsTpl)}
+              ${this._createBtns(this.options.footToolbar, btnsTpl)}
             </div>
           </div>
         </div>
@@ -200,7 +200,7 @@ class PhotoViewer {
   build() {
 
     // Create photoviewer HTML string
-    let photoviewerHTML = this._creatDOM();
+    let photoviewerHTML = this.render();
 
     // Make photoviewer HTML string to jQuery element
     let $photoviewer = $(photoviewerHTML);
