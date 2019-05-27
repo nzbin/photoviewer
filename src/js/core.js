@@ -478,38 +478,39 @@ class PhotoViewer {
       this.isRotated
     );
 
-    this.$stage.removeClass('stage-ready');
-    this.$image.removeClass('image-ready');
-
-    // loader end
-    this.$photoviewer.find(CLASS_NS + '-loader').remove();
-
-    // Add image init animation
-    if (
-      this.options.initAnimation
-      && !this.options.progressiveLoading
-      && this.$image.css('display') === 'none'
-    ) {
-      this.$image.fadeIn();
+    // Just execute before image loaded
+    if(!this.imgLoaded){
+      // loader end
+      this.$photoviewer.find(CLASS_NS + '-loader').remove();
+  
+      // Remove class after image loaded
+      this.$stage.removeClass('stage-ready');
+      this.$image.removeClass('image-ready');
+      
+      // Add image init animation
+      if (this.options.initAnimation&& !this.options.progressiveLoading) {
+        this.$image.fadeIn();
+      }
+      this.imgLoaded = true;
     }
 
   }
 
   loadImg(imgSrc, fn, err) {
 
-    let loaderHTML = `<div class="${NS}-loader"></div>`;
-
-    // loader start
-    this.$photoviewer.append(loaderHTML);
-
-    // Add class before image loaded
-    this.$stage.addClass('stage-ready');
-    this.$image.addClass('image-ready');
-
     // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
     this.rotateAngle = 0;
+
+    this.imgLoaded = false;
+
+    // loader start
+    this.$photoviewer.append(`<div class="${NS}-loader"></div>`);
+
+    // Add class before image loaded
+    this.$stage.addClass('stage-ready');
+    this.$image.addClass('image-ready');
 
     if (this.options.initAnimation && !this.options.progressiveLoading) {
       this.$image.hide();
