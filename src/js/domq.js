@@ -36,7 +36,7 @@ const $ = D;
 const methods = {
   isArray,
   noop
-}
+};
 
 const fnMethods = {
   find,
@@ -66,7 +66,7 @@ const fnMethods = {
   animate,
   fadeTo,
   fadeIn
-}
+};
 
 $.extend(methods);
 $.fn.extend(fnMethods);

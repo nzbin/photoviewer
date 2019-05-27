@@ -7,20 +7,18 @@ export const document = window.document;
  * @return {Function}       [description]
  */
 export function throttle(fn, delay) {
-
   let timer = null;
 
-  return function () {
+  return function() {
     let context = this,
       args = arguments;
 
     clearTimeout(timer);
 
-    timer = setTimeout(function () {
+    timer = setTimeout(function() {
       fn.apply(context, args);
     }, delay);
   };
-
 }
 
 /**
@@ -30,19 +28,17 @@ export function throttle(fn, delay) {
  * @param  {Function}  error    [callbacks]
  */
 export function preloadImg(src, success, error) {
-
   let img = new Image();
 
-  img.onload = function () {
+  img.onload = function() {
     success(img);
   };
 
-  img.onerror = function () {
+  img.onerror = function() {
     error(img);
   };
 
   img.src = src;
-
 }
 
 /**
@@ -80,7 +76,7 @@ export function exitFullscreen() {
  * @return {[String]}     [description]
  */
 export function getImageNameFromUrl(url) {
-  let reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/ig,
+  let reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi,
     txt = url.replace(reg, '$1');
   return txt;
 }
@@ -90,7 +86,10 @@ export function getImageNameFromUrl(url) {
  * @return {[Boolean]}       [description]
  */
 export function hasScrollbar() {
-  return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
+  return (
+    document.body.scrollHeight >
+    (window.innerHeight || document.documentElement.clientHeight)
+  );
 }
 
 /**
@@ -98,15 +97,14 @@ export function hasScrollbar() {
  * @return {[Number]}       [description]
  */
 export function getScrollbarWidth() {
-
   let scrollDiv = document.createElement('div');
-  scrollDiv.style.cssText = 'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
+  scrollDiv.style.cssText =
+    'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
   document.body.appendChild(scrollDiv);
   let scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
   document.body.removeChild(scrollDiv);
 
   return scrollbarWidth;
-
 }
 
 /**
@@ -117,7 +115,6 @@ export function getScrollbarWidth() {
  * @param {[Boolean]} isRotate     [description]
  */
 export function setGrabCursor(imageData, stageData, stage, isRotated) {
-
   let imageWidth = !isRotated ? imageData.w : imageData.h,
     imageHeight = !isRotated ? imageData.h : imageData.w;
 
@@ -134,5 +131,8 @@ export function setGrabCursor(imageData, stageData, stage, isRotated) {
  * @return {[Boolean]}     [description]
  */
 export function supportTouch() {
-  return !!(('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
+  return !!(
+    'ontouchstart' in window ||
+    (window.DocumentTouch && document instanceof DocumentTouch)
+  );
 }

@@ -24,5 +24,5 @@ export const PUBLIC_VARS = {
   // modal resizing flag
   isResizing: false,
   // modal z-index setting
-  zIndex: defaults.zIndex,
+  zIndex: defaults.zIndex
 };

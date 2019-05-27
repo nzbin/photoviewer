@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v3.1.0
+ * photoviewer - v3.1.1
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -1323,7 +1323,7 @@ function requestFullscreen(element) {
  */
 
 function getImageNameFromUrl(url) {
-  var reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/ig,
+  var reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi,
       txt = url.replace(reg, '$1');
   return txt;
 }
@@ -1602,14 +1602,14 @@ var resizable = {
         resizableHandleNE = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-ne\"></div>"),
         resizableHandleNW = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-nw\"></div>");
     var resizableHandles = {
-      'e': resizableHandleE,
-      's': resizableHandleS,
-      'se': resizableHandleSE,
-      'n': resizableHandleN,
-      'w': resizableHandleW,
-      'nw': resizableHandleNW,
-      'ne': resizableHandleNE,
-      'sw': resizableHandleSW
+      e: resizableHandleE,
+      s: resizableHandleS,
+      se: resizableHandleSE,
+      n: resizableHandleN,
+      w: resizableHandleW,
+      nw: resizableHandleNW,
+      ne: resizableHandleNE,
+      sw: resizableHandleSW
     };
     $$1(modal).append(resizableHandleE, resizableHandleW, resizableHandleS, resizableHandleN, resizableHandleSE, resizableHandleSW, resizableHandleNE, resizableHandleNW);
     var isDragging = false;
@@ -1644,36 +1644,36 @@ var resizable = {
       var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.l : modalData.l + modalData.w - minWidth,
           modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.t : modalData.t + modalData.h - minHeight;
       var opts = {
-        'e': {
+        e: {
           width: Math.max(offsetX + modalData.w, minWidth) + 'px'
         },
-        's': {
+        s: {
           height: Math.max(offsetY + modalData.h, minHeight) + 'px'
         },
-        'se': {
+        se: {
           width: Math.max(offsetX + modalData.w, minWidth) + 'px',
           height: Math.max(offsetY + modalData.h, minHeight) + 'px'
         },
-        'w': {
+        w: {
           width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
           left: modalLeft + 'px'
         },
-        'n': {
+        n: {
           height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
           top: modalTop + 'px'
         },
-        'nw': {
+        nw: {
           width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
           height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
           top: modalTop + 'px',
           left: modalLeft + 'px'
         },
-        'ne': {
+        ne: {
           width: Math.max(offsetX + modalData.w, minWidth) + 'px',
           height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
           top: modalTop + 'px'
         },
-        'sw': {
+        sw: {
           width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
           height: Math.max(offsetY + modalData.h, minHeight) + 'px',
           left: modalLeft + 'px'
@@ -1696,31 +1696,31 @@ var resizable = {
           imgLeft2 = (widthDiff2 > 0 ? $$1(image).position().left : $$1(image).position().left < 0 ? $$1(image).position().left : 0) - δ,
           imgTop2 = (heightDiff2 > 0 ? $$1(image).position().top : $$1(image).position().top < 0 ? $$1(image).position().top : 0) + δ;
       var opts = {
-        'e': {
+        e: {
           left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
         },
-        's': {
+        s: {
           top: heightDiff >= δ ? (heightDiff + δ) / 2 + 'px' : imgTop > heightDiff ? imgTop + 'px' : heightDiff + 'px'
         },
-        'se': {
+        se: {
           top: heightDiff >= δ ? (heightDiff + δ) / 2 + 'px' : imgTop > heightDiff ? imgTop + 'px' : heightDiff + 'px',
           left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
         },
-        'w': {
+        w: {
           left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 + 'px' : imgLeft2 > widthDiff2 ? imgLeft2 + 'px' : widthDiff2 + 'px'
         },
-        'n': {
+        n: {
           top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 + 'px' : imgTop2 > heightDiff2 ? imgTop2 + 'px' : heightDiff2 + 'px'
         },
-        'nw': {
+        nw: {
           top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 + 'px' : imgTop2 > heightDiff2 ? imgTop2 + 'px' : heightDiff2 + 'px',
           left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 + 'px' : imgLeft2 > widthDiff2 ? imgLeft2 + 'px' : widthDiff2 + 'px'
         },
-        'ne': {
+        ne: {
           top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 + 'px' : imgTop2 > heightDiff2 ? imgTop2 + 'px' : heightDiff2 + 'px',
           left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
         },
-        'sw': {
+        sw: {
           top: heightDiff >= δ ? (heightDiff + δ) / 2 + 'px' : imgTop > heightDiff ? imgTop + 'px' : heightDiff + 'px',
           left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 + 'px' : imgLeft2 > widthDiff2 ? imgLeft2 + 'px' : widthDiff2 + 'px'
         }
@@ -1884,7 +1884,7 @@ function () {
     }
   };
 
-  _proto._creatBtns = function _creatBtns(toolbar, btns) {
+  _proto._createBtns = function _createBtns(toolbar, btns) {
     var btnsStr = '';
     $$1.each(toolbar, function (index, item) {
       btnsStr += btns[item];
@@ -1892,11 +1892,11 @@ function () {
     return btnsStr;
   };
 
-  _proto._creatTitle = function _creatTitle() {
+  _proto._createTitle = function _createTitle() {
     return this.options.title ? "<div class=\"" + NS + "-title\"></div>" : '';
   };
 
-  _proto._creatDOM = function _creatDOM() {
+  _proto.render = function render() {
     var btnsTpl = {
       minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\"\n                  title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
       maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\"\n                  title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
@@ -1911,14 +1911,13 @@ function () {
       rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\"\n                      title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
     }; // photoviewer base HTML
 
-    var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._creatBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._creatTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._creatBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
+    var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._createBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
     return photoviewerHTML;
   };
 
   _proto.build = function build() {
     // Create photoviewer HTML string
-    var photoviewerHTML = this._creatDOM(); // Make photoviewer HTML string to jQuery element
-
+    var photoviewerHTML = this.render(); // Make photoviewer HTML string to jQuery element
 
     var $photoviewer = $$1(photoviewerHTML); // Get all photoviewer element
 
@@ -1962,7 +1961,7 @@ function () {
 
     if (!$$1(CLASS_NS + '-modal').length && this.options.fixedContent) {
       $$1('html').css({
-        'overflow': 'hidden'
+        overflow: 'hidden'
       });
 
       if (hasScrollbar()) {
@@ -2001,7 +2000,7 @@ function () {
 
     if (zeroModal && this.options.fixedContent) {
       $$1('html').css({
-        'overflow': '',
+        overflow: '',
         'padding-right': ''
       });
     } // Reset zIndex after close
@@ -2138,30 +2137,36 @@ function () {
     }, {
       w: this.$stage.width(),
       h: this.$stage.height()
-    }, this.$stage, this.isRotated);
-    this.$stage.removeClass('stage-ready');
-    this.$image.removeClass('image-ready'); // loader end
+    }, this.$stage, this.isRotated); // Just execute before image loaded
 
-    this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Add image init animation
+    if (!this.imgLoaded) {
+      // loader end
+      this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Remove class after image loaded
 
-    if (this.options.initAnimation && !this.options.progressiveLoading && this.$image.css('display') === 'none') {
-      this.$image.fadeIn();
+      this.$stage.removeClass('stage-ready');
+      this.$image.removeClass('image-ready'); // Add image init animation
+
+      if (this.options.initAnimation && !this.options.progressiveLoading) {
+        this.$image.fadeIn();
+      }
+
+      this.imgLoaded = true;
     }
   };
 
   _proto.loadImg = function loadImg(imgSrc, fn, err) {
     var _this2 = this;
 
-    var loaderHTML = "<div class=\"" + NS + "-loader\"></div>"; // loader start
-
-    this.$photoviewer.append(loaderHTML); // Add class before image loaded
-
-    this.$stage.addClass('stage-ready');
-    this.$image.addClass('image-ready'); // Reset image
-
+    // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
     this.rotateAngle = 0;
+    this.imgLoaded = false; // loader start
+
+    this.$photoviewer.append("<div class=\"" + NS + "-loader\"></div>"); // Add class before image loaded
+
+    this.$stage.addClass('stage-ready');
+    this.$image.addClass('image-ready');
 
     if (this.options.initAnimation && !this.options.progressiveLoading) {
       this.$image.hide();

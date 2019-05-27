@@ -31,9 +31,7 @@ import resizable from './resizable';
  * PhotoViewer Class
  */
 class PhotoViewer {
-
   constructor(items, options, el) {
-
     this.options = $.extend(true, {}, DEFAULTS, options);
 
     if (options && $.isArray(options.footToolbar)) {
@@ -73,11 +71,9 @@ class PhotoViewer {
     };
 
     this.init(items, this.options, el);
-
   }
 
   init(items, opts, el) {
-
     this.groupData = items;
     this.groupIndex = opts['index'];
 
@@ -104,27 +100,23 @@ class PhotoViewer {
         opts.modalHeight
       );
     }
-
   }
 
   _createBtns(toolbar, btns) {
-
     let btnsStr = '';
 
-    $.each(toolbar, function (index, item) {
+    $.each(toolbar, function(index, item) {
       btnsStr += btns[item];
     });
 
     return btnsStr;
-
   }
 
   _createTitle() {
-    return (this.options.title ? `<div class="${NS}-title"></div>` : '');
+    return this.options.title ? `<div class="${NS}-title"></div>` : '';
   }
 
   render() {
-
     let btnsTpl = {
       minimize: `<button class="${NS}-button ${NS}-button-minimize"
                   title="${this.options.i18n.minimize}">
@@ -173,8 +165,7 @@ class PhotoViewer {
     };
 
     // photoviewer base HTML
-    let photoviewerHTML =
-      `<div class="${NS}-modal">
+    let photoviewerHTML = `<div class="${NS}-modal">
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-head">
@@ -194,11 +185,9 @@ class PhotoViewer {
       </div>`;
 
     return photoviewerHTML;
-
   }
 
   build() {
-
     // Create photoviewer HTML string
     let photoviewerHTML = this.render();
 
@@ -234,24 +223,26 @@ class PhotoViewer {
     this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
 
     // Set handle element of draggable
-    if (!this.options.dragHandle || this.options.dragHandle === CLASS_NS + '-modal') {
+    if (
+      !this.options.dragHandle ||
+      this.options.dragHandle === CLASS_NS + '-modal'
+    ) {
       this.dragHandle = this.$photoviewer;
     } else {
       this.dragHandle = this.$photoviewer.find(this.options.dragHandle);
     }
-
   }
 
   open() {
-
     if (!this.options.multiInstances) {
-      $(CLASS_NS + '-modal').eq(0).remove();
+      $(CLASS_NS + '-modal')
+        .eq(0)
+        .remove();
     }
 
     // Fixed modal position bug
     if (!$(CLASS_NS + '-modal').length && this.options.fixedContent) {
-
-      $('html').css({ 'overflow': 'hidden' });
+      $('html').css({ overflow: 'hidden' });
 
       if (hasScrollbar()) {
         let scrollbarWidth = getScrollbarWidth();
@@ -259,7 +250,6 @@ class PhotoViewer {
           $('html').css({ 'padding-right': scrollbarWidth });
         }
       }
-
     }
 
     this.build();
@@ -274,11 +264,9 @@ class PhotoViewer {
     this.setModalPos(this.$photoviewer);
 
     this._triggerHook('opened', this.$el);
-
   }
 
   close() {
-
     this._triggerHook('beforeClose', this.$el);
 
     // Remove instance
@@ -293,7 +281,7 @@ class PhotoViewer {
 
     // Fixed modal position bug
     if (zeroModal && this.options.fixedContent) {
-      $('html').css({ 'overflow': '', 'padding-right': '' });
+      $('html').css({ overflow: '', 'padding-right': '' });
     }
 
     // Reset zIndex after close
@@ -308,11 +296,9 @@ class PhotoViewer {
     }
 
     this._triggerHook('closed', this.$el);
-
   }
 
   setModalPos(modal) {
-
     let winWidth = $W.width(),
       winHeight = $W.height(),
       scrollLeft = $D.scrollLeft(),
@@ -323,7 +309,6 @@ class PhotoViewer {
 
     // Set modal maximized when init
     if (this.options.initMaximized) {
-
       modal.addClass(NS + '-maximize');
 
       modal.css({
@@ -335,9 +320,7 @@ class PhotoViewer {
 
       this.isOpened = true;
       this.isMaximized = true;
-
     } else {
-
       // Make the modal in windows center
       modal.css({
         width: modalWidth,
@@ -345,13 +328,10 @@ class PhotoViewer {
         left: (winWidth - modalWidth) / 2 + scrollLeft + 'px',
         top: (winHeight - modalHeight) / 2 + scrollTop + 'px'
       });
-
     }
-
   }
 
   setModalSize(img) {
-
     let winWidth = $W.width(),
       winHeight = $W.height(),
       scrollLeft = $D.scrollLeft(),
@@ -370,18 +350,21 @@ class PhotoViewer {
     };
 
     // Modal size should calc with stage css value
-    let modalWidth = img.width +
-      parseFloat(stageCSS.left) +
-      parseFloat(stageCSS.right) +
-      parseFloat(stageCSS.borderLeft) +
-      parseFloat(stageCSS.borderRight),
-      modalHeight = img.height +
+    let modalWidth =
+        img.width +
+        parseFloat(stageCSS.left) +
+        parseFloat(stageCSS.right) +
+        parseFloat(stageCSS.borderLeft) +
+        parseFloat(stageCSS.borderRight),
+      modalHeight =
+        img.height +
         parseFloat(stageCSS.top) +
         parseFloat(stageCSS.bottom) +
         parseFloat(stageCSS.borderTop) +
         parseFloat(stageCSS.borderBottom);
 
-    let gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
+    let gapThreshold =
+        (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
       // modal scale to window
       scale = Math.min(
         winWidth / (modalWidth * gapThreshold),
@@ -417,33 +400,35 @@ class PhotoViewer {
     }
 
     this.isOpened = true;
-
   }
 
   getImageScaleToStage(stageWidth, stageHeight) {
-
     var scale = 1;
 
     if (!this.isRotated) {
-      scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
+      scale = Math.min(
+        stageWidth / this.img.width,
+        stageHeight / this.img.height,
+        1
+      );
     } else {
-      scale = Math.min(stageWidth / this.img.height, stageHeight / this.img.width, 1);
+      scale = Math.min(
+        stageWidth / this.img.height,
+        stageHeight / this.img.width,
+        1
+      );
     }
 
     return scale;
   }
 
   setImageSize(img) {
-
     let stageData = {
       w: this.$stage.width(),
       h: this.$stage.height()
     };
 
-    let scale = this.getImageScaleToStage(
-      stageData.w,
-      stageData.h
-    );
+    let scale = this.getImageScaleToStage(stageData.w, stageData.h);
 
     this.$image.css({
       width: Math.ceil(img.width * scale) + 'px',
@@ -479,25 +464,24 @@ class PhotoViewer {
     );
 
     // Just execute before image loaded
-    if(!this.imgLoaded){
+    if (!this.imgLoaded) {
       // loader end
       this.$photoviewer.find(CLASS_NS + '-loader').remove();
-  
+
       // Remove class after image loaded
       this.$stage.removeClass('stage-ready');
       this.$image.removeClass('image-ready');
-      
+
       // Add image init animation
-      if (this.options.initAnimation&& !this.options.progressiveLoading) {
+      if (this.options.initAnimation && !this.options.progressiveLoading) {
         this.$image.fadeIn();
       }
+
       this.imgLoaded = true;
     }
-
   }
 
   loadImg(imgSrc, fn, err) {
-
     // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
@@ -518,65 +502,62 @@ class PhotoViewer {
 
     this.$image.attr('src', imgSrc);
 
-    preloadImg(imgSrc, (img) => {
-      // Store HTMLImageElement
-      this.img = img;
+    preloadImg(
+      imgSrc,
+      img => {
+        // Store HTMLImageElement
+        this.img = img;
 
-      // Store original data
-      this.imageData = {
-        originalWidth: img.width,
-        originalHeight: img.height
-      };
+        // Store original data
+        this.imageData = {
+          originalWidth: img.width,
+          originalHeight: img.height
+        };
 
-      if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
-        this.setImageSize(img);
-      } else {
-        this.setModalSize(img);
+        if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
+          this.setImageSize(img);
+        } else {
+          this.setModalSize(img);
+        }
+
+        // callback of image loaded successfully
+        if (fn) {
+          fn.call();
+        }
+      },
+      () => {
+        // loader end
+        this.$photoviewer.find(CLASS_NS + '-loader').remove();
+
+        // callback of image loading failed
+        if (err) {
+          err.call();
+        }
       }
-
-      // callback of image loaded successfully
-      if (fn) {
-        fn.call();
-      }
-
-    }, () => {
-      // loader end
-      this.$photoviewer.find(CLASS_NS + '-loader').remove();
-
-      // callback of image loading failed
-      if (err) {
-        err.call();
-      }
-    });
+    );
 
     if (this.options.title) {
       this.setImgTitle(imgSrc);
     }
-
   }
 
   setImgTitle(url) {
-
     let title = this.groupData[this.groupIndex].title
       ? this.groupData[this.groupIndex].title
       : getImageNameFromUrl(url);
 
     this.$title.html(title);
-
   }
 
   jump(step) {
-
     this._triggerHook('beforeChange', this.groupIndex);
 
     this.groupIndex = this.groupIndex + step;
 
     this.jumpTo(this.groupIndex);
-
   }
 
   jumpTo(index) {
-
     index = index % this.groupData.length;
 
     if (index >= 0) {
@@ -587,16 +568,18 @@ class PhotoViewer {
 
     this.groupIndex = index;
 
-    this.loadImg(this.groupData[index].src, () => {
-      this._triggerHook('changed', index);
-    }, () => {
-      this._triggerHook('changed', index);
-    });
-
+    this.loadImg(
+      this.groupData[index].src,
+      () => {
+        this._triggerHook('changed', index);
+      },
+      () => {
+        this._triggerHook('changed', index);
+      }
+    );
   }
 
   wheel(e) {
-
     e.preventDefault();
 
     let delta = 1;
@@ -619,16 +602,14 @@ class PhotoViewer {
     };
 
     this.zoom(ratio, pointer, e);
-
   }
 
   zoom(ratio, origin, e) {
-
     // zoom out ratio & zoom in ratio
-    ratio = ratio < 0 ? (1 / (1 - ratio)) : (1 + ratio);
+    ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
 
     // image ratio
-    ratio = this.$image.width() / this.imageData.originalWidth * ratio;
+    ratio = (this.$image.width() / this.imageData.originalWidth) * ratio;
 
     // Fixed digital error
     // if (ratio > 0.95 && ratio < 1.05) {
@@ -640,11 +621,9 @@ class PhotoViewer {
     }
 
     this.zoomTo(ratio, origin, e);
-
   }
 
   zoomTo(ratio, origin, e) {
-
     let $image = this.$image,
       $stage = this.$stage,
       imgData = {
@@ -666,8 +645,8 @@ class PhotoViewer {
     let newWidth = this.imageData.originalWidth * ratio,
       newHeight = this.imageData.originalHeight * ratio,
       // Think about it for a while
-      newLeft = origin.x - (origin.x - imgData.x) / imgData.w * newWidth,
-      newTop = origin.y - (origin.y - imgData.y) / imgData.h * newHeight;
+      newLeft = origin.x - ((origin.x - imgData.x) / imgData.w) * newWidth,
+      newTop = origin.y - ((origin.y - imgData.y) / imgData.h) * newHeight;
 
     // δ is the difference between image new width and new height
     let δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2,
@@ -683,25 +662,21 @@ class PhotoViewer {
     if (imgNewHeight <= stageData.h) {
       newTop = (stageData.h - newHeight) / 2;
     } else {
-      newTop = newTop > δ
-        ? δ
-        : (newTop > (offsetY - δ)
-          ? newTop
-          : (offsetY - δ));
+      newTop = newTop > δ ? δ : newTop > offsetY - δ ? newTop : offsetY - δ;
     }
 
     if (imgNewWidth <= stageData.w) {
       newLeft = (stageData.w - newWidth) / 2;
     } else {
-      newLeft = newLeft > -δ
-        ? -δ
-        : (newLeft > (offsetX + δ)
-          ? newLeft
-          : (offsetX + δ));
+      newLeft =
+        newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
     }
 
     // if the image scale get to the critical point
-    if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
+    if (
+      Math.abs(this.imageData.initWidth - newWidth) <
+      this.imageData.initWidth * 0.05
+    ) {
       this.setImageSize(this.img);
     } else {
       $image.css({
@@ -725,7 +700,6 @@ class PhotoViewer {
       );
     }
 
-
     // Update image initial data
     $.extend(this.imageData, {
       width: newWidth,
@@ -733,11 +707,9 @@ class PhotoViewer {
       left: newLeft,
       top: newTop
     });
-
   }
 
   rotate(angle) {
-
     this.rotateAngle = this.rotateAngle + angle;
 
     if ((this.rotateAngle / 90) % 2 === 0) {
@@ -747,11 +719,9 @@ class PhotoViewer {
     }
 
     this.rotateTo(this.rotateAngle);
-
   }
 
   rotateTo(angle) {
-
     this.$image.css({
       transform: 'rotate(' + angle + 'deg)'
     });
@@ -763,13 +733,10 @@ class PhotoViewer {
 
     // Remove grab cursor when rotate
     this.$stage.removeClass('is-grab');
-
   }
 
   resize() {
-
     let resizeHandler = throttle(() => {
-
       if (this.isOpened) {
         if (this.isMaximized) {
           this.setImageSize({
@@ -783,15 +750,12 @@ class PhotoViewer {
           });
         }
       }
-
     }, 500);
 
     return resizeHandler;
-
   }
 
   maximize() {
-
     if (!this.isMaximized) {
       // Store modal data before maximize
       this.modalData = {
@@ -811,9 +775,7 @@ class PhotoViewer {
       });
 
       this.isMaximized = true;
-
     } else {
-
       this.$photoviewer.removeClass(NS + '-maximize');
 
       this.$photoviewer.css({
@@ -838,17 +800,13 @@ class PhotoViewer {
       width: this.imageData.originalWidth,
       height: this.imageData.originalHeight
     });
-
   }
 
   fullscreen() {
-
     requestFullscreen(this.$photoviewer[0]);
-
   }
 
   keydown(e) {
-
     if (!this.options.keyboard) {
       return false;
     }
@@ -922,20 +880,18 @@ class PhotoViewer {
         break;
       default:
     }
-
   }
 
   addEvents() {
-
-    this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, (e) => {
+    this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
       this.close();
     });
 
-    this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, (e) => {
+    this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, e => {
       this.wheel(e);
     });
 
-    this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, (e) => {
+    this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
       this.zoom(
         this.options.ratioThreshold * 3,
         { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
@@ -943,7 +899,7 @@ class PhotoViewer {
       );
     });
 
-    this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, (e) => {
+    this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
       this.zoom(
         -this.options.ratioThreshold * 3,
         { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
@@ -951,44 +907,53 @@ class PhotoViewer {
       );
     });
 
-    this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, (e) => {
-      this.zoomTo(
-        1,
-        { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
-        e
-      );
-    });
+    this.$actualSize
+      .off(CLICK_EVENT + EVENT_NS)
+      .on(CLICK_EVENT + EVENT_NS, e => {
+        this.zoomTo(
+          1,
+          { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
+          e
+        );
+      });
 
     this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(-1);
     });
 
-    this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
-      this.fullscreen();
-    });
+    this.$fullscreen
+      .off(CLICK_EVENT + EVENT_NS)
+      .on(CLICK_EVENT + EVENT_NS, () => {
+        this.fullscreen();
+      });
 
     this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(1);
     });
 
-    this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
-      this.rotate(-90);
-    });
+    this.$rotateLeft
+      .off(CLICK_EVENT + EVENT_NS)
+      .on(CLICK_EVENT + EVENT_NS, () => {
+        this.rotate(-90);
+      });
 
-    this.$rotateRight.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
-      this.rotate(90);
-    });
+    this.$rotateRight
+      .off(CLICK_EVENT + EVENT_NS)
+      .on(CLICK_EVENT + EVENT_NS, () => {
+        this.rotate(90);
+      });
 
-    this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
-      this.maximize();
-    });
+    this.$maximize
+      .off(CLICK_EVENT + EVENT_NS)
+      .on(CLICK_EVENT + EVENT_NS, () => {
+        this.maximize();
+      });
 
-    $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, (e) => {
+    $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
       this.keydown(e);
     });
 
     $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
-
   }
 
   _triggerHook(e, data) {
@@ -996,7 +961,6 @@ class PhotoViewer {
       this.options.callbacks[e].apply(this, $.isArray(data) ? data : [data]);
     }
   }
-
 }
 
 /**

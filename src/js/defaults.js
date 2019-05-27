@@ -1,6 +1,5 @@
 import $ from './domq.js';
 export default {
-
   // Enable modal to drag
   draggable: true,
 
@@ -44,10 +43,7 @@ export default {
   maxRatio: 16,
 
   // Toolbar options in header
-  headToolbar: [
-    'maximize',
-    'close'
-  ],
+  headToolbar: ['maximize', 'close'],
 
   // Toolbar options in footer
   footToolbar: [
@@ -171,5 +167,4 @@ export default {
 
   // Load the image progressively
   progressiveLoading: true
-
-}
+};

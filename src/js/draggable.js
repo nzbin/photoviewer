@@ -9,7 +9,6 @@ import {
 } from './constants';
 
 export default {
-
   /**
    * [draggable]
    * @param  {[Object]} modal       [the modal element]
@@ -17,17 +16,14 @@ export default {
    * @param  {[Object]} dragCancel  [the cancel element when dragging]
    */
   draggable(modal, dragHandle, dragCancel) {
-
     let isDragging = false;
 
     let startX = 0,
       startY = 0,
-
       left = 0,
       top = 0;
 
-    let dragStart = (e) => {
-
+    let dragStart = e => {
       e = e || window.event;
 
       // Must be removed
@@ -46,36 +42,32 @@ export default {
 
       isDragging = true;
 
-      startX = e.type === 'touchstart'
-        ? e.targetTouches[0].pageX
-        : e.clientX;
-      startY = e.type === 'touchstart'
-        ? e.targetTouches[0].pageY
-        : e.clientY;
+      startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
+      startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
 
       left = $(modal).offset().left;
       top = $(modal).offset().top;
 
-      $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
-        .on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
-
+      $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(
+        TOUCH_END_EVENT + EVENT_NS,
+        dragEnd
+      );
     };
 
-    let dragMove = (e) => {
-
+    let dragMove = e => {
       e = e || window.event;
 
       e.preventDefault();
 
-      if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !this.isMaximized) {
-
-        let endX = e.type === 'touchmove'
-          ? e.targetTouches[0].pageX
-          : e.clientX,
-          endY = e.type === 'touchmove'
-            ? e.targetTouches[0].pageY
-            : e.clientY,
-
+      if (
+        isDragging &&
+        !PUBLIC_VARS['isMoving'] &&
+        !PUBLIC_VARS['isResizing'] &&
+        !this.isMaximized
+      ) {
+        let endX =
+            e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX,
+          endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY,
           relativeX = endX - startX,
           relativeY = endY - startY;
 
@@ -83,22 +75,18 @@ export default {
           left: relativeX + left + 'px',
           top: relativeY + top + 'px'
         });
-
       }
-
     };
 
     let dragEnd = () => {
-
-      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
-        .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
+      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(
+        TOUCH_END_EVENT + EVENT_NS,
+        dragEnd
+      );
 
       isDragging = false;
-
     };
 
     $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
-
   }
-
-}
+};
