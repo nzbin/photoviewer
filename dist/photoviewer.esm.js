@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v3.1.1
+ * photoviewer - v3.2.0
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -2506,6 +2506,11 @@ function () {
           this.rotate(90);
         }
 
+        break;
+      // Q
+
+      case 81:
+        this.close();
         break;
 
       default:
