@@ -878,6 +878,10 @@ class PhotoViewer {
           this.rotate(90);
         }
         break;
+      // Q
+      case 81:
+        this.close();
+        break;
       default:
     }
   }
