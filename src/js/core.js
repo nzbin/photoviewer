@@ -28,7 +28,7 @@ import movable from './movable';
 import resizable from './resizable';
 
 /**
- * PhotoViewer Class
+ * PhotoViewer class
  */
 class PhotoViewer {
   constructor(items, options, el) {
@@ -48,16 +48,16 @@ class PhotoViewer {
     // As we have multiple instances,
     // so every instance has following variables.
 
-    // modal open flag
+    // Modal open flag
     this.isOpened = false;
-    // modal maximize flag
+    // Modal maximize flag
     this.isMaximized = false;
-    // image rotate 90*(2n+1) flag
+    // Image rotate 90*(2n+1) flag
     this.isRotated = false;
-    // image rotate angle
+    // Image rotate angle
     this.rotateAngle = 0;
 
-    // if modal do resize
+    // If modal do resize
     this.isDoResize = false;
 
     // Store image data in every instance
@@ -89,7 +89,7 @@ class PhotoViewer {
 
     this.loadImg(imgSrc);
 
-    // draggable & movable & resizable
+    // Draggable & Movable & Resizable
     if (opts.draggable) {
       this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
     }
@@ -294,7 +294,7 @@ class PhotoViewer {
       PUBLIC_VARS['zIndex'] = this.options.zIndex;
     }
 
-    // off events
+    // Off events
     if (!$(CLASS_NS + '-modal').length) {
       $D.off(KEYDOWN_EVENT + EVENT_NS);
       $W.off(RESIZE_EVENT + EVENT_NS);
@@ -342,7 +342,7 @@ class PhotoViewer {
       scrollLeft = $D.scrollLeft(),
       scrollTop = $D.scrollTop();
 
-    // stage css value
+    // Stage css value
     let stageCSS = {
       left: this.$stage.css('left'),
       right: this.$stage.css('right'),
@@ -370,7 +370,7 @@ class PhotoViewer {
 
     let gapThreshold =
         (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
-      // modal scale to window
+      // Modal scale to window
       scale = Math.min(
         winWidth / (modalWidth * gapThreshold),
         winHeight / (modalHeight * gapThreshold),
@@ -470,7 +470,7 @@ class PhotoViewer {
 
     // Just execute before image loaded
     if (!this.imgLoaded) {
-      // loader end
+      // Loader end
       this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
       // Remove class after image loaded
@@ -494,7 +494,7 @@ class PhotoViewer {
 
     this.imgLoaded = false;
 
-    // loader start
+    // Loader start
     this.$photoviewer.append(`<div class="${NS}-loader"></div>`);
 
     // Add class before image loaded
@@ -525,16 +525,16 @@ class PhotoViewer {
           this.setModalSize(img);
         }
 
-        // callback of image loaded successfully
+        // Callback of image loaded successfully
         if (fn) {
           fn.call();
         }
       },
       () => {
-        // loader end
+        // Loader end
         this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
-        // callback of image loading failed
+        // Callback of image loading failed
         if (err) {
           err.call();
         }
@@ -597,7 +597,7 @@ class PhotoViewer {
       delta = e.detail > 0 ? 1 : -1;
     }
 
-    // ratio threshold
+    // Ratio threshold
     let ratio = -delta * this.options.ratioThreshold;
 
     // mouse point position relative to stage
@@ -610,10 +610,10 @@ class PhotoViewer {
   }
 
   zoom(ratio, origin, e) {
-    // zoom out ratio & zoom in ratio
+    // Zoom out ratio & Zoom in ratio
     ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
 
-    // image ratio
+    // Image ratio
     ratio = (this.$image.width() / this.imageData.originalWidth) * ratio;
 
     // Fixed digital error
@@ -638,7 +638,7 @@ class PhotoViewer {
         y: this.imageData.top
       };
 
-    // image stage position
+    // Image stage position
     // We will use it to calc the relative position of image
     let stageData = {
       w: $stage.width(),
@@ -661,7 +661,7 @@ class PhotoViewer {
     let offsetX = stageData.w - newWidth,
       offsetY = stageData.h - newHeight;
 
-    // zoom out & zoom in condition
+    // Zoom out & Zoom in condition
     // It's important and it takes me a lot of time to get it
     // The conditions with image rotate 90 degree drive me crazy alomst!
     if (imgNewHeight <= stageData.h) {
@@ -677,7 +677,7 @@ class PhotoViewer {
         newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
     }
 
-    // if the image scale get to the critical point
+    // If the image scale get to the critical point
     if (
       Math.abs(this.imageData.initWidth - newWidth) <
       this.imageData.initWidth * 0.05
@@ -861,7 +861,7 @@ class PhotoViewer {
           e
         );
         break;
-      // ctrl + alt + 0
+      // Ctrl + Alt + 0
       case 48:
         if (ctrlKey && altKey) {
           this.zoomTo(
@@ -871,13 +871,13 @@ class PhotoViewer {
           );
         }
         break;
-      // ctrl + ,
+      // Ctrl + ,
       case 188:
         if (ctrlKey) {
           this.rotate(-90);
         }
         break;
-      // ctrl + .
+      // Ctrl + .
       case 190:
         if (ctrlKey) {
           this.rotate(90);

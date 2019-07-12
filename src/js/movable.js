@@ -14,15 +14,15 @@ const ELEMS_WITH_GRABBING_CURSOR = `html,body,.${NS}-modal,.${NS}-stage,.${NS}-b
 export default {
   /**
    * --------------------------------------
-   * 1.no movable
-   * 2.vertical movable
-   * 3.horizontal movable
-   * 4.vertical & horizontal movable
+   * 1. No movable
+   * 2. Vertical movable
+   * 3. Horizontal movable
+   * 4. Vertical & Horizontal movable
    * --------------------------------------
    *
-   * [image movable]
-   * @param  {[Object]} stage   [the stage element]
-   * @param  {[Object]} image   [the image element]
+   * Image movable
+   * @param {Object} stage - The stage element
+   * @param {Object} image - The image element
    */
   movable(stage, image) {
     let isDragging = false;
@@ -93,7 +93,7 @@ export default {
           newLeft = relativeX + left,
           newTop = relativeY + top;
 
-        // vertical limit
+        // Vertical limit
         if (heightDiff > 0) {
           if (relativeY + top > δ) {
             newTop = δ;
@@ -103,7 +103,7 @@ export default {
         } else {
           newTop = top;
         }
-        // horizontal limit
+        // Horizontal limit
         if (widthDiff > 0) {
           if (relativeX + left > -δ) {
             newLeft = -δ;

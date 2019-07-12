@@ -19,10 +19,10 @@ export const CLASS_NS = '.' + NS;
 export const EVENT_NS = '.' + NS;
 
 export const PUBLIC_VARS = {
-  // image moving flag
+  // Image moving flag
   isMoving: false,
-  // modal resizing flag
+  // Modal resizing flag
   isResizing: false,
-  // modal z-index setting
+  // Modal z-index setting
   zIndex: defaults.zIndex
 };

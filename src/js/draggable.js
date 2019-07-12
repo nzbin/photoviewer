@@ -10,14 +10,14 @@ import {
 
 export default {
   /**
-   * [draggable]
-   * @param  {[Object]} modal       [the modal element]
-   * @param  {[Object]} dragHandle  [the handle element when dragging]
-   * @param  {[Object]} dragCancel  [the cancel element when dragging]
+   * Draggable
+   * @param {Object} modal - The modal element
+   * @param {Object} dragHandle - The handle element when dragging
+   * @param {Object} dragCancel - The cancel element when dragging
    */
   draggable(modal, dragHandle, dragCancel) {
     let isDragging = false;
-console.log(this.zIndex)
+
     let startX = 0,
       startY = 0,
       left = 0,

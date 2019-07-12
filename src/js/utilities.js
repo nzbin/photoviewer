@@ -1,10 +1,10 @@
 export const document = window.document;
 
 /**
- * [throttle]
- * @param  {Function} fn    [description]
- * @param  {[Number]} delay [description]
- * @return {Function}       [description]
+ * Throttle function
+ * @param {Function} fn - The function will be triggered
+ * @param {Number} delay - The throttle delay time
+ * @return {Function}
  */
 export function throttle(fn, delay) {
   let timer = null;
@@ -22,10 +22,10 @@ export function throttle(fn, delay) {
 }
 
 /**
- * [preloadImg]
- * @param  {[String]}  src      [image src]
- * @param  {Function}  success  [callbacks]
- * @param  {Function}  error    [callbacks]
+ * Preload a image
+ * @param {String} src - The image src
+ * @param {Function} success - The callback of success
+ * @param {Function} error - The callback of error
  */
 export function preloadImg(src, success, error) {
   let img = new Image();
@@ -42,8 +42,8 @@ export function preloadImg(src, success, error) {
 }
 
 /**
- * [requestFullscreen]
- * @param  {[type]} element [description]
+ * Request fullscreen
+ * @param {type} element
  */
 export function requestFullscreen(element) {
   if (element.requestFullscreen) {
@@ -58,7 +58,7 @@ export function requestFullscreen(element) {
 }
 
 /**
- * [exitFullscreen]
+ * Exit fullscreen
  */
 export function exitFullscreen() {
   if (document.exitFullscreen) {
@@ -71,9 +71,9 @@ export function exitFullscreen() {
 }
 
 /**
- * [getImageNameFromUrl]
- * @param  {[String]} url [description]
- * @return {[String]}     [description]
+ * Get the image name from its url
+ * @param {String} url- The image src
+ * @return {String}
  */
 export function getImageNameFromUrl(url) {
   let reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi,
@@ -82,8 +82,8 @@ export function getImageNameFromUrl(url) {
 }
 
 /**
- * [hasScrollbar]
- * @return {[Boolean]}       [description]
+ * Check if the document has a scrollbar
+ * @return {Boolean}
  */
 export function hasScrollbar() {
   return (
@@ -93,8 +93,8 @@ export function hasScrollbar() {
 }
 
 /**
- * [getScrollbarWidth]
- * @return {[Number]}       [description]
+ * Get the scrollbar width
+ * @return {Number}
  */
 export function getScrollbarWidth() {
   let scrollDiv = document.createElement('div');
@@ -108,11 +108,11 @@ export function getScrollbarWidth() {
 }
 
 /**
- * [setGrabCursor]
- * @param {[Object]}  imageData    [description]
- * @param {[Object]}  stageData    [description]
- * @param {[Object]}  stage        [description]
- * @param {[Boolean]} isRotate     [description]
+ * Set grab cursor when move image
+ * @param {Object} imageData - The image data
+ * @param {Object} stageData - The stage data
+ * @param {Object} stage - The stage element
+ * @param {Boolean} isRotate - The image rotated flag
  */
 export function setGrabCursor(imageData, stageData, stage, isRotated) {
   let imageWidth = !isRotated ? imageData.w : imageData.h,
@@ -127,8 +127,8 @@ export function setGrabCursor(imageData, stageData, stage, isRotated) {
 }
 
 /**
- * [supportTouch]
- * @return {[Boolean]}     [description]
+ * Check if browser support touch event
+ * @return {Boolean}
  */
 export function supportTouch() {
   return !!(

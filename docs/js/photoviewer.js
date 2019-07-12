@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v3.2.0
+ * photoviewer - v3.2.1
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -1267,10 +1267,10 @@
 
     var document$1 = window.document;
     /**
-     * [throttle]
-     * @param  {Function} fn    [description]
-     * @param  {[Number]} delay [description]
-     * @return {Function}       [description]
+     * Throttle function
+     * @param {Function} fn - The function will be triggered
+     * @param {Number} delay - The throttle delay time
+     * @return {Function}
      */
 
     function throttle(fn, delay) {
@@ -1285,10 +1285,10 @@
       };
     }
     /**
-     * [preloadImg]
-     * @param  {[String]}  src      [image src]
-     * @param  {Function}  success  [callbacks]
-     * @param  {Function}  error    [callbacks]
+     * Preload a image
+     * @param {String} src - The image src
+     * @param {Function} success - The callback of success
+     * @param {Function} error - The callback of error
      */
 
     function preloadImg(src, success, error) {
@@ -1305,8 +1305,8 @@
       img.src = src;
     }
     /**
-     * [requestFullscreen]
-     * @param  {[type]} element [description]
+     * Request fullscreen
+     * @param {type} element
      */
 
     function requestFullscreen(element) {
@@ -1321,9 +1321,9 @@
       }
     }
     /**
-     * [getImageNameFromUrl]
-     * @param  {[String]} url [description]
-     * @return {[String]}     [description]
+     * Get the image name from its url
+     * @param {String} url- The image src
+     * @return {String}
      */
 
     function getImageNameFromUrl(url) {
@@ -1332,16 +1332,16 @@
       return txt;
     }
     /**
-     * [hasScrollbar]
-     * @return {[Boolean]}       [description]
+     * Check if the document has a scrollbar
+     * @return {Boolean}
      */
 
     function hasScrollbar() {
       return document$1.body.scrollHeight > (window.innerHeight || document$1.documentElement.clientHeight);
     }
     /**
-     * [getScrollbarWidth]
-     * @return {[Number]}       [description]
+     * Get the scrollbar width
+     * @return {Number}
      */
 
     function getScrollbarWidth() {
@@ -1353,11 +1353,11 @@
       return scrollbarWidth;
     }
     /**
-     * [setGrabCursor]
-     * @param {[Object]}  imageData    [description]
-     * @param {[Object]}  stageData    [description]
-     * @param {[Object]}  stage        [description]
-     * @param {[Boolean]} isRotate     [description]
+     * Set grab cursor when move image
+     * @param {Object} imageData - The image data
+     * @param {Object} stageData - The stage data
+     * @param {Object} stage - The stage element
+     * @param {Boolean} isRotate - The image rotated flag
      */
 
     function setGrabCursor(imageData, stageData, stage, isRotated) {
@@ -1373,8 +1373,8 @@
       }
     }
     /**
-     * [supportTouch]
-     * @return {[Boolean]}     [description]
+     * Check if browser support touch event
+     * @return {Boolean}
      */
 
     function supportTouch() {
@@ -1394,20 +1394,20 @@
     var CLASS_NS = '.' + NS;
     var EVENT_NS = '.' + NS;
     var PUBLIC_VARS = {
-      // image moving flag
+      // Image moving flag
       isMoving: false,
-      // modal resizing flag
+      // Modal resizing flag
       isResizing: false,
-      // modal z-index setting
+      // Modal z-index setting
       zIndex: defaults.zIndex
     };
 
     var draggable = {
       /**
-       * [draggable]
-       * @param  {[Object]} modal       [the modal element]
-       * @param  {[Object]} dragHandle  [the handle element when dragging]
-       * @param  {[Object]} dragCancel  [the cancel element when dragging]
+       * Draggable
+       * @param {Object} modal - The modal element
+       * @param {Object} dragHandle - The handle element when dragging
+       * @param {Object} dragCancel - The cancel element when dragging
        */
       draggable: function draggable(modal, dragHandle, dragCancel) {
         var _this = this;
@@ -1424,8 +1424,10 @@
 
           if (_this.options.multiInstances) {
             modal.css('z-index', ++PUBLIC_VARS['zIndex']);
-          } // Get clicked button
+          } // Fix https://github.com/nzbin/photoviewer/issues/7
 
+
+          PhotoViewer.zIndex = PUBLIC_VARS['zIndex']; // Get clicked button
 
           var elemCancel = $$1(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
@@ -1470,15 +1472,15 @@
     var movable = {
       /**
        * --------------------------------------
-       * 1.no movable
-       * 2.vertical movable
-       * 3.horizontal movable
-       * 4.vertical & horizontal movable
+       * 1. No movable
+       * 2. Vertical movable
+       * 3. Horizontal movable
+       * 4. Vertical & Horizontal movable
        * --------------------------------------
        *
-       * [image movable]
-       * @param  {[Object]} stage   [the stage element]
-       * @param  {[Object]} image   [the image element]
+       * Image movable
+       * @param {Object} stage - The stage element
+       * @param {Object} image - The image element
        */
       movable: function movable(stage, image) {
         var _this = this;
@@ -1531,7 +1533,7 @@
                 relativeX = endX - startX,
                 relativeY = endY - startY,
                 newLeft = relativeX + left,
-                newTop = relativeY + top; // vertical limit
+                newTop = relativeY + top; // Vertical limit
 
             if (heightDiff > 0) {
               if (relativeY + top > δ) {
@@ -1541,7 +1543,7 @@
               }
             } else {
               newTop = top;
-            } // horizontal limit
+            } // Horizontal limit
 
 
             if (widthDiff > 0) {
@@ -1582,17 +1584,17 @@
     var resizable = {
       /**
        * ------------------------------
-       * 1.modal resizable
-       * 2.keep image in stage center
-       * 3.other image limitations
+       * 1. Modal resizable
+       * 2. Keep image in stage center
+       * 3. Other image limitations
        * ------------------------------
        *
-       * [resizable]
-       * @param  {[Object]} modal       [the modal element]
-       * @param  {[Object]} stage       [the stage element]
-       * @param  {[Object]} image       [the image element]
-       * @param  {[Number]} minWidth    [the option of modalWidth]
-       * @param  {[Number]} minHeight   [the option of modalHeight]
+       * Resizable
+       * @param {Object} modal - The modal element
+       * @param {Object} stage - The stage element
+       * @param {Object} image - The image element
+       * @param {Number} minWidth - The option of modalWidth
+       * @param {Number} minHeight - The option of modalHeight
        */
       resizable: function resizable(modal, stage, image, minWidth, minHeight) {
         var _this = this;
@@ -1641,7 +1643,7 @@
         δ = 0,
             imgWidth = 0,
             imgHeight = 0,
-            direction = ''; // modal CSS options
+            direction = ''; // Modal CSS options
 
         var getModalOpts = function getModalOpts(dir, offsetX, offsetY) {
           // Modal should not move when its width to the minwidth
@@ -1684,7 +1686,7 @@
             }
           };
           return opts[dir];
-        }; // image CSS options
+        }; // Image CSS options
 
 
         var getImageOpts = function getImageOpts(dir, offsetX, offsetY) {
@@ -1822,10 +1824,10 @@
     };
 
     /**
-     * PhotoViewer Class
+     * PhotoViewer class
      */
 
-    var PhotoViewer =
+    var PhotoViewer$1 =
     /*#__PURE__*/
     function () {
       function PhotoViewer(items, options, el) {
@@ -1842,15 +1844,15 @@
 
         this.$el = $$1(el); // As we have multiple instances,
         // so every instance has following variables.
-        // modal open flag
+        // Modal open flag
 
-        this.isOpened = false; // modal maximize flag
+        this.isOpened = false; // Modal maximize flag
 
-        this.isMaximized = false; // image rotate 90*(2n+1) flag
+        this.isMaximized = false; // Image rotate 90*(2n+1) flag
 
-        this.isRotated = false; // image rotate angle
+        this.isRotated = false; // Image rotate angle
 
-        this.rotateAngle = 0; // if modal do resize
+        this.rotateAngle = 0; // If modal do resize
 
         this.isDoResize = false; // Store image data in every instance
 
@@ -1869,11 +1871,13 @@
 
       _proto.init = function init(items, opts, el) {
         this.groupData = items;
-        this.groupIndex = opts['index']; // Get image src
+        this.groupIndex = opts['index']; // Fix https://github.com/nzbin/photoviewer/issues/7
+
+        PUBLIC_VARS['zIndex'] = PhotoViewer.zIndex ? PhotoViewer.zIndex : opts.zIndex; // Get image src
 
         var imgSrc = items[this.groupIndex]['src'];
         this.open();
-        this.loadImg(imgSrc); // draggable & movable & resizable
+        this.loadImg(imgSrc); // Draggable & Movable & Resizable
 
         if (opts.draggable) {
           this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
@@ -2012,7 +2016,7 @@
 
         if (zeroModal && this.options.multiInstances) {
           PUBLIC_VARS['zIndex'] = this.options.zIndex;
-        } // off events
+        } // Off events
 
 
         if (!$$1(CLASS_NS + '-modal').length) {
@@ -2058,7 +2062,7 @@
         var winWidth = $W.width(),
             winHeight = $W.height(),
             scrollLeft = $D.scrollLeft(),
-            scrollTop = $D.scrollTop(); // stage css value
+            scrollTop = $D.scrollTop(); // Stage css value
 
         var stageCSS = {
           left: this.$stage.css('left'),
@@ -2074,7 +2078,7 @@
         var modalWidth = img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) + parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight),
             modalHeight = img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) + parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom);
         var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
-            // modal scale to window
+            // Modal scale to window
         scale = Math.min(winWidth / (modalWidth * gapThreshold), winHeight / (modalHeight * gapThreshold), 1);
         var minWidth = Math.max(modalWidth * scale, this.options.modalWidth),
             minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
@@ -2144,7 +2148,7 @@
         }, this.$stage, this.isRotated); // Just execute before image loaded
 
         if (!this.imgLoaded) {
-          // loader end
+          // Loader end
           this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Remove class after image loaded
 
           this.$stage.removeClass('stage-ready');
@@ -2165,7 +2169,7 @@
         this.$image.removeAttr('style').attr('src', '');
         this.isRotated = false;
         this.rotateAngle = 0;
-        this.imgLoaded = false; // loader start
+        this.imgLoaded = false; // Loader start
 
         this.$photoviewer.append("<div class=\"" + NS + "-loader\"></div>"); // Add class before image loaded
 
@@ -2190,15 +2194,15 @@
             _this2.setImageSize(img);
           } else {
             _this2.setModalSize(img);
-          } // callback of image loaded successfully
+          } // Callback of image loaded successfully
 
 
           if (fn) {
             fn.call();
           }
         }, function () {
-          // loader end
-          _this2.$photoviewer.find(CLASS_NS + '-loader').remove(); // callback of image loading failed
+          // Loader end
+          _this2.$photoviewer.find(CLASS_NS + '-loader').remove(); // Callback of image loading failed
 
 
           if (err) {
@@ -2252,7 +2256,7 @@
           delta = -e.wheelDelta / 120;
         } else if (e.detail) {
           delta = e.detail > 0 ? 1 : -1;
-        } // ratio threshold
+        } // Ratio threshold
 
 
         var ratio = -delta * this.options.ratioThreshold; // mouse point position relative to stage
@@ -2265,8 +2269,8 @@
       };
 
       _proto.zoom = function zoom(ratio, origin, e) {
-        // zoom out ratio & zoom in ratio
-        ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio; // image ratio
+        // Zoom out ratio & Zoom in ratio
+        ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio; // Image ratio
 
         ratio = this.$image.width() / this.imageData.originalWidth * ratio; // Fixed digital error
         // if (ratio > 0.95 && ratio < 1.05) {
@@ -2288,7 +2292,7 @@
           h: this.imageData.height,
           x: this.imageData.left,
           y: this.imageData.top
-        }; // image stage position
+        }; // Image stage position
         // We will use it to calc the relative position of image
 
         var stageData = {
@@ -2307,7 +2311,7 @@
             imgNewWidth = !this.isRotated ? newWidth : newHeight,
             imgNewHeight = !this.isRotated ? newHeight : newWidth;
         var offsetX = stageData.w - newWidth,
-            offsetY = stageData.h - newHeight; // zoom out & zoom in condition
+            offsetY = stageData.h - newHeight; // Zoom out & Zoom in condition
         // It's important and it takes me a lot of time to get it
         // The conditions with image rotate 90 degree drive me crazy alomst!
 
@@ -2321,7 +2325,7 @@
           newLeft = (stageData.w - newWidth) / 2;
         } else {
           newLeft = newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
-        } // if the image scale get to the critical point
+        } // If the image scale get to the critical point
 
 
         if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
@@ -2486,7 +2490,7 @@
               y: this.$stage.height() / 2
             }, e);
             break;
-          // ctrl + alt + 0
+          // Ctrl + Alt + 0
 
           case 48:
             if (ctrlKey && altKey) {
@@ -2497,7 +2501,7 @@
             }
 
             break;
-          // ctrl + ,
+          // Ctrl + ,
 
           case 188:
             if (ctrlKey) {
@@ -2505,7 +2509,7 @@
             }
 
             break;
-          // ctrl + .
+          // Ctrl + .
 
           case 190:
             if (ctrlKey) {
@@ -2587,13 +2591,13 @@
      */
 
 
-    $$1.extend(PhotoViewer.prototype, draggable, movable, resizable);
+    $$1.extend(PhotoViewer$1.prototype, draggable, movable, resizable);
     /**
      * Add PhotoViewer to globle
      */
 
-    window.PhotoViewer = PhotoViewer;
+    window.PhotoViewer = PhotoViewer$1;
 
-    return PhotoViewer;
+    return PhotoViewer$1;
 
 })));

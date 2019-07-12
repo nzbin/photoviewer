@@ -16,17 +16,17 @@ const ELEMS_WITH_RESIZE_CURSOR = `html,body,.${NS}-modal,.${NS}-stage,.${NS}-but
 export default {
   /**
    * ------------------------------
-   * 1.modal resizable
-   * 2.keep image in stage center
-   * 3.other image limitations
+   * 1. Modal resizable
+   * 2. Keep image in stage center
+   * 3. Other image limitations
    * ------------------------------
    *
-   * [resizable]
-   * @param  {[Object]} modal       [the modal element]
-   * @param  {[Object]} stage       [the stage element]
-   * @param  {[Object]} image       [the image element]
-   * @param  {[Number]} minWidth    [the option of modalWidth]
-   * @param  {[Number]} minHeight   [the option of modalHeight]
+   * Resizable
+   * @param {Object} modal - The modal element
+   * @param {Object} stage - The stage element
+   * @param {Object} image - The image element
+   * @param {Number} minWidth - The option of modalWidth
+   * @param {Number} minHeight - The option of modalHeight
    */
   resizable(modal, stage, image, minWidth, minHeight) {
     let resizableHandleE = $(
@@ -104,7 +104,7 @@ export default {
       imgHeight = 0,
       direction = '';
 
-    // modal CSS options
+    // Modal CSS options
     let getModalOpts = function(dir, offsetX, offsetY) {
       // Modal should not move when its width to the minwidth
       let modalLeft =
@@ -156,7 +156,7 @@ export default {
       return opts[dir];
     };
 
-    // image CSS options
+    // Image CSS options
     let getImageOpts = function(dir, offsetX, offsetY) {
       // Image should not move when modal width to the min width
       // The minwidth is modal width, so we should clac the stage minwidth
