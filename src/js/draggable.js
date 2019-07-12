@@ -17,7 +17,7 @@ export default {
    */
   draggable(modal, dragHandle, dragCancel) {
     let isDragging = false;
-
+console.log(this.zIndex)
     let startX = 0,
       startY = 0,
       left = 0,
@@ -32,6 +32,9 @@ export default {
       if (this.options.multiInstances) {
         modal.css('z-index', ++PUBLIC_VARS['zIndex']);
       }
+
+      // Fix https://github.com/nzbin/photoviewer/issues/7
+      PhotoViewer.zIndex = PUBLIC_VARS['zIndex'];
 
       // Get clicked button
       let elemCancel = $(e.target).closest(dragCancel);

@@ -77,6 +77,11 @@ class PhotoViewer {
     this.groupData = items;
     this.groupIndex = opts['index'];
 
+    // Fix https://github.com/nzbin/photoviewer/issues/7
+    PUBLIC_VARS['zIndex'] = PhotoViewer.zIndex
+      ? PhotoViewer.zIndex
+      : opts.zIndex;
+
     // Get image src
     let imgSrc = items[this.groupIndex]['src'];
 
