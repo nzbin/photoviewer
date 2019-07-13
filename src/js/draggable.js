@@ -29,18 +29,15 @@ export default {
       // Must be removed
       // e.preventDefault();
 
-      if (this.options.multiInstances) {
-        modal.css('z-index', ++PUBLIC_VARS['zIndex']);
-      }
-
-      // Fix https://github.com/nzbin/photoviewer/issues/7
-      PhotoViewer.zIndex = PUBLIC_VARS['zIndex'];
-
       // Get clicked button
       let elemCancel = $(e.target).closest(dragCancel);
       // Stop modal moving when click buttons
       if (elemCancel.length) {
         return true;
+      }
+
+      if (this.options.multiInstances) {
+        modal.css('z-index', ++PUBLIC_VARS['zIndex']);
       }
 
       isDragging = true;

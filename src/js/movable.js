@@ -13,12 +13,12 @@ const ELEMS_WITH_GRABBING_CURSOR = `html,body,.${NS}-modal,.${NS}-stage,.${NS}-b
 
 export default {
   /**
-   * --------------------------------------
+   * --------------------------------------------------------------------------
    * 1. No movable
    * 2. Vertical movable
    * 3. Horizontal movable
    * 4. Vertical & Horizontal movable
-   * --------------------------------------
+   * --------------------------------------------------------------------------
    *
    * Image movable
    * @param {Object} stage - The stage element

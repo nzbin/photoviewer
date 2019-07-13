@@ -78,9 +78,8 @@ class PhotoViewer {
     this.groupIndex = opts['index'];
 
     // Fix https://github.com/nzbin/photoviewer/issues/7
-    PUBLIC_VARS['zIndex'] = PhotoViewer.zIndex
-      ? PhotoViewer.zIndex
-      : opts.zIndex;
+    PUBLIC_VARS['zIndex'] =
+      PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex'];
 
     // Get image src
     let imgSrc = items[this.groupIndex]['src'];
@@ -169,7 +168,7 @@ class PhotoViewer {
                     </button>`
     };
 
-    // photoviewer base HTML
+    // PhotoViewer base HTML
     let photoviewerHTML = `<div class="${NS}-modal">
         <div class="${NS}-inner">
           <div class="${NS}-header">
@@ -193,13 +192,13 @@ class PhotoViewer {
   }
 
   build() {
-    // Create photoviewer HTML string
+    // Create PhotoViewer HTML string
     let photoviewerHTML = this.render();
 
-    // Make photoviewer HTML string to jQuery element
+    // Make PhotoViewer HTML string to jQuery element
     let $photoviewer = $(photoviewerHTML);
 
-    // Get all photoviewer element
+    // Get all PhotoViewer element
     this.$photoviewer = $photoviewer;
     this.$header = $photoviewer.find(CLASS_NS + '-header');
     this.$headToolbar = $photoviewer.find(CLASS_NS + '-toolbar-head');

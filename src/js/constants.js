@@ -1,5 +1,4 @@
 import $ from './domq.js';
-import defaults from './defaults';
 import { document, supportTouch } from './utilities';
 
 export const $W = $(window);
@@ -24,5 +23,5 @@ export const PUBLIC_VARS = {
   // Modal resizing flag
   isResizing: false,
   // Modal z-index setting
-  zIndex: defaults.zIndex
+  zIndex: 0
 };

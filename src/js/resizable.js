@@ -15,11 +15,11 @@ const ELEMS_WITH_RESIZE_CURSOR = `html,body,.${NS}-modal,.${NS}-stage,.${NS}-but
 
 export default {
   /**
-   * ------------------------------
+   * --------------------------------------------------------------------------
    * 1. Modal resizable
    * 2. Keep image in stage center
    * 3. Other image limitations
-   * ------------------------------
+   * --------------------------------------------------------------------------
    *
    * Resizable
    * @param {Object} modal - The modal element
