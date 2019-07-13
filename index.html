@@ -377,6 +377,13 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>If true, the image will be rendered progressively.</p>
+    <h3>
+      <code>appendTo</code>
+      <small>
+        <code>'body'</code>
+      </small>
+    </h3>
+    <p>The DOM element to which viewer will be added.</p>
 
 
     <footer class="footer text-center">
@@ -392,7 +399,6 @@ $('[data-gallery=manual]').click(function (e) {
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/photoviewer.js"></script>
   <script>
-
     window.prettyPrint && prettyPrint();
 
     // initialize with an array of objects
@@ -418,7 +424,7 @@ $('[data-gallery=manual]').click(function (e) {
 
       var items = [],
         options = {
-          index: $(this).index()
+          index: $(this).index(),
         };
 
       $('[data-gallery=manual]').each(function () {
