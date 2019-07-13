@@ -70,10 +70,10 @@ class PhotoViewer {
       top: null
     };
 
-    this.init(items, this.options, el);
+    this.init(items, this.options);
   }
 
-  init(items, opts, el) {
+  init(items, opts) {
     this.groupData = items;
     this.groupIndex = opts['index'];
 
@@ -261,7 +261,7 @@ class PhotoViewer {
     this._triggerHook('beforeOpen', this.$el);
 
     // Add PhotoViewer to DOM
-    $('body').append(this.$photoviewer);
+    $(this.options.appendTo).eq(0).append(this.$photoviewer);
 
     this.addEvents();
 

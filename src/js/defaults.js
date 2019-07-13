@@ -166,5 +166,8 @@ export default {
   index: 0,
 
   // Load the image progressively
-  progressiveLoading: true
+  progressiveLoading: true,
+
+  // The DOM element to which viewer will be added
+  appendTo: 'body'
 };
