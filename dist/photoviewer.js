@@ -7,7 +7,7 @@
  * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
  * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
  *
- * photoviewer - v3.2.1
+ * photoviewer - v3.3.0
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -1179,7 +1179,7 @@
     $$1.extend(methods);
     $$1.fn.extend(fnMethods);
 
-    var defaults = {
+    var DEFAULTS = {
       // Enable modal to drag
       draggable: true,
       // Enable modal to resize
@@ -1262,7 +1262,9 @@
       // Start images index
       index: 0,
       // Load the image progressively
-      progressiveLoading: true
+      progressiveLoading: true,
+      // The DOM element to which viewer will be added
+      appendTo: 'body'
     };
 
     var document$1 = window.document;
@@ -1399,7 +1401,7 @@
       // Modal resizing flag
       isResizing: false,
       // Modal z-index setting
-      zIndex: defaults.zIndex
+      zIndex: 0
     };
 
     var draggable = {
@@ -1421,18 +1423,16 @@
         var dragStart = function dragStart(e) {
           e = e || window.event; // Must be removed
           // e.preventDefault();
-
-          if (_this.options.multiInstances) {
-            modal.css('z-index', ++PUBLIC_VARS['zIndex']);
-          } // Fix https://github.com/nzbin/photoviewer/issues/7
-
-
-          PhotoViewer.zIndex = PUBLIC_VARS['zIndex']; // Get clicked button
+          // Get clicked button
 
           var elemCancel = $$1(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
           if (elemCancel.length) {
             return true;
+          }
+
+          if (_this.options.multiInstances) {
+            modal.css('z-index', ++PUBLIC_VARS['zIndex']);
           }
 
           isDragging = true;
@@ -1471,12 +1471,12 @@
     var ELEMS_WITH_GRABBING_CURSOR = "html,body,." + NS + "-modal,." + NS + "-stage,." + NS + "-button,." + NS + "-resizable-handle";
     var movable = {
       /**
-       * --------------------------------------
+       * --------------------------------------------------------------------------
        * 1. No movable
        * 2. Vertical movable
        * 3. Horizontal movable
        * 4. Vertical & Horizontal movable
-       * --------------------------------------
+       * --------------------------------------------------------------------------
        *
        * Image movable
        * @param {Object} stage - The stage element
@@ -1583,11 +1583,11 @@
     var ELEMS_WITH_RESIZE_CURSOR = "html,body,." + NS + "-modal,." + NS + "-stage,." + NS + "-button";
     var resizable = {
       /**
-       * ------------------------------
+       * --------------------------------------------------------------------------
        * 1. Modal resizable
        * 2. Keep image in stage center
        * 3. Other image limitations
-       * ------------------------------
+       * --------------------------------------------------------------------------
        *
        * Resizable
        * @param {Object} modal - The modal element
@@ -1827,11 +1827,11 @@
      * PhotoViewer class
      */
 
-    var PhotoViewer$1 =
+    var PhotoViewer =
     /*#__PURE__*/
     function () {
       function PhotoViewer(items, options, el) {
-        this.options = $$1.extend(true, {}, defaults, options);
+        this.options = $$1.extend(true, {}, DEFAULTS, options);
 
         if (options && $$1.isArray(options.footToolbar)) {
           this.options.footToolbar = options.footToolbar;
@@ -1864,16 +1864,16 @@
           left: null,
           top: null
         };
-        this.init(items, this.options, el);
+        this.init(items, this.options);
       }
 
       var _proto = PhotoViewer.prototype;
 
-      _proto.init = function init(items, opts, el) {
+      _proto.init = function init(items, opts) {
         this.groupData = items;
         this.groupIndex = opts['index']; // Fix https://github.com/nzbin/photoviewer/issues/7
 
-        PUBLIC_VARS['zIndex'] = PhotoViewer.zIndex ? PhotoViewer.zIndex : opts.zIndex; // Get image src
+        PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex']; // Get image src
 
         var imgSrc = items[this.groupIndex]['src'];
         this.open();
@@ -1917,17 +1917,17 @@
           actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\"\n                    title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
           rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\"\n                    title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
           rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\"\n                      title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
-        }; // photoviewer base HTML
+        }; // PhotoViewer base HTML
 
         var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._createBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
         return photoviewerHTML;
       };
 
       _proto.build = function build() {
-        // Create photoviewer HTML string
-        var photoviewerHTML = this.render(); // Make photoviewer HTML string to jQuery element
+        // Create PhotoViewer HTML string
+        var photoviewerHTML = this.render(); // Make PhotoViewer HTML string to jQuery element
 
-        var $photoviewer = $$1(photoviewerHTML); // Get all photoviewer element
+        var $photoviewer = $$1(photoviewerHTML); // Get all PhotoViewer element
 
         this.$photoviewer = $photoviewer;
         this.$header = $photoviewer.find(CLASS_NS + '-header');
@@ -1988,7 +1988,7 @@
         this._triggerHook('beforeOpen', this.$el); // Add PhotoViewer to DOM
 
 
-        $$1('body').append(this.$photoviewer);
+        $$1(this.options.appendTo).eq(0).append(this.$photoviewer);
         this.addEvents();
         this.setModalPos(this.$photoviewer);
 
@@ -2591,13 +2591,13 @@
      */
 
 
-    $$1.extend(PhotoViewer$1.prototype, draggable, movable, resizable);
+    $$1.extend(PhotoViewer.prototype, draggable, movable, resizable);
     /**
      * Add PhotoViewer to globle
      */
 
-    window.PhotoViewer = PhotoViewer$1;
+    window.PhotoViewer = PhotoViewer;
 
-    return PhotoViewer$1;
+    return PhotoViewer;
 
 })));
