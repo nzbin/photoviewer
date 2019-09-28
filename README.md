@@ -1,7 +1,9 @@
 # PhotoViewer
 
-[![Financial Contributors on Open Collective](https://opencollective.com/photoviewer/all/badge.svg?label=financial+contributors)](https://opencollective.com/photoviewer) [![npm](https://img.shields.io/npm/v/photoviewer.svg)](https://www.npmjs.com/package/photoviewer)
+[![npm](https://img.shields.io/npm/v/photoviewer.svg)](https://www.npmjs.com/package/photoviewer)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/nzbin/photoviewer)
+[![Gitter](https://img.shields.io/gitter/room/photoviewer/photoviewer.svg)](https://gitter.im/photoviewer/community)
+[![Financial Contributors on Open Collective](https://opencollective.com/photoviewer/all/badge.svg?label=financial+contributors)](https://opencollective.com/photoviewer) 
 
 PhotoViewer is a JS plugin to view images just like in windows.
 
