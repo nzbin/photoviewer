@@ -4,8 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="description" content="photoviewer,jquery plugin,lightbox,viewer,Windows 照片查看器,图片查看器,模态窗,拖拽,缩放,旋转,平移,最大化">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description"
+        content="photoviewer,jquery plugin,lightbox,viewer,Windows 照片查看器,图片查看器,模态窗,拖拽,缩放,旋转,平移,最大化">
   <title>PhotoViewer</title>
   <!-- Bootstrap -->
   <link href="css/photoviewer.css" rel="stylesheet">
@@ -30,7 +32,8 @@
       <p>PhotoViewer is a JS plugin to view images just like in Windows.</p>
       <p>
         <a class="btn primary m-5" href="https://github.com/nzbin/photoviewer">View on GitHub</a>
-        <a class="btn danger m-5" href="https://github.com/nzbin/photoviewer/archive/master.zip">Download</a>
+        <a class="btn danger m-5"
+           href="https://github.com/nzbin/photoviewer/archive/master.zip">Download</a>
       </p>
     </div>
     <!-- Getting Started -->
@@ -43,26 +46,22 @@ $ npm install photoviewer --save
 </pre>
     <h3>Quick Start</h3>
     <h4>Step 1: Include files</h4>
-    <p>
-      <pre class="prettyprint">
+    <pre class="prettyprint">
 @import 'photoviewer/dist/photoviewer.css';
 </pre>
-    </p>
-    <p>
-      <pre class="prettyprint">
+    <pre class="prettyprint">
 import PhotoViewer from 'photoviewer';
 </pre>
-    </p>
+
     <p>or</p>
-    <p>
-      <pre class="prettyprint">
+
+    <pre class="prettyprint">
 &lt;!-- Core CSS file --&gt;
 &lt;link href=&quot;/path/to/photoviewer.css&quot; rel=&quot;stylesheet&quot;&gt;
 
 &lt;!-- Core JS file --&gt;
 &lt;script src=&quot;/path/to/photoviewer.js&quot;&gt;&lt;/script&gt;
 </pre>
-    </p>
 
     <h4>Step 2: Initialize</h4>
     <p>The usage of photoviewer is very simple, the
@@ -116,7 +115,8 @@ var viewer = new PhotoViewer(items, options);
 &lt;/a&gt;
 </pre>
 
-    <p>You should get the image src and the index of element clicked manually to create the images array.</p>
+    <p>You should get the image src and the index of element clicked manually to create the images
+      array.</p>
     <pre class="prettyprint">
 $('[data-gallery=manual]').click(function (e) {
 
@@ -144,25 +144,28 @@ $('[data-gallery=manual]').click(function (e) {
     <p>Look at the following example:</p>
     <div class="image-set">
       <a data-gallery="manual" data-title="Slipping Away by Jerry Fryer" data-group="a"
-        href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
+         href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
         <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
       </a>
       <a data-gallery="manual" data-title="Mi Fuego by albert dros" data-group="a"
-        href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
+         href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
         <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
       </a>
       <a data-gallery="manual" data-title="Winter Fairytale by Achim Thomae" data-group="a"
-        href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
+         href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
         <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
       </a>
 
-      <a data-gallery="manual" href="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg" data-group="b">
+      <a data-gallery="manual"
+         href="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg" data-group="b">
         <img src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
       </a>
-      <a data-gallery="manual" href="https://farm1.staticflickr.com/4160/34418397675_18de1f7b9f_z.jpg" data-group="b">
+      <a data-gallery="manual"
+         href="https://farm1.staticflickr.com/4160/34418397675_18de1f7b9f_z.jpg" data-group="b">
         <img src="https://farm1.staticflickr.com/4160/34418397675_18de1f7b9f_s.jpg" alt="">
       </a>
-      <a data-gallery="manual" href="https://farm1.staticflickr.com/512/32967783396_a6b4babd92_z.jpg" data-group="b">
+      <a data-gallery="manual"
+         href="https://farm1.staticflickr.com/512/32967783396_a6b4babd92_z.jpg" data-group="b">
         <img src="https://farm1.staticflickr.com/512/32967783396_a6b4babd92_s.jpg" alt="">
       </a>
     </div>
@@ -204,7 +207,8 @@ $('[data-gallery=manual]').click(function (e) {
         <code>boolean true</code>
       </small>
     </h3>
-    <p>Make photoviewer can be controled by keyboard. The shortcut key is similar to Windows photo viewer.</p>
+    <p>Make photoviewer can be controled by keyboard. The shortcut key is similar to Windows photo
+      viewer.</p>
     <ul>
       <li>
         <kbd>←</kbd> prev image
@@ -247,7 +251,8 @@ $('[data-gallery=manual]').click(function (e) {
         <code>boolean false</code>
       </small>
     </h3>
-    <p>This option will set photoviewer's size when it opened. If false, the modal initialized size will fit to image
+    <p>This option will set photoviewer's size when it opened. If false, the modal initialized size
+      will fit to image
       size.
       If true, the modal initialized size will be set with modalWidth and modalHeight.</p>
     <h3>
@@ -270,8 +275,10 @@ $('[data-gallery=manual]').click(function (e) {
         <code>number 0.02</code>
       </small>
     </h3>
-    <p>The gap size threshold. There will have a gap if modal too large to beyond the browser. Its min value is
-      <code>0</code>, means the modal's width or height should be equal to browser window if it's too large.</p>
+    <p>The gap size threshold. There will have a gap if modal too large to beyond the browser. Its
+      min value is
+      <code>0</code>, means the modal's width or height should be equal to browser window if it's
+      too large.</p>
     <h3>
       <code>ratioThreshold</code>
       <small>
@@ -324,7 +331,8 @@ $('[data-gallery=manual]').click(function (e) {
         <code>boolean false</code>
       </small>
     </h3>
-    <p>If false, the modal size will be set of image size or what you set with modalWidth and modalHeight. If true, the
+    <p>If false, the modal size will be set of image size or what you set with modalWidth and
+      modalHeight. If true, the
       modal
       size will be set maximized when initialized just like other lightbox.
     </p>
