@@ -1,9 +1,9 @@
-// -----------------------
+//
 // Fullscreen
-// -----------------------
-$fullscreen-list: -webkit-full-screen,-moz-full-screen,-ms-fullscreen,full-screen,fullscreen;
+//
 
-$backdrop-list: backdrop,-ms-backdrop;
+$fullscreen-list: -webkit-full-screen, -moz-full-screen, -ms-fullscreen, full-screen, fullscreen;
+$backdrop-list: backdrop, -ms-backdrop;
 
 @each $fullscreen in $fullscreen-list {
   :#{$fullscreen} {
