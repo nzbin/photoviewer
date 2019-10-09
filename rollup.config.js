@@ -3,8 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import pkg from './package.json';
 
-const banner = String.raw`
-/*!
+const banner = String.raw`/*!
  *     ____  __  ______  __________ _    _____________       ____________ 
  *    / __ \/ / / / __ \/_  __/ __ \ |  / /  _/ ____/ |     / / ____/ __ \
  *   / /_/ / /_/ / / / / / / / / / / | / // // __/  | | /| / / __/ / /_/ /
@@ -27,14 +26,13 @@ export default [
       {
         name: 'photoviewer',
         banner,
-        file: "dist/photoviewer.js",
+        file: 'dist/photoviewer.js',
         format: 'umd'
       },
       {
         file: 'dist/photoviewer.common.js',
         banner,
         format: 'cjs'
-
       },
       {
         file: 'dist/photoviewer.esm.js',
@@ -42,10 +40,6 @@ export default [
         format: 'es'
       }
     ],
-    plugins: [
-      babel({ exclude: 'node_modules/**' }),
-      resolve(),
-      commonjs(),
-    ],
-  },
+    plugins: [babel({ exclude: 'node_modules/**' }), resolve(), commonjs()]
+  }
 ];
