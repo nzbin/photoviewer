@@ -37,8 +37,8 @@ h3 small code {
   -o-linear-gradient(bottom left, hsla(0, 0%, 0%, .25) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 0%, .25) 75%, hsla(0, 0%, 0%, .25));
   background-image: linear-gradient(to top right, hsla(0, 0%, 0%, .25) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 0%, .25) 75%, hsla(0, 0%, 0%, .25)),
   linear-gradient(to top right, hsla(0, 0%, 0%, .25) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 0%, .25) 75%, hsla(0, 0%, 0%, .25));;
-  background-position: 0 0, 2px 2px;
-  background-size: 4px 4px;
+  background-position: 0 0, 4px 4px;
+  background-size: 8px 8px;
 }
 
 .footer {
@@ -117,7 +117,7 @@ pre ol {
 
 .prettyprint {
   padding: 15px;
-  margin: 0 -15px;
+  margin: 10px -15px;
   background-color: #f7f7f9;
   border: 1px solid #f7f7f9;
 }

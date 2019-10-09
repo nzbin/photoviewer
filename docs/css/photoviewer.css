@@ -1,13 +1,11 @@
-
 /*!
- *  ____  _   _  ___  _____  ___  _   _ _____ ____ _    _ ____ ____
- * |  _ \| | | |/ _ \|_   _|/ _ \| | | |_   _|  __| |  | |  __|  _ \
- * | |_| | |_| | | | | | | | | | | | | | | | | |__| |  | | |__| |_| |
- * |  __/|  _  | | | | | | | | | | |_| | | | |  __| |/\| |  __|    /
- * | |   | | | | |_| | | | | |_| |\   / _| |_| |__|  /\  | |__| |\ \
- * |_|   |_| |_|\___/  |_|  \___/  \_/ |_____|____|_/  \_|____|_| \_\
+ *     ____  __  ______  __________ _    _____________       ____________ 
+ *    / __ \/ / / / __ \/_  __/ __ \ |  / /  _/ ____/ |     / / ____/ __ \
+ *   / /_/ / /_/ / / / / / / / / / / | / // // __/  | | /| / / __/ / /_/ /
+ *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
+ * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|     
  *
- * photoviewer - v3.3.0
+ * photoviewer - v3.4.0
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -102,6 +100,10 @@
   float: right;
 }
 
+[dir='rtl'] .photoviewer-header .photoviewer-toolbar {
+  float: left;
+}
+
 .photoviewer-header .photoviewer-button {
   height: 30px;
 }
@@ -148,7 +150,7 @@
   font-size: 0;
 }
 
-.photoviewer-stage.stage-ready:before {
+.photoviewer-stage.stage-ready::before {
   content: '';
   display: inline-block;
   height: 100%;
@@ -157,11 +159,12 @@
 }
 
 .photoviewer-image {
-  position: relative;
+  position: absolute;
   display: inline-block;
 }
 
 .photoviewer-image.image-ready {
+  position: static;
   max-width: 100%;
   max-height: 100%;
   vertical-align: middle;
@@ -179,65 +182,6 @@
 
 .photoviewer-footer .photoviewer-toolbar {
   display: inline-block;
-}
-
-.photoviewer-loader {
-  position: absolute;
-  top: 30px;
-  left: 0;
-  right: 0;
-  bottom: 40px;
-  z-index: 2;
-  text-align: center;
-  color: #333;
-}
-
-.photoviewer-loader::before {
-  content: '';
-  display: inline-block;
-  position: relative;
-  width: 36px;
-  height: 36px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  border-width: 5px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(255, 255, 255, 0.5);
-  border-radius: 100%;
-  vertical-align: middle;
-  -webkit-animation: photoviewerLoading 1s infinite linear;
-  animation: photoviewerLoading 1s infinite linear;
-}
-
-.photoviewer-loader::after {
-  content: '';
-  display: inline-block;
-  width: 0;
-  height: 100%;
-  vertical-align: middle;
-  overflow: hidden;
-}
-
-@-webkit-keyframes photoviewerLoading {
-  0% {
-    -webkit-transform: rotateZ(0deg) translate3d(0, 0, 0);
-    transform: rotateZ(0deg) translate3d(0, 0, 0);
-  }
-  100% {
-    -webkit-transform: rotateZ(360deg) translate3d(0, 0, 0);
-    transform: rotateZ(360deg) translate3d(0, 0, 0);
-  }
-}
-
-@keyframes photoviewerLoading {
-  0% {
-    -webkit-transform: rotateZ(0deg) translate3d(0, 0, 0);
-    transform: rotateZ(0deg) translate3d(0, 0, 0);
-  }
-  100% {
-    -webkit-transform: rotateZ(360deg) translate3d(0, 0, 0);
-    transform: rotateZ(360deg) translate3d(0, 0, 0);
-  }
 }
 
 .photoviewer-resizable-handle {
@@ -519,4 +463,63 @@
   cursor: move;
   cursor: -webkit-grabbing;
   cursor: grabbing;
+}
+
+.photoviewer-loader {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  z-index: 2;
+  text-align: center;
+  color: #333;
+}
+
+.photoviewer-loader::before {
+  content: '';
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(255, 255, 255, 0.5);
+  border-radius: 100%;
+  vertical-align: middle;
+  -webkit-animation: photoviewerLoading 1s infinite linear;
+  animation: photoviewerLoading 1s infinite linear;
+}
+
+.photoviewer-loader::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+@-webkit-keyframes photoviewerLoading {
+  0% {
+    -webkit-transform: rotateZ(0deg) translate3d(0, 0, 0);
+    transform: rotateZ(0deg) translate3d(0, 0, 0);
+  }
+  100% {
+    -webkit-transform: rotateZ(360deg) translate3d(0, 0, 0);
+    transform: rotateZ(360deg) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes photoviewerLoading {
+  0% {
+    -webkit-transform: rotateZ(0deg) translate3d(0, 0, 0);
+    transform: rotateZ(0deg) translate3d(0, 0, 0);
+  }
+  100% {
+    -webkit-transform: rotateZ(360deg) translate3d(0, 0, 0);
+    transform: rotateZ(360deg) translate3d(0, 0, 0);
+  }
 }
