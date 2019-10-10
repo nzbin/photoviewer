@@ -9,10 +9,9 @@ PhotoViewer is a JS plugin to view images just like in windows.
 
 > If you want to support IE8, please goto [Magnify](https://github.com/nzbin/magnify/).
 
-## Main Features
+## Features
 
 - Vanilla JS
-- Browser support IE9+
 - Modal draggable
 - Modal resizable
 - Modal maximizable
@@ -22,6 +21,8 @@ PhotoViewer is a JS plugin to view images just like in windows.
 - Keyboard control
 - Fullscreen showing
 - Multiple instances
+- Browser support IE9+
+- RTL support
 
 ## Installation
 
