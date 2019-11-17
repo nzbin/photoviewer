@@ -1,5 +1,6 @@
 # PhotoViewer
 
+[![Travis](https://img.shields.io/travis/nzbin/photoviewer.svg)](https://travis-ci.org/nzbin/photoviewer)
 [![npm](https://img.shields.io/npm/v/photoviewer.svg)](https://www.npmjs.com/package/photoviewer)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/nzbin/photoviewer/blob/master/LICENSE)
 [![Gitter](https://img.shields.io/gitter/room/photoviewer/photoviewer.svg)](https://gitter.im/photoviewer/community)
