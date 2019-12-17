@@ -57,7 +57,7 @@ class PhotoViewer {
     // Image rotate angle
     this.rotateAngle = 0;
 
-    // If modal do resize
+    // Whether modal do resize
     this.isDoResize = false;
 
     // Store image data in every instance
@@ -78,11 +78,10 @@ class PhotoViewer {
     this.groupIndex = opts['index'];
 
     // Fix https://github.com/nzbin/photoviewer/issues/7
-    PUBLIC_VARS['zIndex'] =
-      PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex'];
+    PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex'];
 
     // Get image src
-    let imgSrc = items[this.groupIndex]['src'];
+    const imgSrc = items[this.groupIndex]['src'];
 
     this.open();
 
@@ -109,7 +108,7 @@ class PhotoViewer {
   _createBtns(toolbar, btns) {
     let btnsStr = '';
 
-    $.each(toolbar, function(index, item) {
+    $.each(toolbar, function (index, item) {
       btnsStr += btns[item];
     });
 
@@ -121,55 +120,44 @@ class PhotoViewer {
   }
 
   render() {
-    let btnsTpl = {
-      minimize: `<button class="${NS}-button ${NS}-button-minimize"
-                  title="${this.options.i18n.minimize}">
+    const btnsTpl = {
+      minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
                     ${this.options.icons.minimize}
                   </button>`,
-      maximize: `<button class="${NS}-button ${NS}-button-maximize"
-                  title="${this.options.i18n.maximize}">
+      maximize: `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
                     ${this.options.icons.maximize}
                   </button>`,
-      close: `<button class="${NS}-button ${NS}-button-close"
-              title="${this.options.i18n.close}">
+      close: `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
                 ${this.options.icons.close}
               </button>`,
-      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in"
-                title="${this.options.i18n.zoomIn}">
+      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
                   ${this.options.icons.zoomIn}
                 </button>`,
-      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out"
-                title="${this.options.i18n.zoomOut}">
+      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
                   ${this.options.icons.zoomOut}
                 </button>`,
-      prev: `<button class="${NS}-button ${NS}-button-prev"
-              title="${this.options.i18n.prev}">
+      prev: `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
                 ${this.options.icons.prev}
               </button>`,
-      next: `<button class="${NS}-button ${NS}-button-next"
-              title="${this.options.i18n.next}">
+      next: `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
                 ${this.options.icons.next}
               </button>`,
-      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen"
-                    title="${this.options.i18n.fullscreen}">
+      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
                     ${this.options.icons.fullscreen}
                   </button>`,
-      actualSize: `<button class="${NS}-button ${NS}-button-actual-size"
-                    title="${this.options.i18n.actualSize}">
+      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
                       ${this.options.icons.actualSize}
                     </button>`,
-      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left"
-                    title="${this.options.i18n.rotateLeft}">
+      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
                       ${this.options.icons.rotateLeft}
                     </button>`,
-      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right"
-                      title="${this.options.i18n.rotateRight}">
+      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
                       ${this.options.icons.rotateRight}
                     </button>`
     };
 
     // PhotoViewer base HTML
-    let photoviewerHTML = `<div class="${NS}-modal">
+    const photoviewerHTML = `<div class="${NS}-modal">
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-head">
@@ -193,10 +181,10 @@ class PhotoViewer {
 
   build() {
     // Create PhotoViewer HTML string
-    let photoviewerHTML = this.render();
+    const photoviewerHTML = this.render();
 
     // Make PhotoViewer HTML string to jQuery element
-    let $photoviewer = $(photoviewerHTML);
+    const $photoviewer = $(photoviewerHTML);
 
     // Get all PhotoViewer element
     this.$photoviewer = $photoviewer;
@@ -239,9 +227,7 @@ class PhotoViewer {
 
   open() {
     if (!this.options.multiInstances) {
-      $(CLASS_NS + '-modal')
-        .eq(0)
-        .remove();
+      $(CLASS_NS + '-modal').eq(0).remove();
     }
 
     // Fixed modal position bug
@@ -281,7 +267,7 @@ class PhotoViewer {
     this.isRotated = false;
     this.rotateAngle = 0;
 
-    let zeroModal = !$(CLASS_NS + '-modal').length;
+    const zeroModal = !$(CLASS_NS + '-modal').length;
 
     // Fixed modal position bug
     if (zeroModal && this.options.fixedContent) {
@@ -303,13 +289,13 @@ class PhotoViewer {
   }
 
   setModalPos(modal) {
-    let winWidth = $W.width(),
-      winHeight = $W.height(),
-      scrollLeft = $D.scrollLeft(),
-      scrollTop = $D.scrollTop();
+    const winWidth = $W.width();
+    const winHeight = $W.height();
+    const scrollLeft = $D.scrollLeft();
+    const scrollTop = $D.scrollTop();
 
-    let modalWidth = this.options.modalWidth,
-      modalHeight = this.options.modalHeight;
+    const modalWidth = this.options.modalWidth;
+    const modalHeight = this.options.modalHeight;
 
     // Set modal maximized when init
     if (this.options.initMaximized) {
@@ -336,13 +322,13 @@ class PhotoViewer {
   }
 
   setModalSize(img) {
-    let winWidth = $W.width(),
-      winHeight = $W.height(),
-      scrollLeft = $D.scrollLeft(),
-      scrollTop = $D.scrollTop();
+    const winWidth = $W.width();
+    const winHeight = $W.height();
+    const scrollLeft = $D.scrollLeft();
+    const scrollTop = $D.scrollTop();
 
     // Stage css value
-    let stageCSS = {
+    const stageCSS = {
       left: this.$stage.css('left'),
       right: this.$stage.css('right'),
       top: this.$stage.css('top'),
@@ -354,39 +340,32 @@ class PhotoViewer {
     };
 
     // Modal size should calc with stage css value
-    let modalWidth =
-        img.width +
-        parseFloat(stageCSS.left) +
-        parseFloat(stageCSS.right) +
-        parseFloat(stageCSS.borderLeft) +
-        parseFloat(stageCSS.borderRight),
-      modalHeight =
-        img.height +
-        parseFloat(stageCSS.top) +
-        parseFloat(stageCSS.bottom) +
-        parseFloat(stageCSS.borderTop) +
-        parseFloat(stageCSS.borderBottom);
+    const modalWidth = img.width +
+      parseFloat(stageCSS.left) +
+      parseFloat(stageCSS.right) +
+      parseFloat(stageCSS.borderLeft) +
+      parseFloat(stageCSS.borderRight);
+    const modalHeight = img.height +
+      parseFloat(stageCSS.top) +
+      parseFloat(stageCSS.bottom) +
+      parseFloat(stageCSS.borderTop) +
+      parseFloat(stageCSS.borderBottom);
 
-    let gapThreshold =
-        (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
-      // Modal scale to window
-      scale = Math.min(
-        winWidth / (modalWidth * gapThreshold),
-        winHeight / (modalHeight * gapThreshold),
-        1
-      );
+    const gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1;
+    // Modal scale to window
+    const scale = Math.min(
+      winWidth / (modalWidth * gapThreshold),
+      winHeight / (modalHeight * gapThreshold),
+      1
+    );
 
-    let minWidth = Math.max(modalWidth * scale, this.options.modalWidth),
-      minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
+    let minWidth = Math.max(modalWidth * scale, this.options.modalWidth);
+    let minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
 
-    minWidth = this.options.fixedModalSize
-      ? this.options.modalWidth
-      : Math.round(minWidth);
-    minHeight = this.options.fixedModalSize
-      ? this.options.modalHeight
-      : Math.round(minHeight);
+    minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
+    minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
 
-    let modalCSSObj = {
+    const modalCSSObj = {
       width: minWidth + 'px',
       height: minHeight + 'px',
       left: (winWidth - minWidth) / 2 + scrollLeft + 'px',
@@ -407,32 +386,24 @@ class PhotoViewer {
   }
 
   getImageScaleToStage(stageWidth, stageHeight) {
-    var scale = 1;
+    let scale = 1;
 
     if (!this.isRotated) {
-      scale = Math.min(
-        stageWidth / this.img.width,
-        stageHeight / this.img.height,
-        1
-      );
+      scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
     } else {
-      scale = Math.min(
-        stageWidth / this.img.height,
-        stageHeight / this.img.width,
-        1
-      );
+      scale = Math.min(stageWidth / this.img.height, stageHeight / this.img.width, 1);
     }
 
     return scale;
   }
 
   setImageSize(img) {
-    let stageData = {
+    const stageData = {
       w: this.$stage.width(),
       h: this.$stage.height()
     };
 
-    let scale = this.getImageScaleToStage(stageData.w, stageData.h);
+    const scale = this.getImageScaleToStage(stageData.w, stageData.h);
 
     this.$image.css({
       width: Math.ceil(img.width * scale) + 'px',
@@ -546,7 +517,7 @@ class PhotoViewer {
   }
 
   setImgTitle(url) {
-    let title = this.groupData[this.groupIndex].title
+    const title = this.groupData[this.groupIndex].title
       ? this.groupData[this.groupIndex].title
       : getImageNameFromUrl(url);
 
@@ -597,10 +568,10 @@ class PhotoViewer {
     }
 
     // Ratio threshold
-    let ratio = -delta * this.options.ratioThreshold;
+    const ratio = -delta * this.options.ratioThreshold;
 
-    // mouse point position relative to stage
-    let pointer = {
+    // Mouse point position relative to stage
+    const pointer = {
       x: e.clientX - this.$stage.offset().left + $D.scrollLeft(),
       y: e.clientY - this.$stage.offset().top + $D.scrollTop()
     };
@@ -628,37 +599,37 @@ class PhotoViewer {
   }
 
   zoomTo(ratio, origin, e) {
-    let $image = this.$image,
-      $stage = this.$stage,
-      imgData = {
-        w: this.imageData.width,
-        h: this.imageData.height,
-        x: this.imageData.left,
-        y: this.imageData.top
-      };
+    const $image = this.$image;
+    const $stage = this.$stage;
+    const imgData = {
+      w: this.imageData.width,
+      h: this.imageData.height,
+      x: this.imageData.left,
+      y: this.imageData.top
+    };
 
     // Image stage position
     // We will use it to calc the relative position of image
-    let stageData = {
+    const stageData = {
       w: $stage.width(),
       h: $stage.height(),
       x: $stage.offset().left,
       y: $stage.offset().top
     };
 
-    let newWidth = this.imageData.originalWidth * ratio,
-      newHeight = this.imageData.originalHeight * ratio,
-      // Think about it for a while
-      newLeft = origin.x - ((origin.x - imgData.x) / imgData.w) * newWidth,
-      newTop = origin.y - ((origin.y - imgData.y) / imgData.h) * newHeight;
+    const newWidth = this.imageData.originalWidth * ratio;
+    const newHeight = this.imageData.originalHeight * ratio;
+    // Think about it for a while
+    let newLeft = origin.x - ((origin.x - imgData.x) / imgData.w) * newWidth;
+    let newTop = origin.y - ((origin.y - imgData.y) / imgData.h) * newHeight;
 
     // δ is the difference between image new width and new height
-    let δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2,
-      imgNewWidth = !this.isRotated ? newWidth : newHeight,
-      imgNewHeight = !this.isRotated ? newHeight : newWidth;
+    const δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2;
+    const imgNewWidth = !this.isRotated ? newWidth : newHeight;
+    const imgNewHeight = !this.isRotated ? newHeight : newWidth;
 
-    let offsetX = stageData.w - newWidth,
-      offsetY = stageData.h - newHeight;
+    const offsetX = stageData.w - newWidth;
+    const offsetY = stageData.h - newHeight;
 
     // Zoom out & Zoom in condition
     // It's important and it takes me a lot of time to get it
@@ -672,8 +643,7 @@ class PhotoViewer {
     if (imgNewWidth <= stageData.w) {
       newLeft = (stageData.w - newWidth) / 2;
     } else {
-      newLeft =
-        newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
+      newLeft = newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
     }
 
     // If the image scale get to the critical point
@@ -740,7 +710,7 @@ class PhotoViewer {
   }
 
   resize() {
-    let resizeHandler = throttle(() => {
+    const resizeHandler = throttle(() => {
       if (this.isOpened) {
         if (this.isMaximized) {
           this.setImageSize({
@@ -782,19 +752,14 @@ class PhotoViewer {
     } else {
       this.$photoviewer.removeClass(NS + '-maximize');
 
+      const initModalLeft = ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft();
+      const initModalTop = ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop();
+
       this.$photoviewer.css({
-        width: this.modalData.width
-          ? this.modalData.width
-          : this.options.modalWidth,
-        height: this.modalData.height
-          ? this.modalData.height
-          : this.options.modalHeight,
-        left: this.modalData.left
-          ? this.modalData.left
-          : ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft(),
-        top: this.modalData.top
-          ? this.modalData.top
-          : ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop()
+        width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
+        height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
+        left: this.modalData.left ? this.modalData.left : initModalLeft,
+        top: this.modalData.top ? this.modalData.top : initModalTop
       });
 
       this.isMaximized = false;
@@ -815,9 +780,9 @@ class PhotoViewer {
       return false;
     }
 
-    let keyCode = e.keyCode || e.which || e.charCode,
-      ctrlKey = e.ctrlKey || e.metaKey,
-      altKey = e.altKey || e.metaKey;
+    const keyCode = e.keyCode || e.which || e.charCode;
+    const ctrlKey = e.ctrlKey || e.metaKey;
+    const altKey = e.altKey || e.metaKey;
 
     switch (keyCode) {
       // ←
@@ -915,47 +880,37 @@ class PhotoViewer {
       );
     });
 
-    this.$actualSize
-      .off(CLICK_EVENT + EVENT_NS)
-      .on(CLICK_EVENT + EVENT_NS, e => {
-        this.zoomTo(
-          1,
-          { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
-          e
-        );
-      });
+    this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
+      this.zoomTo(
+        1,
+        { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
+        e
+      );
+    });
 
     this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(-1);
     });
 
-    this.$fullscreen
-      .off(CLICK_EVENT + EVENT_NS)
-      .on(CLICK_EVENT + EVENT_NS, () => {
-        this.fullscreen();
-      });
+    this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+      this.fullscreen();
+    });
 
     this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(1);
     });
 
-    this.$rotateLeft
-      .off(CLICK_EVENT + EVENT_NS)
-      .on(CLICK_EVENT + EVENT_NS, () => {
-        this.rotate(-90);
-      });
+    this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+      this.rotate(-90);
+    });
 
-    this.$rotateRight
-      .off(CLICK_EVENT + EVENT_NS)
-      .on(CLICK_EVENT + EVENT_NS, () => {
-        this.rotate(90);
-      });
+    this.$rotateRight.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+      this.rotate(90);
+    });
 
-    this.$maximize
-      .off(CLICK_EVENT + EVENT_NS)
-      .on(CLICK_EVENT + EVENT_NS, () => {
-        this.maximize();
-      });
+    this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+      this.maximize();
+    });
 
     $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
       this.keydown(e);

@@ -9,7 +9,7 @@ import {
   PUBLIC_VARS
 } from './constants';
 
-const ELEMS_WITH_GRABBING_CURSOR = `html,body,.${NS}-modal,.${NS}-stage,.${NS}-button,.${NS}-resizable-handle`;
+const ELEMS_WITH_GRABBING_CURSOR = `html,body, .${NS}-modal, .${NS}-stage, .${NS}-button, .${NS}-resizable-handle`;
 
 export default {
   /**
@@ -27,23 +27,23 @@ export default {
   movable(stage, image) {
     let isDragging = false;
 
-    let startX = 0,
-      startY = 0,
-      left = 0,
-      top = 0,
-      widthDiff = 0,
-      heightDiff = 0,
-      δ = 0;
+    let startX = 0;
+    let startY = 0;
+    let left = 0;
+    let top = 0;
+    let widthDiff = 0;
+    let heightDiff = 0;
+    let δ = 0;
 
-    let dragStart = e => {
+    const dragStart = e => {
       e = e || window.event;
 
       e.preventDefault();
 
-      let imageWidth = $(image).width(),
-        imageHeight = $(image).height(),
-        stageWidth = $(stage).width(),
-        stageHeight = $(stage).height();
+      const imageWidth = $(image).width();
+      const imageHeight = $(image).height();
+      const stageWidth = $(stage).width();
+      const stageHeight = $(stage).height();
 
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
@@ -52,19 +52,15 @@ export default {
       δ = !this.isRotated ? 0 : (imageWidth - imageHeight) / 2;
 
       // Width or height difference can be use to limit image right or top position
-      widthDiff = !this.isRotated
-        ? imageWidth - stageWidth
-        : imageHeight - stageWidth;
-      heightDiff = !this.isRotated
-        ? imageHeight - stageHeight
-        : imageWidth - stageHeight;
+      widthDiff = !this.isRotated ? imageWidth - stageWidth : imageHeight - stageWidth;
+      heightDiff = !this.isRotated ? imageHeight - stageHeight : imageWidth - stageHeight;
 
       // Modal can be dragging if image is smaller to stage
       isDragging = widthDiff > 0 || heightDiff > 0 ? true : false;
       PUBLIC_VARS['isMoving'] = widthDiff > 0 || heightDiff > 0 ? true : false;
 
       // Reclac the element position when mousedown
-      // Fixed the issue of stage with a border
+      // Fix the issue of stage with a border
       left = $(image).position().left - δ;
       top = $(image).position().top + δ;
 
@@ -79,19 +75,18 @@ export default {
       );
     };
 
-    let dragMove = e => {
+    const dragMove = e => {
       e = e || window.event;
 
       e.preventDefault();
 
       if (isDragging) {
-        let endX =
-            e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX,
-          endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY,
-          relativeX = endX - startX,
-          relativeY = endY - startY,
-          newLeft = relativeX + left,
-          newTop = relativeY + top;
+        const endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX;
+        const endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY;
+        const relativeX = endX - startX;
+        const relativeY = endY - startY;
+        let newLeft = relativeX + left;
+        let newTop = relativeY + top;
 
         // Vertical limit
         if (heightDiff > 0) {
@@ -127,7 +122,7 @@ export default {
       }
     };
 
-    let dragEnd = () => {
+    const dragEnd = () => {
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(
         TOUCH_END_EVENT + EVENT_NS,
         dragEnd
