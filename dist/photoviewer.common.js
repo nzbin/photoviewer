@@ -1272,8 +1272,8 @@ var document$1 = window.document;
 function throttle(fn, delay) {
   var timer = null;
   return function () {
-    var context = this,
-        args = arguments;
+    var context = this;
+    var args = arguments;
     clearTimeout(timer);
     timer = setTimeout(function () {
       fn.apply(context, args);
@@ -1323,8 +1323,8 @@ function requestFullscreen(element) {
  */
 
 function getImageNameFromUrl(url) {
-  var reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi,
-      txt = url.replace(reg, '$1');
+  var reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi;
+  var txt = url.replace(reg, '$1');
   return txt;
 }
 /**
@@ -1357,8 +1357,8 @@ function getScrollbarWidth() {
  */
 
 function setGrabCursor(imageData, stageData, stage, isRotated) {
-  var imageWidth = !isRotated ? imageData.w : imageData.h,
-      imageHeight = !isRotated ? imageData.h : imageData.w;
+  var imageWidth = !isRotated ? imageData.w : imageData.h;
+  var imageHeight = !isRotated ? imageData.h : imageData.w;
 
   if (imageHeight > stageData.h || imageWidth > stageData.w) {
     stage.addClass('is-grab');
@@ -1374,7 +1374,7 @@ function setGrabCursor(imageData, stageData, stage, isRotated) {
  */
 
 function supportTouch() {
-  return !!('ontouchstart' in window || window.DocumentTouch && document$1 instanceof DocumentTouch);
+  return !!('ontouchstart' in window || window.DocumentTouch && document$1 instanceof window.DocumentTouch);
 }
 
 var $W = $$1(window);
@@ -1409,10 +1409,10 @@ var draggable = {
     var _this = this;
 
     var isDragging = false;
-    var startX = 0,
-        startY = 0,
-        left = 0,
-        top = 0;
+    var startX = 0;
+    var startY = 0;
+    var left = 0;
+    var top = 0;
 
     var dragStart = function dragStart(e) {
       e = e || window.event; // Must be removed
@@ -1442,10 +1442,10 @@ var draggable = {
       e.preventDefault();
 
       if (isDragging && !PUBLIC_VARS['isMoving'] && !PUBLIC_VARS['isResizing'] && !_this.isMaximized) {
-        var endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX,
-            endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY,
-            relativeX = endX - startX,
-            relativeY = endY - startY;
+        var endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX;
+        var endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY;
+        var relativeX = endX - startX;
+        var relativeY = endY - startY;
         $$1(modal).css({
           left: relativeX + left + 'px',
           top: relativeY + top + 'px'
@@ -1462,7 +1462,7 @@ var draggable = {
   }
 };
 
-var ELEMS_WITH_GRABBING_CURSOR = "html,body,." + NS + "-modal,." + NS + "-stage,." + NS + "-button,." + NS + "-resizable-handle";
+var ELEMS_WITH_GRABBING_CURSOR = "html, body, ." + NS + "-modal, ." + NS + "-stage, ." + NS + "-button, ." + NS + "-resizable-handle";
 var movable = {
   /**
    * --------------------------------------------------------------------------
@@ -1480,21 +1480,21 @@ var movable = {
     var _this = this;
 
     var isDragging = false;
-    var startX = 0,
-        startY = 0,
-        left = 0,
-        top = 0,
-        widthDiff = 0,
-        heightDiff = 0,
-        δ = 0;
+    var startX = 0;
+    var startY = 0;
+    var left = 0;
+    var top = 0;
+    var widthDiff = 0;
+    var heightDiff = 0;
+    var δ = 0;
 
     var dragStart = function dragStart(e) {
       e = e || window.event;
       e.preventDefault();
-      var imageWidth = $$1(image).width(),
-          imageHeight = $$1(image).height(),
-          stageWidth = $$1(stage).width(),
-          stageHeight = $$1(stage).height();
+      var imageWidth = $$1(image).width();
+      var imageHeight = $$1(image).height();
+      var stageWidth = $$1(stage).width();
+      var stageHeight = $$1(stage).height();
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // δ is the difference between image width and height
 
@@ -1505,7 +1505,7 @@ var movable = {
 
       isDragging = widthDiff > 0 || heightDiff > 0 ? true : false;
       PUBLIC_VARS['isMoving'] = widthDiff > 0 || heightDiff > 0 ? true : false; // Reclac the element position when mousedown
-      // Fixed the issue of stage with a border
+      // Fix the issue of stage with a border
 
       left = $$1(image).position().left - δ;
       top = $$1(image).position().top + δ; // Add grabbing cursor
@@ -1522,12 +1522,12 @@ var movable = {
       e.preventDefault();
 
       if (isDragging) {
-        var endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX,
-            endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY,
-            relativeX = endX - startX,
-            relativeY = endY - startY,
-            newLeft = relativeX + left,
-            newTop = relativeY + top; // Vertical limit
+        var endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX;
+        var endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY;
+        var relativeX = endX - startX;
+        var relativeY = endY - startY;
+        var newLeft = relativeX + left;
+        var newTop = relativeY + top; // Vertical limit
 
         if (heightDiff > 0) {
           if (relativeY + top > δ) {
@@ -1574,7 +1574,7 @@ var movable = {
   }
 };
 
-var ELEMS_WITH_RESIZE_CURSOR = "html,body,." + NS + "-modal,." + NS + "-stage,." + NS + "-button";
+var ELEMS_WITH_RESIZE_CURSOR = "html, body, ." + NS + "-modal, ." + NS + "-stage, ." + NS + "-button";
 var resizable = {
   /**
    * --------------------------------------------------------------------------
@@ -1593,14 +1593,14 @@ var resizable = {
   resizable: function resizable(modal, stage, image, minWidth, minHeight) {
     var _this = this;
 
-    var resizableHandleE = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-e\"></div>"),
-        resizableHandleW = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-w\"></div>"),
-        resizableHandleS = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-s\"></div>"),
-        resizableHandleN = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-n\"></div>"),
-        resizableHandleSE = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-se\"></div>"),
-        resizableHandleSW = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-sw\"></div>"),
-        resizableHandleNE = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-ne\"></div>"),
-        resizableHandleNW = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-nw\"></div>");
+    var resizableHandleE = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-e\"></div>");
+    var resizableHandleW = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-w\"></div>");
+    var resizableHandleS = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-s\"></div>");
+    var resizableHandleN = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-n\"></div>");
+    var resizableHandleSE = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-se\"></div>");
+    var resizableHandleSW = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-sw\"></div>");
+    var resizableHandleNE = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-ne\"></div>");
+    var resizableHandleNW = $$1("<div class=\"" + NS + "-resizable-handle " + NS + "-resizable-handle-nw\"></div>");
     var resizableHandles = {
       e: resizableHandleE,
       s: resizableHandleS,
@@ -1613,36 +1613,36 @@ var resizable = {
     };
     $$1(modal).append(resizableHandleE, resizableHandleW, resizableHandleS, resizableHandleN, resizableHandleSE, resizableHandleSW, resizableHandleNE, resizableHandleNW);
     var isDragging = false;
-    var startX = 0,
-        startY = 0,
-        modalData = {
+    var startX = 0;
+    var startY = 0;
+    var modalData = {
       w: 0,
       h: 0,
       l: 0,
       t: 0
-    },
-        stageData = {
+    };
+    var stageData = {
       w: 0,
       h: 0,
       l: 0,
       t: 0
-    },
-        imageData = {
+    };
+    var imageData = {
       w: 0,
       h: 0,
       l: 0,
       t: 0
-    },
-        // δ is the difference between image width and height
-    δ = 0,
-        imgWidth = 0,
-        imgHeight = 0,
-        direction = ''; // Modal CSS options
+    }; // δ is the difference between image width and height
+
+    var δ = 0;
+    var imgWidth = 0;
+    var imgHeight = 0;
+    var direction = ''; // Modal CSS options
 
     var getModalOpts = function getModalOpts(dir, offsetX, offsetY) {
       // Modal should not move when its width to the minwidth
-      var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.l : modalData.l + modalData.w - minWidth,
-          modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.t : modalData.t + modalData.h - minHeight;
+      var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.l : modalData.l + modalData.w - minWidth;
+      var modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.t : modalData.t + modalData.h - minHeight;
       var opts = {
         e: {
           width: Math.max(offsetX + modalData.w, minWidth) + 'px'
@@ -1686,15 +1686,15 @@ var resizable = {
     var getImageOpts = function getImageOpts(dir, offsetX, offsetY) {
       // Image should not move when modal width to the min width
       // The minwidth is modal width, so we should clac the stage minwidth
-      var widthDiff = offsetX + modalData.w > minWidth ? stageData.w - imgWidth + offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ,
-          heightDiff = offsetY + modalData.h > minHeight ? stageData.h - imgHeight + offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ,
-          widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ,
-          heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ; // Get image position in dragging
+      var widthDiff = offsetX + modalData.w > minWidth ? stageData.w - imgWidth + offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
+      var heightDiff = offsetY + modalData.h > minHeight ? stageData.h - imgHeight + offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
+      var widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
+      var heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ; // Get image position in dragging
 
-      var imgLeft = (widthDiff > 0 ? $$1(image).position().left : $$1(image).position().left < 0 ? $$1(image).position().left : 0) - δ,
-          imgTop = (heightDiff > 0 ? $$1(image).position().top : $$1(image).position().top < 0 ? $$1(image).position().top : 0) + δ,
-          imgLeft2 = (widthDiff2 > 0 ? $$1(image).position().left : $$1(image).position().left < 0 ? $$1(image).position().left : 0) - δ,
-          imgTop2 = (heightDiff2 > 0 ? $$1(image).position().top : $$1(image).position().top < 0 ? $$1(image).position().top : 0) + δ;
+      var imgLeft = (widthDiff > 0 ? $$1(image).position().left : $$1(image).position().left < 0 ? $$1(image).position().left : 0) - δ;
+      var imgTop = (heightDiff > 0 ? $$1(image).position().top : $$1(image).position().top < 0 ? $$1(image).position().top : 0) + δ;
+      var imgLeft2 = (widthDiff2 > 0 ? $$1(image).position().left : $$1(image).position().left < 0 ? $$1(image).position().left : 0) - δ;
+      var imgTop2 = (heightDiff2 > 0 ? $$1(image).position().top : $$1(image).position().top < 0 ? $$1(image).position().top : 0) + δ;
       var opts = {
         e: {
           left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
@@ -1769,10 +1769,10 @@ var resizable = {
       e.preventDefault();
 
       if (isDragging && !_this.isMaximized) {
-        var endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX,
-            endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY,
-            relativeX = endX - startX,
-            relativeY = endY - startY;
+        var endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX;
+        var endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY;
+        var relativeX = endX - startX;
+        var relativeY = endY - startY;
         var modalOpts = getModalOpts(direction, relativeX, relativeY);
         $$1(modal).css(modalOpts);
         var imageOpts = getImageOpts(direction, relativeX, relativeY);
@@ -1846,7 +1846,7 @@ function () {
 
     this.isRotated = false; // Image rotate angle
 
-    this.rotateAngle = 0; // If modal do resize
+    this.rotateAngle = 0; // Whether modal do resize
 
     this.isDoResize = false; // Store image data in every instance
 
@@ -1900,17 +1900,17 @@ function () {
 
   _proto.render = function render() {
     var btnsTpl = {
-      minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\"\n                  title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
-      maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\"\n                  title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
-      close: "<button class=\"" + NS + "-button " + NS + "-button-close\"\n              title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
-      zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\"\n                title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
-      zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\"\n                title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
-      prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\"\n              title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
-      next: "<button class=\"" + NS + "-button " + NS + "-button-next\"\n              title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
-      fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\"\n                    title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
-      actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\"\n                    title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
-      rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\"\n                    title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
-      rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\"\n                      title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
+      minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\" title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
+      maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\" title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
+      close: "<button class=\"" + NS + "-button " + NS + "-button-close\" title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
+      zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\" title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
+      zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\" title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
+      prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\" title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
+      next: "<button class=\"" + NS + "-button " + NS + "-button-next\" title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
+      fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\" title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
+      actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
+      rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
+      rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
     }; // PhotoViewer base HTML
 
     var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._createBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
@@ -2022,12 +2022,12 @@ function () {
   };
 
   _proto.setModalPos = function setModalPos(modal) {
-    var winWidth = $W.width(),
-        winHeight = $W.height(),
-        scrollLeft = $D.scrollLeft(),
-        scrollTop = $D.scrollTop();
-    var modalWidth = this.options.modalWidth,
-        modalHeight = this.options.modalHeight; // Set modal maximized when init
+    var winWidth = $W.width();
+    var winHeight = $W.height();
+    var scrollLeft = $D.scrollLeft();
+    var scrollTop = $D.scrollTop();
+    var modalWidth = this.options.modalWidth;
+    var modalHeight = this.options.modalHeight; // Set modal maximized when init
 
     if (this.options.initMaximized) {
       modal.addClass(NS + '-maximize');
@@ -2053,10 +2053,10 @@ function () {
   _proto.setModalSize = function setModalSize(img) {
     var _this = this;
 
-    var winWidth = $W.width(),
-        winHeight = $W.height(),
-        scrollLeft = $D.scrollLeft(),
-        scrollTop = $D.scrollTop(); // Stage css value
+    var winWidth = $W.width();
+    var winHeight = $W.height();
+    var scrollLeft = $D.scrollLeft();
+    var scrollTop = $D.scrollTop(); // Stage css value
 
     var stageCSS = {
       left: this.$stage.css('left'),
@@ -2069,13 +2069,13 @@ function () {
       borderBottom: this.$stage.css('border-bottom-width')
     }; // Modal size should calc with stage css value
 
-    var modalWidth = img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) + parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight),
-        modalHeight = img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) + parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom);
-    var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
-        // Modal scale to window
-    scale = Math.min(winWidth / (modalWidth * gapThreshold), winHeight / (modalHeight * gapThreshold), 1);
-    var minWidth = Math.max(modalWidth * scale, this.options.modalWidth),
-        minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
+    var modalWidth = img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) + parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight);
+    var modalHeight = img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) + parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom);
+    var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1; // Modal scale to window
+
+    var scale = Math.min(winWidth / (modalWidth * gapThreshold), winHeight / (modalHeight * gapThreshold), 1);
+    var minWidth = Math.max(modalWidth * scale, this.options.modalWidth);
+    var minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
     minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
     minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
     var modalCSSObj = {
@@ -2253,7 +2253,7 @@ function () {
     } // Ratio threshold
 
 
-    var ratio = -delta * this.options.ratioThreshold; // mouse point position relative to stage
+    var ratio = -delta * this.options.ratioThreshold; // Mouse point position relative to stage
 
     var pointer = {
       x: e.clientX - this.$stage.offset().left + $D.scrollLeft(),
@@ -2279,9 +2279,9 @@ function () {
   };
 
   _proto.zoomTo = function zoomTo(ratio, origin, e) {
-    var $image = this.$image,
-        $stage = this.$stage,
-        imgData = {
+    var $image = this.$image;
+    var $stage = this.$stage;
+    var imgData = {
       w: this.imageData.width,
       h: this.imageData.height,
       x: this.imageData.left,
@@ -2295,17 +2295,17 @@ function () {
       x: $stage.offset().left,
       y: $stage.offset().top
     };
-    var newWidth = this.imageData.originalWidth * ratio,
-        newHeight = this.imageData.originalHeight * ratio,
-        // Think about it for a while
-    newLeft = origin.x - (origin.x - imgData.x) / imgData.w * newWidth,
-        newTop = origin.y - (origin.y - imgData.y) / imgData.h * newHeight; // δ is the difference between image new width and new height
+    var newWidth = this.imageData.originalWidth * ratio;
+    var newHeight = this.imageData.originalHeight * ratio; // Think about it for a while
 
-    var δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2,
-        imgNewWidth = !this.isRotated ? newWidth : newHeight,
-        imgNewHeight = !this.isRotated ? newHeight : newWidth;
-    var offsetX = stageData.w - newWidth,
-        offsetY = stageData.h - newHeight; // Zoom out & Zoom in condition
+    var newLeft = origin.x - (origin.x - imgData.x) / imgData.w * newWidth;
+    var newTop = origin.y - (origin.y - imgData.y) / imgData.h * newHeight; // δ is the difference between image new width and new height
+
+    var δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2;
+    var imgNewWidth = !this.isRotated ? newWidth : newHeight;
+    var imgNewHeight = !this.isRotated ? newHeight : newWidth;
+    var offsetX = stageData.w - newWidth;
+    var offsetY = stageData.h - newHeight; // Zoom out & Zoom in condition
     // It's important and it takes me a lot of time to get it
     // The conditions with image rotate 90 degree drive me crazy alomst!
 
@@ -2414,11 +2414,13 @@ function () {
       this.isMaximized = true;
     } else {
       this.$photoviewer.removeClass(NS + '-maximize');
+      var initModalLeft = ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft();
+      var initModalTop = ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop();
       this.$photoviewer.css({
         width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
         height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
-        left: this.modalData.left ? this.modalData.left : ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft(),
-        top: this.modalData.top ? this.modalData.top : ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop()
+        left: this.modalData.left ? this.modalData.left : initModalLeft,
+        top: this.modalData.top ? this.modalData.top : initModalTop
       });
       this.isMaximized = false;
     }
@@ -2438,9 +2440,9 @@ function () {
       return false;
     }
 
-    var keyCode = e.keyCode || e.which || e.charCode,
-        ctrlKey = e.ctrlKey || e.metaKey,
-        altKey = e.altKey || e.metaKey;
+    var keyCode = e.keyCode || e.which || e.charCode;
+    var ctrlKey = e.ctrlKey || e.metaKey;
+    var altKey = e.altKey || e.metaKey;
 
     switch (keyCode) {
       // ←
