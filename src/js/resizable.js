@@ -11,7 +11,7 @@ import {
 
 import { setGrabCursor } from './utilities';
 
-const ELEMS_WITH_RESIZE_CURSOR = `html,body,.${NS}-modal,.${NS}-stage,.${NS}-button`;
+const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}-button`;
 
 export default {
   /**
@@ -31,28 +31,28 @@ export default {
   resizable(modal, stage, image, minWidth, minHeight) {
     const resizableHandleE = $(
       `<div class="${NS}-resizable-handle ${NS}-resizable-handle-e"></div>`
-    ),
-      resizableHandleW = $(
-        `<div class="${NS}-resizable-handle ${NS}-resizable-handle-w"></div>`
-      ),
-      resizableHandleS = $(
-        `<div class="${NS}-resizable-handle ${NS}-resizable-handle-s"></div>`
-      ),
-      resizableHandleN = $(
-        `<div class="${NS}-resizable-handle ${NS}-resizable-handle-n"></div>`
-      ),
-      resizableHandleSE = $(
-        `<div class="${NS}-resizable-handle ${NS}-resizable-handle-se"></div>`
-      ),
-      resizableHandleSW = $(
-        `<div class="${NS}-resizable-handle ${NS}-resizable-handle-sw"></div>`
-      ),
-      resizableHandleNE = $(
-        `<div class="${NS}-resizable-handle ${NS}-resizable-handle-ne"></div>`
-      ),
-      resizableHandleNW = $(
-        `<div class="${NS}-resizable-handle ${NS}-resizable-handle-nw"></div>`
-      );
+    );
+    const resizableHandleW = $(
+      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-w"></div>`
+    );
+    const resizableHandleS = $(
+      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-s"></div>`
+    );
+    const resizableHandleN = $(
+      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-n"></div>`
+    );
+    const resizableHandleSE = $(
+      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-se"></div>`
+    );
+    const resizableHandleSW = $(
+      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-sw"></div>`
+    );
+    const resizableHandleNE = $(
+      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-ne"></div>`
+    );
+    const resizableHandleNW = $(
+      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-nw"></div>`
+    );
 
     const resizableHandles = {
       e: resizableHandleE,

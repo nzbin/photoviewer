@@ -9,7 +9,7 @@ import {
   PUBLIC_VARS
 } from './constants';
 
-const ELEMS_WITH_GRABBING_CURSOR = `html,body, .${NS}-modal, .${NS}-stage, .${NS}-button, .${NS}-resizable-handle`;
+const ELEMS_WITH_GRABBING_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}-button, .${NS}-resizable-handle`;
 
 export default {
   /**
