@@ -2214,7 +2214,7 @@
       };
 
       _proto.setImgTitle = function setImgTitle(url) {
-        var title = this.groupData[this.groupIndex].title ? this.groupData[this.groupIndex].title : getImageNameFromUrl(url);
+        var title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
         this.$title.html(title);
       };
 
