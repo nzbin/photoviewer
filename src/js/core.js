@@ -517,9 +517,7 @@ class PhotoViewer {
   }
 
   setImgTitle(url) {
-    const title = this.groupData[this.groupIndex].title
-      ? this.groupData[this.groupIndex].title
-      : getImageNameFromUrl(url);
+    const title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
 
     this.$title.html(title);
   }
