@@ -4,6 +4,7 @@
     "stylelint-config-recommended-scss"
   ],
   "rules": {
-    "number-leading-zero": "never"
+    "number-leading-zero": "never",
+    "no-descending-specificity": null
   }
 }
