@@ -77,7 +77,7 @@ class PhotoViewer {
     this.groupData = items;
     this.groupIndex = opts['index'];
 
-    // Fix https://github.com/nzbin/photoviewer/issues/7
+    // Fix: https://github.com/nzbin/photoviewer/issues/7
     PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex'];
 
     // Get image src
@@ -121,43 +121,55 @@ class PhotoViewer {
 
   render() {
     const btnsTpl = {
-      minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
-                    ${this.options.icons.minimize}
-                  </button>`,
-      maximize: `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
-                    ${this.options.icons.maximize}
-                  </button>`,
-      close: `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
-                ${this.options.icons.close}
-              </button>`,
-      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
-                  ${this.options.icons.zoomIn}
-                </button>`,
-      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
-                  ${this.options.icons.zoomOut}
-                </button>`,
-      prev: `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
-                ${this.options.icons.prev}
-              </button>`,
-      next: `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
-                ${this.options.icons.next}
-              </button>`,
-      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
-                    ${this.options.icons.fullscreen}
-                  </button>`,
-      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
-                      ${this.options.icons.actualSize}
-                    </button>`,
-      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
-                      ${this.options.icons.rotateLeft}
-                    </button>`,
-      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
-                      ${this.options.icons.rotateRight}
-                    </button>`
+      minimize:
+        `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
+          ${this.options.icons.minimize}
+        </button>`,
+      maximize:
+        `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
+          ${this.options.icons.maximize}
+        </button>`,
+      close:
+        `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
+          ${this.options.icons.close}
+        </button>`,
+      zoomIn:
+        `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
+          ${this.options.icons.zoomIn}
+        </button>`,
+      zoomOut:
+        `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
+          ${this.options.icons.zoomOut}
+        </button>`,
+      prev:
+        `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
+          ${this.options.icons.prev}
+        </button>`,
+      next:
+        `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
+          ${this.options.icons.next}
+        </button>`,
+      fullscreen:
+        `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
+          ${this.options.icons.fullscreen}
+        </button>`,
+      actualSize:
+        `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
+          ${this.options.icons.actualSize}
+        </button>`,
+      rotateLeft:
+        `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
+          ${this.options.icons.rotateLeft}
+        </button>`,
+      rotateRight:
+        `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
+          ${this.options.icons.rotateRight}
+        </button>`
     };
 
     // PhotoViewer base HTML
-    const photoviewerHTML = `<div class="${NS}-modal">
+    const photoviewerHTML =
+      `<div class="${NS}-modal">
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-head">
