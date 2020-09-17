@@ -31,8 +31,8 @@ declare namespace PhotoViewer {
     ratioThreshold?: number;
     minRatio?: number;
     maxRatio?: number;
-    headToolbar?: toolbarOption[];
-    footToolbar?: toolbarOption[];
+    headToolbar?: Array<toolbarOption> | Array<string>;
+    footToolbar?: Array<toolbarOption> | Array<string>;
     icons?: {
       minimize?: string;
       maximize?: string;
@@ -65,15 +65,17 @@ declare namespace PhotoViewer {
     zIndex?: number;
     dragHandle?: boolean;
     callbacks?: {
-      beforeOpen?: Function;
-      opened?: Function;
-      beforeClose?: Function;
-      closed?: Function;
-      beforeChange?: Function;
-      changed: Function;
+      beforeOpen?: (context?: any) => void;
+      opened?: (context?: any) => void;
+      beforeClose?: (context?: any) => void;
+      closed?: (context?: any) => void;
+      beforeChange?: (context?: any, index?: number) => void;
+      changed: (context?: any, index?: number) => void;
     };
     index?: number;
     progressiveLoading?: boolean;
+    appendTo: string;
+    customButtons: any;
   }
 }
 
