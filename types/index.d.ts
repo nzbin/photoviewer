@@ -74,8 +74,8 @@ declare namespace PhotoViewer {
     };
     index?: number;
     progressiveLoading?: boolean;
-    appendTo: string;
-    customButtons: any;
+    appendTo?: string;
+    customButtons?: any;
   }
 }
 
