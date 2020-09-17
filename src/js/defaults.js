@@ -43,10 +43,10 @@ export default {
   maxRatio: 16,
 
   // Toolbar options in header
-  headToolbar: ['maximize', 'close'],
+  headerToolbar: ['maximize', 'close'],
 
   // Toolbar options in footer
-  footToolbar: [
+  footerToolbar: [
     'zoomIn',
     'zoomOut',
     'prev',
@@ -171,5 +171,8 @@ export default {
   progressiveLoading: true,
 
   // The DOM element to which viewer will be added
-  appendTo: 'body'
+  appendTo: 'body',
+
+  // Custom Buttons
+  customButtons: {}
 };

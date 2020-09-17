@@ -34,12 +34,12 @@ class PhotoViewer {
   constructor(items, options, el) {
     this.options = $.extend(true, {}, DEFAULTS, options);
 
-    if (options && $.isArray(options.footToolbar)) {
-      this.options.footToolbar = options.footToolbar;
+    if (options && $.isArray(options.footerToolbar)) {
+      this.options.footerToolbar = options.footerToolbar;
     }
 
-    if (options && $.isArray(options.headToolbar)) {
-      this.options.headToolbar = options.headToolbar;
+    if (options && $.isArray(options.headerToolbar)) {
+      this.options.headerToolbar = options.headerToolbar;
     }
 
     // Store element of clicked
@@ -105,11 +105,25 @@ class PhotoViewer {
     }
   }
 
-  _createBtns(toolbar, btns) {
+  _createBtns(toolbar) {
+    const btns = [
+      'minimize', 'maximize', 'close',
+      'zoomIn', 'zoomOut', 'prev', 'next', 'fullscreen', 'actualSize', 'rotateLeft', 'rotateRight'
+    ];
     let btnsStr = '';
 
-    $.each(toolbar, function (index, item) {
-      btnsStr += btns[item];
+    $.each(toolbar, (index, item) => {
+      if (btns.indexOf(item) >= 0) {
+        btnsStr +=
+          `<button class="${NS}-button ${NS}-button-${item}" title="${this.options.i18n[item]}">
+            ${this.options.icons[item]}
+          </button>`;
+      } else if (this.options.customButtons[item]) {
+        btnsStr +=
+          `<button class="${NS}-button ${NS}-button-${item}" title="${this.options.customButtons[item].title || ''}">
+          ${this.options.customButtons[item].text}
+          </button>`;
+      }
     });
 
     return btnsStr;
@@ -120,60 +134,13 @@ class PhotoViewer {
   }
 
   render() {
-    const btnsTpl = {
-      minimize:
-        `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
-          ${this.options.icons.minimize}
-        </button>`,
-      maximize:
-        `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
-          ${this.options.icons.maximize}
-        </button>`,
-      close:
-        `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
-          ${this.options.icons.close}
-        </button>`,
-      zoomIn:
-        `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
-          ${this.options.icons.zoomIn}
-        </button>`,
-      zoomOut:
-        `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
-          ${this.options.icons.zoomOut}
-        </button>`,
-      prev:
-        `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
-          ${this.options.icons.prev}
-        </button>`,
-      next:
-        `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
-          ${this.options.icons.next}
-        </button>`,
-      fullscreen:
-        `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
-          ${this.options.icons.fullscreen}
-        </button>`,
-      actualSize:
-        `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
-          ${this.options.icons.actualSize}
-        </button>`,
-      rotateLeft:
-        `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
-          ${this.options.icons.rotateLeft}
-        </button>`,
-      rotateRight:
-        `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
-          ${this.options.icons.rotateRight}
-        </button>`
-    };
-
     // PhotoViewer base HTML
     const photoviewerHTML =
       `<div class="${NS}-modal">
         <div class="${NS}-inner">
           <div class="${NS}-header">
-            <div class="${NS}-toolbar ${NS}-toolbar-head">
-              ${this._createBtns(this.options.headToolbar, btnsTpl)}
+            <div class="${NS}-toolbar ${NS}-toolbar-header">
+              ${this._createBtns(this.options.headerToolbar)}
             </div>
             ${this._createTitle()}
           </div>
@@ -181,8 +148,8 @@ class PhotoViewer {
             <img class="${NS}-image" src="" alt="" />
           </div>
           <div class="${NS}-footer">
-            <div class="${NS}-toolbar ${NS}-toolbar-foot">
-              ${this._createBtns(this.options.footToolbar, btnsTpl)}
+            <div class="${NS}-toolbar ${NS}-toolbar-footer">
+              ${this._createBtns(this.options.footerToolbar)}
             </div>
           </div>
         </div>
@@ -200,22 +167,18 @@ class PhotoViewer {
 
     // Get all PhotoViewer element
     this.$photoviewer = $photoviewer;
-    this.$header = $photoviewer.find(CLASS_NS + '-header');
-    this.$headToolbar = $photoviewer.find(CLASS_NS + '-toolbar-head');
-    this.$footer = $photoviewer.find(CLASS_NS + '-footer');
-    this.$footToolbar = $photoviewer.find(CLASS_NS + '-toolbar-foot');
     this.$stage = $photoviewer.find(CLASS_NS + '-stage');
     this.$title = $photoviewer.find(CLASS_NS + '-title');
     this.$image = $photoviewer.find(CLASS_NS + '-image');
     this.$close = $photoviewer.find(CLASS_NS + '-button-close');
     this.$maximize = $photoviewer.find(CLASS_NS + '-button-maximize');
     this.$minimize = $photoviewer.find(CLASS_NS + '-button-minimize');
-    this.$zoomIn = $photoviewer.find(CLASS_NS + '-button-zoom-in');
-    this.$zoomOut = $photoviewer.find(CLASS_NS + '-button-zoom-out');
-    this.$actualSize = $photoviewer.find(CLASS_NS + '-button-actual-size');
+    this.$zoomIn = $photoviewer.find(CLASS_NS + '-button-zoomIn');
+    this.$zoomOut = $photoviewer.find(CLASS_NS + '-button-zoomOut');
+    this.$actualSize = $photoviewer.find(CLASS_NS + '-button-actualSize');
     this.$fullscreen = $photoviewer.find(CLASS_NS + '-button-fullscreen');
-    this.$rotateLeft = $photoviewer.find(CLASS_NS + '-button-rotate-left');
-    this.$rotateRight = $photoviewer.find(CLASS_NS + '-button-rotate-right');
+    this.$rotateLeft = $photoviewer.find(CLASS_NS + '-button-rotateLeft');
+    this.$rotateRight = $photoviewer.find(CLASS_NS + '-button-rotateRight');
     this.$prev = $photoviewer.find(CLASS_NS + '-button-prev');
     this.$next = $photoviewer.find(CLASS_NS + '-button-next');
 
@@ -256,20 +219,21 @@ class PhotoViewer {
 
     this.build();
 
-    this._triggerHook('beforeOpen', this.$el);
+    this._triggerHook('beforeOpen', this);
 
     // Add PhotoViewer to DOM
     $(this.options.appendTo).eq(0).append(this.$photoviewer);
 
     this.addEvents();
+    this.addCustomButtonEvents();
 
     this.setModalPos(this.$photoviewer);
 
-    this._triggerHook('opened', this.$el);
+    this._triggerHook('opened', this);
   }
 
   close() {
-    this._triggerHook('beforeClose', this.$el);
+    this._triggerHook('beforeClose', this);
 
     // Remove instance
     this.$photoviewer.remove();
@@ -297,7 +261,7 @@ class PhotoViewer {
       $W.off(RESIZE_EVENT + EVENT_NS);
     }
 
-    this._triggerHook('closed', this.$el);
+    this._triggerHook('closed', this);
   }
 
   setModalPos(modal) {
@@ -535,7 +499,7 @@ class PhotoViewer {
   }
 
   jump(step) {
-    this._triggerHook('beforeChange', this.groupIndex);
+    this._triggerHook('beforeChange', [this, this.groupIndex]);
 
     this.groupIndex = this.groupIndex + step;
 
@@ -556,10 +520,10 @@ class PhotoViewer {
     this.loadImg(
       this.groupData[index].src,
       () => {
-        this._triggerHook('changed', index);
+        this._triggerHook('changed', [this, index]);
       },
       () => {
-        this._triggerHook('changed', index);
+        this._triggerHook('changed', [this, index]);
       }
     );
   }
@@ -927,6 +891,15 @@ class PhotoViewer {
     });
 
     $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
+  }
+
+  addCustomButtonEvents() {
+    for (const btnKey in this.options.customButtons) {
+      this.$photoviewer.find(CLASS_NS + '-button-' + btnKey)
+        .off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
+          this.options.customButtons[btnKey].click(this, e);
+        });
+    }
   }
 
   _triggerHook(e, data) {
