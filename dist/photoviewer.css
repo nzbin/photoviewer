@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|     
  *
- * photoviewer - v3.4.0
+ * photoviewer - v3.5.0
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -60,7 +60,7 @@
 
 .photoviewer-button {
   display: inline-block;
-  width: 40px;
+  min-width: 40px;
   height: 40px;
   box-sizing: border-box;
   margin: 0;
@@ -358,6 +358,13 @@
   height: 100% !important;
 }
 
+:-ms-fullscreen {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 :fullscreen {
   top: 0 !important;
   left: 0 !important;
@@ -369,6 +376,10 @@
   display: none;
 }
 
+:-ms-fullscreen .photoviewer-header, :-ms-fullscreen .photoviewer-footer, :-ms-fullscreen .photoviewer-resizable-handle {
+  display: none;
+}
+
 :fullscreen .photoviewer-header,
 :fullscreen .photoviewer-footer,
 :fullscreen .photoviewer-resizable-handle {
@@ -376,6 +387,15 @@
 }
 
 :-webkit-full-screen .photoviewer-stage {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-width: 0;
+  background-color: #000;
+}
+
+:-ms-fullscreen .photoviewer-stage {
   top: 0;
   right: 0;
   bottom: 0;
