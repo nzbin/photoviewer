@@ -31,8 +31,8 @@ declare namespace PhotoViewer {
     ratioThreshold?: number;
     minRatio?: number;
     maxRatio?: number;
-    headToolbar?: Array<toolbarOption> | Array<string>;
-    footToolbar?: Array<toolbarOption> | Array<string>;
+    headerToolbar?: Array<toolbarOption> | Array<string>;
+    footerToolbar?: Array<toolbarOption> | Array<string>;
     icons?: {
       minimize?: string;
       maximize?: string;
