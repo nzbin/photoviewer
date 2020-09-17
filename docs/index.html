@@ -180,6 +180,7 @@ $('[data-gallery=manual]').click(function (e) {
     </h3>
     <p>The images array index. If
       <code>0</code>, it will show first image when photoviewer opened.</p>
+
     <h3>
       <code>draggable</code>
       <small>
@@ -187,6 +188,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>If ture, it allow modal dragging.</p>
+
     <h3>
       <code>resizable</code>
       <small>
@@ -194,6 +196,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>If ture, it allow modal resizing.</p>
+
     <h3>
       <code>movable</code>
       <small>
@@ -201,6 +204,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>If ture, it allow image moving.</p>
+
     <h3>
       <code>keyboard</code>
       <small>
@@ -238,6 +242,7 @@ $('[data-gallery=manual]').click(function (e) {
         <kbd>Q</kbd> quit the photoviewer
       </li>
     </ul>
+
     <h3>
       <code>title</code>
       <small>
@@ -245,6 +250,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>If ture, it will show image title on header.</p>
+
     <h3>
       <code>fixedModalSize</code>
       <small>
@@ -255,6 +261,7 @@ $('[data-gallery=manual]').click(function (e) {
       will fit to image
       size.
       If true, the modal initialized size will be set with modalWidth and modalHeight.</p>
+
     <h3>
       <code>modalWidth</code>
       <small>
@@ -262,6 +269,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>It's the modal min width or modal initialized width when opened.</p>
+
     <h3>
       <code>modalHeight</code>
       <small>
@@ -269,6 +277,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>It's the modal min height or modal initialized height when opened.</p>
+
     <h3>
       <code>gapThreshold</code>
       <small>
@@ -279,6 +288,7 @@ $('[data-gallery=manual]').click(function (e) {
       min value is
       <code>0</code>, means the modal's width or height should be equal to browser window if it's
       too large.</p>
+
     <h3>
       <code>ratioThreshold</code>
       <small>
@@ -286,6 +296,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>Image zoom ratio threshold.</p>
+
     <h3>
       <code>minRatio</code>
       <small>
@@ -294,6 +305,7 @@ $('[data-gallery=manual]').click(function (e) {
     </h3>
     <p>The min ratio to show image.
       <code>0.1</code> means the image can be zoomed 0.1x from original size.</p>
+
     <h3>
       <code>maxRatio</code>
       <small>
@@ -304,19 +316,21 @@ $('[data-gallery=manual]').click(function (e) {
       <code>16</code> means the image can be zoomed 16x from original size.</p>
 
     <h3>
-      <code>headToolbar</code>
+      <code>headerToolbar</code>
       <small>
         <code>array ['maximize','close']</code>
       </small>
     </h3>
     <p>The buttons display in header toolbar.</p>
+
     <h3>
-      <code>footToolbar</code>
+      <code>footerToolbar</code>
       <small>
         <code>array ['zoomIn','zoomOut','prev','fullscreen','next','actualSize','rotateRight']</code>
       </small>
     </h3>
     <p>The buttons display in footer toolbar.</p>
+
     <h3>
       <code>fixedContent</code>
       <small>
@@ -336,6 +350,7 @@ $('[data-gallery=manual]').click(function (e) {
       modal
       size will be set maximized when initialized just like other lightbox.
     </p>
+
     <h3>
       <code>initAnimation</code>
       <small>
@@ -343,6 +358,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>If false, it will not have animation at plugin's initialized.</p>
+
     <h3>
       <code>fixedModalPos</code>
       <small>
@@ -350,6 +366,7 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>If true, the modal position will be fixed when change images.</p>
+
     <h3>
       <code>zIndex</code>
       <small>
@@ -357,13 +374,23 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>The modal style of z-index, it is useful with multiple instances.</p>
+
     <h3>
       <code>dragHandle</code>
       <small>
-        <code>string modal</code>
+        <code>string | boolean false</code>
       </small>
     </h3>
-    <p>The handle of draggable.</p>
+    <p>The handle of draggable. Default <code>false</code> which whole modal can be dragging.</p>
+
+    <h3>
+      <code>multiInstances</code>
+      <small>
+        <code>boolean true</code>
+      </small>
+    </h3>
+    <p>If false, it can only open single photoviewer.</p>
+
     <h3>
       <code>icons</code>
       <small>
@@ -371,6 +398,20 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>You can customize the icons class in following key.</p>
+    <ul>
+      <li>minimize: <code>SVG codes</code></li>
+      <li>maximize: <code>SVG codes</code></li>
+      <li>close: <code>SVG codes</code></li>
+      <li>zoomIn: <code>SVG codes</code></li>
+      <li>zoomOut: <code>SVG codes</code></li>
+      <li>prev: <code>SVG codes</code></li>
+      <li>next: <code>SVG codes</code></li>
+      <li>fullscreen: <code>SVG codes</code></li>
+      <li>actualSize: <code>SVG codes</code></li>
+      <li>rotateLeft: <code>SVG codes</code></li>
+      <li>rotateRight: <code>SVG codes</code></li>
+    </ul>
+
     <h3>
       <code>i18n</code>
       <small>
@@ -378,20 +419,101 @@ $('[data-gallery=manual]').click(function (e) {
       </small>
     </h3>
     <p>You can customize the buttons title in following key.</p>
+    <ul>
+      <li>minimize: <code>minimize</code></li>
+      <li>maximize: <code>maximize</code></li>
+      <li>close: <code>close</code></li>
+      <li>zoomIn: <code>zoom-in</code></li>
+      <li>zoomOut: <code>zoom-out</code></li>
+      <li>prev: <code>prev</code></li>
+      <li>next: <code>next</code></li>
+      <li>fullscreen: <code>fullscreen</code></li>
+      <li>actualSize: <code>actualSize</code></li>
+      <li>rotateLeft: <code>rotate-left</code></li>
+      <li>rotateRight: <code>rotate-right</code></li>
+    </ul>
+
+    <h3>
+      <code>callbacks</code>
+      <small>
+        <code>object</code>
+      </small>
+    </h3>
+    <p>
+      You can define callbacks in <code>callbacks</code> option.
+    </p>
+    <pre class="prettyprint">
+new PhotoViewer(items, {
+  callbacks: {
+    beforeOpen: function(context){
+      // Will fire before modal is opened
+    },
+    opened: function(context){
+      // Will fire after modal is opened
+    },
+    beforeClose: function(context){
+      // Will fire before modal is closed
+    },
+    closed: function(context){
+      // Will fire after modal is closed
+    },
+    beforeChange: function(context, index){
+      // Will fire before image is changed
+      // The argument index is the current image index of image group
+    },
+    changed: function(context, index){
+      // Will fire after image is changed
+      // The argument index is the next image index of image group
+    }
+  }
+});
+</pre>
+
     <h3>
       <code>progressiveLoading</code>
       <small>
-        <code>true</code>
+        <code>boolean true</code>
       </small>
     </h3>
     <p>If true, the image will be rendered progressively.</p>
+
     <h3>
       <code>appendTo</code>
       <small>
-        <code>'body'</code>
+        <code>string 'body'</code>
       </small>
     </h3>
     <p>The DOM element to which viewer will be added.</p>
+
+    <h3>
+      <code>customButtons</code>
+      <small>
+        <code>object {}</code>
+      </small>
+    </h3>
+    <pre class="prettyprint">
+new PhotoViewer(items, {
+  footerToolbar: [
+    ...
+    'myCustomButton'
+  ],
+  customButtons: {
+    myCustomButton: {
+      text: 'custom!',
+      title: 'custom!',
+      click: function (e) {
+        alert('clicked the custom button!');
+      }
+    }
+  }
+});
+</pre>
+    <p>Each <code>customButton</code> entry accepts the following properties:</p>
+    <ul>
+      <li><code>text</code> - the text to be display on the button itself.</li>
+      <li><code>title</code> - the title to be display when hover the button.</li>
+      <li><code>click</code> - a callback function that is called when the button is clicked.</li>
+    </ul>
 
 
     <footer class="footer text-center">
