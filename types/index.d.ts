@@ -16,6 +16,12 @@ declare namespace PhotoViewer {
     title?: string;
   }
 
+  export interface customButton {
+    text: string;
+    title?: string;
+    click?: (context?: any, e?: MouseEvent) => void
+  }
+
   export interface Options {
     draggable?: boolean;
     resizable?: boolean;
@@ -75,7 +81,9 @@ declare namespace PhotoViewer {
     index?: number;
     progressiveLoading?: boolean;
     appendTo?: string;
-    customButtons?: any;
+    customButtons?: {
+      [k: string]: customButton
+    };
   }
 }
 
