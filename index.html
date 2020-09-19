@@ -265,7 +265,7 @@ $('[data-gallery=manual]').click(function (e) {
     <h3>
       <code>modalWidth</code>
       <small>
-        <code>320</code>
+        <code>number 320</code>
       </small>
     </h3>
     <p>It's the modal min width or modal initialized width when opened.</p>
@@ -273,7 +273,7 @@ $('[data-gallery=manual]').click(function (e) {
     <h3>
       <code>modalHeight</code>
       <small>
-        <code>320</code>
+        <code>number 320</code>
       </small>
     </h3>
     <p>It's the modal min height or modal initialized height when opened.</p>
@@ -501,7 +501,7 @@ new PhotoViewer(items, {
     myCustomButton: {
       text: 'custom!',
       title: 'custom!',
-      click: function (e) {
+      click: function (context, e) {
         alert('clicked the custom button!');
       }
     }
