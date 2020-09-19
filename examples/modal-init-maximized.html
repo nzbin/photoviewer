@@ -112,8 +112,9 @@
       var items = [],
         options = {
           index: $(this).index(),
+          resizable: false,
+          initMaximized: true,
           headerToolbar: ['close'],
-          initMaximized: true
         };
 
       $('[data-gallery=photoviewer]').each(function () {

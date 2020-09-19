@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.5.1
+ * photoviewer - v3.5.2
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -1309,7 +1309,7 @@ function throttle(fn, delay) {
  * @param {Function} error - The callback of error
  */
 
-function preloadImg(src, success, error) {
+function preloadImage(src, success, error) {
   var img = new Image();
 
   img.onload = function () {
@@ -1893,7 +1893,7 @@ var PhotoViewer = /*#__PURE__*/function () {
 
       var imgSrc = items[this.groupIndex]['src'];
       this.open();
-      this.loadImg(imgSrc); // Draggable & Movable & Resizable
+      this.loadImage(imgSrc); // Draggable & Movable & Resizable
 
       if (opts.draggable) {
         this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
@@ -1913,15 +1913,17 @@ var PhotoViewer = /*#__PURE__*/function () {
       var _this = this;
 
       var btns = ['minimize', 'maximize', 'close', 'zoomIn', 'zoomOut', 'prev', 'next', 'fullscreen', 'actualSize', 'rotateLeft', 'rotateRight'];
-      var btnsStr = '';
+      var btnsHTML = '';
       $.each(toolbar, function (index, item) {
+        var btnClass = "".concat(NS, "-button ").concat(NS, "-button-").concat(item);
+
         if (btns.indexOf(item) >= 0) {
-          btnsStr += "<button class=\"".concat(NS, "-button ").concat(NS, "-button-").concat(item, "\" title=\"").concat(_this.options.i18n[item], "\">\n            ").concat(_this.options.icons[item], "\n          </button>");
+          btnsHTML += "<button class=\"".concat(btnClass, "\" title=\"").concat(_this.options.i18n[item], "\">\n          ").concat(_this.options.icons[item], "\n          </button>");
         } else if (_this.options.customButtons[item]) {
-          btnsStr += "<button class=\"".concat(NS, "-button ").concat(NS, "-button-").concat(item, "\" title=\"").concat(_this.options.customButtons[item].title || '', "\">\n          ").concat(_this.options.customButtons[item].text, "\n          </button>");
+          btnsHTML += "<button class=\"".concat(btnClass, "\" title=\"").concat(_this.options.customButtons[item].title || '', "\">\n          ").concat(_this.options.customButtons[item].text, "\n          </button>");
         }
       });
-      return btnsStr;
+      return btnsHTML;
     }
   }, {
     key: "_createTitle",
@@ -1929,17 +1931,18 @@ var PhotoViewer = /*#__PURE__*/function () {
       return this.options.title ? "<div class=\"".concat(NS, "-title\"></div>") : '';
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "_createTemplate",
+    value: function _createTemplate() {
       // PhotoViewer base HTML
-      var photoviewerHTML = "<div class=\"".concat(NS, "-modal\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n              ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n              ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
+      var photoviewerHTML = "<div class=\"".concat(NS, "-modal\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
       return photoviewerHTML;
     }
   }, {
     key: "build",
     value: function build() {
       // Create PhotoViewer HTML string
-      var photoviewerHTML = this.render(); // Make PhotoViewer HTML string to jQuery element
+      var photoviewerHTML = this._createTemplate(); // Make PhotoViewer HTML string to jQuery element
+
 
       var $photoviewer = $(photoviewerHTML); // Get all PhotoViewer element
 
@@ -1968,11 +1971,20 @@ var PhotoViewer = /*#__PURE__*/function () {
         this.dragHandle = this.$photoviewer;
       } else {
         this.dragHandle = this.$photoviewer.find(this.options.dragHandle);
-      }
+      } // Add PhotoViewer to DOM
+
+
+      $(this.options.appendTo).eq(0).append(this.$photoviewer);
+
+      this._addEvents();
+
+      this._addCustomButtonEvents();
     }
   }, {
     key: "open",
     value: function open() {
+      this._triggerHook('beforeOpen', this);
+
       if (!this.options.multiInstances) {
         $(CLASS_NS + '-modal').eq(0).remove();
       } // Fixed modal position bug
@@ -1995,13 +2007,6 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
 
       this.build();
-
-      this._triggerHook('beforeOpen', this); // Add PhotoViewer to DOM
-
-
-      $(this.options.appendTo).eq(0).append(this.$photoviewer);
-      this.addEvents();
-      this.addCustomButtonEvents();
       this.setModalPos(this.$photoviewer);
 
       this._triggerHook('opened', this);
@@ -2164,7 +2169,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         h: this.$stage.height()
       }, this.$stage, this.isRotated); // Just execute before image loaded
 
-      if (!this.imgLoaded) {
+      if (!this.imageLoaded) {
         // Loader end
         this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Remove class after image loaded
 
@@ -2175,19 +2180,19 @@ var PhotoViewer = /*#__PURE__*/function () {
           this.$image.fadeIn();
         }
 
-        this.imgLoaded = true;
+        this.imageLoaded = true;
       }
     }
   }, {
-    key: "loadImg",
-    value: function loadImg(imgSrc, fn, err) {
+    key: "loadImage",
+    value: function loadImage(imgSrc, fn, err) {
       var _this3 = this;
 
       // Reset image
       this.$image.removeAttr('style').attr('src', '');
       this.isRotated = false;
       this.rotateAngle = 0;
-      this.imgLoaded = false; // Loader start
+      this.imageLoaded = false; // Loader start
 
       this.$photoviewer.append("<div class=\"".concat(NS, "-loader\"></div>")); // Add class before image loaded
 
@@ -2199,7 +2204,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
 
       this.$image.attr('src', imgSrc);
-      preloadImg(imgSrc, function (img) {
+      preloadImage(imgSrc, function (img) {
         // Store HTMLImageElement
         _this3.img = img; // Store original data
 
@@ -2229,12 +2234,12 @@ var PhotoViewer = /*#__PURE__*/function () {
       });
 
       if (this.options.title) {
-        this.setImgTitle(imgSrc);
+        this.setImageTitle(imgSrc);
       }
     }
   }, {
-    key: "setImgTitle",
-    value: function setImgTitle(url) {
+    key: "setImageTitle",
+    value: function setImageTitle(url) {
       var title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
       this.$title.html(title);
     }
@@ -2260,7 +2265,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
 
       this.groupIndex = index;
-      this.loadImg(this.groupData[index].src, function () {
+      this.loadImage(this.groupData[index].src, function () {
         _this4._triggerHook('changed', [_this4, index]);
       }, function () {
         _this4._triggerHook('changed', [_this4, index]);
@@ -2470,8 +2475,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       requestFullscreen(this.$photoviewer[0]);
     }
   }, {
-    key: "keydown",
-    value: function keydown(e) {
+    key: "_keydown",
+    value: function _keydown(e) {
       if (!this.options.keyboard) {
         return false;
       }
@@ -2557,8 +2562,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "addEvents",
-    value: function addEvents() {
+    key: "_addEvents",
+    value: function _addEvents() {
       var _this6 = this;
 
       this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
@@ -2604,18 +2609,18 @@ var PhotoViewer = /*#__PURE__*/function () {
         _this6.maximize();
       });
       $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
-        _this6.keydown(e);
+        _this6._keydown(e);
       });
       $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
     }
   }, {
-    key: "addCustomButtonEvents",
-    value: function addCustomButtonEvents() {
+    key: "_addCustomButtonEvents",
+    value: function _addCustomButtonEvents() {
       var _this7 = this;
 
       var _loop = function _loop(btnKey) {
         _this7.$photoviewer.find(CLASS_NS + '-button-' + btnKey).off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-          _this7.options.customButtons[btnKey].click(_this7, e);
+          _this7.options.customButtons[btnKey].click.apply(_this7, [_this7, e]);
         });
       };
 
