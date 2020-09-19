@@ -15,7 +15,7 @@ import {
 
 import {
   throttle,
-  preloadImg,
+  preloadImage,
   requestFullscreen,
   getImageNameFromUrl,
   hasScrollbar,
@@ -85,7 +85,7 @@ class PhotoViewer {
 
     this.open();
 
-    this.loadImg(imgSrc);
+    this.loadImage(imgSrc);
 
     // Draggable & Movable & Resizable
     if (opts.draggable) {
@@ -110,37 +110,39 @@ class PhotoViewer {
       'minimize', 'maximize', 'close',
       'zoomIn', 'zoomOut', 'prev', 'next', 'fullscreen', 'actualSize', 'rotateLeft', 'rotateRight'
     ];
-    let btnsStr = '';
+    let btnsHTML = '';
 
     $.each(toolbar, (index, item) => {
+      const btnClass = `${NS}-button ${NS}-button-${item}`;
+
       if (btns.indexOf(item) >= 0) {
-        btnsStr +=
-          `<button class="${NS}-button ${NS}-button-${item}" title="${this.options.i18n[item]}">
-            ${this.options.icons[item]}
+        btnsHTML +=
+          `<button class="${btnClass}" title="${this.options.i18n[item]}">
+          ${this.options.icons[item]}
           </button>`;
       } else if (this.options.customButtons[item]) {
-        btnsStr +=
-          `<button class="${NS}-button ${NS}-button-${item}" title="${this.options.customButtons[item].title || ''}">
+        btnsHTML +=
+          `<button class="${btnClass}" title="${this.options.customButtons[item].title || ''}">
           ${this.options.customButtons[item].text}
           </button>`;
       }
     });
 
-    return btnsStr;
+    return btnsHTML;
   }
 
   _createTitle() {
     return this.options.title ? `<div class="${NS}-title"></div>` : '';
   }
 
-  render() {
+  _createTemplate() {
     // PhotoViewer base HTML
     const photoviewerHTML =
       `<div class="${NS}-modal">
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-header">
-              ${this._createBtns(this.options.headerToolbar)}
+            ${this._createBtns(this.options.headerToolbar)}
             </div>
             ${this._createTitle()}
           </div>
@@ -149,7 +151,7 @@ class PhotoViewer {
           </div>
           <div class="${NS}-footer">
             <div class="${NS}-toolbar ${NS}-toolbar-footer">
-              ${this._createBtns(this.options.footerToolbar)}
+            ${this._createBtns(this.options.footerToolbar)}
             </div>
           </div>
         </div>
@@ -160,7 +162,7 @@ class PhotoViewer {
 
   build() {
     // Create PhotoViewer HTML string
-    const photoviewerHTML = this.render();
+    const photoviewerHTML = this._createTemplate();
 
     // Make PhotoViewer HTML string to jQuery element
     const $photoviewer = $(photoviewerHTML);
@@ -198,9 +200,17 @@ class PhotoViewer {
     } else {
       this.dragHandle = this.$photoviewer.find(this.options.dragHandle);
     }
+
+    // Add PhotoViewer to DOM
+    $(this.options.appendTo).eq(0).append(this.$photoviewer);
+
+    this._addEvents();
+    this._addCustomButtonEvents();
   }
 
   open() {
+    this._triggerHook('beforeOpen', this);
+
     if (!this.options.multiInstances) {
       $(CLASS_NS + '-modal').eq(0).remove();
     }
@@ -218,14 +228,6 @@ class PhotoViewer {
     }
 
     this.build();
-
-    this._triggerHook('beforeOpen', this);
-
-    // Add PhotoViewer to DOM
-    $(this.options.appendTo).eq(0).append(this.$photoviewer);
-
-    this.addEvents();
-    this.addCustomButtonEvents();
 
     this.setModalPos(this.$photoviewer);
 
@@ -415,7 +417,7 @@ class PhotoViewer {
     );
 
     // Just execute before image loaded
-    if (!this.imgLoaded) {
+    if (!this.imageLoaded) {
       // Loader end
       this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
@@ -428,17 +430,17 @@ class PhotoViewer {
         this.$image.fadeIn();
       }
 
-      this.imgLoaded = true;
+      this.imageLoaded = true;
     }
   }
 
-  loadImg(imgSrc, fn, err) {
+  loadImage(imgSrc, fn, err) {
     // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
     this.rotateAngle = 0;
 
-    this.imgLoaded = false;
+    this.imageLoaded = false;
 
     // Loader start
     this.$photoviewer.append(`<div class="${NS}-loader"></div>`);
@@ -453,7 +455,7 @@ class PhotoViewer {
 
     this.$image.attr('src', imgSrc);
 
-    preloadImg(
+    preloadImage(
       imgSrc,
       img => {
         // Store HTMLImageElement
@@ -488,11 +490,11 @@ class PhotoViewer {
     );
 
     if (this.options.title) {
-      this.setImgTitle(imgSrc);
+      this.setImageTitle(imgSrc);
     }
   }
 
-  setImgTitle(url) {
+  setImageTitle(url) {
     const title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
 
     this.$title.html(title);
@@ -517,7 +519,7 @@ class PhotoViewer {
 
     this.groupIndex = index;
 
-    this.loadImg(
+    this.loadImage(
       this.groupData[index].src,
       () => {
         this._triggerHook('changed', [this, index]);
@@ -749,7 +751,7 @@ class PhotoViewer {
     requestFullscreen(this.$photoviewer[0]);
   }
 
-  keydown(e) {
+  _keydown(e) {
     if (!this.options.keyboard) {
       return false;
     }
@@ -829,7 +831,7 @@ class PhotoViewer {
     }
   }
 
-  addEvents() {
+  _addEvents() {
     this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
       this.close();
     });
@@ -887,17 +889,17 @@ class PhotoViewer {
     });
 
     $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
-      this.keydown(e);
+      this._keydown(e);
     });
 
     $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
   }
 
-  addCustomButtonEvents() {
+  _addCustomButtonEvents() {
     for (const btnKey in this.options.customButtons) {
       this.$photoviewer.find(CLASS_NS + '-button-' + btnKey)
         .off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
-          this.options.customButtons[btnKey].click(this, e);
+          this.options.customButtons[btnKey].click.apply(this, [this, e]);
         });
     }
   }

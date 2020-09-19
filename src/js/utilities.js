@@ -27,7 +27,7 @@ export function throttle(fn, delay) {
  * @param {Function} success - The callback of success
  * @param {Function} error - The callback of error
  */
-export function preloadImg(src, success, error) {
+export function preloadImage(src, success, error) {
   const img = new Image();
 
   img.onload = function () {
