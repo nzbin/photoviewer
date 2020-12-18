@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.5.3
+ * photoviewer - v3.5.4
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -699,17 +699,24 @@ function closest(selector, context) {
   return D(nodes);
 }
 
+function isIE() {
+  var ua = window.navigator.userAgent;
+  var msie = ua.indexOf('MSIE ');
+  return msie > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
+}
+
 function subtract(el, dimen) {
-  var offset = el.offset(),
-    offsetMap = {
-      width: ['padding-left', 'padding-right', 'border-left-width', 'border-right-width'],
-      height: ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width']
-    };
-  return offset[dimen]
-    - parseFloat(el.css(offsetMap[dimen][0]))
-    - parseFloat(el.css(offsetMap[dimen][1]))
-    - parseFloat(el.css(offsetMap[dimen][2]))
-    - parseFloat(el.css(offsetMap[dimen][3]));
+  var offsetMap = {
+    width: ['padding-left', 'padding-right', 'border-left-width', 'border-right-width'],
+    height: ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width']
+  };
+  return el.css('box-sizing') === 'border-box' && !isIE()
+    ? parseFloat(el.css(dimen))
+      - parseFloat(el.css(offsetMap[dimen][0]))
+      - parseFloat(el.css(offsetMap[dimen][1]))
+      - parseFloat(el.css(offsetMap[dimen][2]))
+      - parseFloat(el.css(offsetMap[dimen][3]))
+    : parseFloat(el.css(dimen));
 }
 
 function calc(dimension, value) {
