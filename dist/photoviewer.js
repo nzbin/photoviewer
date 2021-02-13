@@ -1376,7 +1376,8 @@
 
   function getImageNameFromUrl(url) {
     var reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi;
-    var txt = url.replace(reg, '$1');
+    var rep = url.replace(reg, '$1');
+    var txt = decodeURI(rep);
     return txt;
   }
   /**
