@@ -77,7 +77,8 @@ export function exitFullscreen() {
  */
 export function getImageNameFromUrl(url) {
   const reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi;
-  const txt = url.replace(reg, '$1');
+  const rep = url.replace(reg, '$1');
+  const txt = decodeURI(rep);
   return txt;
 }
 
