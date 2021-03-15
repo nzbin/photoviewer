@@ -29,8 +29,10 @@ export default {
       // Must be removed
       // e.preventDefault();
 
+      modal.get(0).focus();
+
       // Get clicked button
-      let elemCancel = $(e.target).closest(dragCancel);
+      const elemCancel = $(e.target).closest(dragCancel);
       // Stop modal moving when click buttons
       if (elemCancel.length) {
         return true;

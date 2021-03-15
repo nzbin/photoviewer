@@ -138,7 +138,7 @@ class PhotoViewer {
   _createTemplate() {
     // PhotoViewer base HTML
     const photoviewerHTML =
-      `<div class="${NS}-modal">
+      `<div class="${NS}-modal" tabindex="0">
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-header">
@@ -231,6 +231,8 @@ class PhotoViewer {
 
     this.setModalPos(this.$photoviewer);
 
+    this.$photoviewer.get(0).focus();
+
     this._triggerHook('opened', this);
   }
 
@@ -247,19 +249,18 @@ class PhotoViewer {
 
     const zeroModal = !$(CLASS_NS + '-modal').length;
 
-    // Fixed modal position bug
-    if (zeroModal && this.options.fixedContent) {
-      $('html').css({ overflow: '', 'padding-right': '' });
-    }
+    if (zeroModal) {
+      // Fixed modal position bug
+      if (this.options.fixedContent) {
+        $('html').css({ overflow: '', 'padding-right': '' });
+      }
 
-    // Reset zIndex after close
-    if (zeroModal && this.options.multiInstances) {
-      PUBLIC_VARS['zIndex'] = this.options.zIndex;
-    }
+      // Reset zIndex after close
+      if (this.options.multiInstances) {
+        PUBLIC_VARS['zIndex'] = this.options.zIndex;
+      }
 
-    // Off events
-    if (!$(CLASS_NS + '-modal').length) {
-      $D.off(KEYDOWN_EVENT + EVENT_NS);
+      // Off resize event
       $W.off(RESIZE_EVENT + EVENT_NS);
     }
 
@@ -706,6 +707,8 @@ class PhotoViewer {
   }
 
   maximize() {
+    this.$photoviewer.get(0).focus();
+
     if (!this.isMaximized) {
       // Store modal data before maximize
       this.modalData = {
@@ -748,6 +751,7 @@ class PhotoViewer {
   }
 
   fullscreen() {
+    this.$photoviewer.get(0).focus();
     requestFullscreen(this.$photoviewer[0]);
   }
 
@@ -888,7 +892,7 @@ class PhotoViewer {
       this.maximize();
     });
 
-    $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
+    this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
       this._keydown(e);
     });
 
