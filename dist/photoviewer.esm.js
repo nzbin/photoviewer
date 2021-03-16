@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.5.4
+ * photoviewer - v3.5.5
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -40,7 +40,7 @@ var D = function (selector, context) {
   return new D.fn.init(selector, context);
 };
 
-var document = window.document,
+var document$1 = window.document,
   emptyArray = [],
   concat = emptyArray.concat,
   filter = emptyArray.filter,
@@ -63,25 +63,25 @@ var document = window.document,
   // special attributes that should be get/set via method calls
   methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
 
-  table = document.createElement('table'),
-  tableRow = document.createElement('tr'),
+  table = document$1.createElement('table'),
+  tableRow = document$1.createElement('tr'),
   containers = {
-    'tr': document.createElement('tbody'),
+    'tr': document$1.createElement('tbody'),
     'tbody': table,
     'thead': table,
     'tfoot': table,
     'td': tableRow,
     'th': tableRow,
-    '*': document.createElement('div')
+    '*': document$1.createElement('div')
   },
   simpleSelectorRE = /^[\w-]*$/,
   class2type = {},
   toString = class2type.toString,
-  tempParent = document.createElement('div'),
+  tempParent = document$1.createElement('div'),
   isArray = Array.isArray || function (arg) {
     return Object.prototype.toString.call(arg) === '[object Array]';
   },
-  contains = document.documentElement.contains
+  contains = document$1.documentElement.contains
     ? function (parent, node) {
       return parent !== node && parent.contains(node);
     }
@@ -133,7 +133,7 @@ function compact(array) {
   });
 }
 
-function dasherize(str) {
+function dasherize$1(str) {
   return str.replace(/::/g, '/')
     .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
     .replace(/([a-z\d])([A-Z])/g, '$1_$2')
@@ -142,7 +142,7 @@ function dasherize(str) {
 }
 
 function maybeAddPx(name, value) {
-  return (typeof value == 'number' && !cssNumber[dasherize(name)]) ? value + 'px' : value;
+  return (typeof value == 'number' && !cssNumber[dasherize$1(name)]) ? value + 'px' : value;
 }
 
 function camelize(str) {
@@ -159,8 +159,8 @@ function classRE(name) {
 function defaultDisplay(nodeName) {
   var element, display;
   if (!elementDisplay[nodeName]) {
-    element = document.createElement(nodeName);
-    document.body.appendChild(element);
+    element = document$1.createElement(nodeName);
+    document$1.body.appendChild(element);
     display = getComputedStyle(element, '').getPropertyValue('display');
     element.parentNode.removeChild(element);
     display == 'none' && (display = 'block');
@@ -231,12 +231,12 @@ D.fn = D.prototype = {
       }
       // If it's a CSS selector, use it to select nodes.
       else {
-        dom = D.qsa(document, selector);
+        dom = D.qsa(document$1, selector);
       }
     }
     // If a function is given, call it when the DOM is ready
     else if (isFunction(selector)) {
-      return D(document).ready(selector);
+      return D(document$1).ready(selector);
     }
     // If a D collection is given, just return it
     else if (isD(selector)) {
@@ -257,7 +257,7 @@ D.fn = D.prototype = {
     }
     // And last but no least, if it's a CSS selector, use it to select nodes.
     else {
-      dom = D.qsa(document, selector);
+      dom = D.qsa(document$1, selector);
     }
     // create a new D collection from the nodes found
     return D.makeArray(dom, selector, this);
@@ -411,7 +411,7 @@ D.extend({
     var dom, nodes, container;
 
     // A special case optimization for a single tag
-    if (singleTagRE.test(html)) dom = D(document.createElement(RegExp.$1));
+    if (singleTagRE.test(html)) dom = D(document$1.createElement(RegExp.$1));
 
     if (!dom) {
       if (html.replace) html = html.replace(tagExpanderRE, '<$1></$2>');
@@ -509,17 +509,17 @@ function css(property, value) {
   if (type(property) == 'string') {
     if (!value && value !== 0) {
       this.each(function () {
-        this.style.removeProperty(dasherize(property));
+        this.style.removeProperty(dasherize$1(property));
       });
     } else {
-      css = dasherize(property) + ':' + maybeAddPx(property, value);
+      css = dasherize$1(property) + ':' + maybeAddPx(property, value);
     }
   } else {
     for (var key in property) {
       if (!property[key] && property[key] !== 0) {
-        this.each(function () { this.style.removeProperty(dasherize(key)); });
+        this.each(function () { this.style.removeProperty(dasherize$1(key)); });
       } else {
-        css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';';
+        css += dasherize$1(key) + ':' + maybeAddPx(key, property[key]) + ';';
       }
     }
   }
@@ -576,7 +576,7 @@ function offset(coordinates) {
     $this.css(props);
   });
   if (!this.length) return null;
-  if (document.documentElement !== this[0] && !contains(document.documentElement, this[0]))
+  if (document$1.documentElement !== this[0] && !contains(document$1.documentElement, this[0]))
     return { top: 0, left: 0 };
   var obj = this[0].getBoundingClientRect();
   return {
@@ -642,7 +642,7 @@ function scrollLeft(value) {
 
 function offsetParent() {
   return this.map(function () {
-    var parent = this.offsetParent || document.body;
+    var parent = this.offsetParent || document$1.body;
     while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css('position') == 'static')
       parent = parent.offsetParent;
     return parent;
@@ -772,7 +772,7 @@ var domMani = function (elem, args, fn, inside) {
 
   return elem.each(function (_, target) {
     parent = inside ? target : target.parentNode;
-    var parentInDocument = contains(document.documentElement, parent);
+    var parentInDocument = contains(document$1.documentElement, parent);
 
     nodes.forEach(function (node) {
       if (copyByClone) node = node.cloneNode(true);
@@ -794,7 +794,7 @@ var domMani = function (elem, args, fn, inside) {
 };
 
 // Export
-function remove() {
+function remove$1() {
   return this.each(function () {
     if (this.parentNode != null)
       this.parentNode.removeChild(this);
@@ -903,7 +903,7 @@ function realEvent(type) {
 function add(element, events, fn, data, selector, delegator, capture) {
   var id = zid(element), set = (handlers[id] || (handlers[id] = []));
   events.split(/\s/).forEach(function (event) {
-    if (event == 'ready') return D(document).ready(fn);
+    if (event == 'ready') return D(document$1).ready(fn);
     var handler = parse(event);
     handler.fn = fn;
     handler.sel = selector;
@@ -930,7 +930,7 @@ function add(element, events, fn, data, selector, delegator, capture) {
   });
 }
 
-function remove$1(element, events, fn, selector, capture) {
+function remove(element, events, fn, selector, capture) {
   var id = zid(element);
   (events || '').split(/\s/).forEach(function (event) {
     findHandlers(element, event, fn, selector).forEach(function (handler) {
@@ -967,7 +967,7 @@ var on = function (event, selector, data, callback, one) {
 
   return $this.each(function (_, element) {
     if (one) autoRemove = function (e) {
-      remove$1(element, e.type, callback);
+      remove(element, e.type, callback);
       return callback.apply(this, arguments);
     };
 
@@ -998,14 +998,14 @@ var off = function (event, selector, callback) {
   if (callback === false) callback = returnFalse;
 
   return $this.each(function () {
-    remove$1(this, event, callback, selector);
+    remove(this, event, callback, selector);
   });
 };
 
 var prefix = '',
   eventPrefix,
   vendors = { Webkit: 'webkit', Moz: '', O: 'o' },
-  testEl = document.createElement('div'),
+  testEl = document$1.createElement('div'),
   testTransitionProperty = testEl.style.transitionProperty;
 
 if (testEl.style.transform === undefined) D.each(vendors, function (vendor, event) {
@@ -1037,7 +1037,7 @@ var supportedTransforms = /^((translate|rotate|scale)(X|Y|Z|3d)?|matrix(3d)?|per
   animationName, animationDuration, animationTiming, animationDelay,
   cssReset = {};
 
-function dasherize$1(str) { return str.replace(/([A-Z])/g, '-$1').toLowerCase(); }
+function dasherize(str) { return str.replace(/([A-Z])/g, '-$1').toLowerCase(); }
 
 transform = prefix + 'transform';
 cssReset[transitionProperty = prefix + 'transition-property'] =
@@ -1049,7 +1049,7 @@ cssReset[transitionProperty = prefix + 'transition-property'] =
   cssReset[animationDelay = prefix + 'animation-delay'] =
   cssReset[animationTiming = prefix + 'animation-timing-function'] = '';
 
-var anim = function (properties, duration, ease, callback, delay) {
+var anim$1 = function (properties, duration, ease, callback, delay) {
   var key, cssValues = {}, cssProperties, transforms = '',
     that = this, wrappedCallback, endEvent = D.fx.transitionEnd,
     fired = false;
@@ -1070,7 +1070,7 @@ var anim = function (properties, duration, ease, callback, delay) {
     // CSS transitions
     for (key in properties)
       if (supportedTransforms.test(key)) transforms += key + '(' + properties[key] + ') ';
-      else cssValues[key] = properties[key], cssProperties.push(dasherize$1(key));
+      else cssValues[key] = properties[key], cssProperties.push(dasherize(key));
 
     if (transforms) cssValues[transform] = transforms, cssProperties.push(transform);
     if (duration > 0 && typeof properties === 'object') {
@@ -1139,7 +1139,7 @@ var origHide = function () {
   return this.css('display', 'none');
 };
 
-function anim$1(el, speed, opacity, scale, callback) {
+function anim(el, speed, opacity, scale, callback) {
   if (typeof speed == 'function' && !callback) callback = speed, speed = undefined;
   var props = { opacity: opacity };
   if (scale) {
@@ -1150,7 +1150,7 @@ function anim$1(el, speed, opacity, scale, callback) {
 }
 
 function hideHelper(el, speed, scale, callback) {
-  return anim$1(el, speed, 0, scale, function () {
+  return anim(el, speed, 0, scale, function () {
     origHide.call(D(this));
     callback && callback.call(this);
   });
@@ -1161,7 +1161,7 @@ var show = function (speed, callback) {
   origShow.call(this);
   if (speed === undefined) speed = 0;
   else this.css('opacity', 0);
-  return anim$1(this, speed, 1, '1,1', callback);
+  return anim(this, speed, 1, '1,1', callback);
 };
 
 var hide = function (speed, callback) {
@@ -1170,7 +1170,7 @@ var hide = function (speed, callback) {
 };
 
 var fadeTo = function (speed, opacity, callback) {
-  return anim$1(this, speed, opacity, null, callback);
+  return anim(this, speed, opacity, null, callback);
 };
 
 var fadeIn = function (speed, callback) {
@@ -1195,7 +1195,7 @@ var fnMethods = {
   attr: attr,
   removeAttr: removeAttr,
   append: append,
-  remove: remove,
+  remove: remove$1,
   empty: empty,
   html: html,
   width: width,
@@ -1209,7 +1209,7 @@ var fnMethods = {
   off: off,
   show: show,
   hide: hide,
-  anim: anim,
+  anim: anim$1,
   animate: animate,
   fadeTo: fadeTo,
   fadeIn: fadeIn
@@ -1307,7 +1307,7 @@ var DEFAULTS = {
   customButtons: {}
 };
 
-var document$1 = window.document;
+var document = window.document;
 /**
  * Throttle function
  * @param {Function} fn - The function will be triggered
@@ -1364,7 +1364,7 @@ function requestFullscreen(element) {
 }
 /**
  * Get the image name from its url
- * @param {String} url- The image src
+ * @param {String} url - The image src
  * @return {String}
  */
 
@@ -1379,7 +1379,7 @@ function getImageNameFromUrl(url) {
  */
 
 function hasScrollbar() {
-  return document$1.body.scrollHeight > (window.innerHeight || document$1.documentElement.clientHeight);
+  return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
 }
 /**
  * Get the scrollbar width
@@ -1387,11 +1387,11 @@ function hasScrollbar() {
  */
 
 function getScrollbarWidth() {
-  var scrollDiv = document$1.createElement('div');
+  var scrollDiv = document.createElement('div');
   scrollDiv.style.cssText = 'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
-  document$1.body.appendChild(scrollDiv);
+  document.body.appendChild(scrollDiv);
   var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-  document$1.body.removeChild(scrollDiv);
+  document.body.removeChild(scrollDiv);
   return scrollbarWidth;
 }
 /**
@@ -1420,11 +1420,11 @@ function setGrabCursor(imageData, stageData, stage, isRotated) {
  */
 
 function supportTouch() {
-  return !!('ontouchstart' in window || window.DocumentTouch && document$1 instanceof window.DocumentTouch);
+  return !!('ontouchstart' in window || window.DocumentTouch && document instanceof window.DocumentTouch);
 }
 
 var $W = $(window);
-var $D = $(document$1);
+var $D = $(document);
 var CLICK_EVENT = 'click';
 var RESIZE_EVENT = 'resize';
 var KEYDOWN_EVENT = 'keydown';
@@ -1463,7 +1463,8 @@ var draggable = {
     var dragStart = function dragStart(e) {
       e = e || window.event; // Must be removed
       // e.preventDefault();
-      // Get clicked button
+
+      modal.get(0).focus(); // Get clicked button
 
       var elemCancel = $(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
@@ -1958,7 +1959,7 @@ var PhotoViewer = /*#__PURE__*/function () {
     key: "_createTemplate",
     value: function _createTemplate() {
       // PhotoViewer base HTML
-      var photoviewerHTML = "<div class=\"".concat(NS, "-modal\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
+      var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
       return photoviewerHTML;
     }
   }, {
@@ -2032,6 +2033,7 @@ var PhotoViewer = /*#__PURE__*/function () {
 
       this.build();
       this.setModalPos(this.$photoviewer);
+      this.$photoviewer.get(0).focus();
 
       this._triggerHook('opened', this);
     }
@@ -2046,23 +2048,23 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.isMaximized = false;
       this.isRotated = false;
       this.rotateAngle = 0;
-      var zeroModal = !$(CLASS_NS + '-modal').length; // Fixed modal position bug
+      var zeroModal = !$(CLASS_NS + '-modal').length;
 
-      if (zeroModal && this.options.fixedContent) {
-        $('html').css({
-          overflow: '',
-          'padding-right': ''
-        });
-      } // Reset zIndex after close
-
-
-      if (zeroModal && this.options.multiInstances) {
-        PUBLIC_VARS['zIndex'] = this.options.zIndex;
-      } // Off events
+      if (zeroModal) {
+        // Fixed modal position bug
+        if (this.options.fixedContent) {
+          $('html').css({
+            overflow: '',
+            'padding-right': ''
+          });
+        } // Reset zIndex after close
 
 
-      if (!$(CLASS_NS + '-modal').length) {
-        $D.off(KEYDOWN_EVENT + EVENT_NS);
+        if (this.options.multiInstances) {
+          PUBLIC_VARS['zIndex'] = this.options.zIndex;
+        } // Off resize event
+
+
         $W.off(RESIZE_EVENT + EVENT_NS);
       }
 
@@ -2459,6 +2461,8 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "maximize",
     value: function maximize() {
+      this.$photoviewer.get(0).focus();
+
       if (!this.isMaximized) {
         // Store modal data before maximize
         this.modalData = {
@@ -2496,6 +2500,7 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "fullscreen",
     value: function fullscreen() {
+      this.$photoviewer.get(0).focus();
       requestFullscreen(this.$photoviewer[0]);
     }
   }, {
@@ -2632,7 +2637,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this6.maximize();
       });
-      $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
+      this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
         _this6._keydown(e);
       });
       $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
