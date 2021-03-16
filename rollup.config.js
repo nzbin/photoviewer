@@ -41,6 +41,10 @@ export default [
         format: 'es'
       }
     ],
-    plugins: [babel({ exclude: 'node_modules/**' }), resolve(), commonjs()]
+    plugins: [
+      babel({ babelHelpers: 'bundled', exclude: 'node_modules/**' }),
+      resolve(),
+      commonjs()
+    ]
   }
 ];
