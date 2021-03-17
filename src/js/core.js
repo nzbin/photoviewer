@@ -220,7 +220,7 @@ class PhotoViewer {
       $('html').css({ overflow: 'hidden' });
 
       if (hasScrollbar()) {
-        let scrollbarWidth = getScrollbarWidth();
+        const scrollbarWidth = getScrollbarWidth();
         if (scrollbarWidth) {
           $('html').css({ 'padding-right': scrollbarWidth });
         }
@@ -247,9 +247,7 @@ class PhotoViewer {
     this.isRotated = false;
     this.rotateAngle = 0;
 
-    const zeroModal = !$(CLASS_NS + '-modal').length;
-
-    if (zeroModal) {
+    if (!$(CLASS_NS + '-modal').length) {
       // Fixed modal position bug
       if (this.options.fixedContent) {
         $('html').css({ overflow: '', 'padding-right': '' });
