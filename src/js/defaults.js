@@ -129,14 +129,14 @@ export default {
     minimize: 'minimize',
     maximize: 'maximize',
     close: 'close',
-    zoomIn: 'zoom-in(+)',
-    zoomOut: 'zoom-out(-)',
-    prev: 'prev(←)',
-    next: 'next(→)',
+    zoomIn: 'zoom-in (+)',
+    zoomOut: 'zoom-out (-)',
+    prev: 'prev (←)',
+    next: 'next (→)',
     fullscreen: 'fullscreen',
-    actualSize: 'actual-size(Ctrl+Alt+0)',
-    rotateLeft: 'rotate-left(Ctrl+,)',
-    rotateRight: 'rotate-right(Ctrl+.)'
+    actualSize: 'actual-size (Ctrl+Alt+0)',
+    rotateLeft: 'rotate-left (Ctrl+,)',
+    rotateRight: 'rotate-right (Ctrl+.)'
   },
 
   // Enable multiple instances
