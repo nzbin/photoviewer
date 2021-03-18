@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.5.5
+ * photoviewer - v3.5.6
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -1271,14 +1271,14 @@ var DEFAULTS = {
     minimize: 'minimize',
     maximize: 'maximize',
     close: 'close',
-    zoomIn: 'zoom-in(+)',
-    zoomOut: 'zoom-out(-)',
-    prev: 'prev(←)',
-    next: 'next(→)',
+    zoomIn: 'zoom-in (+)',
+    zoomOut: 'zoom-out (-)',
+    prev: 'prev (←)',
+    next: 'next (→)',
     fullscreen: 'fullscreen',
-    actualSize: 'actual-size(Ctrl+Alt+0)',
-    rotateLeft: 'rotate-left(Ctrl+,)',
-    rotateRight: 'rotate-right(Ctrl+.)'
+    actualSize: 'actual-size (Ctrl+Alt+0)',
+    rotateLeft: 'rotate-left (Ctrl+,)',
+    rotateRight: 'rotate-right (Ctrl+.)'
   },
   // Enable multiple instances
   multiInstances: true,
@@ -2050,9 +2050,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.isMaximized = false;
       this.isRotated = false;
       this.rotateAngle = 0;
-      var zeroModal = !$(CLASS_NS + '-modal').length;
 
-      if (zeroModal) {
+      if (!$(CLASS_NS + '-modal').length) {
         // Fixed modal position bug
         if (this.options.fixedContent) {
           $('html').css({
