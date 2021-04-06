@@ -149,6 +149,7 @@
 .photoviewer-image {
   position: absolute;
   display: inline-block;
+  min-width: auto;
   max-width: none;
 
   &.image-ready {
