@@ -232,8 +232,6 @@ class PhotoViewer {
 
     this.setInitModalPos(this.$photoviewer);
 
-    this.$photoviewer.get(0).focus();
-
     this._triggerHook('opened', this);
   }
 
@@ -292,21 +290,15 @@ class PhotoViewer {
 
   setInitModalPos(modal) {
     if (this.options.initMaximized) {
-      modal.addClass(NS + '-maximize');
-
-      modal.css({
-        width: '100%',
-        height: '100%',
-        left: 0,
-        top: 0
-      });
-
-      this.isMaximized = true;
+      this.maximize(modal);
 
       this.isOpened = true;
     } else {
       this.setModalToCenter(modal);
     }
+
+    // The focus must behind opening
+    this.$photoviewer.get(0).focus();
   }
 
   setModalSize(img) {
@@ -577,11 +569,6 @@ class PhotoViewer {
     // Image ratio
     ratio = (this.$image.width() / this.imageData.originalWidth) * ratio;
 
-    // Fixed digital error
-    // if (ratio > 0.95 && ratio < 1.05) {
-    //   ratio = 1;
-    // }
-
     if (ratio > this.options.maxRatio || ratio < this.options.minRatio) {
       return;
     }
@@ -720,11 +707,32 @@ class PhotoViewer {
     return resizeHandler;
   }
 
-  maximize() {
-    this.$photoviewer.get(0).focus();
+  maximize(modal) {
+    modal.addClass(NS + '-maximized');
 
+    modal.css({
+      width: 'unset',
+      height: 'unset',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    });
+
+    this.isMaximized = true;
+  }
+
+  minimize(modal) {
+    modal.removeClass(NS + '-maximized');
+
+    this.setModalToCenter(modal);
+
+    this.isMaximized = false;
+  }
+
+  _toggleMaximize() {
     if (!this.isMaximized) {
-      // Store modal size and position before maximize
+      // Store modal size and position before maximized
       this.modalData = {
         width: this.$photoviewer.width(),
         height: this.$photoviewer.height(),
@@ -732,33 +740,23 @@ class PhotoViewer {
         top: parseFloat(this.$photoviewer.css('top'))
       };
 
-      this.$photoviewer.addClass(NS + '-maximize');
-
-      this.$photoviewer.css({
-        width: '100%',
-        height: '100%',
-        left: 0,
-        top: 0
-      });
-
-      this.isMaximized = true;
+      this.maximize(this.$photoviewer);
     } else {
-      this.$photoviewer.removeClass(NS + '-maximize');
-
-      this.setModalToCenter(this.$photoviewer);
-
-      this.isMaximized = false;
+      this.minimize(this.$photoviewer);
     }
 
     this.setImageSize({
       width: this.imageData.originalWidth,
       height: this.imageData.originalHeight
     });
+
+    this.$photoviewer.get(0).focus();
   }
 
   fullscreen() {
-    this.$photoviewer.get(0).focus();
     requestFullscreen(this.$photoviewer[0]);
+
+    this.$photoviewer.get(0).focus();
   }
 
   _keydown(e) {
@@ -895,7 +893,7 @@ class PhotoViewer {
     });
 
     this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
-      this.maximize();
+      this._toggleMaximize();
     });
 
     this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
