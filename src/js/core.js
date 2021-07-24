@@ -20,7 +20,8 @@ import {
   getImageNameFromUrl,
   hasScrollbar,
   getScrollbarWidth,
-  setGrabCursor
+  setGrabCursor,
+  isRootNode
 } from './utilities';
 
 import draggable from './draggable';
@@ -229,7 +230,7 @@ class PhotoViewer {
 
     this.build();
 
-    this.setModalPos(this.$photoviewer);
+    this.setInitModalPos(this.$photoviewer);
 
     this.$photoviewer.get(0).focus();
 
@@ -265,16 +266,31 @@ class PhotoViewer {
     this._triggerHook('closed', this);
   }
 
-  setModalPos(modal) {
-    const winWidth = $W.width();
-    const winHeight = $W.height();
-    const scrollLeft = $D.scrollLeft();
-    const scrollTop = $D.scrollTop();
+  setModalToCenter(modal) {
+    const offsetParent = $(this.options.appendTo)[0];
+    const offsetParentData = {
+      width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
+      height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
+      scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
+      scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop,
+    };
 
-    const modalWidth = this.options.modalWidth;
-    const modalHeight = this.options.modalHeight;
+    const modalData = {
+      width: this.options.modalWidth,
+      height: this.options.modalHeight,
+      initLeft: (offsetParentData.width - this.options.modalWidth) / 2 + offsetParentData.scrollLeft,
+      initTop: (offsetParentData.height - this.options.modalHeight) / 2 + offsetParentData.scrollTop
+    };
 
-    // Set modal maximized when init
+    modal.css({
+      width: (this.modalData.width || modalData.width) + 'px',
+      height: (this.modalData.height || modalData.height) + 'px',
+      left: (this.modalData.left || modalData.initLeft) + 'px',
+      top: (this.modalData.top || modalData.initTop) + 'px'
+    });
+  }
+
+  setInitModalPos(modal) {
     if (this.options.initMaximized) {
       modal.addClass(NS + '-maximize');
 
@@ -285,24 +301,22 @@ class PhotoViewer {
         top: 0
       });
 
-      this.isOpened = true;
       this.isMaximized = true;
+
+      this.isOpened = true;
     } else {
-      // Make the modal in windows center
-      modal.css({
-        width: modalWidth,
-        height: modalHeight,
-        left: (winWidth - modalWidth) / 2 + scrollLeft + 'px',
-        top: (winHeight - modalHeight) / 2 + scrollTop + 'px'
-      });
+      this.setModalToCenter(modal);
     }
   }
 
   setModalSize(img) {
-    const winWidth = $W.width();
-    const winHeight = $W.height();
-    const scrollLeft = $D.scrollLeft();
-    const scrollTop = $D.scrollTop();
+    const offsetParent = $(this.options.appendTo)[0];
+    const offsetParentData = {
+      width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
+      height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
+      scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
+      scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop,
+    };
 
     // Stage css value
     const stageCSS = {
@@ -317,27 +331,29 @@ class PhotoViewer {
     };
 
     // Modal size should calc with stage css value
-    const modalWidth = img.width +
-      parseFloat(stageCSS.left) +
-      parseFloat(stageCSS.right) +
-      parseFloat(stageCSS.borderLeft) +
-      parseFloat(stageCSS.borderRight);
-    const modalHeight = img.height +
-      parseFloat(stageCSS.top) +
-      parseFloat(stageCSS.bottom) +
-      parseFloat(stageCSS.borderTop) +
-      parseFloat(stageCSS.borderBottom);
+    const modalData = {
+      width: img.width +
+        parseFloat(stageCSS.left) +
+        parseFloat(stageCSS.right) +
+        parseFloat(stageCSS.borderLeft) +
+        parseFloat(stageCSS.borderRight),
+      height: img.height +
+        parseFloat(stageCSS.top) +
+        parseFloat(stageCSS.bottom) +
+        parseFloat(stageCSS.borderTop) +
+        parseFloat(stageCSS.borderBottom)
+    };
 
     const gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1;
     // Modal scale to window
     const scale = Math.min(
-      winWidth / (modalWidth * gapThreshold),
-      winHeight / (modalHeight * gapThreshold),
+      offsetParentData.width / (modalData.width * gapThreshold),
+      offsetParentData.height / (modalData.height * gapThreshold),
       1
     );
 
-    let minWidth = Math.max(modalWidth * scale, this.options.modalWidth);
-    let minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
+    let minWidth = Math.max(modalData.width * scale, this.options.modalWidth);
+    let minHeight = Math.max(modalData.height * scale, this.options.modalHeight);
 
     minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
     minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
@@ -345,8 +361,8 @@ class PhotoViewer {
     const modalCSSObj = {
       width: minWidth + 'px',
       height: minHeight + 'px',
-      left: (winWidth - minWidth) / 2 + scrollLeft + 'px',
-      top: (winHeight - minHeight) / 2 + scrollTop + 'px'
+      left: (offsetParentData.width - minWidth) / 2 + offsetParentData.scrollLeft + 'px',
+      top: (offsetParentData.height - minHeight) / 2 + offsetParentData.scrollTop + 'px'
     };
 
     // Add modal init animation
@@ -708,12 +724,12 @@ class PhotoViewer {
     this.$photoviewer.get(0).focus();
 
     if (!this.isMaximized) {
-      // Store modal data before maximize
+      // Store modal size and position before maximize
       this.modalData = {
         width: this.$photoviewer.width(),
         height: this.$photoviewer.height(),
-        left: this.$photoviewer.offset().left,
-        top: this.$photoviewer.offset().top
+        left: parseFloat(this.$photoviewer.css('left')),
+        top: parseFloat(this.$photoviewer.css('top'))
       };
 
       this.$photoviewer.addClass(NS + '-maximize');
@@ -729,15 +745,7 @@ class PhotoViewer {
     } else {
       this.$photoviewer.removeClass(NS + '-maximize');
 
-      const initModalLeft = ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft();
-      const initModalTop = ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop();
-
-      this.$photoviewer.css({
-        width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
-        height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
-        left: this.modalData.left ? this.modalData.left : initModalLeft,
-        top: this.modalData.top ? this.modalData.top : initModalTop
-      });
+      this.setModalToCenter(this.$photoviewer);
 
       this.isMaximized = false;
     }

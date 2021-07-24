@@ -47,8 +47,9 @@ export default {
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
 
-      left = $(modal).position().left;
-      top = $(modal).position().top;
+      // Get current position of the modal
+      left = parseFloat($(modal).css('left'));
+      top = parseFloat($(modal).css('top'));
 
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(
         TOUCH_END_EVENT + EVENT_NS,

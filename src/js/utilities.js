@@ -125,11 +125,19 @@ export function setGrabCursor(imageData, stageData, stage, isRotated) {
 }
 
 /**
- * Check if browser support touch event
+ * Check whether browser support touch event
  * @return {Boolean}
  */
 export function supportTouch() {
   return !!(
     'ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch)
   );
+}
+
+/**
+ * Check whether element is root node (`body` or `html`)
+ * @return {Boolean}
+ */
+export function isRootNode(elem) {
+  return /^(?:body|html)$/i.test(elem.nodeName);
 }
