@@ -47,8 +47,8 @@ export default {
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
 
-      left = $(modal).offset().left;
-      top = $(modal).offset().top;
+      left = $(modal).position().left;
+      top = $(modal).position().top;
 
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(
         TOUCH_END_EVENT + EVENT_NS,
