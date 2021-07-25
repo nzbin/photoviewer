@@ -1,5 +1,6 @@
 import {
   D,
+  isPlainObject,
   isArray,
   noop,
   find,
@@ -34,6 +35,7 @@ import {
 const $ = D;
 
 const methods = {
+  isPlainObject,
   isArray,
   noop
 };
