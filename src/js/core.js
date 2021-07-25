@@ -14,6 +14,7 @@ import {
 } from './constants';
 
 import {
+  debounce,
   throttle,
   preloadImage,
   requestFullscreen,
@@ -688,23 +689,19 @@ class PhotoViewer {
   }
 
   resize() {
-    const resizeHandler = throttle(() => {
-      if (this.isOpened) {
-        if (this.isMaximized) {
-          this.setImageSize({
-            width: this.imageData.originalWidth,
-            height: this.imageData.originalHeight
-          });
-        } else {
-          this.setModalSize({
-            width: this.imageData.originalWidth,
-            height: this.imageData.originalHeight
-          });
-        }
+    if (this.isOpened) {
+      if (this.isMaximized) {
+        this.setImageSize({
+          width: this.imageData.originalWidth,
+          height: this.imageData.originalHeight
+        });
+      } else {
+        this.setModalSize({
+          width: this.imageData.originalWidth,
+          height: this.imageData.originalHeight
+        });
       }
-    }, 500);
-
-    return resizeHandler;
+    }
   }
 
   maximize(modal) {
@@ -872,17 +869,17 @@ class PhotoViewer {
       );
     });
 
-    this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(() => {
       this.jump(-1);
-    });
+    }, 300));
 
     this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.fullscreen();
     });
 
-    this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(() => {
       this.jump(1);
-    });
+    }, 300));
 
     this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.rotate(-90);
@@ -896,11 +893,13 @@ class PhotoViewer {
       this._toggleMaximize();
     });
 
-    this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
+    this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, throttle(e => {
       this._keydown(e);
-    });
+    }, 300));
 
-    $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
+    $W.on(RESIZE_EVENT + EVENT_NS, debounce(() => {
+      this.resize();
+    }, 500));
   }
 
   _addCustomButtonEvents() {

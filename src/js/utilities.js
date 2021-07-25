@@ -1,12 +1,12 @@
 export const document = window.document;
 
 /**
- * Throttle function
+ * Debounce function
  * @param {Function} fn - The function will be triggered
- * @param {Number} delay - The throttle delay time
+ * @param {Number} delay - The debounce delay time
  * @return {Function}
  */
-export function throttle(fn, delay) {
+export function debounce(fn, delay) {
   let timer = null;
 
   return function () {
@@ -18,6 +18,28 @@ export function throttle(fn, delay) {
     timer = setTimeout(function () {
       fn.apply(context, args);
     }, delay);
+  };
+}
+
+/**
+ * Throttle function
+ * @param {Function} fn - The function will be triggered
+ * @param {Number} timeFrame - The throttle time frame
+ * @return {Function}
+ */
+export function throttle(fn, timeFrame) {
+  let lastTime = 0;
+
+  return function () {
+    const context = this;
+    const args = arguments;
+
+    const now = Date.now();
+
+    if (now - lastTime >= timeFrame) {
+      fn.apply(context, args);
+      lastTime = now;
+    }
   };
 }
 
