@@ -391,10 +391,10 @@ class PhotoViewer {
     const scale = this.getImageScaleToStage(stageData.w, stageData.h);
 
     this.$image.css({
-      width: Math.ceil(img.width * scale) + 'px',
-      height: Math.ceil(img.height * scale) + 'px',
-      left: (stageData.w - Math.ceil(img.width * scale)) / 2 + 'px',
-      top: (stageData.h - Math.ceil(img.height * scale)) / 2 + 'px'
+      width: Math.round(img.width * scale) + 'px',
+      height: Math.round(img.height * scale) + 'px',
+      left: (stageData.w - Math.round(img.width * scale)) / 2 + 'px',
+      top: (stageData.h - Math.round(img.height * scale)) / 2 + 'px'
     });
 
     // Store image initial data
