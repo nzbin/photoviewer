@@ -61,30 +61,30 @@
     "prepublish": "npm run release"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
+    "@babel/core": "^7.14.8",
     "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
-    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-env": "^7.14.8",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^19.0.1",
-    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "autoprefixer": "^10.3.1",
     "cpy-cli": "^3.1.1",
     "eslint": "^7.31.0",
     "node-sass": "^6.0.1",
     "npm-run-all": "^4.1.5",
     "onchange": "^7.1.0",
-    "postcss": "^8.3.5",
+    "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "postcss-header": "^3.0.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.53.2",
+    "rollup": "^2.53.3",
     "stylelint": "^13.13.1",
     "stylelint-config-recommended-scss": "^4.3.0",
     "stylelint-config-standard": "^22.0.0",
-    "stylelint-scss": "^3.19.0",
-    "uglify-js": "^3.13.10"
+    "stylelint-scss": "^3.20.1",
+    "uglify-js": "^3.14.0"
   },
   "dependencies": {
-    "domq.js": "^0.6.5"
+    "domq.js": "^0.6.6"
   }
 }
