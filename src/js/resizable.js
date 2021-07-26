@@ -290,15 +290,15 @@ export default {
       modalData = {
         w: $(modal).width(),
         h: $(modal).height(),
-        l: $(modal).offset().left,
-        t: $(modal).offset().top
+        l: $(modal).position().left,
+        t: $(modal).position().top
       };
 
       stageData = {
         w: $(stage).width(),
         h: $(stage).height(),
-        l: $(stage).offset().left,
-        t: $(stage).offset().top
+        l: $(stage).position().left,
+        t: $(stage).position().top
       };
 
       imageData = {

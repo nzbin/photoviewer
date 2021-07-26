@@ -592,27 +592,29 @@ function offset(coordinates) {
 function position() {
   if (!this.length) return;
 
-  var elem = this[0],
-    // Get *real* offsetParent
+  var elem = this[0], offset,
+    // Get *real* offset parent
     offsetParent = this.offsetParent(),
-    // Get correct offsets
-    offset = this.offset(),
     parentOffset = rootNodeRE.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset();
 
-  // Subtract element margins
-  // note: when an element has margin: auto the offsetLeft and marginLeft
-  // are the same in Safari causing offset.left to incorrectly be 0
-  offset.top -= parseFloat(D(elem).css('margin-top')) || 0;
-  offset.left -= parseFloat(D(elem).css('margin-left')) || 0;
+  // `position: fixed` elements are offset from the viewport, which itself always has zero offset
+  if (D(elem).css('position') === 'fixed') {
+    // Assume `position: fixed` implies availability of getBoundingClientRect
+    offset = elem.getBoundingClientRect();
+  } else {
+    offset = this.offset();
 
-  // Add offsetParent borders
-  parentOffset.top += parseFloat(D(offsetParent[0]).css('border-top-width')) || 0;
-  parentOffset.left += parseFloat(D(offsetParent[0]).css('border-left-width')) || 0;
+    // Incorporate borders into its offset, since they are outside its content origin
+    parentOffset.top += parseFloat(D(offsetParent[0]).css('border-top-width')) || 0;
+    parentOffset.left += parseFloat(D(offsetParent[0]).css('border-left-width')) || 0;
+  }
 
-  // Subtract the two offsets
+  // Subtract parent offsets and element margins
+  // note: when an element has `margin: auto` the offsetLeft and marginLeft
+  // are the same in Safari causing `offset.left` to incorrectly be 0
   return {
-    top: offset.top - parentOffset.top,
-    left: offset.left - parentOffset.left
+    top: offset.top - parentOffset.top - parseFloat(D(elem).css('margin-top')) || 0,
+    left: offset.left - parentOffset.left - parseFloat(D(elem).css('margin-left')) || 0
   };
 }
 
@@ -1184,6 +1186,7 @@ var fadeIn = function (speed, callback) {
 
 var $ = D;
 var methods = {
+  isPlainObject: isPlainObject,
   isArray: isArray,
   noop: noop
 };
@@ -1311,13 +1314,13 @@ var DEFAULTS = {
 
 var document = window.document;
 /**
- * Throttle function
+ * Debounce function
  * @param {Function} fn - The function will be triggered
- * @param {Number} delay - The throttle delay time
+ * @param {Number} delay - The debounce delay time
  * @return {Function}
  */
 
-function throttle(fn, delay) {
+function debounce(fn, delay) {
   var timer = null;
   return function () {
     var context = this;
@@ -1326,6 +1329,26 @@ function throttle(fn, delay) {
     timer = setTimeout(function () {
       fn.apply(context, args);
     }, delay);
+  };
+}
+/**
+ * Throttle function
+ * @param {Function} fn - The function will be triggered
+ * @param {Number} timeFrame - The throttle time frame
+ * @return {Function}
+ */
+
+function throttle(fn, timeFrame) {
+  var lastTime = 0;
+  return function () {
+    var context = this;
+    var args = arguments;
+    var now = Date.now();
+
+    if (now - lastTime >= timeFrame) {
+      fn.apply(context, args);
+      lastTime = now;
+    }
   };
 }
 /**
@@ -1417,12 +1440,20 @@ function setGrabCursor(imageData, stageData, stage, isRotated) {
   }
 }
 /**
- * Check if browser support touch event
+ * Check whether browser support touch event
  * @return {Boolean}
  */
 
 function supportTouch() {
   return !!('ontouchstart' in window || window.DocumentTouch && document instanceof window.DocumentTouch);
+}
+/**
+ * Check whether element is root node (`body` or `html`)
+ * @return {Boolean}
+ */
+
+function isRootNode(elem) {
+  return /^(?:body|html)$/i.test(elem.nodeName);
 }
 
 var $W = $(window);
@@ -1480,9 +1511,10 @@ var draggable = {
 
       isDragging = true;
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
-      startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
-      left = $(modal).offset().left;
-      top = $(modal).offset().top;
+      startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // Get current position of the modal
+
+      left = parseFloat($(modal).css('left'));
+      top = parseFloat($(modal).css('top'));
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
     };
 
@@ -1788,14 +1820,14 @@ var resizable = {
       modalData = {
         w: $(modal).width(),
         h: $(modal).height(),
-        l: $(modal).offset().left,
-        t: $(modal).offset().top
+        l: $(modal).position().left,
+        t: $(modal).position().top
       };
       stageData = {
         w: $(stage).width(),
         h: $(stage).height(),
-        l: $(stage).offset().left,
-        t: $(stage).offset().top
+        l: $(stage).position().left,
+        t: $(stage).position().top
       };
       imageData = {
         w: $(image).width(),
@@ -2034,8 +2066,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
 
       this.build();
-      this.setModalPos(this.$photoviewer);
-      this.$photoviewer.get(0).focus();
+      this.setInitModalPos(this.$photoviewer);
 
       this._triggerHook('opened', this);
     }
@@ -2072,44 +2103,53 @@ var PhotoViewer = /*#__PURE__*/function () {
       this._triggerHook('closed', this);
     }
   }, {
-    key: "setModalPos",
-    value: function setModalPos(modal) {
-      var winWidth = $W.width();
-      var winHeight = $W.height();
-      var scrollLeft = $D.scrollLeft();
-      var scrollTop = $D.scrollTop();
-      var modalWidth = this.options.modalWidth;
-      var modalHeight = this.options.modalHeight; // Set modal maximized when init
-
+    key: "setModalToCenter",
+    value: function setModalToCenter(modal) {
+      var offsetParent = $(this.options.appendTo)[0];
+      var offsetParentData = {
+        width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
+        height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
+        scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
+        scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop
+      };
+      var modalData = {
+        width: this.options.modalWidth,
+        height: this.options.modalHeight,
+        initLeft: (offsetParentData.width - this.options.modalWidth) / 2 + offsetParentData.scrollLeft,
+        initTop: (offsetParentData.height - this.options.modalHeight) / 2 + offsetParentData.scrollTop
+      };
+      modal.css({
+        width: (this.modalData.width || modalData.width) + 'px',
+        height: (this.modalData.height || modalData.height) + 'px',
+        left: (this.modalData.left || modalData.initLeft) + 'px',
+        top: (this.modalData.top || modalData.initTop) + 'px'
+      });
+    }
+  }, {
+    key: "setInitModalPos",
+    value: function setInitModalPos(modal) {
       if (this.options.initMaximized) {
-        modal.addClass(NS + '-maximize');
-        modal.css({
-          width: '100%',
-          height: '100%',
-          left: 0,
-          top: 0
-        });
+        this.maximize(modal);
         this.isOpened = true;
-        this.isMaximized = true;
       } else {
-        // Make the modal in windows center
-        modal.css({
-          width: modalWidth,
-          height: modalHeight,
-          left: (winWidth - modalWidth) / 2 + scrollLeft + 'px',
-          top: (winHeight - modalHeight) / 2 + scrollTop + 'px'
-        });
-      }
+        this.setModalToCenter(modal);
+      } // The focus must behind opening
+
+
+      this.$photoviewer.get(0).focus();
     }
   }, {
     key: "setModalSize",
     value: function setModalSize(img) {
       var _this2 = this;
 
-      var winWidth = $W.width();
-      var winHeight = $W.height();
-      var scrollLeft = $D.scrollLeft();
-      var scrollTop = $D.scrollTop(); // Stage css value
+      var offsetParent = $(this.options.appendTo)[0];
+      var offsetParentData = {
+        width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
+        height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
+        scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
+        scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop
+      }; // Stage css value
 
       var stageCSS = {
         left: this.$stage.css('left'),
@@ -2122,20 +2162,22 @@ var PhotoViewer = /*#__PURE__*/function () {
         borderBottom: this.$stage.css('border-bottom-width')
       }; // Modal size should calc with stage css value
 
-      var modalWidth = img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) + parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight);
-      var modalHeight = img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) + parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom);
+      var modalData = {
+        width: img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) + parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight),
+        height: img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) + parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom)
+      };
       var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1; // Modal scale to window
 
-      var scale = Math.min(winWidth / (modalWidth * gapThreshold), winHeight / (modalHeight * gapThreshold), 1);
-      var minWidth = Math.max(modalWidth * scale, this.options.modalWidth);
-      var minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
+      var scale = Math.min(offsetParentData.width / (modalData.width * gapThreshold), offsetParentData.height / (modalData.height * gapThreshold), 1);
+      var minWidth = Math.max(modalData.width * scale, this.options.modalWidth);
+      var minHeight = Math.max(modalData.height * scale, this.options.modalHeight);
       minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
       minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
       var modalCSSObj = {
         width: minWidth + 'px',
         height: minHeight + 'px',
-        left: (winWidth - minWidth) / 2 + scrollLeft + 'px',
-        top: (winHeight - minHeight) / 2 + scrollTop + 'px'
+        left: (offsetParentData.width - minWidth) / 2 + offsetParentData.scrollLeft + 'px',
+        top: (offsetParentData.height - minHeight) / 2 + offsetParentData.scrollTop + 'px'
       }; // Add modal init animation
 
       if (this.options.initAnimation) {
@@ -2171,10 +2213,10 @@ var PhotoViewer = /*#__PURE__*/function () {
       };
       var scale = this.getImageScaleToStage(stageData.w, stageData.h);
       this.$image.css({
-        width: Math.ceil(img.width * scale) + 'px',
-        height: Math.ceil(img.height * scale) + 'px',
-        left: (stageData.w - Math.ceil(img.width * scale)) / 2 + 'px',
-        top: (stageData.h - Math.ceil(img.height * scale)) / 2 + 'px'
+        width: Math.round(img.width * scale) + 'px',
+        height: Math.round(img.height * scale) + 'px',
+        left: (stageData.w - Math.round(img.width * scale)) / 2 + 'px',
+        top: (stageData.h - Math.round(img.height * scale)) / 2 + 'px'
       }); // Store image initial data
 
       $.extend(this.imageData, {
@@ -2327,10 +2369,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       // Zoom out ratio & Zoom in ratio
       ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio; // Image ratio
 
-      ratio = this.$image.width() / this.imageData.originalWidth * ratio; // Fixed digital error
-      // if (ratio > 0.95 && ratio < 1.05) {
-      //   ratio = 1;
-      // }
+      ratio = this.$image.width() / this.imageData.originalWidth * ratio;
 
       if (ratio > this.options.maxRatio || ratio < this.options.minRatio) {
         return;
@@ -2440,69 +2479,68 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "resize",
     value: function resize() {
-      var _this5 = this;
-
-      var resizeHandler = throttle(function () {
-        if (_this5.isOpened) {
-          if (_this5.isMaximized) {
-            _this5.setImageSize({
-              width: _this5.imageData.originalWidth,
-              height: _this5.imageData.originalHeight
-            });
-          } else {
-            _this5.setModalSize({
-              width: _this5.imageData.originalWidth,
-              height: _this5.imageData.originalHeight
-            });
-          }
+      if (this.isOpened) {
+        if (this.isMaximized) {
+          this.setImageSize({
+            width: this.imageData.originalWidth,
+            height: this.imageData.originalHeight
+          });
+        } else {
+          this.setModalSize({
+            width: this.imageData.originalWidth,
+            height: this.imageData.originalHeight
+          });
         }
-      }, 500);
-      return resizeHandler;
+      }
     }
   }, {
     key: "maximize",
-    value: function maximize() {
-      this.$photoviewer.get(0).focus();
-
+    value: function maximize(modal) {
+      modal.addClass(NS + '-maximized');
+      modal.css({
+        width: 'unset',
+        height: 'unset',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+      });
+      this.isMaximized = true;
+    }
+  }, {
+    key: "minimize",
+    value: function minimize(modal) {
+      modal.removeClass(NS + '-maximized');
+      this.setModalToCenter(modal);
+      this.isMaximized = false;
+    }
+  }, {
+    key: "_toggleMaximize",
+    value: function _toggleMaximize() {
       if (!this.isMaximized) {
-        // Store modal data before maximize
+        // Store modal size and position before maximized
         this.modalData = {
           width: this.$photoviewer.width(),
           height: this.$photoviewer.height(),
-          left: this.$photoviewer.offset().left,
-          top: this.$photoviewer.offset().top
+          left: parseFloat(this.$photoviewer.css('left')),
+          top: parseFloat(this.$photoviewer.css('top'))
         };
-        this.$photoviewer.addClass(NS + '-maximize');
-        this.$photoviewer.css({
-          width: '100%',
-          height: '100%',
-          left: 0,
-          top: 0
-        });
-        this.isMaximized = true;
+        this.maximize(this.$photoviewer);
       } else {
-        this.$photoviewer.removeClass(NS + '-maximize');
-        var initModalLeft = ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft();
-        var initModalTop = ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop();
-        this.$photoviewer.css({
-          width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
-          height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
-          left: this.modalData.left ? this.modalData.left : initModalLeft,
-          top: this.modalData.top ? this.modalData.top : initModalTop
-        });
-        this.isMaximized = false;
+        this.minimize(this.$photoviewer);
       }
 
       this.setImageSize({
         width: this.imageData.originalWidth,
         height: this.imageData.originalHeight
       });
+      this.$photoviewer.get(0).focus();
     }
   }, {
     key: "fullscreen",
     value: function fullscreen() {
-      this.$photoviewer.get(0).focus();
       requestFullscreen(this.$photoviewer[0]);
+      this.$photoviewer.get(0).focus();
     }
   }, {
     key: "_keydown",
@@ -2594,63 +2632,65 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "_addEvents",
     value: function _addEvents() {
-      var _this6 = this;
+      var _this5 = this;
 
       this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-        _this6.close();
+        _this5.close();
       });
       this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, function (e) {
-        _this6.wheel(e);
+        _this5.wheel(e);
       });
       this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-        _this6.zoom(_this6.options.ratioThreshold * 3, {
-          x: _this6.$stage.width() / 2,
-          y: _this6.$stage.height() / 2
+        _this5.zoom(_this5.options.ratioThreshold * 3, {
+          x: _this5.$stage.width() / 2,
+          y: _this5.$stage.height() / 2
         }, e);
       });
       this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-        _this6.zoom(-_this6.options.ratioThreshold * 3, {
-          x: _this6.$stage.width() / 2,
-          y: _this6.$stage.height() / 2
+        _this5.zoom(-_this5.options.ratioThreshold * 3, {
+          x: _this5.$stage.width() / 2,
+          y: _this5.$stage.height() / 2
         }, e);
       });
       this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-        _this6.zoomTo(1, {
-          x: _this6.$stage.width() / 2,
-          y: _this6.$stage.height() / 2
+        _this5.zoomTo(1, {
+          x: _this5.$stage.width() / 2,
+          y: _this5.$stage.height() / 2
         }, e);
       });
-      this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this6.jump(-1);
-      });
+      this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(function () {
+        _this5.jump(-1);
+      }, 300));
       this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this6.fullscreen();
+        _this5.fullscreen();
       });
-      this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this6.jump(1);
-      });
+      this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(function () {
+        _this5.jump(1);
+      }, 300));
       this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this6.rotate(-90);
+        _this5.rotate(-90);
       });
       this.$rotateRight.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this6.rotate(90);
+        _this5.rotate(90);
       });
       this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this6.maximize();
+        _this5._toggleMaximize();
       });
-      this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
-        _this6._keydown(e);
-      });
-      $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
+      this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, throttle(function (e) {
+        _this5._keydown(e);
+      }, 300));
+      $W.on(RESIZE_EVENT + EVENT_NS, debounce(function () {
+        _this5.resize();
+      }, 500));
     }
   }, {
     key: "_addCustomButtonEvents",
     value: function _addCustomButtonEvents() {
-      var _this7 = this;
+      var _this6 = this;
 
       var _loop = function _loop(btnKey) {
-        _this7.$photoviewer.find(CLASS_NS + '-button-' + btnKey).off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-          _this7.options.customButtons[btnKey].click.apply(_this7, [_this7, e]);
+        _this6.$photoviewer.find(CLASS_NS + '-button-' + btnKey).off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
+          _this6.options.customButtons[btnKey].click.apply(_this6, [_this6, e]);
         });
       };
 
