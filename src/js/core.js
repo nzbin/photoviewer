@@ -193,6 +193,10 @@ class PhotoViewer {
     // Reset modal z-index with multiple instances
     this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
 
+    if (this.options.positionFixed) {
+      this.$photoviewer.css({ position: 'fixed' });
+    }
+
     // Set handle element of draggable
     if (
       !this.options.dragHandle ||
@@ -265,14 +269,18 @@ class PhotoViewer {
     this._triggerHook('closed', this);
   }
 
-  setModalToCenter(modal) {
+  _getOffsetParentData() {
     const offsetParent = $(this.options.appendTo)[0];
-    const offsetParentData = {
-      width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
-      height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
-      scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
-      scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop,
+    return {
+      width: this.options.positionFixed || isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
+      height: this.options.positionFixed || isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
+      scrollLeft: this.options.positionFixed ? 0 : isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
+      scrollTop: this.options.positionFixed ? 0 : isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop,
     };
+  }
+
+  setModalToCenter(modal) {
+    const offsetParentData = this._getOffsetParentData();
 
     const modalData = {
       width: this.options.modalWidth,
@@ -303,13 +311,7 @@ class PhotoViewer {
   }
 
   setModalSize(img) {
-    const offsetParent = $(this.options.appendTo)[0];
-    const offsetParentData = {
-      width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
-      height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
-      scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
-      scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop,
-    };
+    const offsetParentData = this._getOffsetParentData();
 
     // Stage css value
     const stageCSS = {

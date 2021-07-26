@@ -84,6 +84,7 @@ declare namespace PhotoViewer {
     customButtons?: {
       [k: string]: customButton
     };
+    positionFixed?: boolean;
   }
 }
 

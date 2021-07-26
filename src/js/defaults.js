@@ -21,16 +21,16 @@ export default {
   // Min height of modal
   modalHeight: 320,
 
-  // Enable the page content fixed
+  // Disable the page content scroll
   fixedContent: true,
 
-  // Disable the modal size fixed
+  // Disable change the modal size after image loaded
   fixedModalSize: false,
 
   // Disable the image viewer maximized on init
   initMaximized: false,
 
-  // Threshold of modal to browser window
+  // Threshold of modal relative to browser window
   gapThreshold: 0.02,
 
   // Threshold of image ratio
@@ -145,10 +145,10 @@ export default {
   // Enable animation
   initAnimation: true,
 
-  // Disable modal position fixed when change images
+  // Enable modal position auto centering after image changed
   fixedModalPos: false,
 
-  // Modal z-index
+  // Modal css `z-index`
   zIndex: 1090,
 
   // Selector of drag handler
@@ -174,5 +174,8 @@ export default {
   appendTo: 'body',
 
   // Custom Buttons
-  customButtons: {}
+  customButtons: {},
+
+  // Modal css `position: fixed`
+  positionFixed: false
 };
