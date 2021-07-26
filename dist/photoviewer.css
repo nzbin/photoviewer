@@ -3,7 +3,7 @@
   z-index: 1090;
   width: 320px;
   height: 320px;
-  overflow: hidden;
+  overflow: visible !important;
   color: #333;
   cursor: default;
   background-color: rgba(255, 255, 255, 0.92);
@@ -28,12 +28,16 @@
   right: 0;
   bottom: 0;
   left: 0;
-  width: unset;
-  height: unset;
+  width: auto;
+  height: auto;
 }
 
 .photoviewer-maximized.photoviewer-modal {
   border-width: 0;
+  border-radius: 0;
+}
+
+.photoviewer-maximized .photoviewer-header {
   border-radius: 0;
 }
 
@@ -83,6 +87,8 @@
   position: relative;
   z-index: 2;
   height: 30px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
 }
 
 .photoviewer-header .photoviewer-toolbar {

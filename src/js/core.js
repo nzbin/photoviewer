@@ -708,8 +708,8 @@ class PhotoViewer {
     modal.addClass(NS + '-maximized');
 
     modal.css({
-      width: 'unset',
-      height: 'unset',
+      width: 'auto',
+      height: 'auto',
       top: 0,
       right: 0,
       bottom: 0,
