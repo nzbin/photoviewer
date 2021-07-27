@@ -113,10 +113,14 @@
         modalHeight: 400,
         draggable: true,
         fixedModalSize: true,
-        fixedModalPos: true,
+        fixedModalPos: false,
         initMaximized: false,
         fixedContent: true,
+        positionFixed: false,
         appendTo: '.container',
+        initModalPos: {
+          top: 0
+        }
       };
 
       new PhotoViewer(items, options);
