@@ -85,6 +85,12 @@ declare namespace PhotoViewer {
       [k: string]: customButton
     };
     positionFixed?: boolean;
+    initModalPos?: {
+      top?: number;
+      left?: number;
+      bottom?: number;
+      right?: number;
+    }
   }
 }
 

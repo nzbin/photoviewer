@@ -177,5 +177,8 @@ export default {
   customButtons: {},
 
   // Modal css `position: fixed`
-  positionFixed: false
+  positionFixed: false,
+
+  // Init modal position `{top: 0, right: 0, bottom: 0, left: 0}`
+  initModalPos: null
 };
