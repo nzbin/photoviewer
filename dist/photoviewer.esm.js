@@ -1235,13 +1235,13 @@ var DEFAULTS = {
   modalWidth: 320,
   // Min height of modal
   modalHeight: 320,
-  // Enable the page content fixed
+  // Disable the page content scroll
   fixedContent: true,
-  // Disable the modal size fixed
+  // Disable change the modal size after image loaded
   fixedModalSize: false,
   // Disable the image viewer maximized on init
   initMaximized: false,
-  // Threshold of modal to browser window
+  // Threshold of modal relative to browser window
   gapThreshold: 0.02,
   // Threshold of image ratio
   ratioThreshold: 0.1,
@@ -1285,9 +1285,9 @@ var DEFAULTS = {
   multiInstances: true,
   // Enable animation
   initAnimation: true,
-  // Disable modal position fixed when change images
+  // Enable modal position auto centering after image changed
   fixedModalPos: false,
-  // Modal z-index
+  // Modal css `z-index`
   zIndex: 1090,
   // Selector of drag handler
   dragHandle: false,
@@ -1307,7 +1307,11 @@ var DEFAULTS = {
   // The DOM element to which viewer will be added
   appendTo: 'body',
   // Custom Buttons
-  customButtons: {}
+  customButtons: {},
+  // Modal css `position: fixed`
+  positionFixed: false,
+  // Init modal position `{top: 0, right: 0, bottom: 0, left: 0}`
+  initModalPos: null
 };
 
 var document = window.document;
@@ -1327,26 +1331,6 @@ function debounce(fn, delay) {
     timer = setTimeout(function () {
       fn.apply(context, args);
     }, delay);
-  };
-}
-/**
- * Throttle function
- * @param {Function} fn - The function will be triggered
- * @param {Number} timeFrame - The throttle time frame
- * @return {Function}
- */
-
-function throttle(fn, timeFrame) {
-  var lastTime = 0;
-  return function () {
-    var context = this;
-    var args = arguments;
-    var now = Date.now();
-
-    if (now - lastTime >= timeFrame) {
-      fn.apply(context, args);
-      lastTime = now;
-    }
   };
 }
 /**
@@ -1494,8 +1478,7 @@ var draggable = {
     var dragStart = function dragStart(e) {
       e = e || window.event; // Must be removed
       // e.preventDefault();
-
-      modal.get(0).focus(); // Get clicked button
+      // Get clicked button
 
       var elemCancel = $(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
@@ -1534,7 +1517,9 @@ var draggable = {
 
     var dragEnd = function dragEnd() {
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
-      isDragging = false;
+      isDragging = false; // Focus must be executed at the end
+
+      modal.get(0).focus();
     };
 
     $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
@@ -1936,7 +1921,9 @@ var PhotoViewer = /*#__PURE__*/function () {
       height: null,
       left: null,
       top: null
-    };
+    }; // Used for time comparison
+
+    this._lastTimestamp = 0;
     this.init(items, this.options);
   }
 
@@ -2022,7 +2009,14 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$stage.addClass('stage-ready');
       this.$image.addClass('image-ready'); // Reset modal z-index with multiple instances
 
-      this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']); // Set handle element of draggable
+      this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
+
+      if (this.options.positionFixed) {
+        this.$photoviewer.css({
+          position: 'fixed'
+        });
+      } // Set handle element of draggable
+
 
       if (!this.options.dragHandle || this.options.dragHandle === CLASS_NS + '-modal') {
         this.dragHandle = this.$photoviewer;
@@ -2101,27 +2095,39 @@ var PhotoViewer = /*#__PURE__*/function () {
       this._triggerHook('closed', this);
     }
   }, {
+    key: "_getOffsetParentData",
+    value: function _getOffsetParentData() {
+      var offsetParent = $(this.options.appendTo)[0];
+      return {
+        width: this.options.positionFixed || isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
+        height: this.options.positionFixed || isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
+        scrollLeft: this.options.positionFixed ? 0 : isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
+        scrollTop: this.options.positionFixed ? 0 : isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop
+      };
+    }
+  }, {
     key: "setModalToCenter",
     value: function setModalToCenter(modal) {
-      var offsetParent = $(this.options.appendTo)[0];
-      var offsetParentData = {
-        width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
-        height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
-        scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
-        scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop
+      var initLeft = 0,
+          initTop = 0;
+
+      if ($.isPlainObject(this.options.initModalPos)) {
+        initLeft = this.options.initModalPos.left || 0;
+        initTop = this.options.initModalPos.top || 0;
+      } else {
+        var offsetParentData = this._getOffsetParentData();
+
+        initLeft = (offsetParentData.width - this.options.modalWidth) / 2 + offsetParentData.scrollLeft;
+        initTop = (offsetParentData.height - this.options.modalHeight) / 2 + offsetParentData.scrollTop;
+      }
+
+      var modalCSSProps = {
+        width: (this.modalData.width || this.options.modalWidth) + 'px',
+        height: (this.modalData.height || this.options.modalHeight) + 'px',
+        left: (this.modalData.left || initLeft) + 'px',
+        top: (this.modalData.top || initTop) + 'px'
       };
-      var modalData = {
-        width: this.options.modalWidth,
-        height: this.options.modalHeight,
-        initLeft: (offsetParentData.width - this.options.modalWidth) / 2 + offsetParentData.scrollLeft,
-        initTop: (offsetParentData.height - this.options.modalHeight) / 2 + offsetParentData.scrollTop
-      };
-      modal.css({
-        width: (this.modalData.width || modalData.width) + 'px',
-        height: (this.modalData.height || modalData.height) + 'px',
-        left: (this.modalData.left || modalData.initLeft) + 'px',
-        top: (this.modalData.top || modalData.initTop) + 'px'
-      });
+      modal.css(modalCSSProps);
     }
   }, {
     key: "setInitModalPos",
@@ -2141,13 +2147,8 @@ var PhotoViewer = /*#__PURE__*/function () {
     value: function setModalSize(img) {
       var _this2 = this;
 
-      var offsetParent = $(this.options.appendTo)[0];
-      var offsetParentData = {
-        width: isRootNode(offsetParent) ? $W.width() : offsetParent.clientWidth,
-        height: isRootNode(offsetParent) ? $W.height() : offsetParent.clientHeight,
-        scrollLeft: isRootNode(offsetParent) ? $D.scrollLeft() : offsetParent.scrollLeft,
-        scrollTop: isRootNode(offsetParent) ? $D.scrollTop() : offsetParent.scrollTop
-      }; // Stage css value
+      var offsetParentData = this._getOffsetParentData(); // Stage css value
+
 
       var stageCSS = {
         left: this.$stage.css('left'),
@@ -2171,19 +2172,32 @@ var PhotoViewer = /*#__PURE__*/function () {
       var minHeight = Math.max(modalData.height * scale, this.options.modalHeight);
       minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
       minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
-      var modalCSSObj = {
+      var transLeft = 0,
+          transTop = 0;
+
+      if ($.isPlainObject(this.options.initModalPos)) {
+        transLeft = this.options.initModalPos.left || 0;
+        transTop = this.options.initModalPos.top || 0;
+      } else {
+        var _offsetParentData = this._getOffsetParentData();
+
+        transLeft = (_offsetParentData.width - minWidth) / 2 + _offsetParentData.scrollLeft;
+        transTop = (_offsetParentData.height - minHeight) / 2 + _offsetParentData.scrollTop;
+      }
+
+      var modalCSSProps = {
         width: minWidth + 'px',
         height: minHeight + 'px',
-        left: (offsetParentData.width - minWidth) / 2 + offsetParentData.scrollLeft + 'px',
-        top: (offsetParentData.height - minHeight) / 2 + offsetParentData.scrollTop + 'px'
+        left: transLeft + 'px',
+        top: transTop + 'px'
       }; // Add modal init animation
 
       if (this.options.initAnimation) {
-        this.$photoviewer.animate(modalCSSObj, 400, 'ease-in-out', function () {
+        this.$photoviewer.animate(modalCSSProps, 400, 'ease-in-out', function () {
           _this2.setImageSize(img);
         });
       } else {
-        this.$photoviewer.css(modalCSSObj);
+        this.$photoviewer.css(modalCSSProps);
         this.setImageSize(img);
       }
 
@@ -2313,10 +2327,16 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "jump",
     value: function jump(step) {
-      this._triggerHook('beforeChange', [this, this.groupIndex]);
+      this._triggerHook('beforeChange', [this, this.groupIndex]); // Make sure change image after the modal animation has finished
 
-      this.groupIndex = this.groupIndex + step;
-      this.jumpTo(this.groupIndex);
+
+      var now = Date.now();
+
+      if (now - this._lastTimestamp >= 400) {
+        this.groupIndex = this.groupIndex + step;
+        this.jumpTo(this.groupIndex);
+        this._lastTimestamp = now;
+      }
     }
   }, {
     key: "jumpTo",
@@ -2496,8 +2516,8 @@ var PhotoViewer = /*#__PURE__*/function () {
     value: function maximize(modal) {
       modal.addClass(NS + '-maximized');
       modal.css({
-        width: 'unset',
-        height: 'unset',
+        width: 'auto',
+        height: 'auto',
         top: 0,
         right: 0,
         bottom: 0,
@@ -2656,15 +2676,15 @@ var PhotoViewer = /*#__PURE__*/function () {
           y: _this5.$stage.height() / 2
         }, e);
       });
-      this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(function () {
+      this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this5.jump(-1);
-      }, 300));
+      });
       this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this5.fullscreen();
       });
-      this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(function () {
+      this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this5.jump(1);
-      }, 300));
+      });
       this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this5.rotate(-90);
       });
@@ -2674,9 +2694,9 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this5._toggleMaximize();
       });
-      this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, throttle(function (e) {
+      this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
         _this5._keydown(e);
-      }, 300));
+      });
       $W.on(RESIZE_EVENT + EVENT_NS, debounce(function () {
         _this5.resize();
       }, 500));

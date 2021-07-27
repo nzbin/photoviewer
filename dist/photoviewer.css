@@ -1,3 +1,18 @@
+/*!
+ *     ____  __  ______  __________ _    _____________       ____________ 
+ *    / __ \/ / / / __ \/_  __/ __ \ |  / /  _/ ____/ |     / / ____/ __ \
+ *   / /_/ / /_/ / / / / / / / / / / | / // // __/  | | /| / / __/ / /_/ /
+ *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
+ * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|     
+ *
+ * photoviewer - v3.5.8
+ * A JS plugin to view images just like in Windows
+ * https://nzbin.github.io/photoviewer/
+ *
+ * Copyright (c) 2018 nzbin
+ * Released under MIT License
+ */
+
 .photoviewer-modal {
   position: absolute;
   z-index: 1090;
@@ -118,6 +133,9 @@
   line-height: 1;
   white-space: nowrap;
   text-overflow: ellipsis;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   overflow: hidden;
 }
@@ -364,6 +382,30 @@
   background-color: black;
 }
 
+:-webkit-full-screen {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: transparent;
+  border-width: 0;
+  border-radius: 0;
+}
+
+:-ms-fullscreen {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: transparent;
+  border-width: 0;
+  border-radius: 0;
+}
+
 :fullscreen {
   top: 0 !important;
   right: 0 !important;
@@ -376,10 +418,36 @@
   border-radius: 0;
 }
 
+:-webkit-full-screen .photoviewer-header, :-webkit-full-screen .photoviewer-footer, :-webkit-full-screen .photoviewer-resizable-handle {
+  display: none;
+}
+
+:-ms-fullscreen .photoviewer-header, :-ms-fullscreen .photoviewer-footer, :-ms-fullscreen .photoviewer-resizable-handle {
+  display: none;
+}
+
 :fullscreen .photoviewer-header,
 :fullscreen .photoviewer-footer,
 :fullscreen .photoviewer-resizable-handle {
   display: none;
+}
+
+:-webkit-full-screen .photoviewer-stage {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-width: 0;
+  background-color: black;
+}
+
+:-ms-fullscreen .photoviewer-stage {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-width: 0;
+  background-color: black;
 }
 
 :fullscreen .photoviewer-stage {
@@ -388,6 +456,10 @@
   bottom: 0;
   left: 0;
   border-width: 0;
+  background-color: black;
+}
+
+::-webkit-backdrop {
   background-color: black;
 }
 
@@ -434,6 +506,7 @@
   border-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(255, 255, 255, 0.5);
   border-radius: 100%;
   vertical-align: middle;
+  -webkit-animation: photoviewerLoading 1s infinite linear;
   animation: photoviewerLoading 1s infinite linear;
 }
 
@@ -444,6 +517,15 @@
   height: 100%;
   vertical-align: middle;
   overflow: hidden;
+}
+
+@-webkit-keyframes photoviewerLoading {
+  0% {
+    transform: rotateZ(0deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: rotateZ(360deg) translate3d(0, 0, 0);
+  }
 }
 
 @keyframes photoviewerLoading {
