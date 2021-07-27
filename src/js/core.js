@@ -15,7 +15,6 @@ import {
 
 import {
   debounce,
-  throttle,
   preloadImage,
   requestFullscreen,
   getImageNameFromUrl,
@@ -71,6 +70,9 @@ class PhotoViewer {
       left: null,
       top: null
     };
+
+    // Used for time comparison
+    this._lastTimestamp = 0;
 
     this.init(items, this.options);
   }
@@ -513,9 +515,15 @@ class PhotoViewer {
   jump(step) {
     this._triggerHook('beforeChange', [this, this.groupIndex]);
 
-    this.groupIndex = this.groupIndex + step;
+    // Make sure change image after the modal animation has finished
+    const now = Date.now();
+    if (now - this._lastTimestamp >= 400) {
+      this.groupIndex = this.groupIndex + step;
 
-    this.jumpTo(this.groupIndex);
+      this.jumpTo(this.groupIndex);
+
+      this._lastTimestamp = now;
+    }
   }
 
   jumpTo(index) {
@@ -871,17 +879,17 @@ class PhotoViewer {
       );
     });
 
-    this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(() => {
+    this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(-1);
-    }, 300));
+    });
 
     this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.fullscreen();
     });
 
-    this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, throttle(() => {
+    this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(1);
-    }, 300));
+    });
 
     this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.rotate(-90);
@@ -895,9 +903,9 @@ class PhotoViewer {
       this._toggleMaximize();
     });
 
-    this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, throttle(e => {
+    this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
       this._keydown(e);
-    }, 300));
+    });
 
     $W.on(RESIZE_EVENT + EVENT_NS, debounce(() => {
       this.resize();
