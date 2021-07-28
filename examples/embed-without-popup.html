@@ -98,7 +98,7 @@
   <script>
     $(function (e) {
 
-      const items = [{
+      var items = [{
         src: 'https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg',
         title: '1'
       }, {
@@ -108,14 +108,13 @@
         src: 'https://farm1.staticflickr.com/512/32967783396_a6b4babd92_z.jpg',
         title: '3'
       }];
-      const options = {
+      var options = {
         modalWidth: 400,
         modalHeight: 400,
         draggable: true,
+        resizable: true,
         fixedModalSize: true,
         fixedModalPos: false,
-        initMaximized: false,
-        fixedContent: true,
         positionFixed: false,
         appendTo: '.container',
         initModalPos: {
@@ -129,10 +128,10 @@
       $('[data-gallery=photoviewer]').click(function (e) {
         e.preventDefault();
 
-        const items = [];
-        const options = {
+        var items = [];
+        var options = {
           index: $(this).index(),
-          fixedContent: true,
+          positionFixed: false,
           appendTo: '.container'
         };
 
