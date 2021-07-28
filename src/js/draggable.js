@@ -29,6 +29,7 @@ export default {
       // Must be removed
       // e.preventDefault();
 
+      // Fix focus scroll issue on Chrome
       modal[0].blur();
 
       // Get clicked button

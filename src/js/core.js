@@ -223,18 +223,6 @@ class PhotoViewer {
       $(CLASS_NS + '-modal').eq(0).remove();
     }
 
-    // Fixed modal position bug
-    if (!$(CLASS_NS + '-modal').length && this.options.fixedContent) {
-      $('html').css({ overflow: 'hidden' });
-
-      if (hasScrollbar()) {
-        const scrollbarWidth = getScrollbarWidth();
-        if (scrollbarWidth) {
-          $('html').css({ 'padding-right': scrollbarWidth });
-        }
-      }
-    }
-
     this.build();
 
     this.setInitModalPos(this.$photoviewer);
@@ -245,7 +233,7 @@ class PhotoViewer {
   close() {
     this._triggerHook('beforeClose', this);
 
-    // Remove instance
+    // Remove viewer instance
     this.$photoviewer.remove();
 
     this.isOpened = false;
@@ -254,12 +242,7 @@ class PhotoViewer {
     this.rotateAngle = 0;
 
     if (!$(CLASS_NS + '-modal').length) {
-      // Fixed modal position bug
-      if (this.options.fixedContent) {
-        $('html').css({ overflow: '', 'padding-right': '' });
-      }
-
-      // Reset zIndex after close
+      // Reset `z-index` after close
       if (this.options.multiInstances) {
         PUBLIC_VARS['zIndex'] = this.options.zIndex;
       }
