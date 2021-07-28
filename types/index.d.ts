@@ -69,7 +69,7 @@ declare namespace PhotoViewer {
     initAnimation?: boolean;
     fixedModalPos?: boolean;
     zIndex?: number;
-    dragHandle?: boolean;
+    dragHandle?: string | null;
     callbacks?: {
       beforeOpen?: (context?: any) => void;
       opened?: (context?: any) => void;

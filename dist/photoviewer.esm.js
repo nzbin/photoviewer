@@ -1478,7 +1478,8 @@ var draggable = {
     var dragStart = function dragStart(e) {
       e = e || window.event; // Must be removed
       // e.preventDefault();
-      // Get clicked button
+
+      modal.get(0).blur(); // Get clicked button
 
       var elemCancel = $(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
@@ -1517,7 +1518,7 @@ var draggable = {
 
     var dragEnd = function dragEnd() {
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
-      isDragging = false; // Focus must be executed at the end
+      isDragging = false; // Focus must be executed after drag end
 
       modal.get(0).focus();
     };

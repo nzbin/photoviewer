@@ -152,7 +152,7 @@ export default {
   zIndex: 1090,
 
   // Selector of drag handler
-  dragHandle: false,
+  dragHandle: null,
 
   // Callback events
   callbacks: {
