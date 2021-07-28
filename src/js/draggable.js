@@ -29,6 +29,8 @@ export default {
       // Must be removed
       // e.preventDefault();
 
+      modal[0].blur();
+
       // Get clicked button
       const elemCancel = $(e.target).closest(dragCancel);
       // Stop modal moving when click buttons
@@ -86,8 +88,8 @@ export default {
 
       isDragging = false;
 
-      // Focus must be executed at the end
-      modal.get(0).focus();
+      // Focus must be executed after drag end
+      modal[0].focus();
     };
 
     $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);

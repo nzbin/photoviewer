@@ -313,7 +313,7 @@ class PhotoViewer {
     }
 
     // The focus must behind opening
-    this.$photoviewer.get(0).focus();
+    this.$photoviewer[0].focus();
   }
 
   setModalSize(img) {
@@ -333,9 +333,11 @@ class PhotoViewer {
 
     // Modal size should calc with stage css value
     const modalData = {
-      width: img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) +
+      width: img.width +
+        parseFloat(stageCSS.left) + parseFloat(stageCSS.right) +
         parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight),
-      height: img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) +
+      height: img.height +
+        parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) +
         parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom)
     };
 
@@ -766,13 +768,13 @@ class PhotoViewer {
       height: this.imageData.originalHeight
     });
 
-    this.$photoviewer.get(0).focus();
+    this.$photoviewer[0].focus();
   }
 
   fullscreen() {
     requestFullscreen(this.$photoviewer[0]);
 
-    this.$photoviewer.get(0).focus();
+    this.$photoviewer[0].focus();
   }
 
   _keydown(e) {

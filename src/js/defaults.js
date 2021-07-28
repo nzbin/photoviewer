@@ -1,18 +1,18 @@
 import $ from './domq.js';
 export default {
-  // Enable modal to drag
+  // Whether enable modal dragging
   draggable: true,
 
-  // Enable modal to resize
+  // Whether enable modal resizing
   resizable: true,
 
-  // Enable image to move
+  // Whether enable image moving
   movable: true,
 
-  // Enable keyboard navigation
+  // Whether enable keyboard navigation
   keyboard: true,
 
-  // Shows the title
+  // Whether show the title
   title: true,
 
   // Min width of modal
@@ -21,13 +21,13 @@ export default {
   // Min height of modal
   modalHeight: 320,
 
-  // Disable the page content scroll
+  // Whether enable the page content scroll
   fixedContent: true,
 
-  // Disable change the modal size after image loaded
+  // Whether change the modal size after image loaded
   fixedModalSize: false,
 
-  // Disable the image viewer maximized on init
+  // Whether enable maximized on init
   initMaximized: false,
 
   // Threshold of modal relative to browser window
@@ -139,13 +139,13 @@ export default {
     rotateRight: 'rotate-right (Ctrl+.)'
   },
 
-  // Enable multiple instances
+  // Whether enable multiple instances
   multiInstances: true,
 
-  // Enable animation
+  // Whether enable modal transform animation
   initAnimation: true,
 
-  // Enable modal position auto centering after image changed
+  // Whether disable modal translate to center after image changed
   fixedModalPos: false,
 
   // Modal css `z-index`
@@ -167,7 +167,7 @@ export default {
   // Start images index
   index: 0,
 
-  // Load the image progressively
+  // Whether load the image progressively
   progressiveLoading: true,
 
   // The DOM element to which viewer will be added
@@ -176,7 +176,7 @@ export default {
   // Custom Buttons
   customButtons: {},
 
-  // Modal css `position: fixed`
+  // Whether set modal css `position: fixed`
   positionFixed: false,
 
   // Init modal position `{top: 0, right: 0, bottom: 0, left: 0}`
