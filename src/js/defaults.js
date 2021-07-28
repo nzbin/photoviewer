@@ -21,9 +21,6 @@ export default {
   // Min height of modal
   modalHeight: 320,
 
-  // Whether enable the page content scroll
-  fixedContent: true,
-
   // Whether change the modal size after image loaded
   fixedModalSize: false,
 
@@ -177,7 +174,7 @@ export default {
   customButtons: {},
 
   // Whether set modal css `position: fixed`
-  positionFixed: false,
+  positionFixed: true,
 
   // Init modal position `{top: 0, right: 0, bottom: 0, left: 0}`
   initModalPos: null
