@@ -22,8 +22,8 @@
   <div class="container">
     <h1></h1>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Launch
-      demo modal</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+      Launch demo modal</button>
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
@@ -43,7 +43,8 @@
                  href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
                 <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
               </a>
-              <a data-gallery="photoviewer" data-title="Winter Fairytale by Achim Thomae" data-group="a"
+              <a data-gallery="photoviewer" data-title="Winter Fairytale by Achim Thomae"
+                 data-group="a"
                  href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
                 <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
               </a>
@@ -112,12 +113,13 @@
       var items = [],
         options = {
           index: $(this).index(),
+          appendTo: '.modal',
         };
 
       $('[data-gallery=photoviewer]').each(function () {
         items.push({
           src: $(this).attr('href'),
-          title: $(this).attr('data-title')
+          title: $(this).attr('data-title'),
         });
       });
 
