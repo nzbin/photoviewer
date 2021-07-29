@@ -398,10 +398,10 @@ class PhotoViewer {
     const scale = this.getImageScale(stageData.w, stageData.h);
 
     this.$image.css({
-      width: Math.round(img.width * scale) + 'px',
-      height: Math.round(img.height * scale) + 'px',
-      left: (stageData.w - Math.round(img.width * scale)) / 2 + 'px',
-      top: (stageData.h - Math.round(img.height * scale)) / 2 + 'px'
+      width: Math.round(img.width * scale),
+      height: Math.round(img.height * scale),
+      left: (stageData.w - Math.round(img.width * scale)) / 2,
+      top: (stageData.h - Math.round(img.height * scale)) / 2
     });
 
     // Store image initial data
@@ -645,10 +645,10 @@ class PhotoViewer {
       this.setImageSize(this.img);
     } else {
       $image.css({
-        width: Math.round(newWidth) + 'px',
-        height: Math.round(newHeight) + 'px',
-        left: Math.round(newLeft) + 'px',
-        top: Math.round(newTop) + 'px'
+        width: Math.round(newWidth),
+        height: Math.round(newHeight),
+        left: Math.round(newLeft),
+        top: Math.round(newTop)
       });
 
       // Set grab cursor

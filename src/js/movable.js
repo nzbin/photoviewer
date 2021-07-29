@@ -110,8 +110,8 @@ export default {
         }
 
         $(image).css({
-          left: newLeft + 'px',
-          top: newTop + 'px'
+          left: newLeft,
+          top: newTop
         });
 
         // Update image initial data

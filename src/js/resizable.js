@@ -116,38 +116,38 @@ export default {
 
       const opts = {
         e: {
-          width: Math.max(offsetX + modalData.w, minWidth) + 'px'
+          width: Math.max(offsetX + modalData.w, minWidth)
         },
         s: {
-          height: Math.max(offsetY + modalData.h, minHeight) + 'px'
+          height: Math.max(offsetY + modalData.h, minHeight)
         },
         se: {
-          width: Math.max(offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(offsetY + modalData.h, minHeight) + 'px'
+          width: Math.max(offsetX + modalData.w, minWidth),
+          height: Math.max(offsetY + modalData.h, minHeight)
         },
         w: {
-          width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
-          left: modalLeft + 'px'
+          width: Math.max(-offsetX + modalData.w, minWidth),
+          left: modalLeft
         },
         n: {
-          height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
-          top: modalTop + 'px'
+          height: Math.max(-offsetY + modalData.h, minHeight),
+          top: modalTop
         },
         nw: {
-          width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
-          top: modalTop + 'px',
-          left: modalLeft + 'px'
+          width: Math.max(-offsetX + modalData.w, minWidth),
+          height: Math.max(-offsetY + modalData.h, minHeight),
+          top: modalTop,
+          left: modalLeft
         },
         ne: {
-          width: Math.max(offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
-          top: modalTop + 'px'
+          width: Math.max(offsetX + modalData.w, minWidth),
+          height: Math.max(-offsetY + modalData.h, minHeight),
+          top: modalTop
         },
         sw: {
-          width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(offsetY + modalData.h, minHeight) + 'px',
-          left: modalLeft + 'px'
+          width: Math.max(-offsetX + modalData.w, minWidth),
+          height: Math.max(offsetY + modalData.h, minHeight),
+          left: modalLeft
         }
       };
 
@@ -196,79 +196,79 @@ export default {
       const opts = {
         e: {
           left: widthDiff >= -δ
-            ? (widthDiff - δ) / 2 + 'px'
+            ? (widthDiff - δ) / 2
             : imgLeft > widthDiff
-              ? imgLeft + 'px'
-              : widthDiff + 'px'
+              ? imgLeft
+              : widthDiff
         },
         s: {
           top: heightDiff >= δ
-            ? (heightDiff + δ) / 2 + 'px'
+            ? (heightDiff + δ) / 2
             : imgTop > heightDiff
-              ? imgTop + 'px'
-              : heightDiff + 'px'
+              ? imgTop
+              : heightDiff
         },
         se: {
           top: heightDiff >= δ
-            ? (heightDiff + δ) / 2 + 'px'
+            ? (heightDiff + δ) / 2
             : imgTop > heightDiff
-              ? imgTop + 'px'
-              : heightDiff + 'px',
+              ? imgTop
+              : heightDiff,
           left: widthDiff >= -δ
-            ? (widthDiff - δ) / 2 + 'px'
+            ? (widthDiff - δ) / 2
             : imgLeft > widthDiff
-              ? imgLeft + 'px'
-              : widthDiff + 'px'
+              ? imgLeft
+              : widthDiff
         },
         w: {
           left: widthDiff2 >= -δ
-            ? (widthDiff2 - δ) / 2 + 'px'
+            ? (widthDiff2 - δ) / 2
             : imgLeft2 > widthDiff2
-              ? imgLeft2 + 'px'
-              : widthDiff2 + 'px'
+              ? imgLeft2
+              : widthDiff2
         },
         n: {
           top: heightDiff2 >= δ
-            ? (heightDiff2 + δ) / 2 + 'px'
+            ? (heightDiff2 + δ) / 2
             : imgTop2 > heightDiff2
-              ? imgTop2 + 'px'
-              : heightDiff2 + 'px'
+              ? imgTop2
+              : heightDiff2
         },
         nw: {
           top: heightDiff2 >= δ
-            ? (heightDiff2 + δ) / 2 + 'px'
+            ? (heightDiff2 + δ) / 2
             : imgTop2 > heightDiff2
-              ? imgTop2 + 'px'
-              : heightDiff2 + 'px',
+              ? imgTop2
+              : heightDiff2,
           left: widthDiff2 >= -δ
-            ? (widthDiff2 - δ) / 2 + 'px'
+            ? (widthDiff2 - δ) / 2
             : imgLeft2 > widthDiff2
-              ? imgLeft2 + 'px'
-              : widthDiff2 + 'px'
+              ? imgLeft2
+              : widthDiff2
         },
         ne: {
           top: heightDiff2 >= δ
-            ? (heightDiff2 + δ) / 2 + 'px'
+            ? (heightDiff2 + δ) / 2
             : imgTop2 > heightDiff2
-              ? imgTop2 + 'px'
-              : heightDiff2 + 'px',
+              ? imgTop2
+              : heightDiff2,
           left: widthDiff >= -δ
-            ? (widthDiff - δ) / 2 + 'px'
+            ? (widthDiff - δ) / 2
             : imgLeft > widthDiff
-              ? imgLeft + 'px'
-              : widthDiff + 'px'
+              ? imgLeft
+              : widthDiff
         },
         sw: {
           top: heightDiff >= δ
-            ? (heightDiff + δ) / 2 + 'px'
+            ? (heightDiff + δ) / 2
             : imgTop > heightDiff
-              ? imgTop + 'px'
-              : heightDiff + 'px',
+              ? imgTop
+              : heightDiff,
           left: widthDiff2 >= -δ
-            ? (widthDiff2 - δ) / 2 + 'px'
+            ? (widthDiff2 - δ) / 2
             : imgLeft2 > widthDiff2
-              ? imgLeft2 + 'px'
-              : widthDiff2 + 'px'
+              ? imgLeft2
+              : widthDiff2
         }
       };
 

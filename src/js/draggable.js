@@ -75,8 +75,8 @@ export default {
         const relativeY = endY - startY;
 
         $(modal).css({
-          left: relativeX + left + 'px',
-          top: relativeY + top + 'px'
+          left: relativeX + left,
+          top: relativeY + top
         });
       }
     };
