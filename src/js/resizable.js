@@ -375,7 +375,7 @@ export default {
       $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
       // Update image initial data
-      const scale = this.getImageScaleToStage(
+      const scale = this.getImageScale(
         $(stage).width(),
         $(stage).height()
       );

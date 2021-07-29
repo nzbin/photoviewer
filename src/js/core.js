@@ -49,13 +49,13 @@ class PhotoViewer {
     // As we have multiple instances,
     // so every instance has following variables.
 
-    // Modal open flag
+    // Modal opened flag
     this.isOpened = false;
-    // Modal maximize flag
+    // Modal maximized flag
     this.isMaximized = false;
-    // Image rotate 90*(2n+1) flag
+    // Image rotated flag 90*(2n+1)
     this.isRotated = false;
-    // Image rotate angle
+    // Image rotated angle
     this.rotateAngle = 0;
 
     // Whether modal do resize
@@ -325,7 +325,7 @@ class PhotoViewer {
     };
 
     const gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1;
-    // Modal scale to window
+    // Modal scale relative to window
     const scale = Math.min(
       offsetParentData.width / (modalData.width * gapThreshold),
       offsetParentData.height / (modalData.height * gapThreshold),
@@ -356,7 +356,7 @@ class PhotoViewer {
       top: transTop + 'px'
     };
 
-    // Add modal init animation
+    // Add init animation for modal
     if (this.options.initAnimation) {
       this.$photoviewer.animate(modalCSSProps, 400, 'ease-in-out', () => {
         this.setImageSize(img);
@@ -369,7 +369,7 @@ class PhotoViewer {
     this.isOpened = true;
   }
 
-  getImageScaleToStage(stageWidth, stageHeight) {
+  getImageScale(stageWidth, stageHeight) {
     let scale = 1;
 
     if (!this.isRotated) {
@@ -387,7 +387,7 @@ class PhotoViewer {
       h: this.$stage.height()
     };
 
-    const scale = this.getImageScaleToStage(stageData.w, stageData.h);
+    const scale = this.getImageScale(stageData.w, stageData.h);
 
     this.$image.css({
       width: Math.round(img.width * scale) + 'px',
@@ -431,7 +431,7 @@ class PhotoViewer {
       this.$stage.removeClass('stage-ready');
       this.$image.removeClass('image-ready');
 
-      // Add image init animation
+      // Add init animation for image
       if (this.options.initAnimation && !this.options.progressiveLoading) {
         this.$image.fadeIn();
       }
