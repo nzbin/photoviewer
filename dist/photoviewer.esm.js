@@ -1221,25 +1221,23 @@ $.extend(methods);
 $.fn.extend(fnMethods);
 
 var DEFAULTS = {
-  // Enable modal to drag
+  // Whether to enable modal dragging
   draggable: true,
-  // Enable modal to resize
+  // Whether to enable modal resizing
   resizable: true,
-  // Enable image to move
+  // Whether to enable image moving
   movable: true,
-  // Enable keyboard navigation
+  // Whether to enable keyboard navigation
   keyboard: true,
-  // Shows the title
+  // Whether to show the title
   title: true,
   // Min width of modal
   modalWidth: 320,
   // Min height of modal
   modalHeight: 320,
-  // Disable the page content scroll
-  fixedContent: true,
-  // Disable change the modal size after image loaded
+  // Whether to change the modal size after image loaded
   fixedModalSize: false,
-  // Disable the image viewer maximized on init
+  // Whether to set maximized on init
   initMaximized: false,
   // Threshold of modal relative to browser window
   gapThreshold: 0.02,
@@ -1281,16 +1279,18 @@ var DEFAULTS = {
     rotateLeft: 'rotate-left (Ctrl+,)',
     rotateRight: 'rotate-right (Ctrl+.)'
   },
-  // Enable multiple instances
+  // Whether to enable multiple instances
   multiInstances: true,
-  // Enable animation
+  // Whether to enable modal transform animation
   initAnimation: true,
-  // Enable modal position auto centering after image changed
+  // Modal transform animation duration
+  animationDuration: 400,
+  // Whether to disable modal translate to center after image changed
   fixedModalPos: false,
   // Modal css `z-index`
   zIndex: 1090,
   // Selector of drag handler
-  dragHandle: false,
+  dragHandle: null,
   // Callback events
   callbacks: {
     beforeOpen: $.noop,
@@ -1302,14 +1302,14 @@ var DEFAULTS = {
   },
   // Start images index
   index: 0,
-  // Load the image progressively
+  // Whether to load the image progressively
   progressiveLoading: true,
   // The DOM element to which viewer will be added
   appendTo: 'body',
   // Custom Buttons
   customButtons: {},
-  // Modal css `position: fixed`
-  positionFixed: false,
+  // Whether to set modal css `position: fixed`
+  positionFixed: true,
   // Init modal position `{top: 0, right: 0, bottom: 0, left: 0}`
   initModalPos: null
 };
@@ -1379,27 +1379,6 @@ function getImageNameFromUrl(url) {
   var reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi;
   var txt = url.replace(reg, '$1');
   return txt;
-}
-/**
- * Check if the document has a scrollbar
- * @return {Boolean}
- */
-
-function hasScrollbar() {
-  return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
-}
-/**
- * Get the scrollbar width
- * @return {Number}
- */
-
-function getScrollbarWidth() {
-  var scrollDiv = document.createElement('div');
-  scrollDiv.style.cssText = 'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
-  document.body.appendChild(scrollDiv);
-  var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-  document.body.removeChild(scrollDiv);
-  return scrollbarWidth;
 }
 /**
  * Set grab cursor when move image
@@ -1478,8 +1457,9 @@ var draggable = {
     var dragStart = function dragStart(e) {
       e = e || window.event; // Must be removed
       // e.preventDefault();
+      // Fix focus scroll issue on Chrome
 
-      modal.get(0).blur(); // Get clicked button
+      modal[0].blur(); // Get clicked button
 
       var elemCancel = $(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
@@ -1510,8 +1490,8 @@ var draggable = {
         var relativeX = endX - startX;
         var relativeY = endY - startY;
         $(modal).css({
-          left: relativeX + left + 'px',
-          top: relativeY + top + 'px'
+          left: relativeX + left,
+          top: relativeY + top
         });
       }
     };
@@ -1520,7 +1500,7 @@ var draggable = {
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
       isDragging = false; // Focus must be executed after drag end
 
-      modal.get(0).focus();
+      modal[0].focus();
     };
 
     $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
@@ -1616,8 +1596,8 @@ var movable = {
         }
 
         $(image).css({
-          left: newLeft + 'px',
-          top: newTop + 'px'
+          left: newLeft,
+          top: newTop
         }); // Update image initial data
 
         $.extend(_this.imageData, {
@@ -1710,38 +1690,38 @@ var resizable = {
       var modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.t : modalData.t + modalData.h - minHeight;
       var opts = {
         e: {
-          width: Math.max(offsetX + modalData.w, minWidth) + 'px'
+          width: Math.max(offsetX + modalData.w, minWidth)
         },
         s: {
-          height: Math.max(offsetY + modalData.h, minHeight) + 'px'
+          height: Math.max(offsetY + modalData.h, minHeight)
         },
         se: {
-          width: Math.max(offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(offsetY + modalData.h, minHeight) + 'px'
+          width: Math.max(offsetX + modalData.w, minWidth),
+          height: Math.max(offsetY + modalData.h, minHeight)
         },
         w: {
-          width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
-          left: modalLeft + 'px'
+          width: Math.max(-offsetX + modalData.w, minWidth),
+          left: modalLeft
         },
         n: {
-          height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
-          top: modalTop + 'px'
+          height: Math.max(-offsetY + modalData.h, minHeight),
+          top: modalTop
         },
         nw: {
-          width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
-          top: modalTop + 'px',
-          left: modalLeft + 'px'
+          width: Math.max(-offsetX + modalData.w, minWidth),
+          height: Math.max(-offsetY + modalData.h, minHeight),
+          top: modalTop,
+          left: modalLeft
         },
         ne: {
-          width: Math.max(offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(-offsetY + modalData.h, minHeight) + 'px',
-          top: modalTop + 'px'
+          width: Math.max(offsetX + modalData.w, minWidth),
+          height: Math.max(-offsetY + modalData.h, minHeight),
+          top: modalTop
         },
         sw: {
-          width: Math.max(-offsetX + modalData.w, minWidth) + 'px',
-          height: Math.max(offsetY + modalData.h, minHeight) + 'px',
-          left: modalLeft + 'px'
+          width: Math.max(-offsetX + modalData.w, minWidth),
+          height: Math.max(offsetY + modalData.h, minHeight),
+          left: modalLeft
         }
       };
       return opts[dir];
@@ -1762,32 +1742,32 @@ var resizable = {
       var imgTop2 = (heightDiff2 > 0 ? $(image).position().top : $(image).position().top < 0 ? $(image).position().top : 0) + δ;
       var opts = {
         e: {
-          left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
+          left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
         },
         s: {
-          top: heightDiff >= δ ? (heightDiff + δ) / 2 + 'px' : imgTop > heightDiff ? imgTop + 'px' : heightDiff + 'px'
+          top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff
         },
         se: {
-          top: heightDiff >= δ ? (heightDiff + δ) / 2 + 'px' : imgTop > heightDiff ? imgTop + 'px' : heightDiff + 'px',
-          left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
+          top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
+          left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
         },
         w: {
-          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 + 'px' : imgLeft2 > widthDiff2 ? imgLeft2 + 'px' : widthDiff2 + 'px'
+          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
         },
         n: {
-          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 + 'px' : imgTop2 > heightDiff2 ? imgTop2 + 'px' : heightDiff2 + 'px'
+          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2
         },
         nw: {
-          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 + 'px' : imgTop2 > heightDiff2 ? imgTop2 + 'px' : heightDiff2 + 'px',
-          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 + 'px' : imgLeft2 > widthDiff2 ? imgLeft2 + 'px' : widthDiff2 + 'px'
+          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
+          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
         },
         ne: {
-          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 + 'px' : imgTop2 > heightDiff2 ? imgTop2 + 'px' : heightDiff2 + 'px',
-          left: widthDiff >= -δ ? (widthDiff - δ) / 2 + 'px' : imgLeft > widthDiff ? imgLeft + 'px' : widthDiff + 'px'
+          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
+          left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
         },
         sw: {
-          top: heightDiff >= δ ? (heightDiff + δ) / 2 + 'px' : imgTop > heightDiff ? imgTop + 'px' : heightDiff + 'px',
-          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 + 'px' : imgLeft2 > widthDiff2 ? imgLeft2 + 'px' : widthDiff2 + 'px'
+          top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
+          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
         }
       };
       return opts[dir];
@@ -1864,7 +1844,7 @@ var resizable = {
 
       $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', ''); // Update image initial data
 
-      var scale = _this.getImageScaleToStage($(stage).width(), $(stage).height());
+      var scale = _this.getImageScale($(stage).width(), $(stage).height());
 
       $.extend(_this.imageData, {
         initWidth: _this.img.width * scale,
@@ -1903,13 +1883,13 @@ var PhotoViewer = /*#__PURE__*/function () {
 
     this.$el = $(el); // As we have multiple instances,
     // so every instance has following variables.
-    // Modal open flag
+    // Modal opened flag
 
-    this.isOpened = false; // Modal maximize flag
+    this.isOpened = false; // Modal maximized flag
 
-    this.isMaximized = false; // Image rotate 90*(2n+1) flag
+    this.isMaximized = false; // Image rotated flag 90*(2n+1)
 
-    this.isRotated = false; // Image rotate angle
+    this.isRotated = false; // Image rotated angle
 
     this.rotateAngle = 0; // Whether modal do resize
 
@@ -2039,23 +2019,6 @@ var PhotoViewer = /*#__PURE__*/function () {
 
       if (!this.options.multiInstances) {
         $(CLASS_NS + '-modal').eq(0).remove();
-      } // Fixed modal position bug
-
-
-      if (!$(CLASS_NS + '-modal').length && this.options.fixedContent) {
-        $('html').css({
-          overflow: 'hidden'
-        });
-
-        if (hasScrollbar()) {
-          var scrollbarWidth = getScrollbarWidth();
-
-          if (scrollbarWidth) {
-            $('html').css({
-              'padding-right': scrollbarWidth
-            });
-          }
-        }
       }
 
       this.build();
@@ -2066,7 +2029,7 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "close",
     value: function close() {
-      this._triggerHook('beforeClose', this); // Remove instance
+      this._triggerHook('beforeClose', this); // Remove viewer instance
 
 
       this.$photoviewer.remove();
@@ -2076,15 +2039,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.rotateAngle = 0;
 
       if (!$(CLASS_NS + '-modal').length) {
-        // Fixed modal position bug
-        if (this.options.fixedContent) {
-          $('html').css({
-            overflow: '',
-            'padding-right': ''
-          });
-        } // Reset zIndex after close
-
-
+        // Reset `z-index` after close
         if (this.options.multiInstances) {
           PUBLIC_VARS['zIndex'] = this.options.zIndex;
         } // Off resize event
@@ -2110,11 +2065,15 @@ var PhotoViewer = /*#__PURE__*/function () {
     key: "setModalToCenter",
     value: function setModalToCenter(modal) {
       var initLeft = 0,
-          initTop = 0;
+          initTop = 0,
+          initRight = 0,
+          initBottom = 0;
 
       if ($.isPlainObject(this.options.initModalPos)) {
-        initLeft = this.options.initModalPos.left || 0;
-        initTop = this.options.initModalPos.top || 0;
+        initLeft = this.options.initModalPos.left;
+        initTop = this.options.initModalPos.top;
+        initRight = this.options.initModalPos.right;
+        initBottom = this.options.initModalPos.bottom;
       } else {
         var offsetParentData = this._getOffsetParentData();
 
@@ -2123,10 +2082,12 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
 
       var modalCSSProps = {
-        width: (this.modalData.width || this.options.modalWidth) + 'px',
-        height: (this.modalData.height || this.options.modalHeight) + 'px',
-        left: (this.modalData.left || initLeft) + 'px',
-        top: (this.modalData.top || initTop) + 'px'
+        width: this.modalData.width || this.options.modalWidth,
+        height: this.modalData.height || this.options.modalHeight,
+        left: this.modalData.left || initLeft,
+        top: this.modalData.top || initTop,
+        right: this.modalData.right || initRight,
+        bottom: this.modalData.bottom || initBottom
       };
       modal.css(modalCSSProps);
     }
@@ -2141,7 +2102,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       } // The focus must behind opening
 
 
-      this.$photoviewer.get(0).focus();
+      this.$photoviewer[0].focus();
     }
   }, {
     key: "setModalSize",
@@ -2166,7 +2127,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         width: img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) + parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight),
         height: img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) + parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom)
       };
-      var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1; // Modal scale to window
+      var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1; // Modal scale relative to window
 
       var scale = Math.min(offsetParentData.width / (modalData.width * gapThreshold), offsetParentData.height / (modalData.height * gapThreshold), 1);
       var minWidth = Math.max(modalData.width * scale, this.options.modalWidth);
@@ -2174,11 +2135,15 @@ var PhotoViewer = /*#__PURE__*/function () {
       minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
       minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
       var transLeft = 0,
-          transTop = 0;
+          transTop = 0,
+          transRight = 0,
+          transBottom = 0;
 
       if ($.isPlainObject(this.options.initModalPos)) {
-        transLeft = this.options.initModalPos.left || 0;
-        transTop = this.options.initModalPos.top || 0;
+        transLeft = this.options.initModalPos.left;
+        transTop = this.options.initModalPos.top;
+        transRight = this.options.initModalPos.right;
+        transBottom = this.options.initModalPos.bottom;
       } else {
         var _offsetParentData = this._getOffsetParentData();
 
@@ -2187,14 +2152,16 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
 
       var modalCSSProps = {
-        width: minWidth + 'px',
-        height: minHeight + 'px',
-        left: transLeft + 'px',
-        top: transTop + 'px'
-      }; // Add modal init animation
+        width: minWidth,
+        height: minHeight,
+        left: transLeft,
+        top: transTop,
+        right: transRight,
+        bottom: transBottom
+      }; // Add init animation for modal
 
       if (this.options.initAnimation) {
-        this.$photoviewer.animate(modalCSSProps, 400, 'ease-in-out', function () {
+        this.$photoviewer.animate(modalCSSProps, this.options.animationDuration, 'ease-in-out', function () {
           _this2.setImageSize(img);
         });
       } else {
@@ -2205,8 +2172,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.isOpened = true;
     }
   }, {
-    key: "getImageScaleToStage",
-    value: function getImageScaleToStage(stageWidth, stageHeight) {
+    key: "getImageScale",
+    value: function getImageScale(stageWidth, stageHeight) {
       var scale = 1;
 
       if (!this.isRotated) {
@@ -2224,12 +2191,12 @@ var PhotoViewer = /*#__PURE__*/function () {
         w: this.$stage.width(),
         h: this.$stage.height()
       };
-      var scale = this.getImageScaleToStage(stageData.w, stageData.h);
+      var scale = this.getImageScale(stageData.w, stageData.h);
       this.$image.css({
-        width: Math.round(img.width * scale) + 'px',
-        height: Math.round(img.height * scale) + 'px',
-        left: (stageData.w - Math.round(img.width * scale)) / 2 + 'px',
-        top: (stageData.h - Math.round(img.height * scale)) / 2 + 'px'
+        width: Math.round(img.width * scale),
+        height: Math.round(img.height * scale),
+        left: (stageData.w - Math.round(img.width * scale)) / 2,
+        top: (stageData.h - Math.round(img.height * scale)) / 2
       }); // Store image initial data
 
       $.extend(this.imageData, {
@@ -2256,7 +2223,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Remove class after image loaded
 
         this.$stage.removeClass('stage-ready');
-        this.$image.removeClass('image-ready'); // Add image init animation
+        this.$image.removeClass('image-ready'); // Add init animation for image
 
         if (this.options.initAnimation && !this.options.progressiveLoading) {
           this.$image.fadeIn();
@@ -2333,7 +2300,7 @@ var PhotoViewer = /*#__PURE__*/function () {
 
       var now = Date.now();
 
-      if (now - this._lastTimestamp >= 400) {
+      if (now - this._lastTimestamp >= this.options.animationDuration) {
         this.groupIndex = this.groupIndex + step;
         this.jumpTo(this.groupIndex);
         this._lastTimestamp = now;
@@ -2446,10 +2413,10 @@ var PhotoViewer = /*#__PURE__*/function () {
         this.setImageSize(this.img);
       } else {
         $image.css({
-          width: Math.round(newWidth) + 'px',
-          height: Math.round(newHeight) + 'px',
-          left: Math.round(newLeft) + 'px',
-          top: Math.round(newTop) + 'px'
+          width: Math.round(newWidth),
+          height: Math.round(newHeight),
+          left: Math.round(newLeft),
+          top: Math.round(newTop)
         }); // Set grab cursor
 
         setGrabCursor({
@@ -2553,13 +2520,13 @@ var PhotoViewer = /*#__PURE__*/function () {
         width: this.imageData.originalWidth,
         height: this.imageData.originalHeight
       });
-      this.$photoviewer.get(0).focus();
+      this.$photoviewer[0].focus();
     }
   }, {
     key: "fullscreen",
     value: function fullscreen() {
       requestFullscreen(this.$photoviewer[0]);
-      this.$photoviewer.get(0).focus();
+      this.$photoviewer[0].focus();
     }
   }, {
     key: "_keydown",
@@ -2740,4 +2707,4 @@ $.extend(PhotoViewer.prototype, draggable, movable, resizable);
 
 window.PhotoViewer = PhotoViewer;
 
-export default PhotoViewer;
+export { PhotoViewer as default };

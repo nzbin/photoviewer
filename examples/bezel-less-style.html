@@ -18,18 +18,10 @@
   <![endif]-->
   <style>
     .photoviewer-modal {
-      box-shadow: 0 0 6px 2px rgba(0, 0, 0, .3);
-    }
-
-    .photoviewer-inner {
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
       background-color: transparent;
       border: none;
       border-radius: 0;
-      backdrop-filter: unset;
+      box-shadow: 0 0 6px 2px rgba(0, 0, 0, .3);
     }
 
     .photoviewer-header .photoviewer-toolbar {
@@ -53,6 +45,7 @@
 
     .photoviewer-header,
     .photoviewer-footer {
+      border-radius: 0;
       pointer-events: none;
     }
 
@@ -65,6 +58,7 @@
       pointer-events: auto;
     }
 
+    .photoviewer-header .photoviewer-button:hover,
     .photoviewer-footer .photoviewer-button:hover {
       color: white;
     }
