@@ -338,7 +338,7 @@ $('[data-gallery=manual]').click(function (e) {
     <p>The buttons display in footer toolbar.</p>
 
     <h3>
-      <code>fixedContent</code>
+      <code><del>fixedContent</del></code>
       <small>
         <code>boolean true</code>
       </small>
@@ -384,10 +384,10 @@ $('[data-gallery=manual]').click(function (e) {
     <h3>
       <code>dragHandle</code>
       <small>
-        <code>string | boolean false</code>
+        <code>string | null</code>
       </small>
     </h3>
-    <p>The handle of draggable. Default <code>false</code> which whole modal can be dragging.</p>
+    <p>The handle of draggable. Default <code>null</code> which whole modal can be dragging.</p>
 
     <h3>
       <code>multiInstances</code>
@@ -521,6 +521,34 @@ new PhotoViewer(items, {
       <li><code>click</code> - a callback function that is called when the button is clicked.</li>
     </ul>
 
+    <h3>
+      <code>positionFixed</code>
+      <small>
+        <code>boolean true</code>
+      </small>
+    </h3>
+    <p>If true, the modal css position will be set <code>fixed</code> otherwise it will be set
+      <code>absolute</code>.
+    </p>
+
+    <h3>
+      <code>initModalPos</code>
+      <small>
+        <code>object {}</code>
+      </small>
+    </h3>
+    <p>You can set the modal position manually with value <code>top</code> <code>right</code>
+      <code>bottom</code> <code>left</code>.
+    </p>
+
+    <h3>
+      <code>animationDuration</code>
+      <small>
+        <code>number 400</code>
+      </small>
+    </h3>
+    <p>The modal animation duration of transform on init.
+    </p>
 
     <footer class="footer text-center">
       <p>
