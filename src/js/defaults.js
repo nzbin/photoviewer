@@ -142,6 +142,9 @@ export default {
   // Whether to enable modal transform animation
   initAnimation: true,
 
+  // Modal transform animation duration
+  animationDuration: 400,
+
   // Whether to disable modal translate to center after image changed
   fixedModalPos: false,
 

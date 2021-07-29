@@ -366,7 +366,7 @@ class PhotoViewer {
 
     // Add init animation for modal
     if (this.options.initAnimation) {
-      this.$photoviewer.animate(modalCSSProps, 400, 'ease-in-out', () => {
+      this.$photoviewer.animate(modalCSSProps, this.options.animationDuration, 'ease-in-out', () => {
         this.setImageSize(img);
       });
     } else {
@@ -519,7 +519,7 @@ class PhotoViewer {
 
     // Make sure change image after the modal animation has finished
     const now = Date.now();
-    if (now - this._lastTimestamp >= 400) {
+    if (now - this._lastTimestamp >= this.options.animationDuration) {
       this.groupIndex = this.groupIndex + step;
 
       this.jumpTo(this.groupIndex);
