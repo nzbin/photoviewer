@@ -265,11 +265,13 @@ class PhotoViewer {
   }
 
   setModalToCenter(modal) {
-    let initLeft = 0, initTop = 0;
+    let initLeft = 0, initTop = 0, initRight = 0, initBottom = 0;
 
     if ($.isPlainObject(this.options.initModalPos)) {
-      initLeft = this.options.initModalPos.left || 0;
-      initTop = this.options.initModalPos.top || 0;
+      initLeft = this.options.initModalPos.left;
+      initTop = this.options.initModalPos.top;
+      initRight = this.options.initModalPos.right;
+      initBottom = this.options.initModalPos.bottom;
     } else {
       const offsetParentData = this._getOffsetParentData();
       initLeft = (offsetParentData.width - this.options.modalWidth) / 2 + offsetParentData.scrollLeft;
@@ -277,10 +279,12 @@ class PhotoViewer {
     }
 
     const modalCSSProps = {
-      width: (this.modalData.width || this.options.modalWidth) + 'px',
-      height: (this.modalData.height || this.options.modalHeight) + 'px',
-      left: (this.modalData.left || initLeft) + 'px',
-      top: (this.modalData.top || initTop) + 'px'
+      width: (this.modalData.width || this.options.modalWidth),
+      height: (this.modalData.height || this.options.modalHeight),
+      left: (this.modalData.left || initLeft),
+      top: (this.modalData.top || initTop),
+      right: (this.modalData.right || initRight),
+      bottom: (this.modalData.bottom || initBottom)
     };
 
     modal.css(modalCSSProps);
@@ -338,11 +342,13 @@ class PhotoViewer {
     minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
     minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
 
-    let transLeft = 0, transTop = 0;
+    let transLeft = 0, transTop = 0, transRight = 0, transBottom = 0;
 
     if ($.isPlainObject(this.options.initModalPos)) {
-      transLeft = this.options.initModalPos.left || 0;
-      transTop = this.options.initModalPos.top || 0;
+      transLeft = this.options.initModalPos.left;
+      transTop = this.options.initModalPos.top;
+      transRight = this.options.initModalPos.right;
+      transBottom = this.options.initModalPos.bottom;
     } else {
       const offsetParentData = this._getOffsetParentData();
       transLeft = (offsetParentData.width - minWidth) / 2 + offsetParentData.scrollLeft;
@@ -350,10 +356,12 @@ class PhotoViewer {
     }
 
     const modalCSSProps = {
-      width: minWidth + 'px',
-      height: minHeight + 'px',
-      left: transLeft + 'px',
-      top: transTop + 'px'
+      width: minWidth,
+      height: minHeight,
+      left: transLeft,
+      top: transTop,
+      right: transRight,
+      bottom: transBottom
     };
 
     // Add init animation for modal
