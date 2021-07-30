@@ -170,7 +170,7 @@ export default {
   // Whether to load the image progressively
   progressiveLoading: true,
 
-  // The DOM element to which viewer will be added
+  // The DOM element to which viewer will be attached
   appendTo: 'body',
 
   // Custom Buttons

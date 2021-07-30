@@ -171,7 +171,7 @@ class PhotoViewer {
     // Make PhotoViewer HTML string to jQuery element
     const $photoviewer = $(photoviewerHTML);
 
-    // Get all PhotoViewer element
+    // Get all PhotoViewer elements
     this.$photoviewer = $photoviewer;
     this.$stage = $photoviewer.find(CLASS_NS + '-stage');
     this.$title = $photoviewer.find(CLASS_NS + '-title');
@@ -192,7 +192,7 @@ class PhotoViewer {
     this.$stage.addClass('stage-ready');
     this.$image.addClass('image-ready');
 
-    // Reset modal z-index with multiple instances
+    // Reset modal `z-index` of multiple instances
     this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
 
     if (this.options.positionFixed) {
@@ -233,7 +233,7 @@ class PhotoViewer {
   close() {
     this._triggerHook('beforeClose', this);
 
-    // Remove viewer instance
+    // Remove PhotoViewer instance
     this.$photoviewer.remove();
 
     this.isOpened = false;
@@ -299,7 +299,7 @@ class PhotoViewer {
       this.setModalToCenter(modal);
     }
 
-    // The focus must behind opening
+    // The focus must be set after opening
     this.$photoviewer[0].focus();
   }
 

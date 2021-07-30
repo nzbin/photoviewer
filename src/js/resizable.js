@@ -18,7 +18,7 @@ export default {
    * --------------------------------------------------------------------------
    * 1. Modal resizable
    * 2. Keep image in stage center
-   * 3. Other image limitations
+   * 3. Other image restrictions
    * --------------------------------------------------------------------------
    *
    * Resizable
