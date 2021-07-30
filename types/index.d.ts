@@ -30,7 +30,6 @@ declare namespace PhotoViewer {
     title?: boolean;
     modalWidth?: number;
     modalHeight?: number;
-    fixedContent?: boolean;
     fixedModalSize?: boolean;
     initMaximized?: boolean;
     gapThreshold?: number;
