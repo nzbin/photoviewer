@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.6.0
+ * photoviewer - v3.6.1
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -726,12 +726,10 @@
   }
 
   function calc(dimension, value) {
-    var dimensionProperty =
-      dimension.replace(/./, function (m) { return m[0].toUpperCase(); });
-
+    var dimensionProperty = dimension.replace(/./, function (m) { return m[0].toUpperCase(); });
     var el = this[0];
     if (value === undefined) return isWindow(el)
-      ? el['inner' + dimensionProperty]
+      ? el.document.documentElement['client' + dimensionProperty]
       : isDocument(el)
         ? el.documentElement['scroll' + dimensionProperty]
         : subtract(this, dimension);
@@ -742,6 +740,7 @@
   }
 
   // Export
+
   function width(value) {
     return calc.call(this, 'width', value);
   }
@@ -802,6 +801,7 @@
   };
 
   // Export
+
   function remove$1() {
     return this.each(function () {
       if (this.parentNode != null)
@@ -1165,6 +1165,7 @@
   }
 
   // Export
+
   var show = function (speed, callback) {
     origShow.call(this);
     if (speed === undefined) speed = 0;
@@ -1310,7 +1311,7 @@
     index: 0,
     // Whether to load the image progressively
     progressiveLoading: true,
-    // The DOM element to which viewer will be added
+    // The DOM element to which viewer will be attached
     appendTo: 'body',
     // Custom Buttons
     customButtons: {},
@@ -1631,7 +1632,7 @@
      * --------------------------------------------------------------------------
      * 1. Modal resizable
      * 2. Keep image in stage center
-     * 3. Other image limitations
+     * 3. Other image restrictions
      * --------------------------------------------------------------------------
      *
      * Resizable
@@ -1975,7 +1976,7 @@
         var photoviewerHTML = this._createTemplate(); // Make PhotoViewer HTML string to jQuery element
 
 
-        var $photoviewer = $(photoviewerHTML); // Get all PhotoViewer element
+        var $photoviewer = $(photoviewerHTML); // Get all PhotoViewer elements
 
         this.$photoviewer = $photoviewer;
         this.$stage = $photoviewer.find(CLASS_NS + '-stage');
@@ -1994,7 +1995,7 @@
         this.$next = $photoviewer.find(CLASS_NS + '-button-next'); // Add class before image loaded
 
         this.$stage.addClass('stage-ready');
-        this.$image.addClass('image-ready'); // Reset modal z-index with multiple instances
+        this.$image.addClass('image-ready'); // Reset modal `z-index` of multiple instances
 
         this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
 
@@ -2035,7 +2036,7 @@
     }, {
       key: "close",
       value: function close() {
-        this._triggerHook('beforeClose', this); // Remove viewer instance
+        this._triggerHook('beforeClose', this); // Remove PhotoViewer instance
 
 
         this.$photoviewer.remove();
@@ -2105,7 +2106,7 @@
           this.isOpened = true;
         } else {
           this.setModalToCenter(modal);
-        } // The focus must behind opening
+        } // The focus must be set after opening
 
 
         this.$photoviewer[0].focus();
