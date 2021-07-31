@@ -85,6 +85,6 @@
     "uglify-js": "^3.14.1"
   },
   "dependencies": {
-    "domq.js": "^0.6.6"
+    "domq.js": "^0.6.7"
   }
 }
