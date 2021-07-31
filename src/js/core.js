@@ -18,8 +18,6 @@ import {
   preloadImage,
   requestFullscreen,
   getImageNameFromUrl,
-  hasScrollbar,
-  getScrollbarWidth,
   setGrabCursor,
   isRootNode
 } from './utilities';
