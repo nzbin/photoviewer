@@ -744,7 +744,7 @@ class PhotoViewer {
     this.isMaximized = true;
   }
 
-  minimize(modal) {
+  exitMaximize(modal) {
     modal.removeClass(NS + '-maximized');
 
     this.setModalToCenter(modal);
@@ -772,7 +772,7 @@ class PhotoViewer {
 
       this.maximize(this.$photoviewer);
     } else {
-      this.minimize(this.$photoviewer);
+      this.exitMaximize(this.$photoviewer);
     }
 
     this.setImageSize({

@@ -1324,9 +1324,9 @@
   var document = window.document;
   /**
    * Debounce function
-   * @param {Function} fn - The function will be triggered
-   * @param {Number} delay - The debounce delay time
-   * @return {Function}
+   * @param {function} fn - The function will be triggered
+   * @param {number} delay - The debounce delay time
+   * @return {function}
    */
 
   function debounce(fn, delay) {
@@ -1342,9 +1342,9 @@
   }
   /**
    * Preload a image
-   * @param {String} src - The image src
-   * @param {Function} success - The callback of success
-   * @param {Function} error - The callback of error
+   * @param {string} src - The image src
+   * @param {function} success - The callback of success
+   * @param {function} error - The callback of error
    */
 
   function preloadImage(src, success, error) {
@@ -1378,8 +1378,8 @@
   }
   /**
    * Get the image name from its url
-   * @param {String} url - The image src
-   * @return {String}
+   * @param {string} url - The image src
+   * @return {string}
    */
 
   function getImageNameFromUrl(url) {
@@ -1389,27 +1389,27 @@
   }
   /**
    * Set grab cursor when move image
-   * @param {Object} imageData - The image data
-   * @param {Object} stageData - The stage data
-   * @param {Object} stage - The stage element
-   * @param {Boolean} isRotate - The image rotated flag
+   * @param {object} imageData - The image data
+   * @param {object} stageData - The stage data
+   * @param {object} $stage - The domq element
+   * @param {boolean} isRotate - The image rotated flag
    */
 
-  function setGrabCursor(imageData, stageData, stage, isRotated) {
+  function setGrabCursor(imageData, stageData, $stage, isRotated) {
     var imageWidth = !isRotated ? imageData.w : imageData.h;
     var imageHeight = !isRotated ? imageData.h : imageData.w;
 
     if (imageHeight > stageData.h || imageWidth > stageData.w) {
-      stage.addClass('is-grab');
+      $stage.addClass('is-grab');
     }
 
     if (imageHeight <= stageData.h && imageWidth <= stageData.w) {
-      stage.removeClass('is-grab');
+      $stage.removeClass('is-grab');
     }
   }
   /**
    * Check whether browser support touch event
-   * @return {Boolean}
+   * @return {boolean}
    */
 
   function supportTouch() {
@@ -1417,11 +1417,33 @@
   }
   /**
    * Check whether element is root node (`body` or `html`)
-   * @return {Boolean}
+   * @param {object} elem - The DOM element
+   * @return {boolean}
    */
 
   function isRootNode(elem) {
     return /^(?:body|html)$/i.test(elem.nodeName);
+  }
+  /**
+   * Get sum value of CSS props
+   * @param {object} $elem - The domq element
+   * @param {array} props - The array of CSS props
+   * @return {number}
+   */
+
+  function getCSSValueSum($elem, props) {
+    return props.reduce(function (acc, cur) {
+      return acc + parseFloat($elem.css(cur));
+    }, 0);
+  }
+  /**
+   * Check whether element's CSS `box-sizing` is `border-box`
+   * @param {object} $elem - The domq element
+   * @return {boolean}
+   */
+
+  function isBorderBox($elem) {
+    return $elem.css('box-sizing') === 'border-box';
   }
 
   var $W = $(window);
@@ -1937,7 +1959,18 @@
 
         if (opts.resizable) {
           this.resizable(this.$photoviewer, this.$stage, this.$image, opts.modalWidth, opts.modalHeight);
-        }
+        } // Store the edge value of stage
+
+
+        this._stageEdgeValue = {
+          horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
+          vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
+        }; //Store the edge value of modal
+
+        this._modalEdgeValue = {
+          horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
+          vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
+        };
       }
     }, {
       key: "_createBtns",
@@ -2074,7 +2107,15 @@
         var initLeft = 0,
             initTop = 0,
             initRight = 0,
-            initBottom = 0;
+            initBottom = 0; // Extra width/height for `content-box`
+
+        var extraWidth = 0,
+            extraHeight = 0;
+
+        if (!isBorderBox(this.$photoviewer)) {
+          extraWidth += this._modalEdgeValue.horizontal;
+          extraHeight += this._modalEdgeValue.vertical;
+        }
 
         if ($.isPlainObject(this.options.initModalPos)) {
           initLeft = this.options.initModalPos.left;
@@ -2084,11 +2125,11 @@
         } else {
           var offsetParentData = this._getOffsetParentData();
 
-          initLeft = (offsetParentData.width - this.options.modalWidth) / 2 + offsetParentData.scrollLeft;
-          initTop = (offsetParentData.height - this.options.modalHeight) / 2 + offsetParentData.scrollTop;
+          initLeft = (offsetParentData.width - this.options.modalWidth - extraWidth) / 2 + offsetParentData.scrollLeft;
+          initTop = (offsetParentData.height - this.options.modalHeight - extraHeight) / 2 + offsetParentData.scrollTop;
         }
 
-        var modalCSSProps = {
+        var modalInitCSS = {
           width: this.modalData.width || this.options.modalWidth,
           height: this.modalData.height || this.options.modalHeight,
           left: this.modalData.left || initLeft,
@@ -2096,7 +2137,7 @@
           right: this.modalData.right || initRight,
           bottom: this.modalData.bottom || initBottom
         };
-        modal.css(modalCSSProps);
+        modal.css(modalInitCSS);
       }
     }, {
       key: "setInitModalPos",
@@ -2116,29 +2157,28 @@
       value: function setModalSize(img) {
         var _this2 = this;
 
-        var offsetParentData = this._getOffsetParentData(); // Stage css value
+        var offsetParentData = this._getOffsetParentData(); // Modal size should calculate with stage css value
 
 
-        var stageCSS = {
-          left: this.$stage.css('left'),
-          right: this.$stage.css('right'),
-          top: this.$stage.css('top'),
-          bottom: this.$stage.css('bottom'),
-          borderLeft: this.$stage.css('border-left-width'),
-          borderRight: this.$stage.css('border-right-width'),
-          borderTop: this.$stage.css('border-top-width'),
-          borderBottom: this.$stage.css('border-bottom-width')
-        }; // Modal size should calc with stage css value
+        var modalWidth = img.width + this._stageEdgeValue.horizontal;
+        var modalHeight = img.height + this._stageEdgeValue.vertical; // Extra width/height for `content-box`
 
-        var modalData = {
-          width: img.width + parseFloat(stageCSS.left) + parseFloat(stageCSS.right) + parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight),
-          height: img.height + parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) + parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom)
-        };
-        var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1; // Modal scale relative to window
+        var extraWidth = 0,
+            extraHeight = 0;
 
-        var scale = Math.min(offsetParentData.width / (modalData.width * gapThreshold), offsetParentData.height / (modalData.height * gapThreshold), 1);
-        var minWidth = Math.max(modalData.width * scale, this.options.modalWidth);
-        var minHeight = Math.max(modalData.height * scale, this.options.modalHeight);
+        if (isBorderBox(this.$photoviewer)) {
+          modalWidth += this._modalEdgeValue.horizontal;
+          modalHeight += this._modalEdgeValue.vertical;
+        } else {
+          extraWidth += this._modalEdgeValue.horizontal;
+          extraHeight += this._modalEdgeValue.vertical;
+        }
+
+        var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1; // Modal scale relative to parent element
+
+        var scale = Math.min(offsetParentData.width / ((modalWidth + extraWidth) * gapThreshold), offsetParentData.height / ((modalHeight + extraHeight) * gapThreshold), 1);
+        var minWidth = Math.max(modalWidth * scale, this.options.modalWidth);
+        var minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
         minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
         minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
         var transLeft = 0,
@@ -2154,11 +2194,11 @@
         } else {
           var _offsetParentData = this._getOffsetParentData();
 
-          transLeft = (_offsetParentData.width - minWidth) / 2 + _offsetParentData.scrollLeft;
-          transTop = (_offsetParentData.height - minHeight) / 2 + _offsetParentData.scrollTop;
+          transLeft = (_offsetParentData.width - minWidth - extraWidth) / 2 + _offsetParentData.scrollLeft;
+          transTop = (_offsetParentData.height - minHeight - extraHeight) / 2 + _offsetParentData.scrollTop;
         }
 
-        var modalCSSProps = {
+        var modalTransCSS = {
           width: minWidth,
           height: minHeight,
           left: transLeft,
@@ -2168,11 +2208,11 @@
         }; // Add init animation for modal
 
         if (this.options.initAnimation) {
-          this.$photoviewer.animate(modalCSSProps, this.options.animationDuration, 'ease-in-out', function () {
+          this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, 'ease-in-out', function () {
             _this2.setImageSize(img);
           });
         } else {
-          this.$photoviewer.css(modalCSSProps);
+          this.$photoviewer.css(modalTransCSS);
           this.setImageSize(img);
         }
 
@@ -2511,10 +2551,18 @@
       key: "_toggleMaximize",
       value: function _toggleMaximize() {
         if (!this.isMaximized) {
-          // Store modal size and position before maximized
+          var originalWidth = parseFloat(this.$photoviewer.width());
+          var originalHeight = parseFloat(this.$photoviewer.height());
+
+          if (isBorderBox(this.$photoviewer)) {
+            originalWidth += this._modalEdgeValue.horizontal;
+            originalHeight += this._modalEdgeValue.vertical;
+          } // Store modal size and position before maximized
+
+
           this.modalData = {
-            width: this.$photoviewer.width(),
-            height: this.$photoviewer.height(),
+            width: originalWidth,
+            height: originalHeight,
             left: parseFloat(this.$photoviewer.css('left')),
             top: parseFloat(this.$photoviewer.css('top'))
           };
