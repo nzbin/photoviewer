@@ -19,7 +19,9 @@ import {
   requestFullscreen,
   getImageNameFromUrl,
   setGrabCursor,
-  isRootNode
+  isRootNode,
+  getCSSValueSum,
+  isBorderBox
 } from './utilities';
 
 import draggable from './draggable';
@@ -105,6 +107,17 @@ class PhotoViewer {
         opts.modalHeight
       );
     }
+
+    // Store the edge value of stage
+    this._stageEdgeValue = {
+      horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
+      vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
+    };
+    //Store the edge value of modal
+    this._modalEdgeValue = {
+      horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
+      vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
+    };
   }
 
   _createBtns(toolbar) {
@@ -265,6 +278,14 @@ class PhotoViewer {
   setModalToCenter(modal) {
     let initLeft = 0, initTop = 0, initRight = 0, initBottom = 0;
 
+    // Extra width/height for `content-box`
+    let extraWidth = 0, extraHeight = 0;
+
+    if (!isBorderBox(this.$photoviewer)) {
+      extraWidth += this._modalEdgeValue.horizontal;
+      extraHeight += this._modalEdgeValue.vertical;
+    }
+
     if ($.isPlainObject(this.options.initModalPos)) {
       initLeft = this.options.initModalPos.left;
       initTop = this.options.initModalPos.top;
@@ -272,11 +293,11 @@ class PhotoViewer {
       initBottom = this.options.initModalPos.bottom;
     } else {
       const offsetParentData = this._getOffsetParentData();
-      initLeft = (offsetParentData.width - this.options.modalWidth) / 2 + offsetParentData.scrollLeft;
-      initTop = (offsetParentData.height - this.options.modalHeight) / 2 + offsetParentData.scrollTop;
+      initLeft = (offsetParentData.width - this.options.modalWidth - extraWidth) / 2 + offsetParentData.scrollLeft;
+      initTop = (offsetParentData.height - this.options.modalHeight - extraHeight) / 2 + offsetParentData.scrollTop;
     }
 
-    const modalCSSProps = {
+    const modalInitCSS = {
       width: (this.modalData.width || this.options.modalWidth),
       height: (this.modalData.height || this.options.modalHeight),
       left: (this.modalData.left || initLeft),
@@ -285,7 +306,7 @@ class PhotoViewer {
       bottom: (this.modalData.bottom || initBottom)
     };
 
-    modal.css(modalCSSProps);
+    modal.css(modalInitCSS);
   }
 
   setInitModalPos(modal) {
@@ -304,38 +325,32 @@ class PhotoViewer {
   setModalSize(img) {
     const offsetParentData = this._getOffsetParentData();
 
-    // Stage css value
-    const stageCSS = {
-      left: this.$stage.css('left'),
-      right: this.$stage.css('right'),
-      top: this.$stage.css('top'),
-      bottom: this.$stage.css('bottom'),
-      borderLeft: this.$stage.css('border-left-width'),
-      borderRight: this.$stage.css('border-right-width'),
-      borderTop: this.$stage.css('border-top-width'),
-      borderBottom: this.$stage.css('border-bottom-width')
-    };
+    // Modal size should calculate with stage css value
+    let modalWidth = img.width + this._stageEdgeValue.horizontal;
+    let modalHeight = img.height + this._stageEdgeValue.vertical;
 
-    // Modal size should calc with stage css value
-    const modalData = {
-      width: img.width +
-        parseFloat(stageCSS.left) + parseFloat(stageCSS.right) +
-        parseFloat(stageCSS.borderLeft) + parseFloat(stageCSS.borderRight),
-      height: img.height +
-        parseFloat(stageCSS.top) + parseFloat(stageCSS.bottom) +
-        parseFloat(stageCSS.borderTop) + parseFloat(stageCSS.borderBottom)
-    };
+    // Extra width/height for `content-box`
+    let extraWidth = 0, extraHeight = 0;
+
+    if (isBorderBox(this.$photoviewer)) {
+      modalWidth += this._modalEdgeValue.horizontal;
+      modalHeight += this._modalEdgeValue.vertical;
+    } else {
+      extraWidth += this._modalEdgeValue.horizontal;
+      extraHeight += this._modalEdgeValue.vertical;
+    }
 
     const gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1;
-    // Modal scale relative to window
+
+    // Modal scale relative to parent element
     const scale = Math.min(
-      offsetParentData.width / (modalData.width * gapThreshold),
-      offsetParentData.height / (modalData.height * gapThreshold),
+      offsetParentData.width / ((modalWidth + extraWidth) * gapThreshold),
+      offsetParentData.height / ((modalHeight + extraHeight) * gapThreshold),
       1
     );
 
-    let minWidth = Math.max(modalData.width * scale, this.options.modalWidth);
-    let minHeight = Math.max(modalData.height * scale, this.options.modalHeight);
+    let minWidth = Math.max(modalWidth * scale, this.options.modalWidth);
+    let minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
 
     minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
     minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
@@ -349,11 +364,11 @@ class PhotoViewer {
       transBottom = this.options.initModalPos.bottom;
     } else {
       const offsetParentData = this._getOffsetParentData();
-      transLeft = (offsetParentData.width - minWidth) / 2 + offsetParentData.scrollLeft;
-      transTop = (offsetParentData.height - minHeight) / 2 + offsetParentData.scrollTop;
+      transLeft = (offsetParentData.width - minWidth - extraWidth) / 2 + offsetParentData.scrollLeft;
+      transTop = (offsetParentData.height - minHeight - extraHeight) / 2 + offsetParentData.scrollTop;
     }
 
-    const modalCSSProps = {
+    const modalTransCSS = {
       width: minWidth,
       height: minHeight,
       left: transLeft,
@@ -364,11 +379,11 @@ class PhotoViewer {
 
     // Add init animation for modal
     if (this.options.initAnimation) {
-      this.$photoviewer.animate(modalCSSProps, this.options.animationDuration, 'ease-in-out', () => {
+      this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, 'ease-in-out', () => {
         this.setImageSize(img);
       });
     } else {
-      this.$photoviewer.css(modalCSSProps);
+      this.$photoviewer.css(modalTransCSS);
       this.setImageSize(img);
     }
 
@@ -739,10 +754,18 @@ class PhotoViewer {
 
   _toggleMaximize() {
     if (!this.isMaximized) {
+      let originalWidth = parseFloat(this.$photoviewer.width());
+      let originalHeight = parseFloat(this.$photoviewer.height());
+
+      if (isBorderBox(this.$photoviewer)) {
+        originalWidth += this._modalEdgeValue.horizontal;
+        originalHeight += this._modalEdgeValue.vertical;
+      }
+
       // Store modal size and position before maximized
       this.modalData = {
-        width: this.$photoviewer.width(),
-        height: this.$photoviewer.height(),
+        width: originalWidth,
+        height: originalHeight,
         left: parseFloat(this.$photoviewer.css('left')),
         top: parseFloat(this.$photoviewer.css('top'))
       };
