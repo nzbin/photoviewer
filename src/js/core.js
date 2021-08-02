@@ -107,17 +107,6 @@ class PhotoViewer {
         opts.modalHeight
       );
     }
-
-    // Store the edge value of stage
-    this._stageEdgeValue = {
-      horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
-      vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
-    };
-    //Store the edge value of modal
-    this._modalEdgeValue = {
-      horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
-      vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
-    };
   }
 
   _createBtns(toolbar) {
@@ -310,6 +299,18 @@ class PhotoViewer {
   }
 
   setInitModalPos(modal) {
+    // Store the edge value of stage
+    this._stageEdgeValue = {
+      horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
+      vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
+    };
+
+    // Store the edge value of modal
+    this._modalEdgeValue = {
+      horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
+      vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
+    };
+
     if (this.options.initMaximized) {
       this.maximize(modal);
 
