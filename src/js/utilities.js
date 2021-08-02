@@ -2,9 +2,9 @@ export const document = window.document;
 
 /**
  * Debounce function
- * @param {Function} fn - The function will be triggered
- * @param {Number} delay - The debounce delay time
- * @return {Function}
+ * @param {function} fn - The function will be triggered
+ * @param {number} delay - The debounce delay time
+ * @return {function}
  */
 export function debounce(fn, delay) {
   let timer = null;
@@ -23,9 +23,9 @@ export function debounce(fn, delay) {
 
 /**
  * Throttle function
- * @param {Function} fn - The function will be triggered
- * @param {Number} timeFrame - The throttle time frame
- * @return {Function}
+ * @param {function} fn - The function will be triggered
+ * @param {number} timeFrame - The throttle time frame
+ * @return {function}
  */
 export function throttle(fn, timeFrame) {
   let lastTime = 0;
@@ -45,9 +45,9 @@ export function throttle(fn, timeFrame) {
 
 /**
  * Preload a image
- * @param {String} src - The image src
- * @param {Function} success - The callback of success
- * @param {Function} error - The callback of error
+ * @param {string} src - The image src
+ * @param {function} success - The callback of success
+ * @param {function} error - The callback of error
  */
 export function preloadImage(src, success, error) {
   const img = new Image();
@@ -94,8 +94,8 @@ export function exitFullscreen() {
 
 /**
  * Get the image name from its url
- * @param {String} url - The image src
- * @return {String}
+ * @param {string} url - The image src
+ * @return {string}
  */
 export function getImageNameFromUrl(url) {
   const reg = /^.*?\/*([^/?]*)\.[a-z]+(\?.+|$)/gi;
@@ -105,7 +105,7 @@ export function getImageNameFromUrl(url) {
 
 /**
  * Check if the document has a scrollbar
- * @return {Boolean}
+ * @return {boolean}
  */
 export function hasScrollbar() {
   return (
@@ -115,7 +115,7 @@ export function hasScrollbar() {
 
 /**
  * Get the scrollbar width
- * @return {Number}
+ * @return {number}
  */
 export function getScrollbarWidth() {
   const scrollDiv = document.createElement('div');
@@ -129,26 +129,26 @@ export function getScrollbarWidth() {
 
 /**
  * Set grab cursor when move image
- * @param {Object} imageData - The image data
- * @param {Object} stageData - The stage data
- * @param {Object} stage - The stage element
- * @param {Boolean} isRotate - The image rotated flag
+ * @param {object} imageData - The image data
+ * @param {object} stageData - The stage data
+ * @param {object} $stage - The domq element
+ * @param {boolean} isRotate - The image rotated flag
  */
-export function setGrabCursor(imageData, stageData, stage, isRotated) {
+export function setGrabCursor(imageData, stageData, $stage, isRotated) {
   const imageWidth = !isRotated ? imageData.w : imageData.h;
   const imageHeight = !isRotated ? imageData.h : imageData.w;
 
   if (imageHeight > stageData.h || imageWidth > stageData.w) {
-    stage.addClass('is-grab');
+    $stage.addClass('is-grab');
   }
   if (imageHeight <= stageData.h && imageWidth <= stageData.w) {
-    stage.removeClass('is-grab');
+    $stage.removeClass('is-grab');
   }
 }
 
 /**
  * Check whether browser support touch event
- * @return {Boolean}
+ * @return {boolean}
  */
 export function supportTouch() {
   return !!(
@@ -158,8 +158,28 @@ export function supportTouch() {
 
 /**
  * Check whether element is root node (`body` or `html`)
- * @return {Boolean}
+ * @param {object} elem - The DOM element
+ * @return {boolean}
  */
 export function isRootNode(elem) {
   return /^(?:body|html)$/i.test(elem.nodeName);
+}
+
+/**
+ * Get sum value of CSS props
+ * @param {object} $elem - The domq element
+ * @param {array} props - The array of CSS props
+ * @return {number}
+ */
+export function getCSSValueSum($elem, props) {
+  return props.reduce((acc, cur) => acc + parseFloat($elem.css(cur)), 0);
+}
+
+/**
+ * Check whether element's CSS `box-sizing` is `border-box`
+ * @param {object} $elem - The domq element
+ * @return {boolean}
+ */
+export function isBorderBox($elem) {
+  return $elem.css('box-sizing') === 'border-box';
 }
