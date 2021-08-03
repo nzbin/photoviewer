@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.6.1
+ * photoviewer - v3.6.2
  * A JS plugin to view images just like in Windows
  * https://nzbin.github.io/photoviewer/
  *
@@ -1391,7 +1391,7 @@
    * Set grab cursor when move image
    * @param {object} imageData - The image data
    * @param {object} stageData - The stage data
-   * @param {object} $stage - The domq element
+   * @param {object} $stage - The stage element of domq
    * @param {boolean} isRotate - The image rotated flag
    */
 
@@ -1470,11 +1470,11 @@
   var draggable = {
     /**
      * Draggable
-     * @param {Object} modal - The modal element
+     * @param {Object} $modal - The modal element of domq
      * @param {Object} dragHandle - The handle element when dragging
      * @param {Object} dragCancel - The cancel element when dragging
      */
-    draggable: function draggable(modal, dragHandle, dragCancel) {
+    draggable: function draggable($modal, dragHandle, dragCancel) {
       var _this = this;
 
       var isDragging = false;
@@ -1488,7 +1488,7 @@
         // e.preventDefault();
         // Fix focus scroll issue on Chrome
 
-        modal[0].blur(); // Get clicked button
+        $modal[0].blur(); // Get clicked button
 
         var elemCancel = $(e.target).closest(dragCancel); // Stop modal moving when click buttons
 
@@ -1497,15 +1497,15 @@
         }
 
         if (_this.options.multiInstances) {
-          modal.css('z-index', ++PUBLIC_VARS['zIndex']);
+          $modal.css('z-index', ++PUBLIC_VARS['zIndex']);
         }
 
         isDragging = true;
         startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
         startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // Get current position of the modal
 
-        left = parseFloat($(modal).css('left'));
-        top = parseFloat($(modal).css('top'));
+        left = parseFloat($modal.css('left'));
+        top = parseFloat($modal.css('top'));
         $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
       };
 
@@ -1518,7 +1518,7 @@
           var endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY;
           var relativeX = endX - startX;
           var relativeY = endY - startY;
-          $(modal).css({
+          $modal.css({
             left: relativeX + left,
             top: relativeY + top
           });
@@ -1529,7 +1529,7 @@
         $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
         isDragging = false; // Focus must be executed after drag end
 
-        modal[0].focus();
+        $modal[0].focus();
       };
 
       $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
@@ -1547,10 +1547,10 @@
      * --------------------------------------------------------------------------
      *
      * Image movable
-     * @param {Object} stage - The stage element
-     * @param {Object} image - The image element
+     * @param {Object} $stage - The stage element of domq
+     * @param {Object} $image - The image element of domq
      */
-    movable: function movable(stage, image) {
+    movable: function movable($stage, $image) {
       var _this = this;
 
       var isDragging = false;
@@ -1565,10 +1565,10 @@
       var dragStart = function dragStart(e) {
         e = e || window.event;
         e.preventDefault();
-        var imageWidth = $(image).width();
-        var imageHeight = $(image).height();
-        var stageWidth = $(stage).width();
-        var stageHeight = $(stage).height();
+        var imageWidth = $image.width();
+        var imageHeight = $image.height();
+        var stageWidth = $stage.width();
+        var stageHeight = $stage.height();
         startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
         startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // δ is the difference between image width and height
 
@@ -1581,10 +1581,10 @@
         PUBLIC_VARS['isMoving'] = widthDiff > 0 || heightDiff > 0 ? true : false; // Reclac the element position when mousedown
         // Fix the issue of stage with a border
 
-        left = $(image).position().left - δ;
-        top = $(image).position().top + δ; // Add grabbing cursor
+        left = $image.position().left - δ;
+        top = $image.position().top + δ; // Add grabbing cursor
 
-        if (stage.hasClass('is-grab')) {
+        if ($stage.hasClass('is-grab')) {
           $(ELEMS_WITH_GRABBING_CURSOR).addClass('is-grabbing');
         }
 
@@ -1624,7 +1624,7 @@
             newLeft = left;
           }
 
-          $(image).css({
+          $image.css({
             left: newLeft,
             top: newTop
           }); // Update image initial data
@@ -1644,7 +1644,7 @@
         $(ELEMS_WITH_GRABBING_CURSOR).removeClass('is-grabbing');
       };
 
-      $(stage).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
+      $stage.on(TOUCH_START_EVENT + EVENT_NS, dragStart);
     }
   };
 
@@ -1658,13 +1658,13 @@
      * --------------------------------------------------------------------------
      *
      * Resizable
-     * @param {Object} modal - The modal element
-     * @param {Object} stage - The stage element
-     * @param {Object} image - The image element
+     * @param {Object} $modal - The modal element of domq
+     * @param {Object} $stage - The stage element of domq
+     * @param {Object} $image - The image element of domq
      * @param {Number} minWidth - The option of modalWidth
      * @param {Number} minHeight - The option of modalHeight
      */
-    resizable: function resizable(modal, stage, image, minWidth, minHeight) {
+    resizable: function resizable($modal, $stage, $image, minWidth, minHeight) {
       var _this = this;
 
       var resizableHandleE = $("<div class=\"".concat(NS, "-resizable-handle ").concat(NS, "-resizable-handle-e\"></div>"));
@@ -1685,7 +1685,7 @@
         ne: resizableHandleNE,
         sw: resizableHandleSW
       };
-      $(modal).append(resizableHandleE, resizableHandleW, resizableHandleS, resizableHandleN, resizableHandleSE, resizableHandleSW, resizableHandleNE, resizableHandleNW);
+      $modal.append(resizableHandleE, resizableHandleW, resizableHandleS, resizableHandleN, resizableHandleSE, resizableHandleSW, resizableHandleNE, resizableHandleNW);
       var isDragging = false;
       var startX = 0;
       var startY = 0;
@@ -1765,10 +1765,10 @@
         var widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
         var heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ; // Get image position in dragging
 
-        var imgLeft = (widthDiff > 0 ? $(image).position().left : $(image).position().left < 0 ? $(image).position().left : 0) - δ;
-        var imgTop = (heightDiff > 0 ? $(image).position().top : $(image).position().top < 0 ? $(image).position().top : 0) + δ;
-        var imgLeft2 = (widthDiff2 > 0 ? $(image).position().left : $(image).position().left < 0 ? $(image).position().left : 0) - δ;
-        var imgTop2 = (heightDiff2 > 0 ? $(image).position().top : $(image).position().top < 0 ? $(image).position().top : 0) + δ;
+        var imgLeft = (widthDiff > 0 ? $image.position().left : $image.position().left < 0 ? $image.position().left : 0) - δ;
+        var imgTop = (heightDiff > 0 ? $image.position().top : $image.position().top < 0 ? $image.position().top : 0) + δ;
+        var imgLeft2 = (widthDiff2 > 0 ? $image.position().left : $image.position().left < 0 ? $image.position().left : 0) - δ;
+        var imgTop2 = (heightDiff2 > 0 ? $image.position().top : $image.position().top < 0 ? $image.position().top : 0) + δ;
         var opts = {
           e: {
             left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
@@ -1811,22 +1811,22 @@
         startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // Reclac the modal data when mousedown
 
         modalData = {
-          w: $(modal).width(),
-          h: $(modal).height(),
-          l: $(modal).position().left,
-          t: $(modal).position().top
+          w: $modal.width(),
+          h: $modal.height(),
+          l: $modal.position().left,
+          t: $modal.position().top
         };
         stageData = {
-          w: $(stage).width(),
-          h: $(stage).height(),
-          l: $(stage).position().left,
-          t: $(stage).position().top
+          w: $stage.width(),
+          h: $stage.height(),
+          l: $stage.position().left,
+          t: $stage.position().top
         };
         imageData = {
-          w: $(image).width(),
-          h: $(image).height(),
-          l: $(image).position().left,
-          t: $(image).position().top
+          w: $image.width(),
+          h: $image.height(),
+          l: $image.position().left,
+          t: $image.position().top
         }; // δ is the difference between image width and height
 
         δ = !_this.isRotated ? 0 : (imageData.w - imageData.h) / 2;
@@ -1848,9 +1848,9 @@
           var relativeX = endX - startX;
           var relativeY = endY - startY;
           var modalOpts = getModalOpts(direction, relativeX, relativeY);
-          $(modal).css(modalOpts);
+          $modal.css(modalOpts);
           var imageOpts = getImageOpts(direction, relativeX, relativeY);
-          $(image).css(imageOpts);
+          $image.css(imageOpts);
           _this.isDoResize = true;
         }
       };
@@ -1863,9 +1863,9 @@
             w: imgWidth,
             h: imgHeight
           }, {
-            w: $(stage).width(),
-            h: $(stage).height()
-          }, stage);
+            w: $stage.width(),
+            h: $stage.height()
+          }, $stage);
         }
 
         isDragging = false;
@@ -1873,13 +1873,13 @@
 
         $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', ''); // Update image initial data
 
-        var scale = _this.getImageScale($(stage).width(), $(stage).height());
+        var scale = _this.getImageScale($stage.width(), $stage.height());
 
         $.extend(_this.imageData, {
           initWidth: _this.img.width * scale,
           initHeight: _this.img.height * scale,
-          initLeft: ($(stage).width() - _this.img.width * scale) / 2,
-          initTop: ($(stage).height() - _this.img.height * scale) / 2
+          initLeft: ($stage.width() - _this.img.width * scale) / 2,
+          initTop: ($stage.height() - _this.img.height * scale) / 2
         });
       };
 
@@ -1959,18 +1959,7 @@
 
         if (opts.resizable) {
           this.resizable(this.$photoviewer, this.$stage, this.$image, opts.modalWidth, opts.modalHeight);
-        } // Store the edge value of stage
-
-
-        this._stageEdgeValue = {
-          horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
-          vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
-        }; //Store the edge value of modal
-
-        this._modalEdgeValue = {
-          horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
-          vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
-        };
+        }
       }
     }, {
       key: "_createBtns",
@@ -2046,7 +2035,17 @@
         } // Add PhotoViewer to DOM
 
 
-        $(this.options.appendTo).eq(0).append(this.$photoviewer);
+        $(this.options.appendTo).eq(0).append(this.$photoviewer); // Store the edge value of stage
+
+        this._stageEdgeValue = {
+          horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
+          vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
+        }; // Store the edge value of modal
+
+        this._modalEdgeValue = {
+          horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
+          vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
+        };
 
         this._addEvents();
 
@@ -2062,7 +2061,7 @@
         }
 
         this.build();
-        this.setInitModalPos(this.$photoviewer);
+        this.setInitModalPos();
 
         this._triggerHook('opened', this);
       }
@@ -2103,7 +2102,7 @@
       }
     }, {
       key: "setModalToCenter",
-      value: function setModalToCenter(modal) {
+      value: function setModalToCenter() {
         var initLeft = 0,
             initTop = 0,
             initRight = 0,
@@ -2137,16 +2136,16 @@
           right: this.modalData.right || initRight,
           bottom: this.modalData.bottom || initBottom
         };
-        modal.css(modalInitCSS);
+        this.$photoviewer.css(modalInitCSS);
       }
     }, {
       key: "setInitModalPos",
-      value: function setInitModalPos(modal) {
+      value: function setInitModalPos() {
         if (this.options.initMaximized) {
-          this.maximize(modal);
+          this.maximize();
           this.isOpened = true;
         } else {
-          this.setModalToCenter(modal);
+          this.setModalToCenter();
         } // The focus must be set after opening
 
 
@@ -2528,9 +2527,9 @@
       }
     }, {
       key: "maximize",
-      value: function maximize(modal) {
-        modal.addClass(NS + '-maximized');
-        modal.css({
+      value: function maximize() {
+        this.$photoviewer.addClass(NS + '-maximized');
+        this.$photoviewer.css({
           width: 'auto',
           height: 'auto',
           top: 0,
@@ -2541,10 +2540,10 @@
         this.isMaximized = true;
       }
     }, {
-      key: "minimize",
-      value: function minimize(modal) {
-        modal.removeClass(NS + '-maximized');
-        this.setModalToCenter(modal);
+      key: "exitMaximize",
+      value: function exitMaximize() {
+        this.$photoviewer.removeClass(NS + '-maximized');
+        this.setModalToCenter();
         this.isMaximized = false;
       }
     }, {
@@ -2566,9 +2565,9 @@
             left: parseFloat(this.$photoviewer.css('left')),
             top: parseFloat(this.$photoviewer.css('top'))
           };
-          this.maximize(this.$photoviewer);
+          this.maximize();
         } else {
-          this.minimize(this.$photoviewer);
+          this.exitMaximize();
         }
 
         this.setImageSize({
