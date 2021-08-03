@@ -131,7 +131,7 @@ export function getScrollbarWidth() {
  * Set grab cursor when move image
  * @param {object} imageData - The image data
  * @param {object} stageData - The stage data
- * @param {object} $stage - The domq element
+ * @param {object} $stage - The stage element of domq
  * @param {boolean} isRotate - The image rotated flag
  */
 export function setGrabCursor(imageData, stageData, $stage, isRotated) {

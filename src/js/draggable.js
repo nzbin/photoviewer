@@ -11,11 +11,11 @@ import {
 export default {
   /**
    * Draggable
-   * @param {Object} modal - The modal element
+   * @param {Object} $modal - The modal element of domq
    * @param {Object} dragHandle - The handle element when dragging
    * @param {Object} dragCancel - The cancel element when dragging
    */
-  draggable(modal, dragHandle, dragCancel) {
+  draggable($modal, dragHandle, dragCancel) {
     let isDragging = false;
 
     let startX = 0;
@@ -30,7 +30,7 @@ export default {
       // e.preventDefault();
 
       // Fix focus scroll issue on Chrome
-      modal[0].blur();
+      $modal[0].blur();
 
       // Get clicked button
       const elemCancel = $(e.target).closest(dragCancel);
@@ -40,7 +40,7 @@ export default {
       }
 
       if (this.options.multiInstances) {
-        modal.css('z-index', ++PUBLIC_VARS['zIndex']);
+        $modal.css('z-index', ++PUBLIC_VARS['zIndex']);
       }
 
       isDragging = true;
@@ -49,8 +49,8 @@ export default {
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
 
       // Get current position of the modal
-      left = parseFloat($(modal).css('left'));
-      top = parseFloat($(modal).css('top'));
+      left = parseFloat($modal.css('left'));
+      top = parseFloat($modal.css('top'));
 
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(
         TOUCH_END_EVENT + EVENT_NS,
@@ -74,7 +74,7 @@ export default {
         const relativeX = endX - startX;
         const relativeY = endY - startY;
 
-        $(modal).css({
+        $modal.css({
           left: relativeX + left,
           top: relativeY + top
         });
@@ -90,7 +90,7 @@ export default {
       isDragging = false;
 
       // Focus must be executed after drag end
-      modal[0].focus();
+      $modal[0].focus();
     };
 
     $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);

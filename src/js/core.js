@@ -200,10 +200,7 @@ class PhotoViewer {
     }
 
     // Set handle element of draggable
-    if (
-      !this.options.dragHandle ||
-      this.options.dragHandle === CLASS_NS + '-modal'
-    ) {
+    if (!this.options.dragHandle || this.options.dragHandle === CLASS_NS + '-modal') {
       this.dragHandle = this.$photoviewer;
     } else {
       this.dragHandle = this.$photoviewer.find(this.options.dragHandle);
@@ -211,6 +208,18 @@ class PhotoViewer {
 
     // Add PhotoViewer to DOM
     $(this.options.appendTo).eq(0).append(this.$photoviewer);
+
+    // Store the edge value of stage
+    this._stageEdgeValue = {
+      horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
+      vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
+    };
+
+    // Store the edge value of modal
+    this._modalEdgeValue = {
+      horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
+      vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
+    };
 
     this._addEvents();
     this._addCustomButtonEvents();
@@ -225,7 +234,7 @@ class PhotoViewer {
 
     this.build();
 
-    this.setInitModalPos(this.$photoviewer);
+    this.setInitModalPos();
 
     this._triggerHook('opened', this);
   }
@@ -264,7 +273,7 @@ class PhotoViewer {
     };
   }
 
-  setModalToCenter(modal) {
+  setModalToCenter() {
     let initLeft = 0, initTop = 0, initRight = 0, initBottom = 0;
 
     // Extra width/height for `content-box`
@@ -295,28 +304,16 @@ class PhotoViewer {
       bottom: (this.modalData.bottom || initBottom)
     };
 
-    modal.css(modalInitCSS);
+    this.$photoviewer.css(modalInitCSS);
   }
 
-  setInitModalPos(modal) {
-    // Store the edge value of stage
-    this._stageEdgeValue = {
-      horizontal: getCSSValueSum(this.$stage, ['left', 'right', 'border-left-width', 'border-right-width']),
-      vertical: getCSSValueSum(this.$stage, ['top', 'bottom', 'border-top-width', 'border-bottom-width'])
-    };
-
-    // Store the edge value of modal
-    this._modalEdgeValue = {
-      horizontal: getCSSValueSum(this.$photoviewer, ['padding-left', 'padding-right', 'border-left-width', 'border-right-width']),
-      vertical: getCSSValueSum(this.$photoviewer, ['padding-top', 'padding-bottom', 'border-top-width', 'border-bottom-width'])
-    };
-
+  setInitModalPos() {
     if (this.options.initMaximized) {
-      this.maximize(modal);
+      this.maximize();
 
       this.isOpened = true;
     } else {
-      this.setModalToCenter(modal);
+      this.setModalToCenter();
     }
 
     // The focus must be set after opening
@@ -730,10 +727,10 @@ class PhotoViewer {
     }
   }
 
-  maximize(modal) {
-    modal.addClass(NS + '-maximized');
+  maximize() {
+    this.$photoviewer.addClass(NS + '-maximized');
 
-    modal.css({
+    this.$photoviewer.css({
       width: 'auto',
       height: 'auto',
       top: 0,
@@ -745,10 +742,10 @@ class PhotoViewer {
     this.isMaximized = true;
   }
 
-  exitMaximize(modal) {
-    modal.removeClass(NS + '-maximized');
+  exitMaximize() {
+    this.$photoviewer.removeClass(NS + '-maximized');
 
-    this.setModalToCenter(modal);
+    this.setModalToCenter();
 
     this.isMaximized = false;
   }
@@ -771,9 +768,9 @@ class PhotoViewer {
         top: parseFloat(this.$photoviewer.css('top'))
       };
 
-      this.maximize(this.$photoviewer);
+      this.maximize();
     } else {
-      this.exitMaximize(this.$photoviewer);
+      this.exitMaximize();
     }
 
     this.setImageSize({

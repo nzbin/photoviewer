@@ -22,13 +22,13 @@ export default {
    * --------------------------------------------------------------------------
    *
    * Resizable
-   * @param {Object} modal - The modal element
-   * @param {Object} stage - The stage element
-   * @param {Object} image - The image element
+   * @param {Object} $modal - The modal element of domq
+   * @param {Object} $stage - The stage element of domq
+   * @param {Object} $image - The image element of domq
    * @param {Number} minWidth - The option of modalWidth
    * @param {Number} minHeight - The option of modalHeight
    */
-  resizable(modal, stage, image, minWidth, minHeight) {
+  resizable($modal, $stage, $image, minWidth, minHeight) {
     const resizableHandleE = $(
       `<div class="${NS}-resizable-handle ${NS}-resizable-handle-e"></div>`
     );
@@ -65,7 +65,7 @@ export default {
       sw: resizableHandleSW
     };
 
-    $(modal).append(
+    $modal.append(
       resizableHandleE,
       resizableHandleW,
       resizableHandleS,
@@ -173,24 +173,24 @@ export default {
 
       // Get image position in dragging
       const imgLeft = (widthDiff > 0
-        ? $(image).position().left
-        : $(image).position().left < 0
-          ? $(image).position().left
+        ? $image.position().left
+        : $image.position().left < 0
+          ? $image.position().left
           : 0) - δ;
       const imgTop = (heightDiff > 0
-        ? $(image).position().top
-        : $(image).position().top < 0
-          ? $(image).position().top
+        ? $image.position().top
+        : $image.position().top < 0
+          ? $image.position().top
           : 0) + δ;
       const imgLeft2 = (widthDiff2 > 0
-        ? $(image).position().left
-        : $(image).position().left < 0
-          ? $(image).position().left
+        ? $image.position().left
+        : $image.position().left < 0
+          ? $image.position().left
           : 0) - δ;
       const imgTop2 = (heightDiff2 > 0
-        ? $(image).position().top
-        : $(image).position().top < 0
-          ? $(image).position().top
+        ? $image.position().top
+        : $image.position().top < 0
+          ? $image.position().top
           : 0) + δ;
 
       const opts = {
@@ -288,24 +288,24 @@ export default {
 
       // Reclac the modal data when mousedown
       modalData = {
-        w: $(modal).width(),
-        h: $(modal).height(),
-        l: $(modal).position().left,
-        t: $(modal).position().top
+        w: $modal.width(),
+        h: $modal.height(),
+        l: $modal.position().left,
+        t: $modal.position().top
       };
 
       stageData = {
-        w: $(stage).width(),
-        h: $(stage).height(),
-        l: $(stage).position().left,
-        t: $(stage).position().top
+        w: $stage.width(),
+        h: $stage.height(),
+        l: $stage.position().left,
+        t: $stage.position().top
       };
 
       imageData = {
-        w: $(image).width(),
-        h: $(image).height(),
-        l: $(image).position().left,
-        t: $(image).position().top
+        w: $image.width(),
+        h: $image.height(),
+        l: $image.position().left,
+        t: $image.position().top
       };
 
       // δ is the difference between image width and height
@@ -337,11 +337,11 @@ export default {
 
         const modalOpts = getModalOpts(direction, relativeX, relativeY);
 
-        $(modal).css(modalOpts);
+        $modal.css(modalOpts);
 
         const imageOpts = getImageOpts(direction, relativeX, relativeY);
 
-        $(image).css(imageOpts);
+        $image.css(imageOpts);
 
         this.isDoResize = true;
       }
@@ -361,10 +361,10 @@ export default {
             h: imgHeight
           },
           {
-            w: $(stage).width(),
-            h: $(stage).height()
+            w: $stage.width(),
+            h: $stage.height()
           },
-          stage
+          $stage
         );
       }
 
@@ -376,15 +376,15 @@ export default {
 
       // Update image initial data
       const scale = this.getImageScale(
-        $(stage).width(),
-        $(stage).height()
+        $stage.width(),
+        $stage.height()
       );
 
       $.extend(this.imageData, {
         initWidth: this.img.width * scale,
         initHeight: this.img.height * scale,
-        initLeft: ($(stage).width() - this.img.width * scale) / 2,
-        initTop: ($(stage).height() - this.img.height * scale) / 2
+        initLeft: ($stage.width() - this.img.width * scale) / 2,
+        initTop: ($stage.height() - this.img.height * scale) / 2
       });
     };
 

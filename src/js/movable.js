@@ -21,10 +21,10 @@ export default {
    * --------------------------------------------------------------------------
    *
    * Image movable
-   * @param {Object} stage - The stage element
-   * @param {Object} image - The image element
+   * @param {Object} $stage - The stage element of domq
+   * @param {Object} $image - The image element of domq
    */
-  movable(stage, image) {
+  movable($stage, $image) {
     let isDragging = false;
 
     let startX = 0;
@@ -40,10 +40,10 @@ export default {
 
       e.preventDefault();
 
-      const imageWidth = $(image).width();
-      const imageHeight = $(image).height();
-      const stageWidth = $(stage).width();
-      const stageHeight = $(stage).height();
+      const imageWidth = $image.width();
+      const imageHeight = $image.height();
+      const stageWidth = $stage.width();
+      const stageHeight = $stage.height();
 
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
@@ -61,11 +61,11 @@ export default {
 
       // Reclac the element position when mousedown
       // Fix the issue of stage with a border
-      left = $(image).position().left - δ;
-      top = $(image).position().top + δ;
+      left = $image.position().left - δ;
+      top = $image.position().top + δ;
 
       // Add grabbing cursor
-      if (stage.hasClass('is-grab')) {
+      if ($stage.hasClass('is-grab')) {
         $(ELEMS_WITH_GRABBING_CURSOR).addClass('is-grabbing');
       }
 
@@ -109,7 +109,7 @@ export default {
           newLeft = left;
         }
 
-        $(image).css({
+        $image.css({
           left: newLeft,
           top: newTop
         });
@@ -135,6 +135,6 @@ export default {
       $(ELEMS_WITH_GRABBING_CURSOR).removeClass('is-grabbing');
     };
 
-    $(stage).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
+    $stage.on(TOUCH_START_EVENT + EVENT_NS, dragStart);
   }
 };
