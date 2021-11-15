@@ -7,6 +7,9 @@
     "es6": true,
     "jquery": true
   },
+  "ignorePatterns": [
+    "dist"
+  ],
   "extends": "eslint:recommended",
   "parserOptions": {
     "sourceType": "module"
