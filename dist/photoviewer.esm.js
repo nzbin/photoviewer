@@ -2405,7 +2405,7 @@ var PhotoViewer = /*#__PURE__*/function () {
     }
   }, {
     key: "zoomTo",
-    value: function zoomTo(ratio, origin, e) {
+    value: function zoomTo(ratio, origin) {
       var $image = this.$image;
       var $stage = this.$stage;
       var imgData = {
@@ -2668,7 +2668,7 @@ var PhotoViewer = /*#__PURE__*/function () {
     value: function _addEvents() {
       var _this5 = this;
 
-      this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
+      this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this5.close();
       });
       this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, function (e) {

@@ -17,7 +17,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.photoviewer = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2411,7 +2411,7 @@
       }
     }, {
       key: "zoomTo",
-      value: function zoomTo(ratio, origin, e) {
+      value: function zoomTo(ratio, origin) {
         var $image = this.$image;
         var $stage = this.$stage;
         var imgData = {
@@ -2674,7 +2674,7 @@
       value: function _addEvents() {
         var _this5 = this;
 
-        this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
+        this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
           _this5.close();
         });
         this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, function (e) {
@@ -2763,4 +2763,4 @@
 
   return PhotoViewer;
 
-})));
+}));
