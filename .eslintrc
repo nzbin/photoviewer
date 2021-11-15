@@ -20,7 +20,7 @@
       "error",
       "always"
     ],
-    "no-extra-boolean-cast": 1,
-    "no-unused-vars": 0
+    "no-extra-boolean-cast": "warn",
+    "no-unused-vars": "warn"
   }
 }

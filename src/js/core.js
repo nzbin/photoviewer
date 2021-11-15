@@ -600,7 +600,7 @@ class PhotoViewer {
     this.zoomTo(ratio, origin, e);
   }
 
-  zoomTo(ratio, origin, e) {
+  zoomTo(ratio, origin) {
     const $image = this.$image;
     const $stage = this.$stage;
     const imgData = {
@@ -868,7 +868,7 @@ class PhotoViewer {
   }
 
   _addEvents() {
-    this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
+    this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
       this.close();
     });
 
