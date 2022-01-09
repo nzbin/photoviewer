@@ -8,7 +8,12 @@
     "stylelint-config-recommended-scss"
   ],
   "rules": {
+    "alpha-value-notation": null,
+    "color-function-notation": "legacy",
+    "keyframes-name-pattern": null,
+    "no-descending-specificity": null,
     "number-leading-zero": "never",
-    "no-descending-specificity": null
+    "string-quotes": "single",
+    "value-no-vendor-prefix": null
   }
 }
