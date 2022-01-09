@@ -38,8 +38,8 @@
     "url": "https://github.com/nzbin/photoviewer/issues"
   },
   "scripts": {
-    "sass": "node-sass --output-style expanded src/sass/photoviewer.scss dist/photoviewer.css",
-    "sassmin": "node-sass --output-style compressed src/sass/photoviewer.scss dist/photoviewer.min.css",
+    "sass": "sass --style=expanded src/sass/photoviewer.scss dist/photoviewer.css",
+    "sassmin": "sass --style=compressed src/sass/photoviewer.scss dist/photoviewer.min.css",
     "postcss": "postcss -r dist/*.css",
     "build": "run-s build:css build:js",
     "build:css": "run-s sass",
@@ -54,7 +54,7 @@
     "release:css": "run-s build:css compress:css",
     "release:js": "run-s build:js compress:js",
     "lint": "run-s lint:css lint:js",
-    "lint:css": "stylelint --syntax scss \"src/**/*.scss\" --fix",
+    "lint:css": "stylelint \"src/**/*.scss\" --fix",
     "lint:js": "eslint src/js --fix",
     "clean": "rimraf dist",
     "watch": "onchange src -- run-p build:js build:css",
@@ -69,7 +69,6 @@
     "@rollup/plugin-node-resolve": "^13.1.3",
     "autoprefixer": "^10.4.2",
     "eslint": "^8.6.0",
-    "node-sass": "^7.0.1",
     "npm-run-all": "^4.1.5",
     "onchange": "^7.1.0",
     "postcss": "^8.4.5",
@@ -77,10 +76,11 @@
     "postcss-header": "^3.0.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.63.0",
-    "stylelint": "^13.13.1",
-    "stylelint-config-recommended-scss": "^4.3.0",
-    "stylelint-config-standard": "^22.0.0",
-    "stylelint-scss": "^3.21.0",
+    "sass": "^1.47.0",
+    "stylelint": "^14.2.0",
+    "stylelint-config-recommended-scss": "^5.0.2",
+    "stylelint-config-standard": "^24.0.0",
+    "stylelint-scss": "^4.1.0",
     "uglify-js": "^3.14.5"
   },
   "dependencies": {
