@@ -45,16 +45,13 @@
   width: auto;
   height: auto;
 }
-
 .photoviewer-maximized.photoviewer-modal {
   border-width: 0;
   border-radius: 0;
 }
-
 .photoviewer-maximized .photoviewer-header {
   border-radius: 0;
 }
-
 .photoviewer-maximized .photoviewer-resizable-handle {
   display: none;
 }
@@ -79,22 +76,19 @@
   cursor: pointer;
   outline: none;
 }
-
 .photoviewer-button:hover {
   color: #111;
 }
-
 .photoviewer-button:focus {
   background-color: rgba(0, 0, 0, 0.08);
 }
-
 .photoviewer-button svg {
   display: inline-block;
   font-size: inherit;
   width: 1em;
   height: 1em;
   overflow: visible;
-  vertical-align: -.125em;
+  vertical-align: -0.125em;
 }
 
 .photoviewer-header {
@@ -104,23 +98,18 @@
   border-radius: 5px 5px 0 0;
   overflow: hidden;
 }
-
 .photoviewer-header .photoviewer-toolbar {
   float: right;
 }
-
-[dir="rtl"] .photoviewer-header .photoviewer-toolbar {
+[dir=rtl] .photoviewer-header .photoviewer-toolbar {
   float: left;
 }
-
 .photoviewer-header .photoviewer-button {
   height: 30px;
 }
-
 .photoviewer-header .photoviewer-button:hover {
   background-color: rgba(0, 0, 0, 0.08);
 }
-
 .photoviewer-header .photoviewer-button-close:hover {
   color: #fff;
   background-color: #ff4545;
@@ -151,12 +140,10 @@
   background-color: #fff;
   overflow: hidden;
 }
-
 .photoviewer-stage.stage-ready {
   text-align: center;
   font-size: 0;
 }
-
 .photoviewer-stage.stage-ready::before {
   content: "";
   display: inline-block;
@@ -171,7 +158,6 @@
   min-width: auto;
   max-width: none;
 }
-
 .photoviewer-image.image-ready {
   position: static;
   max-width: 100%;
@@ -187,7 +173,6 @@
   height: 40px;
   text-align: center;
 }
-
 .photoviewer-footer .photoviewer-toolbar {
   display: inline-block;
 }
@@ -284,13 +269,11 @@
   border-width: 0;
   border-radius: 0;
 }
-
 :-webkit-full-screen .photoviewer-header,
 :-webkit-full-screen .photoviewer-footer,
 :-webkit-full-screen .photoviewer-resizable-handle {
   display: none;
 }
-
 :-webkit-full-screen .photoviewer-stage {
   top: 0;
   right: 0;
@@ -311,13 +294,11 @@
   border-width: 0;
   border-radius: 0;
 }
-
 :-moz-full-screen .photoviewer-header,
 :-moz-full-screen .photoviewer-footer,
 :-moz-full-screen .photoviewer-resizable-handle {
   display: none;
 }
-
 :-moz-full-screen .photoviewer-stage {
   top: 0;
   right: 0;
@@ -338,13 +319,11 @@
   border-width: 0;
   border-radius: 0;
 }
-
 :-ms-fullscreen .photoviewer-header,
 :-ms-fullscreen .photoviewer-footer,
 :-ms-fullscreen .photoviewer-resizable-handle {
   display: none;
 }
-
 :-ms-fullscreen .photoviewer-stage {
   top: 0;
   right: 0;
@@ -365,13 +344,11 @@
   border-width: 0;
   border-radius: 0;
 }
-
 :full-screen .photoviewer-header,
 :full-screen .photoviewer-footer,
 :full-screen .photoviewer-resizable-handle {
   display: none;
 }
-
 :full-screen .photoviewer-stage {
   top: 0;
   right: 0;
@@ -416,21 +393,17 @@
   border-width: 0;
   border-radius: 0;
 }
-
 :-webkit-full-screen .photoviewer-header, :-webkit-full-screen .photoviewer-footer, :-webkit-full-screen .photoviewer-resizable-handle {
   display: none;
 }
-
 :-ms-fullscreen .photoviewer-header, :-ms-fullscreen .photoviewer-footer, :-ms-fullscreen .photoviewer-resizable-handle {
   display: none;
 }
-
 :fullscreen .photoviewer-header,
 :fullscreen .photoviewer-footer,
 :fullscreen .photoviewer-resizable-handle {
   display: none;
 }
-
 :-webkit-full-screen .photoviewer-stage {
   top: 0;
   right: 0;
@@ -439,7 +412,6 @@
   border-width: 0;
   background-color: black;
 }
-
 :-ms-fullscreen .photoviewer-stage {
   top: 0;
   right: 0;
@@ -448,7 +420,6 @@
   border-width: 0;
   background-color: black;
 }
-
 :fullscreen .photoviewer-stage {
   top: 0;
   right: 0;
@@ -492,9 +463,8 @@
   text-align: center;
   color: #333;
 }
-
 .photoviewer-loader::before {
-  content: '';
+  content: "";
   position: relative;
   display: inline-block;
   width: 36px;
@@ -508,9 +478,8 @@
   -webkit-animation: photoviewerLoading 1s infinite linear;
   animation: photoviewerLoading 1s infinite linear;
 }
-
 .photoviewer-loader::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 0;
   height: 100%;
@@ -535,3 +504,5 @@
     transform: rotateZ(360deg) translate3d(0, 0, 0);
   }
 }
+
+/*# sourceMappingURL=photoviewer.css.map */

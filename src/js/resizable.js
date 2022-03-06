@@ -83,20 +83,20 @@ export default {
     let modalData = {
       w: 0,
       h: 0,
-      l: 0,
-      t: 0
+      x: 0,
+      y: 0
     };
     let stageData = {
       w: 0,
       h: 0,
-      l: 0,
-      t: 0
+      x: 0,
+      y: 0
     };
     let imageData = {
       w: 0,
       h: 0,
-      l: 0,
-      t: 0
+      x: 0,
+      y: 0
     };
     // δ is the difference between image width and height
     let δ = 0;
@@ -108,11 +108,11 @@ export default {
     const getModalOpts = function (dir, offsetX, offsetY) {
       // Modal should not move when its width to the minwidth
       const modalLeft = -offsetX + modalData.w > minWidth
-        ? offsetX + modalData.l
-        : modalData.l + modalData.w - minWidth;
+        ? offsetX + modalData.x
+        : modalData.x + modalData.w - minWidth;
       const modalTop = -offsetY + modalData.h > minHeight
-        ? offsetY + modalData.t
-        : modalData.t + modalData.h - minHeight;
+        ? offsetY + modalData.y
+        : modalData.y + modalData.h - minHeight;
 
       const opts = {
         e: {
@@ -290,22 +290,22 @@ export default {
       modalData = {
         w: $modal.width(),
         h: $modal.height(),
-        l: $modal.position().left,
-        t: $modal.position().top
+        x: $modal.position().left,
+        y: $modal.position().top
       };
 
       stageData = {
         w: $stage.width(),
         h: $stage.height(),
-        l: $stage.position().left,
-        t: $stage.position().top
+        x: $stage.position().left,
+        y: $stage.position().top
       };
 
       imageData = {
         w: $image.width(),
         h: $image.height(),
-        l: $image.position().left,
-        t: $image.position().top
+        x: $image.position().left,
+        y: $image.position().top
       };
 
       // δ is the difference between image width and height

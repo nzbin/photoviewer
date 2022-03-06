@@ -38,6 +38,9 @@
   function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
     return Constructor;
   }
 
@@ -1692,20 +1695,20 @@
       var modalData = {
         w: 0,
         h: 0,
-        l: 0,
-        t: 0
+        x: 0,
+        y: 0
       };
       var stageData = {
         w: 0,
         h: 0,
-        l: 0,
-        t: 0
+        x: 0,
+        y: 0
       };
       var imageData = {
         w: 0,
         h: 0,
-        l: 0,
-        t: 0
+        x: 0,
+        y: 0
       }; // δ is the difference between image width and height
 
       var δ = 0;
@@ -1715,8 +1718,8 @@
 
       var getModalOpts = function getModalOpts(dir, offsetX, offsetY) {
         // Modal should not move when its width to the minwidth
-        var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.l : modalData.l + modalData.w - minWidth;
-        var modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.t : modalData.t + modalData.h - minHeight;
+        var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.x : modalData.x + modalData.w - minWidth;
+        var modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.y : modalData.y + modalData.h - minHeight;
         var opts = {
           e: {
             width: Math.max(offsetX + modalData.w, minWidth)
@@ -1813,20 +1816,20 @@
         modalData = {
           w: $modal.width(),
           h: $modal.height(),
-          l: $modal.position().left,
-          t: $modal.position().top
+          x: $modal.position().left,
+          y: $modal.position().top
         };
         stageData = {
           w: $stage.width(),
           h: $stage.height(),
-          l: $stage.position().left,
-          t: $stage.position().top
+          x: $stage.position().left,
+          y: $stage.position().top
         };
         imageData = {
           w: $image.width(),
           h: $image.height(),
-          l: $image.position().left,
-          t: $image.position().top
+          x: $image.position().left,
+          y: $image.position().top
         }; // δ is the difference between image width and height
 
         δ = !_this.isRotated ? 0 : (imageData.w - imageData.h) / 2;
