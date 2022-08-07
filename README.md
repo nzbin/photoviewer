@@ -57,7 +57,7 @@ or
 
 ### Step 2: Initializing
 
-The usage of photoviewer is very simple, the `PhotoViewer` constructor has 2 argument.
+The usage of photoviewer is very simple, the `PhotoViewer`'s constructor has 2 arguments.
 
 1. Array with objects of image info.
 2. Options
@@ -83,7 +83,7 @@ var options = {
 };
 
 // Initialize the plugin
-var viewer = new PhotoViewer(items, options);
+var photoviewer = new PhotoViewer(items, options);
 ```
 
 ### Step 3: Binding Event
