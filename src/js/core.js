@@ -49,20 +49,24 @@ class PhotoViewer {
     // As we have multiple instances,
     // so every instance has following variables.
 
-    // Modal opened flag
+    // Whether modal opened
     this.isOpened = false;
-    // Modal maximized flag
+
+    // Whether modal maximized
     this.isMaximized = false;
-    // Image rotated flag 90*(2n+1)
+
+    // Whether image rotated (`90*(2n+1)`)
     this.isRotated = false;
-    // Image rotated angle
-    this.rotateAngle = 0;
+
+    // Image rotation degree
+    this.rotationDegree = 0;
 
     // Whether modal do resize
     this.isDoResize = false;
 
     // Store image data in every instance
     this.imageData = {};
+
     // Store modal data in every instance
     this.modalData = {
       width: null,
@@ -248,7 +252,7 @@ class PhotoViewer {
     this.isOpened = false;
     this.isMaximized = false;
     this.isRotated = false;
-    this.rotateAngle = 0;
+    this.rotationDegree = 0;
 
     if (!$(CLASS_NS + '-modal').length) {
       // Reset `z-index` after close
@@ -463,7 +467,7 @@ class PhotoViewer {
     // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
-    this.rotateAngle = 0;
+    this.rotationDegree = 0;
 
     this.imageLoaded = false;
 
@@ -583,10 +587,10 @@ class PhotoViewer {
       y: e.clientY - this.$stage.offset().top + $D.scrollTop()
     };
 
-    this.zoom(ratio, pointer, e);
+    this.zoom(ratio, pointer);
   }
 
-  zoom(ratio, origin, e) {
+  zoom(ratio, origin) {
     // Zoom out ratio & Zoom in ratio
     ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
 
@@ -597,7 +601,7 @@ class PhotoViewer {
       return;
     }
 
-    this.zoomTo(ratio, origin, e);
+    this.zoomTo(ratio, origin);
   }
 
   zoomTo(ratio, origin) {
@@ -618,6 +622,14 @@ class PhotoViewer {
       x: $stage.offset().left,
       y: $stage.offset().top
     };
+
+    // Set default origin coordinates (center of stage)
+    if (origin === void 0) {
+      origin = {
+        x: $stage.width() / 2,
+        y: $stage.height() / 2
+      };
+    }
 
     const newWidth = this.imageData.originalWidth * ratio;
     const newHeight = this.imageData.originalHeight * ratio;
@@ -648,7 +660,7 @@ class PhotoViewer {
       newLeft = newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
     }
 
-    // If the image scale get to the critical point
+    // Whether the image scale get to the critical point
     if (
       Math.abs(this.imageData.initWidth - newWidth) <
       this.imageData.initWidth * 0.05
@@ -685,21 +697,21 @@ class PhotoViewer {
     });
   }
 
-  rotate(angle) {
-    this.rotateAngle = this.rotateAngle + angle;
+  rotate(degree) {
+    this.rotationDegree = this.rotationDegree + degree;
 
-    if ((this.rotateAngle / 90) % 2 === 0) {
+    if ((this.rotationDegree / 90) % 2 === 0) {
       this.isRotated = false;
     } else {
       this.isRotated = true;
     }
 
-    this.rotateTo(this.rotateAngle);
+    this.rotateTo(this.rotationDegree);
   }
 
-  rotateTo(angle) {
+  rotateTo(degree) {
     this.$image.css({
-      transform: 'rotate(' + angle + 'deg)'
+      transform: 'rotate(' + degree + 'deg)'
     });
 
     this.setImageSize({
@@ -876,28 +888,16 @@ class PhotoViewer {
       this.wheel(e);
     });
 
-    this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
-      this.zoom(
-        this.options.ratioThreshold * 3,
-        { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
-        e
-      );
+    this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+      this.zoom(this.options.ratioThreshold * 3);
     });
 
-    this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
-      this.zoom(
-        -this.options.ratioThreshold * 3,
-        { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
-        e
-      );
+    this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+      this.zoom(-this.options.ratioThreshold * 3);
     });
 
-    this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
-      this.zoomTo(
-        1,
-        { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
-        e
-      );
+    this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+      this.zoomTo(1);
     });
 
     this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
@@ -928,9 +928,7 @@ class PhotoViewer {
       this._keydown(e);
     });
 
-    $W.on(RESIZE_EVENT + EVENT_NS, debounce(() => {
-      this.resize();
-    }, 500));
+    $W.on(RESIZE_EVENT + EVENT_NS, debounce(() => this.resize(), 500));
   }
 
   _addCustomButtonEvents() {
