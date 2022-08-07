@@ -5,8 +5,8 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.6.2
- * A JS plugin to view images just like in Windows
+ * photoviewer - v3.6.3
+ * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
  * Copyright (c) 2018 nzbin
@@ -1257,7 +1257,7 @@ var DEFAULTS = {
   headerToolbar: ['maximize', 'close'],
   // Toolbar options in footer
   footerToolbar: ['zoomIn', 'zoomOut', 'prev', 'fullscreen', 'next', 'actualSize', 'rotateRight'],
-  // Customize button icon
+  // Custom icon for button
   icons: {
     minimize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n        <path fill=\"currentColor\" d=\"M20,14H4V10H20\"></path>\n      </svg>",
     maximize: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n        <path fill=\"currentColor\" d=\"M4,4H20V20H4V4M6,8V18H18V8H6Z\"></path>\n      </svg>",
@@ -1271,7 +1271,7 @@ var DEFAULTS = {
     rotateLeft: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n        <path fill=\"currentColor\" d=\"M13,4.07V1L8.45,5.55L13,10V6.09C15.84,6.57 18,9.03 18,12\n        C18,14.97 15.84,17.43 13,17.91V19.93C16.95,19.44 20,16.08 20,12C20,7.92 16.95,4.56 13,4.07\n        M7.1,18.32C8.26,19.22 9.61,19.76 11,19.93V17.9C10.13,17.75 9.29,17.41 8.54,16.87L7.1,18.32\n        M6.09,13H4.07C4.24,14.39 4.79,15.73 5.69,16.89L7.1,15.47C6.58,14.72 6.23,13.88 6.09,13\n        M7.11,8.53L5.7,7.11C4.8,8.27 4.24,9.61 4.07,11H6.09C6.23,10.13 6.58,9.28 7.11,8.53Z\"></path>\n      </svg>",
     rotateRight: "<svg viewBox=\"0 0 24 24\" class=\"svg-inline-icon\">\n        <path fill=\"currentColor\" d=\"M16.89,15.5L18.31,16.89C19.21,15.73 19.76,14.39 19.93,13H17.91\n        C17.77,13.87 17.43,14.72 16.89,15.5M13,17.9V19.92C14.39,19.75 15.74,19.21 16.9,18.31\n        L15.46,16.87C14.71,17.41 13.87,17.76 13,17.9M19.93,11C19.76,9.61 19.21,8.27 18.31,7.11\n        L16.89,8.53C17.43,9.28 17.77,10.13 17.91,11M15.55,5.55L11,1V4.07C7.06,4.56 4,7.92 4,12\n        C4,16.08 7.05,19.44 11,19.93V17.91C8.16,17.43 6,14.97 6,12C6,9.03 8.16,6.57 11,6.09V10\n        L15.55,5.55Z\"></path>\n      </svg>"
   },
-  // Customize language of button title
+  // Custom title for button
   i18n: {
     minimize: 'minimize',
     maximize: 'maximize',
@@ -1306,11 +1306,11 @@ var DEFAULTS = {
     beforeChange: $.noop,
     changed: $.noop
   },
-  // Start images index
+  // Start index of images
   index: 0,
   // Whether to load the image progressively
   progressiveLoading: true,
-  // The DOM element to which viewer will be attached
+  // The DOM element which photoviewer will be attached to
   appendTo: 'body',
   // Custom Buttons
   customButtons: {},
@@ -1323,6 +1323,7 @@ var DEFAULTS = {
 var document = window.document;
 /**
  * Debounce function
+ *
  * @param {function} fn - The function will be triggered
  * @param {number} delay - The debounce delay time
  * @return {function}
@@ -1341,6 +1342,7 @@ function debounce(fn, delay) {
 }
 /**
  * Preload a image
+ *
  * @param {string} src - The image src
  * @param {function} success - The callback of success
  * @param {function} error - The callback of error
@@ -1361,6 +1363,7 @@ function preloadImage(src, success, error) {
 }
 /**
  * Request fullscreen
+ *
  * @param {type} element
  */
 
@@ -1377,6 +1380,7 @@ function requestFullscreen(element) {
 }
 /**
  * Get the image name from its url
+ *
  * @param {string} url - The image src
  * @return {string}
  */
@@ -1388,6 +1392,7 @@ function getImageNameFromUrl(url) {
 }
 /**
  * Set grab cursor when move image
+ *
  * @param {object} imageData - The image data
  * @param {object} stageData - The stage data
  * @param {object} $stage - The stage element of domq
@@ -1408,6 +1413,7 @@ function setGrabCursor(imageData, stageData, $stage, isRotated) {
 }
 /**
  * Check whether browser support touch event
+ *
  * @return {boolean}
  */
 
@@ -1416,6 +1422,7 @@ function supportTouch() {
 }
 /**
  * Check whether element is root node (`body` or `html`)
+ *
  * @param {object} elem - The DOM element
  * @return {boolean}
  */
@@ -1425,6 +1432,7 @@ function isRootNode(elem) {
 }
 /**
  * Get sum value of CSS props
+ *
  * @param {object} $elem - The domq element
  * @param {array} props - The array of CSS props
  * @return {number}
@@ -1437,6 +1445,7 @@ function getCSSValueSum($elem, props) {
 }
 /**
  * Check whether element's CSS `box-sizing` is `border-box`
+ *
  * @param {object} $elem - The domq element
  * @return {boolean}
  */
@@ -1458,20 +1467,21 @@ var NS = 'photoviewer';
 var CLASS_NS = '.' + NS;
 var EVENT_NS = '.' + NS;
 var PUBLIC_VARS = {
-  // Image moving flag
+  // Whether image is moving
   isMoving: false,
-  // Modal resizing flag
+  // Whether modal is resizing
   isResizing: false,
-  // Modal z-index setting
+  // Modal's `z-index`
   zIndex: 0
 };
 
 var draggable = {
   /**
-   * Draggable
-   * @param {Object} $modal - The modal element of domq
-   * @param {Object} dragHandle - The handle element when dragging
-   * @param {Object} dragCancel - The cancel element when dragging
+   * Modal draggable
+   *
+   * @param {object} $modal - The modal element of domq
+   * @param {object} dragHandle - The handle element when dragging
+   * @param {object} dragCancel - The cancel element when dragging
    */
   draggable: function draggable($modal, dragHandle, dragCancel) {
     var _this = this;
@@ -1538,16 +1548,15 @@ var draggable = {
 var ELEMS_WITH_GRABBING_CURSOR = "html, body, .".concat(NS, "-modal, .").concat(NS, "-stage, .").concat(NS, "-button, .").concat(NS, "-resizable-handle");
 var movable = {
   /**
-   * --------------------------------------------------------------------------
+   * Image movable
+   *
    * 1. No movable
    * 2. Vertical movable
    * 3. Horizontal movable
    * 4. Vertical & Horizontal movable
-   * --------------------------------------------------------------------------
    *
-   * Image movable
-   * @param {Object} $stage - The stage element of domq
-   * @param {Object} $image - The image element of domq
+   * @param {object} $stage - The stage element of domq
+   * @param {object} $image - The image element of domq
    */
   movable: function movable($stage, $image) {
     var _this = this;
@@ -1650,18 +1659,17 @@ var movable = {
 var ELEMS_WITH_RESIZE_CURSOR = "html, body, .".concat(NS, "-modal, .").concat(NS, "-stage, .").concat(NS, "-button");
 var resizable = {
   /**
-   * --------------------------------------------------------------------------
-   * 1. Modal resizable
-   * 2. Keep image in stage center
-   * 3. Other image restrictions
-   * --------------------------------------------------------------------------
+   * Modal resizable
    *
-   * Resizable
-   * @param {Object} $modal - The modal element of domq
-   * @param {Object} $stage - The stage element of domq
-   * @param {Object} $image - The image element of domq
-   * @param {Number} minWidth - The option of modalWidth
-   * @param {Number} minHeight - The option of modalHeight
+   * 1. Can be resized in 8 directions
+   * 2. Keep image in stage center
+   * 3. Other restrictions for image
+   *
+   * @param {object} $modal - The modal element of domq
+   * @param {object} $stage - The stage element of domq
+   * @param {object} $image - The image element of domq
+   * @param {number} minWidth - The modalWidth option
+   * @param {number} minHeight - The modalHeight option
    */
   resizable: function resizable($modal, $stage, $image, minWidth, minHeight) {
     var _this = this;
@@ -1909,17 +1917,16 @@ var PhotoViewer = /*#__PURE__*/function () {
     } // Store element of clicked
 
 
-    this.$el = $(el); // As we have multiple instances,
-    // so every instance has following variables.
-    // Modal opened flag
+    this.$el = $(el); // As we have multiple instances, so every instance has the following variables.
+    // Whether modal opened
 
-    this.isOpened = false; // Modal maximized flag
+    this.isOpened = false; // Whether modal maximized
 
-    this.isMaximized = false; // Image rotated flag 90*(2n+1)
+    this.isMaximized = false; // Whether image rotated (`90*(2n+1)`)
 
-    this.isRotated = false; // Image rotated angle
+    this.isRotated = false; // Image rotation degree
 
-    this.rotateAngle = 0; // Whether modal do resize
+    this.rotationDegree = 0; // Whether modal do resize
 
     this.isDoResize = false; // Store image data in every instance
 
@@ -2074,7 +2081,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.isOpened = false;
       this.isMaximized = false;
       this.isRotated = false;
-      this.rotateAngle = 0;
+      this.rotationDegree = 0;
 
       if (!$(CLASS_NS + '-modal').length) {
         // Reset `z-index` after close
@@ -2285,7 +2292,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       // Reset image
       this.$image.removeAttr('style').attr('src', '');
       this.isRotated = false;
-      this.rotateAngle = 0;
+      this.rotationDegree = 0;
       this.imageLoaded = false; // Loader start
 
       this.$photoviewer.append("<div class=\"".concat(NS, "-loader\"></div>")); // Add class before image loaded
@@ -2392,11 +2399,11 @@ var PhotoViewer = /*#__PURE__*/function () {
         x: e.clientX - this.$stage.offset().left + $D.scrollLeft(),
         y: e.clientY - this.$stage.offset().top + $D.scrollTop()
       };
-      this.zoom(ratio, pointer, e);
+      this.zoom(ratio, pointer);
     }
   }, {
     key: "zoom",
-    value: function zoom(ratio, origin, e) {
+    value: function zoom(ratio, origin) {
       // Zoom out ratio & Zoom in ratio
       ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio; // Image ratio
 
@@ -2406,7 +2413,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         return;
       }
 
-      this.zoomTo(ratio, origin, e);
+      this.zoomTo(ratio, origin);
     }
   }, {
     key: "zoomTo",
@@ -2426,7 +2433,15 @@ var PhotoViewer = /*#__PURE__*/function () {
         h: $stage.height(),
         x: $stage.offset().left,
         y: $stage.offset().top
-      };
+      }; // Set default origin coordinates (center of stage)
+
+      if (origin === void 0) {
+        origin = {
+          x: $stage.width() / 2,
+          y: $stage.height() / 2
+        };
+      }
+
       var newWidth = this.imageData.originalWidth * ratio;
       var newHeight = this.imageData.originalHeight * ratio; // Think about it for a while
 
@@ -2451,7 +2466,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         newLeft = (stageData.w - newWidth) / 2;
       } else {
         newLeft = newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
-      } // If the image scale get to the critical point
+      } // Whether the image scale get to the critical point
 
 
       if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
@@ -2483,22 +2498,22 @@ var PhotoViewer = /*#__PURE__*/function () {
     }
   }, {
     key: "rotate",
-    value: function rotate(angle) {
-      this.rotateAngle = this.rotateAngle + angle;
+    value: function rotate(degree) {
+      this.rotationDegree = this.rotationDegree + degree;
 
-      if (this.rotateAngle / 90 % 2 === 0) {
+      if (this.rotationDegree / 90 % 2 === 0) {
         this.isRotated = false;
       } else {
         this.isRotated = true;
       }
 
-      this.rotateTo(this.rotateAngle);
+      this.rotateTo(this.rotationDegree);
     }
   }, {
     key: "rotateTo",
-    value: function rotateTo(angle) {
+    value: function rotateTo(degree) {
       this.$image.css({
-        transform: 'rotate(' + angle + 'deg)'
+        transform: 'rotate(' + degree + 'deg)'
       });
       this.setImageSize({
         width: this.imageData.originalWidth,
@@ -2679,23 +2694,14 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, function (e) {
         _this5.wheel(e);
       });
-      this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-        _this5.zoom(_this5.options.ratioThreshold * 3, {
-          x: _this5.$stage.width() / 2,
-          y: _this5.$stage.height() / 2
-        }, e);
+      this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
+        _this5.zoom(_this5.options.ratioThreshold * 3);
       });
-      this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-        _this5.zoom(-_this5.options.ratioThreshold * 3, {
-          x: _this5.$stage.width() / 2,
-          y: _this5.$stage.height() / 2
-        }, e);
+      this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
+        _this5.zoom(-_this5.options.ratioThreshold * 3);
       });
-      this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-        _this5.zoomTo(1, {
-          x: _this5.$stage.width() / 2,
-          y: _this5.$stage.height() / 2
-        }, e);
+      this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
+        _this5.zoomTo(1);
       });
       this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
         _this5.jump(-1);
@@ -2719,7 +2725,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         _this5._keydown(e);
       });
       $W.on(RESIZE_EVENT + EVENT_NS, debounce(function () {
-        _this5.resize();
+        return _this5.resize();
       }, 500));
     }
   }, {
