@@ -53,7 +53,7 @@ export default {
     'rotateRight'
   ],
 
-  // Customize button icon
+  // Custom icon for button
   icons: {
     minimize:
       `<svg viewBox="0 0 24 24" class="svg-inline-icon">
@@ -121,7 +121,7 @@ export default {
       </svg>`
   },
 
-  // Customize language of button title
+  // Custom title for button
   i18n: {
     minimize: 'minimize',
     maximize: 'maximize',
@@ -164,13 +164,13 @@ export default {
     changed: $.noop
   },
 
-  // Start images index
+  // Start index of images
   index: 0,
 
   // Whether to load the image progressively
   progressiveLoading: true,
 
-  // The DOM element to which viewer will be attached
+  // The DOM element which photoviewer will be attached to
   appendTo: 'body',
 
   // Custom Buttons

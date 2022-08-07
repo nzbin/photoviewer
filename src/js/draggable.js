@@ -10,10 +10,11 @@ import {
 
 export default {
   /**
-   * Draggable
-   * @param {Object} $modal - The modal element of domq
-   * @param {Object} dragHandle - The handle element when dragging
-   * @param {Object} dragCancel - The cancel element when dragging
+   * Modal draggable
+   *
+   * @param {object} $modal - The modal element of domq
+   * @param {object} dragHandle - The handle element when dragging
+   * @param {object} dragCancel - The cancel element when dragging
    */
   draggable($modal, dragHandle, dragCancel) {
     let isDragging = false;

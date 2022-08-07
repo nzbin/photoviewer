@@ -2,6 +2,7 @@ export const document = window.document;
 
 /**
  * Debounce function
+ *
  * @param {function} fn - The function will be triggered
  * @param {number} delay - The debounce delay time
  * @return {function}
@@ -23,6 +24,7 @@ export function debounce(fn, delay) {
 
 /**
  * Throttle function
+ *
  * @param {function} fn - The function will be triggered
  * @param {number} timeFrame - The throttle time frame
  * @return {function}
@@ -45,6 +47,7 @@ export function throttle(fn, timeFrame) {
 
 /**
  * Preload a image
+ *
  * @param {string} src - The image src
  * @param {function} success - The callback of success
  * @param {function} error - The callback of error
@@ -65,6 +68,7 @@ export function preloadImage(src, success, error) {
 
 /**
  * Request fullscreen
+ *
  * @param {type} element
  */
 export function requestFullscreen(element) {
@@ -94,6 +98,7 @@ export function exitFullscreen() {
 
 /**
  * Get the image name from its url
+ *
  * @param {string} url - The image src
  * @return {string}
  */
@@ -104,7 +109,8 @@ export function getImageNameFromUrl(url) {
 }
 
 /**
- * Check if the document has a scrollbar
+ * Check whether the document has a scrollbar
+ *
  * @return {boolean}
  */
 export function hasScrollbar() {
@@ -115,6 +121,7 @@ export function hasScrollbar() {
 
 /**
  * Get the scrollbar width
+ *
  * @return {number}
  */
 export function getScrollbarWidth() {
@@ -129,6 +136,7 @@ export function getScrollbarWidth() {
 
 /**
  * Set grab cursor when move image
+ *
  * @param {object} imageData - The image data
  * @param {object} stageData - The stage data
  * @param {object} $stage - The stage element of domq
@@ -148,6 +156,7 @@ export function setGrabCursor(imageData, stageData, $stage, isRotated) {
 
 /**
  * Check whether browser support touch event
+ *
  * @return {boolean}
  */
 export function supportTouch() {
@@ -158,6 +167,7 @@ export function supportTouch() {
 
 /**
  * Check whether element is root node (`body` or `html`)
+ *
  * @param {object} elem - The DOM element
  * @return {boolean}
  */
@@ -167,6 +177,7 @@ export function isRootNode(elem) {
 
 /**
  * Get sum value of CSS props
+ *
  * @param {object} $elem - The domq element
  * @param {array} props - The array of CSS props
  * @return {number}
@@ -177,6 +188,7 @@ export function getCSSValueSum($elem, props) {
 
 /**
  * Check whether element's CSS `box-sizing` is `border-box`
+ *
  * @param {object} $elem - The domq element
  * @return {boolean}
  */

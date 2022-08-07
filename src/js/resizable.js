@@ -15,18 +15,17 @@ const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}
 
 export default {
   /**
-   * --------------------------------------------------------------------------
-   * 1. Modal resizable
-   * 2. Keep image in stage center
-   * 3. Other image restrictions
-   * --------------------------------------------------------------------------
+   * Modal resizable
    *
-   * Resizable
-   * @param {Object} $modal - The modal element of domq
-   * @param {Object} $stage - The stage element of domq
-   * @param {Object} $image - The image element of domq
-   * @param {Number} minWidth - The option of modalWidth
-   * @param {Number} minHeight - The option of modalHeight
+   * 1. Can be resized in 8 directions
+   * 2. Keep image in stage center
+   * 3. Other restrictions for image
+   *
+   * @param {object} $modal - The modal element of domq
+   * @param {object} $stage - The stage element of domq
+   * @param {object} $image - The image element of domq
+   * @param {number} minWidth - The modalWidth option
+   * @param {number} minHeight - The modalHeight option
    */
   resizable($modal, $stage, $image, minWidth, minHeight) {
     const resizableHandleE = $(

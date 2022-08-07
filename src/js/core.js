@@ -46,8 +46,7 @@ class PhotoViewer {
     // Store element of clicked
     this.$el = $(el);
 
-    // As we have multiple instances,
-    // so every instance has following variables.
+    // As we have multiple instances, so every instance has the following variables.
 
     // Whether modal opened
     this.isOpened = false;

@@ -18,10 +18,10 @@ export const CLASS_NS = '.' + NS;
 export const EVENT_NS = '.' + NS;
 
 export const PUBLIC_VARS = {
-  // Image moving flag
+  // Whether image is moving
   isMoving: false,
-  // Modal resizing flag
+  // Whether modal is resizing
   isResizing: false,
-  // Modal z-index setting
+  // Modal's `z-index`
   zIndex: 0
 };

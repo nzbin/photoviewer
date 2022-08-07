@@ -13,16 +13,15 @@ const ELEMS_WITH_GRABBING_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${N
 
 export default {
   /**
-   * --------------------------------------------------------------------------
+   * Image movable
+   *
    * 1. No movable
    * 2. Vertical movable
    * 3. Horizontal movable
    * 4. Vertical & Horizontal movable
-   * --------------------------------------------------------------------------
    *
-   * Image movable
-   * @param {Object} $stage - The stage element of domq
-   * @param {Object} $image - The image element of domq
+   * @param {object} $stage - The stage element of domq
+   * @param {object} $image - The image element of domq
    */
   movable($stage, $image) {
     let isDragging = false;
