@@ -65,7 +65,7 @@ import PhotoViewer from 'photoviewer';
 
     <h4>Step 2: Initialize</h4>
     <p>The usage of photoviewer is very simple, the
-      <code>PhotoViewer</code> constructor has 2 argument.
+      <code>PhotoViewer</code> constructor has 2 arguments.
     </p>
     <ol>
       <li>Array with objects of image info.</li>
@@ -92,7 +92,7 @@ var options = {
 };
 
 // Initialize the plugin
-var viewer = new PhotoViewer(items, options);
+var photoviewer = new PhotoViewer(items, options);
 </pre>
 
     <p>At last, binding click event on a button element, you should get the following example.</p>
@@ -173,274 +173,284 @@ $('[data-gallery=manual]').click(function (e) {
 
     <!-- Options -->
     <h2 class="b-b-1 p-b-10 p-t-10 m-t-30">Options</h2>
-    <h3>
-      <code>index</code>
-      <small>
-        <code>number 0</code>
-      </small>
-    </h3>
-    <p>The images array index. If
-      <code>0</code>, it will show first image when photoviewer opened.
-    </p>
+    <div class="">
+      <h3>
+        <code>index</code>
+        <small><code>number 0</code></small>
+      </h3>
+      <p>The images array index. If <code>0</code>, it will show first image when photoviewer
+        opened.</p>
 
-    <h3>
-      <code>draggable</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If ture, it allow modal dragging.</p>
+      <h3>
+        <code>draggable</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If ture, it allow modal dragging.</p>
 
-    <h3>
-      <code>resizable</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If ture, it allow modal resizing.</p>
+      <h3>
+        <code>resizable</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If ture, it allow modal resizing.</p>
 
-    <h3>
-      <code>movable</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If ture, it allow image moving.</p>
+      <h3>
+        <code>movable</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If ture, it allow image moving.</p>
 
-    <h3>
-      <code>keyboard</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>Make photoviewer can be controled by keyboard. The shortcut key is similar to Windows photo
-      viewer.</p>
-    <ul>
-      <li>
-        <kbd>←</kbd> prev image
-      </li>
-      <li>
-        <kbd>→</kbd> next image
-      </li>
-      <li>
-        <kbd>+</kbd> zoom in image
-      </li>
-      <li>
-        <kbd>-</kbd> zoom out image
-      </li>
-      <li>
-        <kbd>Ctrl</kbd> +
-        <kbd>Alt</kbd> +
-        <kbd>0</kbd> image autual size
-      </li>
-      <li>
-        <kbd>Ctrl</kbd> +
-        <kbd>,</kbd> rotate image left
-      </li>
-      <li>
-        <kbd>Ctrl</kbd> +
-        <kbd>.</kbd> rotate image right
-      </li>
-      <li>
-        <kbd>Q</kbd> quit the photoviewer
-      </li>
-    </ul>
+      <h3>
+        <code>keyboard</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>Make photoviewer can be controled by keyboard. The shortcut key is similar to Windows photo
+        viewer.</p>
+      <ul>
+        <li>
+          <kbd>←</kbd> prev image
+        </li>
+        <li>
+          <kbd>→</kbd> next image
+        </li>
+        <li>
+          <kbd>+</kbd> zoom in image
+        </li>
+        <li>
+          <kbd>-</kbd> zoom out image
+        </li>
+        <li>
+          <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>0</kbd> image autual size
+        </li>
+        <li>
+          <kbd>Ctrl</kbd> + <kbd>,</kbd> rotate image left
+        </li>
+        <li>
+          <kbd>Ctrl</kbd> + <kbd>.</kbd> rotate image right
+        </li>
+        <li>
+          <kbd>Q</kbd> quit the photoviewer
+        </li>
+      </ul>
 
-    <h3>
-      <code>title</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If ture, it will show image title on header.</p>
+      <h3>
+        <code>title</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If ture, it will show image title on header.</p>
 
-    <h3>
-      <code>fixedModalSize</code>
-      <small>
-        <code>boolean false</code>
-      </small>
-    </h3>
-    <p>This option will set photoviewer's size when it opened. If false, the modal initialized size
-      will fit to image
-      size.
-      If true, the modal initialized size will be set with modalWidth and modalHeight.</p>
+      <h3>
+        <code>fixedModalSize</code>
+        <small><code>boolean false</code></small>
+      </h3>
+      <p>This option will set photoviewer's size when it opened. If false, the modal initialized
+        size will fit to image size. If true, the modal initialized size will be set with modalWidth
+        and modalHeight.</p>
 
-    <h3>
-      <code>modalWidth</code>
-      <small>
-        <code>number 320</code>
-      </small>
-    </h3>
-    <p>It's the modal min width or modal initialized width when opened.</p>
+      <h3>
+        <code>modalWidth</code>
+        <small><code>number 320</code></small>
+      </h3>
+      <p>It's the modal min width or modal initialized width when opened.</p>
 
-    <h3>
-      <code>modalHeight</code>
-      <small>
-        <code>number 320</code>
-      </small>
-    </h3>
-    <p>It's the modal min height or modal initialized height when opened.</p>
+      <h3>
+        <code>modalHeight</code>
+        <small><code>number 320</code></small>
+      </h3>
+      <p>It's the modal min height or modal initialized height when opened.</p>
 
-    <h3>
-      <code>gapThreshold</code>
-      <small>
-        <code>number 0.02</code>
-      </small>
-    </h3>
-    <p>The gap size threshold. There will have a gap if modal too large to beyond the browser. Its
-      min value is
-      <code>0</code>, means the modal's width or height should be equal to browser window if it's
-      too large.
-    </p>
+      <h3>
+        <code>gapThreshold</code>
+        <small><code>number 0.02</code></small>
+      </h3>
+      <p>The gap size threshold. There will have a gap if modal too large to beyond the browser. Its
+        min value is <code>0</code>, means the modal's width or height should be equal to browser
+        window if it's too large.
+      </p>
 
-    <h3>
-      <code>ratioThreshold</code>
-      <small>
-        <code>number 0.01</code>
-      </small>
-    </h3>
-    <p>Image zoom ratio threshold.</p>
+      <h3>
+        <code>ratioThreshold</code>
+        <small><code>number 0.01</code></small>
+      </h3>
+      <p>Image zoom ratio threshold.</p>
 
-    <h3>
-      <code>minRatio</code>
-      <small>
-        <code>number 0.1</code>
-      </small>
-    </h3>
-    <p>The min ratio to show image.
-      <code>0.1</code> means the image can be zoomed 0.1x from original size.
-    </p>
+      <h3>
+        <code>minRatio</code>
+        <small><code>number 0.1</code></small>
+      </h3>
+      <p>The min ratio to show image. <code>0.1</code> means the image can be zoomed 0.1x from
+        original size.
+      </p>
 
-    <h3>
-      <code>maxRatio</code>
-      <small>
-        <code>number 16</code>
-      </small>
-    </h3>
-    <p>The max ratio to show image.
-      <code>16</code> means the image can be zoomed 16x from original size.
-    </p>
+      <h3>
+        <code>maxRatio</code>
+        <small><code>number 16</code></small>
+      </h3>
+      <p>The max ratio to show image. <code>16</code> means the image can be zoomed 16x from
+        original size.
+      </p>
 
-    <h3>
-      <code>headerToolbar</code>
-      <small>
-        <code>array ['maximize','close']</code>
-      </small>
-    </h3>
-    <p>The buttons display in header toolbar.</p>
+      <h3>
+        <code>headerToolbar</code>
+        <small><code>array ['maximize','close']</code></small>
+      </h3>
+      <p>The buttons display in header toolbar.</p>
 
-    <h3>
-      <code>footerToolbar</code>
-      <small>
-        <code>array ['zoomIn','zoomOut','prev','fullscreen','next','actualSize','rotateRight']</code>
-      </small>
-    </h3>
-    <p>The buttons display in footer toolbar.</p>
+      <h3>
+        <code>footerToolbar</code>
+        <small><code>array ['zoomIn','zoomOut','prev','fullscreen','next','actualSize','rotateRight']</code></small>
+      </h3>
+      <p>The buttons display in footer toolbar.</p>
 
-    <h3>
-      <code>initMaximized</code>
-      <small>
-        <code>boolean false</code>
-      </small>
-    </h3>
-    <p>If false, the modal size will be set of image size or what you set with modalWidth and
-      modalHeight. If true, the
-      modal
-      size will be set maximized when initialized just like other lightbox.
-    </p>
+      <h3>
+        <code>initMaximized</code>
+        <small><code>boolean false</code></small>
+      </h3>
+      <p>If false, the modal size will be set of image size or what you set with modalWidth and
+        modalHeight. If true, the modal size will be set maximized when initialized just like other
+        lightbox.
+      </p>
 
-    <h3>
-      <code>initAnimation</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If false, it will not have animation at plugin's initialized.</p>
+      <h3>
+        <code>initAnimation</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If false, it will not have animation at plugin's initialized.</p>
 
-    <h3>
-      <code>fixedModalPos</code>
-      <small>
-        <code>boolean false</code>
-      </small>
-    </h3>
-    <p>If true, the modal position will be fixed when change images.</p>
+      <h3>
+        <code>fixedModalPos</code>
+        <small><code>boolean false</code></small>
+      </h3>
+      <p>If true, the modal position will be fixed when change images.</p>
 
-    <h3>
-      <code>zIndex</code>
-      <small>
-        <code>number 1090</code>
-      </small>
-    </h3>
-    <p>The modal style of z-index, it is useful with multiple instances.</p>
+      <h3>
+        <code>zIndex</code>
+        <small>
+          <code>number 1090</code>
+        </small>
+      </h3>
+      <p>The modal style of z-index, it is useful with multiple instances.</p>
 
-    <h3>
-      <code>dragHandle</code>
-      <small>
-        <code>string | null</code>
-      </small>
-    </h3>
-    <p>The handle of draggable. Default <code>null</code> which whole modal can be dragging.</p>
+      <h3>
+        <code>dragHandle</code>
+        <small><code>string | null</code></small>
+      </h3>
+      <p>The handle of draggable. Default <code>null</code> which whole modal can be dragging.</p>
 
-    <h3>
-      <code>multiInstances</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If false, it can only open single photoviewer.</p>
+      <h3>
+        <code>multiInstances</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If false, it can only open single photoviewer.</p>
 
-    <h3>
-      <code>icons</code>
-      <small>
-        <code>object</code>
-      </small>
-    </h3>
-    <p>You can customize the icons class in following key.</p>
-    <ul>
-      <li>minimize: <code>SVG codes</code></li>
-      <li>maximize: <code>SVG codes</code></li>
-      <li>close: <code>SVG codes</code></li>
-      <li>zoomIn: <code>SVG codes</code></li>
-      <li>zoomOut: <code>SVG codes</code></li>
-      <li>prev: <code>SVG codes</code></li>
-      <li>next: <code>SVG codes</code></li>
-      <li>fullscreen: <code>SVG codes</code></li>
-      <li>actualSize: <code>SVG codes</code></li>
-      <li>rotateLeft: <code>SVG codes</code></li>
-      <li>rotateRight: <code>SVG codes</code></li>
-    </ul>
+      <h3>
+        <code>icons</code>
+        <small><code>object</code></small>
+      </h3>
+      <p>You can customize the icons class with following key.</p>
+      <ul>
+        <li>minimize: <code>SVG codes</code></li>
+        <li>maximize: <code>SVG codes</code></li>
+        <li>close: <code>SVG codes</code></li>
+        <li>zoomIn: <code>SVG codes</code></li>
+        <li>zoomOut: <code>SVG codes</code></li>
+        <li>prev: <code>SVG codes</code></li>
+        <li>next: <code>SVG codes</code></li>
+        <li>fullscreen: <code>SVG codes</code></li>
+        <li>actualSize: <code>SVG codes</code></li>
+        <li>rotateLeft: <code>SVG codes</code></li>
+        <li>rotateRight: <code>SVG codes</code></li>
+      </ul>
 
-    <h3>
-      <code>i18n</code>
-      <small>
-        <code>object</code>
-      </small>
-    </h3>
-    <p>You can customize the buttons title in following key.</p>
-    <ul>
-      <li>minimize: <code>minimize</code></li>
-      <li>maximize: <code>maximize</code></li>
-      <li>close: <code>close</code></li>
-      <li>zoomIn: <code>zoom-in</code></li>
-      <li>zoomOut: <code>zoom-out</code></li>
-      <li>prev: <code>prev</code></li>
-      <li>next: <code>next</code></li>
-      <li>fullscreen: <code>fullscreen</code></li>
-      <li>actualSize: <code>actualSize</code></li>
-      <li>rotateLeft: <code>rotate-left</code></li>
-      <li>rotateRight: <code>rotate-right</code></li>
-    </ul>
+      <h3>
+        <code>i18n</code>
+        <small><code>object</code></small>
+      </h3>
+      <p>You can customize the buttons title with following key.</p>
+      <ul>
+        <li>minimize: <code>minimize</code></li>
+        <li>maximize: <code>maximize</code></li>
+        <li>close: <code>close</code></li>
+        <li>zoomIn: <code>zoom-in</code></li>
+        <li>zoomOut: <code>zoom-out</code></li>
+        <li>prev: <code>prev</code></li>
+        <li>next: <code>next</code></li>
+        <li>fullscreen: <code>fullscreen</code></li>
+        <li>actualSize: <code>actualSize</code></li>
+        <li>rotateLeft: <code>rotate-left</code></li>
+        <li>rotateRight: <code>rotate-right</code></li>
+      </ul>
 
-    <h3>
-      <code>callbacks</code>
-      <small>
-        <code>object</code>
-      </small>
-    </h3>
-    <p>
-      You can define callbacks in <code>callbacks</code> option.
-    </p>
-    <pre class="prettyprint">
+      <h3>
+        <code>progressiveLoading</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If true, the image will be rendered progressively.</p>
+
+      <h3>
+        <code>appendTo</code>
+        <small><code>string 'body'</code></small>
+      </h3>
+      <p>The DOM element which photoviewer will be added to.</p>
+
+      <h3>
+        <code>customButtons</code>
+        <small><code>object {}</code></small>
+      </h3>
+      <pre class="prettyprint">
+new PhotoViewer(items, {
+  footerToolbar: [
+    ...
+    'myCustomButton'
+  ],
+  customButtons: {
+    myCustomButton: {
+      text: 'custom!',
+      title: 'custom!',
+      click: function (context, e) {
+        alert('clicked the custom button!');
+      }
+    }
+  }
+});
+</pre>
+      <p>Each <code>customButton</code> entry accepts the following properties:</p>
+      <ul>
+        <li><code>text</code> - the text to be display on the button itself.</li>
+        <li><code>title</code> - the title to be display when hover the button.</li>
+        <li><code>click</code> - a callback function that is called when the button is clicked.</li>
+      </ul>
+
+      <h3>
+        <code>positionFixed</code>
+        <small><code>boolean true</code></small>
+      </h3>
+      <p>If true, the modal css position will be set <code>fixed</code> otherwise it will be set
+        <code>absolute</code>.
+      </p>
+
+      <h3>
+        <code>initModalPos</code>
+        <small><code>object {}</code></small>
+      </h3>
+      <p>You can set the modal position manually with value <code>top</code> <code>right</code>
+        <code>bottom</code> <code>left</code>.
+      </p>
+
+      <h3>
+        <code>animationDuration</code>
+        <small><code>number 400</code></small>
+      </h3>
+      <p>The modal animation duration of transform on init.</p>
+    </div>
+
+    <!-- Events -->
+    <h2 class="b-b-1 p-b-10 p-t-10 m-t-30">Events</h2>
+    <div class="">
+      <p>Photoviewer comes with a bunch of useful events you can listen.</p>
+      <p>
+        Using <code>callbacks</code> parameter on photoviewer initialization:
+      </p>
+      <pre class="prettyprint">
 new PhotoViewer(items, {
   callbacks: {
     beforeOpen: function(context){
@@ -466,81 +476,95 @@ new PhotoViewer(items, {
   }
 });
 </pre>
+    </div>
 
-    <h3>
-      <code>progressiveLoading</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If true, the image will be rendered progressively.</p>
+    <!-- Methods -->
+    <h2 class="b-b-1 p-b-10 p-t-10 m-t-30">Methods</h2>
+    <div class="">
+      <h3>
+        <code>open()</code>
+      </h3>
+      <p>Open the photoviewer. It will execute automatically on init.</p>
 
-    <h3>
-      <code>appendTo</code>
-      <small>
-        <code>string 'body'</code>
-      </small>
-    </h3>
-    <p>The DOM element to which viewer will be added.</p>
+      <h3>
+        <code>close()</code>
+      </h3>
+      <p>Close the photoviewer and remove the instance.</p>
 
-    <h3>
-      <code>customButtons</code>
-      <small>
-        <code>object {}</code>
-      </small>
-    </h3>
-    <pre class="prettyprint">
-new PhotoViewer(items, {
-  footerToolbar: [
-    ...
-    'myCustomButton'
-  ],
-  customButtons: {
-    myCustomButton: {
-      text: 'custom!',
-      title: 'custom!',
-      click: function (context, e) {
-        alert('clicked the custom button!');
-      }
-    }
-  }
-});
-</pre>
-    <p>Each <code>customButton</code> entry accepts the following properties:</p>
-    <ul>
-      <li><code>text</code> - the text to be display on the button itself.</li>
-      <li><code>title</code> - the title to be display when hover the button.</li>
-      <li><code>click</code> - a callback function that is called when the button is clicked.</li>
-    </ul>
+      <h3>
+        <code>jump(step)</code>
+      </h3>
+      <p>Change images according to step.</p>
+      <ul>
+        <li>
+          <strong><code>step</code></strong>
+          <code>number</code> - The step for changing images.
+        </li>
+      </ul>
 
-    <h3>
-      <code>positionFixed</code>
-      <small>
-        <code>boolean true</code>
-      </small>
-    </h3>
-    <p>If true, the modal css position will be set <code>fixed</code> otherwise it will be set
-      <code>absolute</code>.
-    </p>
+      <h3>
+        <code>jumpTo(index)</code>
+      </h3>
+      <p>Change to an image with the index number.</p>
+      <ul>
+        <li>
+          <strong><code>index</code></strong>
+          <code>number</code> - Index number of the image.
+        </li>
+      </ul>
 
-    <h3>
-      <code>initModalPos</code>
-      <small>
-        <code>object {}</code>
-      </small>
-    </h3>
-    <p>You can set the modal position manually with value <code>top</code> <code>right</code>
-      <code>bottom</code> <code>left</code>.
-    </p>
+      <h3>
+        <code>rotate(degree)</code>
+      </h3>
+      <p>Rotate the image with a relative degree.</p>
+      <ul>
+        <li>
+          <strong><code>degree</code></strong>
+          <code>number</code> - Degree of the image rotation.
+        </li>
+      </ul>
 
-    <h3>
-      <code>animationDuration</code>
-      <small>
-        <code>number 400</code>
-      </small>
-    </h3>
-    <p>The modal animation duration of transform on init.
-    </p>
+      <h3>
+        <code>rotateTo(degree)</code>
+      </h3>
+      <p>Rotate the image to an absolute degree.</p>
+      <ul>
+        <li>
+          <strong><code>degree</code></strong>
+          <code>number</code> - Degree of the image rotation.
+        </li>
+      </ul>
+
+      <h3>
+        <code>zoom(ratio, origin)</code>
+      </h3>
+      <p>Zoom the image with a relative ratio.</p>
+      <ul>
+        <li>
+          <strong><code>ratio</code></strong>
+          <code>number</code> - Ratio for image zoomed.
+        </li>
+        <li>
+          <strong><code>origin</code></strong>
+          <code>object</code> - Origin coordinates for image zoomed.
+        </li>
+      </ul>
+
+      <h3>
+        <code>zoomTo(ratio, origin)</code>
+      </h3>
+      <p>Zoom the image to an absolute ratio.</p>
+      <ul>
+        <li>
+          <strong><code>ratio</code></strong>
+          <code>number</code> - Ratio for image zoomed.
+        </li>
+        <li>
+          <strong><code>origin</code></strong>
+          <code>object</code> - Origin coordinates for image zoomed.
+        </li>
+      </ul>
+    </div>
 
     <footer class="footer text-center">
       <p>
