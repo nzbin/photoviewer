@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.6.3
+ * photoviewer - v3.6.4
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -1822,8 +1822,8 @@
         startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // Reclac the modal data when mousedown
 
         modalData = {
-          w: $modal.width(),
-          h: $modal.height(),
+          w: $modal.width() + (isBorderBox($modal) ? _this._modalEdgeValue.horizontal : 0),
+          h: $modal.height() + (isBorderBox($modal) ? _this._modalEdgeValue.vertical : 0),
           x: $modal.position().left,
           y: $modal.position().top
         };
@@ -1957,7 +1957,7 @@
 
         var imgSrc = items[this.groupIndex]['src'];
         this.open();
-        this.loadImage(imgSrc); // Draggable & Movable & Resizable
+        this.loadImage(imgSrc);
 
         if (opts.draggable) {
           this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
@@ -2565,16 +2565,16 @@
         this.isMaximized = false;
       }
     }, {
-      key: "_toggleMaximize",
-      value: function _toggleMaximize() {
+      key: "toggleMaximize",
+      value: function toggleMaximize() {
         if (!this.isMaximized) {
-          var originalWidth = parseFloat(this.$photoviewer.width());
-          var originalHeight = parseFloat(this.$photoviewer.height());
+          var originalWidth = this.$photoviewer.width();
+          var originalHeight = this.$photoviewer.height();
 
           if (isBorderBox(this.$photoviewer)) {
             originalWidth += this._modalEdgeValue.horizontal;
             originalHeight += this._modalEdgeValue.vertical;
-          } // Store modal size and position before maximized
+          } // Store modal's size and position before maximized
 
 
           this.modalData = {
@@ -2723,7 +2723,7 @@
           _this5.rotate(90);
         });
         this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-          _this5._toggleMaximize();
+          _this5.toggleMaximize();
         });
         this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
           _this5._keydown(e);

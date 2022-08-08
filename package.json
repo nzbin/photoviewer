@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.6.3",
+  "version": "3.6.4",
   "description": "A JS plugin to view images just like in Windows.",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
@@ -58,7 +58,7 @@
     "lint:js": "eslint src/js --fix",
     "clean": "rimraf dist",
     "watch": "onchange src -- run-p build:js build:css",
-    "prepublish": "npm run release"
+    "prepublishOnly": "npm run release"
   },
   "devDependencies": {
     "@babel/core": "^7.17.12",
