@@ -94,13 +94,14 @@ class PhotoViewer {
 
     this.loadImage(imgSrc);
 
-    // Draggable & Movable & Resizable
     if (opts.draggable) {
       this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
     }
+
     if (opts.movable) {
       this.movable(this.$stage, this.$image);
     }
+
     if (opts.resizable) {
       this.resizable(
         this.$photoviewer,
@@ -761,17 +762,17 @@ class PhotoViewer {
     this.isMaximized = false;
   }
 
-  _toggleMaximize() {
+  toggleMaximize() {
     if (!this.isMaximized) {
-      let originalWidth = parseFloat(this.$photoviewer.width());
-      let originalHeight = parseFloat(this.$photoviewer.height());
+      let originalWidth = this.$photoviewer.width();
+      let originalHeight = this.$photoviewer.height();
 
       if (isBorderBox(this.$photoviewer)) {
         originalWidth += this._modalEdgeValue.horizontal;
         originalHeight += this._modalEdgeValue.vertical;
       }
 
-      // Store modal size and position before maximized
+      // Store modal's size and position before maximized
       this.modalData = {
         width: originalWidth,
         height: originalHeight,
@@ -920,7 +921,7 @@ class PhotoViewer {
     });
 
     this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
-      this._toggleMaximize();
+      this.toggleMaximize();
     });
 
     this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {

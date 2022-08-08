@@ -9,7 +9,7 @@ import {
   PUBLIC_VARS
 } from './constants';
 
-import { setGrabCursor } from './utilities';
+import { isBorderBox, setGrabCursor } from './utilities';
 
 const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}-button`;
 
@@ -287,8 +287,8 @@ export default {
 
       // Reclac the modal data when mousedown
       modalData = {
-        w: $modal.width(),
-        h: $modal.height(),
+        w: $modal.width() + (isBorderBox($modal) ? this._modalEdgeValue.horizontal : 0),
+        h: $modal.height() + (isBorderBox($modal) ? this._modalEdgeValue.vertical : 0),
         x: $modal.position().left,
         y: $modal.position().top
       };
