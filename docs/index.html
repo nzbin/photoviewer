@@ -346,39 +346,43 @@ $('[data-gallery=manual]').click(function (e) {
         <code>icons</code>
         <small><code>object</code></small>
       </h3>
-      <p>You can customize the icons class with following key.</p>
-      <ul>
-        <li>minimize: <code>SVG codes</code></li>
-        <li>maximize: <code>SVG codes</code></li>
-        <li>close: <code>SVG codes</code></li>
-        <li>zoomIn: <code>SVG codes</code></li>
-        <li>zoomOut: <code>SVG codes</code></li>
-        <li>prev: <code>SVG codes</code></li>
-        <li>next: <code>SVG codes</code></li>
-        <li>fullscreen: <code>SVG codes</code></li>
-        <li>actualSize: <code>SVG codes</code></li>
-        <li>rotateLeft: <code>SVG codes</code></li>
-        <li>rotateRight: <code>SVG codes</code></li>
-      </ul>
+      <p>You can customize the button icon with the following key:</p>
+      <pre class="prettyprint lang-js">
+icons: {
+  minimize: '&lt;svg&gt;...&lt;/svg&gt;',
+  maximize: '&lt;svg&gt;...&lt;/svg&gt;',
+  close: '&lt;svg&gt;...&lt;/svg&gt;',
+  zoomIn: '&lt;svg&gt;...&lt;/svg&gt;',
+  zoomOut: '&lt;svg&gt;...&lt;/svg&gt;',
+  prev: '&lt;svg&gt;...&lt;/svg&gt;',
+  next: '&lt;svg&gt;...&lt;/svg&gt;',
+  fullscreen: '&lt;svg&gt;...&lt;/svg&gt;',
+  actualSize: '&lt;svg&gt;...&lt;/svg&gt;',
+  rotateLeft: '&lt;svg&gt;...&lt;/svg&gt;',
+  rotateRight: '&lt;svg&gt;...&lt;/svg&gt;',
+}
+</pre>
 
       <h3>
         <code>i18n</code>
         <small><code>object</code></small>
       </h3>
-      <p>You can customize the buttons title with following key.</p>
-      <ul>
-        <li>minimize: <code>minimize</code></li>
-        <li>maximize: <code>maximize</code></li>
-        <li>close: <code>close</code></li>
-        <li>zoomIn: <code>zoom-in</code></li>
-        <li>zoomOut: <code>zoom-out</code></li>
-        <li>prev: <code>prev</code></li>
-        <li>next: <code>next</code></li>
-        <li>fullscreen: <code>fullscreen</code></li>
-        <li>actualSize: <code>actualSize</code></li>
-        <li>rotateLeft: <code>rotate-left</code></li>
-        <li>rotateRight: <code>rotate-right</code></li>
-      </ul>
+      <p>You can customize the button title with the following key:</p>
+      <pre class="prettyprint lang-js">
+i18n: {
+  minimize: 'minimize',
+  maximize: 'maximize',
+  close: 'close',
+  zoomIn: 'zoom-in (+)',
+  zoomOut: 'zoom-out (-)',
+  prev: 'prev (←)',
+  next: 'next (→)',
+  fullscreen: 'fullscreen',
+  actualSize: 'actual-size (Ctrl+Alt+0)',
+  rotateLeft: 'rotate-left (Ctrl+,)',
+  rotateRight: 'rotate-right (Ctrl+.)',
+}
+</pre>
 
       <h3>
         <code>progressiveLoading</code>
