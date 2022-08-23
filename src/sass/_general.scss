@@ -175,3 +175,10 @@
     display: inline-block;
   }
 }
+
+[dir='rtl'] {
+  .photoviewer-button-prev,
+  .photoviewer-button-next {
+    transform: rotate(180deg);
+  }
+}

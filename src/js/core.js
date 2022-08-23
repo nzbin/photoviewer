@@ -278,7 +278,7 @@ class PhotoViewer {
   }
 
   setModalToCenter() {
-    let initLeft = 0, initTop = 0, initRight = 0, initBottom = 0;
+    let initLeft, initTop, initRight, initBottom;
 
     // Extra width/height for `content-box`
     let extraWidth = 0, extraHeight = 0;
@@ -357,7 +357,7 @@ class PhotoViewer {
     minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
     minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
 
-    let transLeft = 0, transTop = 0, transRight = 0, transBottom = 0;
+    let transLeft, transTop, transRight, transBottom;
 
     if ($.isPlainObject(this.options.initModalPos)) {
       transLeft = this.options.initModalPos.left;
