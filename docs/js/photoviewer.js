@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.6.4
+ * photoviewer - v3.6.5
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -1277,17 +1277,17 @@
     },
     // Custom title for button
     i18n: {
-      minimize: 'minimize',
-      maximize: 'maximize',
-      close: 'close',
-      zoomIn: 'zoom-in (+)',
-      zoomOut: 'zoom-out (-)',
-      prev: 'prev (←)',
-      next: 'next (→)',
-      fullscreen: 'fullscreen',
-      actualSize: 'actual-size (Ctrl+Alt+0)',
-      rotateLeft: 'rotate-left (Ctrl+,)',
-      rotateRight: 'rotate-right (Ctrl+.)'
+      minimize: 'Minimize',
+      maximize: 'Maximize',
+      close: 'Close (q)',
+      zoomIn: 'Zoom-in (+)',
+      zoomOut: 'Zoom-out (-)',
+      prev: 'Prev (←)',
+      next: 'Next (→)',
+      fullscreen: 'Fullscreen',
+      actualSize: 'Actual-size (Ctrl+Alt+0)',
+      rotateLeft: 'Rotate-left (Ctrl+,)',
+      rotateRight: 'Rotate-right (Ctrl+.)'
     },
     // Whether to enable multiple instances
     multiInstances: true,
@@ -1518,7 +1518,14 @@
         startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY; // Get current position of the modal
 
         left = parseFloat($modal.css('left'));
-        top = parseFloat($modal.css('top'));
+        top = parseFloat($modal.css('top')); // Reset modal position with left and top
+
+        $modal.css({
+          left: left,
+          top: top,
+          right: '',
+          bottom: ''
+        });
         $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
       };
 
@@ -1951,7 +1958,7 @@
       key: "init",
       value: function init(items, opts) {
         this.groupData = items;
-        this.groupIndex = opts['index']; // Fix: https://github.com/nzbin/photoviewer/issues/7
+        this.groupIndex = opts['index']; // Reset public z-index with option
 
         PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex']; // Get image src
 
@@ -2113,10 +2120,7 @@
     }, {
       key: "setModalToCenter",
       value: function setModalToCenter() {
-        var initLeft = 0,
-            initTop = 0,
-            initRight = 0,
-            initBottom = 0; // Extra width/height for `content-box`
+        var initLeft, initTop, initRight, initBottom; // Extra width/height for `content-box`
 
         var extraWidth = 0,
             extraHeight = 0;
@@ -2190,10 +2194,7 @@
         var minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
         minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
         minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
-        var transLeft = 0,
-            transTop = 0,
-            transRight = 0,
-            transBottom = 0;
+        var transLeft, transTop, transRight, transBottom;
 
         if ($.isPlainObject(this.options.initModalPos)) {
           transLeft = this.options.initModalPos.left;
