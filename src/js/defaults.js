@@ -123,17 +123,17 @@ export default {
 
   // Custom title for button
   i18n: {
-    minimize: 'minimize',
-    maximize: 'maximize',
-    close: 'close',
-    zoomIn: 'zoom-in (+)',
-    zoomOut: 'zoom-out (-)',
-    prev: 'prev (←)',
-    next: 'next (→)',
-    fullscreen: 'fullscreen',
-    actualSize: 'actual-size (Ctrl+Alt+0)',
-    rotateLeft: 'rotate-left (Ctrl+,)',
-    rotateRight: 'rotate-right (Ctrl+.)'
+    minimize: 'Minimize',
+    maximize: 'Maximize',
+    close: 'Close (q)',
+    zoomIn: 'Zoom-in (+)',
+    zoomOut: 'Zoom-out (-)',
+    prev: 'Prev (←)',
+    next: 'Next (→)',
+    fullscreen: 'Fullscreen',
+    actualSize: 'Actual-size (Ctrl+Alt+0)',
+    rotateLeft: 'Rotate-left (Ctrl+,)',
+    rotateRight: 'Rotate-right (Ctrl+.)'
   },
 
   // Whether to enable multiple instances

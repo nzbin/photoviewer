@@ -84,7 +84,7 @@ class PhotoViewer {
     this.groupData = items;
     this.groupIndex = opts['index'];
 
-    // Fix: https://github.com/nzbin/photoviewer/issues/7
+    // Reset public z-index with option
     PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex'];
 
     // Get image src
