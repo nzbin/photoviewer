@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.6.5
+ * photoviewer - v3.6.6
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -1272,13 +1272,13 @@ var DEFAULTS = {
   // Custom title for button
   i18n: {
     minimize: 'Minimize',
-    maximize: 'Maximize',
-    close: 'Close (q)',
+    maximize: 'Maximize (Alt+X)',
+    close: 'Close (Q)',
     zoomIn: 'Zoom-in (+)',
     zoomOut: 'Zoom-out (-)',
     prev: 'Prev (←)',
     next: 'Next (→)',
-    fullscreen: 'Fullscreen',
+    fullscreen: 'Fullscreen (F)',
     actualSize: 'Actual-size (Ctrl+Alt+0)',
     rotateLeft: 'Rotate-left (Ctrl+,)',
     rotateRight: 'Rotate-right (Ctrl+.)'
@@ -2602,9 +2602,10 @@ var PhotoViewer = /*#__PURE__*/function () {
         return false;
       }
 
+      e.preventDefault();
       var keyCode = e.keyCode || e.which || e.charCode;
       var ctrlKey = e.ctrlKey || e.metaKey;
-      var altKey = e.altKey || e.metaKey;
+      var altKey = e.altKey;
 
       switch (keyCode) {
         // ←
@@ -2679,6 +2680,19 @@ var PhotoViewer = /*#__PURE__*/function () {
 
         case 81:
           this.close();
+          break;
+        // Alt + X
+
+        case 88:
+          if (altKey) {
+            this.toggleMaximize();
+          }
+
+          break;
+        // F
+
+        case 70:
+          this.fullscreen();
           break;
       }
     }
