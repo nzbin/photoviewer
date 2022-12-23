@@ -804,9 +804,11 @@ class PhotoViewer {
       return false;
     }
 
+    e.preventDefault();
+
     const keyCode = e.keyCode || e.which || e.charCode;
     const ctrlKey = e.ctrlKey || e.metaKey;
-    const altKey = e.altKey || e.metaKey;
+    const altKey = e.altKey;
 
     switch (keyCode) {
       // ←
@@ -874,6 +876,16 @@ class PhotoViewer {
       // Q
       case 81:
         this.close();
+        break;
+      // Alt + X
+      case 88:
+        if (altKey) {
+          this.toggleMaximize();
+        }
+        break;
+      // F
+      case 70:
+        this.fullscreen();
         break;
       default:
     }

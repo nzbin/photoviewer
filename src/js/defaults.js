@@ -124,13 +124,13 @@ export default {
   // Custom title for button
   i18n: {
     minimize: 'Minimize',
-    maximize: 'Maximize',
-    close: 'Close (q)',
+    maximize: 'Maximize (Alt+X)',
+    close: 'Close (Q)',
     zoomIn: 'Zoom-in (+)',
     zoomOut: 'Zoom-out (-)',
     prev: 'Prev (←)',
     next: 'Next (→)',
-    fullscreen: 'Fullscreen',
+    fullscreen: 'Fullscreen (F)',
     actualSize: 'Actual-size (Ctrl+Alt+0)',
     rotateLeft: 'Rotate-left (Ctrl+,)',
     rotateRight: 'Rotate-right (Ctrl+.)'
