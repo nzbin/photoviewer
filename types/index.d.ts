@@ -1,5 +1,6 @@
 declare namespace PhotoViewer {
   type toolbarOption =
+    | 'minimize'
     | 'maximize'
     | 'close'
     | 'zoomIn'
@@ -36,8 +37,8 @@ declare namespace PhotoViewer {
     ratioThreshold?: number;
     minRatio?: number;
     maxRatio?: number;
-    headerToolbar?: Array<toolbarOption> | Array<string>;
-    footerToolbar?: Array<toolbarOption> | Array<string>;
+    headerToolbar?: toolbarOption[] | string[];
+    footerToolbar?: toolbarOption[] | string[];
     icons?: {
       minimize?: string;
       maximize?: string;
