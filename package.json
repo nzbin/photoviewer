@@ -10,7 +10,8 @@
   "files": [
     "dist",
     "src",
-    "types"
+    "types",
+    "_index.scss"
   ],
   "homepage": "https://nzbin.github.io/photoviewer/",
   "author": "nzbin",
@@ -38,8 +39,8 @@
     "url": "https://github.com/nzbin/photoviewer/issues"
   },
   "scripts": {
-    "sass": "sass --style=expanded src/sass/photoviewer.scss dist/photoviewer.css",
-    "sassmin": "sass --style=compressed src/sass/photoviewer.scss dist/photoviewer.min.css",
+    "sass": "sass --style=expanded src/scss/photoviewer.scss dist/photoviewer.css",
+    "sassmin": "sass --style=compressed src/scss/photoviewer.scss dist/photoviewer.min.css",
     "postcss": "postcss -r dist/*.css",
     "build": "run-s build:css build:js",
     "build:css": "run-s sass",
