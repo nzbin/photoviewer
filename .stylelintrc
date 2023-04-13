@@ -10,6 +10,7 @@
   "rules": {
     "alpha-value-notation": null,
     "color-function-notation": "legacy",
+    "import-notation": null,
     "keyframes-name-pattern": null,
     "no-descending-specificity": null,
     "number-leading-zero": "never",
