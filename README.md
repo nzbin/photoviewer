@@ -6,7 +6,7 @@
 [![Gitter](https://img.shields.io/gitter/room/photoviewer/photoviewer.svg)](https://gitter.im/photoviewer/community)
 [![Financial Contributors on Open Collective](https://opencollective.com/photoviewer/all/badge.svg?label=financial+contributors)](https://opencollective.com/photoviewer) 
 
-PhotoViewer is a JS plugin to view images just like in windows. [[Examples](https://nzbin.github.io/photoviewer/)]
+PhotoViewer is a JS plugin to view images just like in Windows. [[Examples](https://nzbin.github.io/photoviewer/)]
 
 > If you want to support IE8, please goto [Magnify](https://github.com/nzbin/magnify/).
 
@@ -38,7 +38,7 @@ $ npm install photoviewer --save
 ### Step 1: Include files
 
 ```scss
-@import 'photoviewer/dist/photoviewer.css';
+@use 'photoviewer';
 ```
 
 ```js
