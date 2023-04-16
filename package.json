@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.6.6",
+  "version": "3.7.0",
   "description": "A JS plugin to view images just like in Windows.",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
@@ -28,12 +28,17 @@
     "photoviewer",
     "lightbox",
     "image-gallery",
+    "image-viewer",
     "responsive",
-    "jquery",
     "modal",
     "draggable",
     "resizable",
-    "zoomable"
+    "movable",
+    "zoomable",
+    "rotatable",
+    "mousewheel",
+    "fullscreen",
+    "hotkeys"
   ],
   "bugs": {
     "url": "https://github.com/nzbin/photoviewer/issues"

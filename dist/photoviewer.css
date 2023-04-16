@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|     
  *
- * photoviewer - v3.6.6
+ * photoviewer - v3.7.0
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -179,6 +179,7 @@
 
 [dir=rtl] .photoviewer-button-prev,
 [dir=rtl] .photoviewer-button-next {
+  -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 
