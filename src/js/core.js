@@ -430,14 +430,8 @@ class PhotoViewer {
 
     // Set grab cursor
     setGrabCursor(
-      {
-        w: this.$image.width(),
-        h: this.$image.height()
-      },
-      {
-        w: this.$stage.width(),
-        h: this.$stage.height()
-      },
+      { w: this.$image.width(), h: this.$image.height() },
+      { w: this.$stage.width(), h: this.$stage.height() },
       this.$stage,
       this.isRotated
     );
@@ -658,10 +652,7 @@ class PhotoViewer {
     }
 
     // Whether the image scale get to the critical point
-    if (
-      Math.abs(this.imageData.initWidth - newWidth) <
-      this.imageData.initWidth * 0.05
-    ) {
+    if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
       this.setImageSize(this.img);
     } else {
       $image.css({
@@ -673,14 +664,8 @@ class PhotoViewer {
 
       // Set grab cursor
       setGrabCursor(
-        {
-          w: Math.round(imgNewWidth),
-          h: Math.round(imgNewHeight)
-        },
-        {
-          w: stageData.w,
-          h: stageData.h
-        },
+        { w: Math.round(imgNewWidth), h: Math.round(imgNewHeight) },
+        { w: stageData.w, h: stageData.h },
         this.$stage
       );
     }

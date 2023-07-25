@@ -68,10 +68,8 @@ export default {
         $(ELEMS_WITH_GRABBING_CURSOR).addClass('is-grabbing');
       }
 
-      $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(
-        TOUCH_END_EVENT + EVENT_NS,
-        dragEnd
-      );
+      $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
+        .on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
     };
 
     const dragMove = e => {
@@ -122,10 +120,8 @@ export default {
     };
 
     const dragEnd = () => {
-      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(
-        TOUCH_END_EVENT + EVENT_NS,
-        dragEnd
-      );
+      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
+        .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
 
       isDragging = false;
       PUBLIC_VARS['isMoving'] = false;

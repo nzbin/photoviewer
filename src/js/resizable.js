@@ -8,7 +8,6 @@ import {
   EVENT_NS,
   PUBLIC_VARS
 } from './constants';
-
 import { isBorderBox, setGrabCursor } from './utilities';
 
 const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}-button`;
@@ -28,30 +27,14 @@ export default {
    * @param {number} minHeight - The modalHeight option
    */
   resizable($modal, $stage, $image, minWidth, minHeight) {
-    const resizableHandleE = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-e"></div>`
-    );
-    const resizableHandleW = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-w"></div>`
-    );
-    const resizableHandleS = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-s"></div>`
-    );
-    const resizableHandleN = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-n"></div>`
-    );
-    const resizableHandleSE = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-se"></div>`
-    );
-    const resizableHandleSW = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-sw"></div>`
-    );
-    const resizableHandleNE = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-ne"></div>`
-    );
-    const resizableHandleNW = $(
-      `<div class="${NS}-resizable-handle ${NS}-resizable-handle-nw"></div>`
-    );
+    const resizableHandleE = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-e"></div>`);
+    const resizableHandleW = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-w"></div>`);
+    const resizableHandleS = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-s"></div>`);
+    const resizableHandleN = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-n"></div>`);
+    const resizableHandleSE = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-se"></div>`);
+    const resizableHandleSW = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-sw"></div>`);
+    const resizableHandleNE = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-ne"></div>`);
+    const resizableHandleNW = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-nw"></div>`);
 
     const resizableHandles = {
       e: resizableHandleE,
@@ -79,24 +62,9 @@ export default {
 
     let startX = 0;
     let startY = 0;
-    let modalData = {
-      w: 0,
-      h: 0,
-      x: 0,
-      y: 0
-    };
-    let stageData = {
-      w: 0,
-      h: 0,
-      x: 0,
-      y: 0
-    };
-    let imageData = {
-      w: 0,
-      h: 0,
-      x: 0,
-      y: 0
-    };
+    let modalData = { w: 0, h: 0, x: 0, y: 0 };
+    let stageData = { w: 0, h: 0, x: 0, y: 0 };
+    let imageData = { w: 0, h: 0, x: 0, y: 0 };
     // δ is the difference between image width and height
     let δ = 0;
     let imgWidth = 0;
@@ -105,7 +73,7 @@ export default {
 
     // Modal CSS options
     const getModalOpts = function (dir, offsetX, offsetY) {
-      // Modal should not move when its width to the minwidth
+      // Modal should not move when its width to the min-width
       const modalLeft = -offsetX + modalData.w > minWidth
         ? offsetX + modalData.x
         : modalData.x + modalData.w - minWidth;
@@ -156,7 +124,7 @@ export default {
     // Image CSS options
     const getImageOpts = function (dir, offsetX, offsetY) {
       // Image should not move when modal width to the min width
-      // The minwidth is modal width, so we should clac the stage minwidth
+      // The min-width is modal width, so we should clac the stage min-width
       const widthDiff = offsetX + modalData.w > minWidth
         ? stageData.w - imgWidth + offsetX - δ
         : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
@@ -194,80 +162,32 @@ export default {
 
       const opts = {
         e: {
-          left: widthDiff >= -δ
-            ? (widthDiff - δ) / 2
-            : imgLeft > widthDiff
-              ? imgLeft
-              : widthDiff
+          left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
         },
         s: {
-          top: heightDiff >= δ
-            ? (heightDiff + δ) / 2
-            : imgTop > heightDiff
-              ? imgTop
-              : heightDiff
+          top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff
         },
         se: {
-          top: heightDiff >= δ
-            ? (heightDiff + δ) / 2
-            : imgTop > heightDiff
-              ? imgTop
-              : heightDiff,
-          left: widthDiff >= -δ
-            ? (widthDiff - δ) / 2
-            : imgLeft > widthDiff
-              ? imgLeft
-              : widthDiff
+          top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
+          left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
         },
         w: {
-          left: widthDiff2 >= -δ
-            ? (widthDiff2 - δ) / 2
-            : imgLeft2 > widthDiff2
-              ? imgLeft2
-              : widthDiff2
+          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
         },
         n: {
-          top: heightDiff2 >= δ
-            ? (heightDiff2 + δ) / 2
-            : imgTop2 > heightDiff2
-              ? imgTop2
-              : heightDiff2
+          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2
         },
         nw: {
-          top: heightDiff2 >= δ
-            ? (heightDiff2 + δ) / 2
-            : imgTop2 > heightDiff2
-              ? imgTop2
-              : heightDiff2,
-          left: widthDiff2 >= -δ
-            ? (widthDiff2 - δ) / 2
-            : imgLeft2 > widthDiff2
-              ? imgLeft2
-              : widthDiff2
+          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
+          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
         },
         ne: {
-          top: heightDiff2 >= δ
-            ? (heightDiff2 + δ) / 2
-            : imgTop2 > heightDiff2
-              ? imgTop2
-              : heightDiff2,
-          left: widthDiff >= -δ
-            ? (widthDiff - δ) / 2
-            : imgLeft > widthDiff
-              ? imgLeft
-              : widthDiff
+          top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
+          left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
         },
         sw: {
-          top: heightDiff >= δ
-            ? (heightDiff + δ) / 2
-            : imgTop > heightDiff
-              ? imgTop
-              : heightDiff,
-          left: widthDiff2 >= -δ
-            ? (widthDiff2 - δ) / 2
-            : imgLeft2 > widthDiff2
-              ? imgLeft2
-              : widthDiff2
+          top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
+          left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
         }
       };
 
@@ -317,10 +237,8 @@ export default {
       // Add resizable cursor
       $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
 
-      $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(
-        TOUCH_END_EVENT + EVENT_NS,
-        dragEnd
-      );
+      $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
+        .on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
     };
 
     const dragMove = e => {
@@ -347,22 +265,14 @@ export default {
     };
 
     const dragEnd = () => {
-      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(
-        TOUCH_END_EVENT + EVENT_NS,
-        dragEnd
-      );
+      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
+        .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
 
       // Set grab cursor
       if (PUBLIC_VARS['isResizing']) {
         setGrabCursor(
-          {
-            w: imgWidth,
-            h: imgHeight
-          },
-          {
-            w: $stage.width(),
-            h: $stage.height()
-          },
+          { w: imgWidth, h: imgHeight },
+          { w: $stage.width(), h: $stage.height() },
           $stage
         );
       }
