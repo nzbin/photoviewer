@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.7.1
+ * photoviewer - v3.7.2
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -34,6 +34,20 @@ function _createClass(Constructor, protoProps, staticProps) {
     writable: false
   });
   return Constructor;
+}
+function _defineProperty(obj, key, value) {
+  key = _toPropertyKey(key);
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
 }
 function _toPrimitive(input, hint) {
   if (typeof input !== "object" || input === null) return input;
@@ -110,6 +124,10 @@ function type(obj) {
   return obj == null
     ? String(obj)
     : class2type[toString.call(obj)] || 'object';
+}
+
+function isString(obj) {
+  return typeof obj == 'string';
 }
 
 function isFunction(value) {
@@ -207,6 +225,10 @@ function className(node, value) {
 
   if (value === undefined) return svg ? klass.baseVal : klass;
   svg ? (klass.baseVal = value) : (node.className = value);
+}
+
+function nodeName(elem, name) {
+  return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 }
 
 D.fn = D.prototype = {
@@ -392,6 +414,14 @@ D.extend({
     me.selector = selector || '';
     return me;
   },
+  merge: function (first, second) {
+    var len = +second.length,
+      j = 0,
+      i = first.length;
+    for (; j < len; j++) first[i++] = second[j];
+    first.length = i;
+    return first;
+  },
   // D's CSS selector
   qsa: function (element, selector) {
     var found,
@@ -473,7 +503,6 @@ D.extend({
       for (key in elements)
         if (callback.call(elements[key], key, elements[key]) === false) return elements;
     }
-
     return elements;
   },
   map: function (elements, callback) {
@@ -758,14 +787,139 @@ function height(value) {
   return calc.call(this, 'height', value);
 }
 
-var traverseNode = function (node, fn) {
+var _zid = 1,
+  handlers = {},
+  focusinSupported = 'onfocusin' in window,
+  focus = { focus: 'focusin', blur: 'focusout' },
+  hover = { mouseenter: 'mouseover', mouseleave: 'mouseout' },
+  ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
+  returnTrue = function () { return true; },
+  returnFalse = function () { return false; },
+  eventMethods = {
+    preventDefault: 'isDefaultPrevented',
+    stopImmediatePropagation: 'isImmediatePropagationStopped',
+    stopPropagation: 'isPropagationStopped'
+  };
+
+function zid(element) {
+  return element._zid || (element._zid = _zid++);
+}
+
+function compatible(event, source) {
+  if (source || !event.isDefaultPrevented) {
+    source || (source = event);
+
+    D.each(eventMethods, function (name, predicate) {
+      var sourceMethod = source[name];
+      event[name] = function () {
+        this[predicate] = returnTrue;
+        return sourceMethod && sourceMethod.apply(source, arguments);
+      };
+      event[predicate] = returnFalse;
+    });
+
+    try {
+      event.timeStamp || (event.timeStamp = Date.now());
+    } catch (ignored) {
+      console.warn(ignored);
+    }
+
+    if (source.defaultPrevented !== undefined ? source.defaultPrevented :
+      'returnValue' in source ? source.returnValue === false :
+        source.getPreventDefault && source.getPreventDefault())
+      event.isDefaultPrevented = returnTrue;
+  }
+  return event;
+}
+
+function parse(event) {
+  var parts = ('' + event).split('.');
+  return { e: parts[0], ns: parts.slice(1).sort().join(' ') };
+}
+
+function matcherFor(ns) {
+  return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)');
+}
+
+function findHandlers(element, event, fn, selector) {
+  event = parse(event);
+  if (event.ns) var matcher = matcherFor(event.ns);
+  return (handlers[zid(element)] || []).filter(function (handler) {
+    return handler
+      && (!event.e || handler.e == event.e)
+      && (!event.ns || matcher.test(handler.ns))
+      && (!fn || zid(handler.fn) === zid(fn))
+      && (!selector || handler.sel == selector);
+  });
+}
+
+function eventCapture(handler, captureSetting) {
+  return handler.del &&
+    (!focusinSupported && (handler.e in focus)) ||
+    !!captureSetting;
+}
+
+function realEvent(type) {
+  return hover[type] || (focusinSupported && focus[type]) || type;
+}
+
+function addEvent(element, events, fn, data, selector, delegator, capture) {
+  var id = zid(element), set = (handlers[id] || (handlers[id] = []));
+  events.split(/\s/).forEach(function (event) {
+    if (event == 'ready') return D(document$1).ready(fn);
+    var handler = parse(event);
+    handler.fn = fn;
+    handler.sel = selector;
+    // emulate mouseenter, mouseleave
+    if (handler.e in hover) fn = function (e) {
+      var related = e.relatedTarget;
+      if (!related || (related !== this && !contains(this, related)))
+        return handler.fn.apply(this, arguments);
+    };
+    handler.del = delegator;
+    var callback = delegator || fn;
+    handler.proxy = function (e) {
+      e = compatible(e);
+      if (e.isImmediatePropagationStopped()) return;
+      e.data = data;
+      var result = callback.apply(element, e._args == undefined ? [e] : [e].concat(e._args));
+      if (result === false) e.preventDefault(), e.stopPropagation();
+      return result;
+    };
+    handler.i = set.length;
+    set.push(handler);
+    if ('addEventListener' in element)
+      element.addEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture));
+  });
+}
+
+function removeEvent(element, events, fn, selector, capture) {
+  var id = zid(element);
+  (events || '').split(/\s/).forEach(function (event) {
+    findHandlers(element, event, fn, selector).forEach(function (handler) {
+      delete handlers[id][handler.i];
+      if ('removeEventListener' in element)
+        element.removeEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture));
+    });
+  });
+}
+
+function createProxy(event) {
+  var key, proxy = { originalEvent: event };
+  for (key in event)
+    if (!ignoreProperties.test(key) && event[key] !== undefined) proxy[key] = event[key];
+
+  return compatible(proxy, event);
+}
+
+function traverseNode(node, fn) {
   fn(node);
   for (var i = 0, len = node.childNodes.length; i < len; i++)
     traverseNode(node.childNodes[i], fn);
-};
+}
 
 // inside => append, prepend
-var domMani = function (elem, args, fn, inside) {
+function domMani(elem, args, fn, inside) {
   // arguments can be nodes, arrays of nodes, D objects and HTML strings
   var argType,
     nodes = D.map(args, function (arg) {
@@ -807,19 +961,54 @@ var domMani = function (elem, args, fn, inside) {
       }
     });
   });
-};
+}
+
+function getAll(context, tag) {
+  var ret;
+  if (typeof context.getElementsByTagName !== 'undefined') {
+    ret = context.getElementsByTagName(tag || '*');
+  } else if (typeof context.querySelectorAll !== 'undefined') {
+    ret = context.querySelectorAll(tag || '*');
+  } else {
+    ret = [];
+  }
+  if (tag === undefined || tag && nodeName(context, tag)) {
+    return D.merge([context], ret);
+  }
+  return ret;
+}
+
+function cleanData(elems) {
+  var events, elem,
+    i = 0;
+  for (; (elem = elems[i]) !== undefined; i++) {
+    if (elem._zid && (events = handlers[elem._zid])) {
+      events.forEach(evt => {
+        const type = evt.e + '.' + evt.ns.split(' ').join('.');
+        removeEvent(elem, type, evt.fn, evt.sel);
+      });
+    }
+  }
+}
 
 // Export
 
-function remove$1() {
+function remove() {
   return this.each(function () {
+    if (this.nodeType === 1) {
+      // Prevent memory leaks
+      cleanData(getAll(this));
+    }
+
     if (this.parentNode != null)
       this.parentNode.removeChild(this);
   });
 }
 
 function empty() {
-  return this.each(function () { this.innerHTML = ''; });
+  return this.each(function () {
+    this.innerHTML = '';
+  });
 }
 
 function html(html) {
@@ -837,136 +1026,7 @@ function append() {
   }, true);
 }
 
-var _zid = 1;
-function zid(element) {
-  return element._zid || (element._zid = _zid++);
-}
-
-function isString(obj) {
-  return typeof obj == 'string';
-}
-
-var returnTrue = function () { return true; },
-  returnFalse = function () { return false; },
-  eventMethods = {
-    preventDefault: 'isDefaultPrevented',
-    stopImmediatePropagation: 'isImmediatePropagationStopped',
-    stopPropagation: 'isPropagationStopped'
-  };
-
-function compatible(event, source) {
-  if (source || !event.isDefaultPrevented) {
-    source || (source = event);
-
-    D.each(eventMethods, function (name, predicate) {
-      var sourceMethod = source[name];
-      event[name] = function () {
-        this[predicate] = returnTrue;
-        return sourceMethod && sourceMethod.apply(source, arguments);
-      };
-      event[predicate] = returnFalse;
-    });
-
-    try {
-      event.timeStamp || (event.timeStamp = Date.now());
-    } catch (ignored) {
-      console.warn(ignored);
-    }
-
-    if (source.defaultPrevented !== undefined ? source.defaultPrevented :
-      'returnValue' in source ? source.returnValue === false :
-        source.getPreventDefault && source.getPreventDefault())
-      event.isDefaultPrevented = returnTrue;
-  }
-  return event;
-}
-
-var handlers = {},
-  focusinSupported = 'onfocusin' in window,
-  focus = { focus: 'focusin', blur: 'focusout' },
-  hover = { mouseenter: 'mouseover', mouseleave: 'mouseout' },
-  ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/;
-
-function parse(event) {
-  var parts = ('' + event).split('.');
-  return { e: parts[0], ns: parts.slice(1).sort().join(' ') };
-}
-function matcherFor(ns) {
-  return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)');
-}
-
-function findHandlers(element, event, fn, selector) {
-  event = parse(event);
-  if (event.ns) var matcher = matcherFor(event.ns);
-  return (handlers[zid(element)] || []).filter(function (handler) {
-    return handler
-      && (!event.e || handler.e == event.e)
-      && (!event.ns || matcher.test(handler.ns))
-      && (!fn || zid(handler.fn) === zid(fn))
-      && (!selector || handler.sel == selector);
-  });
-}
-
-function eventCapture(handler, captureSetting) {
-  return handler.del &&
-    (!focusinSupported && (handler.e in focus)) ||
-    !!captureSetting;
-}
-
-function realEvent(type) {
-  return hover[type] || (focusinSupported && focus[type]) || type;
-}
-
-function add(element, events, fn, data, selector, delegator, capture) {
-  var id = zid(element), set = (handlers[id] || (handlers[id] = []));
-  events.split(/\s/).forEach(function (event) {
-    if (event == 'ready') return D(document$1).ready(fn);
-    var handler = parse(event);
-    handler.fn = fn;
-    handler.sel = selector;
-    // emulate mouseenter, mouseleave
-    if (handler.e in hover) fn = function (e) {
-      var related = e.relatedTarget;
-      if (!related || (related !== this && !contains(this, related)))
-        return handler.fn.apply(this, arguments);
-    };
-    handler.del = delegator;
-    var callback = delegator || fn;
-    handler.proxy = function (e) {
-      e = compatible(e);
-      if (e.isImmediatePropagationStopped()) return;
-      e.data = data;
-      var result = callback.apply(element, e._args == undefined ? [e] : [e].concat(e._args));
-      if (result === false) e.preventDefault(), e.stopPropagation();
-      return result;
-    };
-    handler.i = set.length;
-    set.push(handler);
-    if ('addEventListener' in element)
-      element.addEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture));
-  });
-}
-
-function remove(element, events, fn, selector, capture) {
-  var id = zid(element);
-  (events || '').split(/\s/).forEach(function (event) {
-    findHandlers(element, event, fn, selector).forEach(function (handler) {
-      delete handlers[id][handler.i];
-      if ('removeEventListener' in element)
-        element.removeEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture));
-    });
-  });
-}
-
-function createProxy(event) {
-  var key, proxy = { originalEvent: event };
-  for (key in event)
-    if (!ignoreProperties.test(key) && event[key] !== undefined) proxy[key] = event[key];
-
-  return compatible(proxy, event);
-}
-
-var on = function (event, selector, data, callback, one) {
+function on(event, selector, data, callback, one) {
   var autoRemove, delegator, $this = this;
   if (event && !isString(event)) {
     D.each(event, function (type, fn) {
@@ -984,7 +1044,7 @@ var on = function (event, selector, data, callback, one) {
 
   return $this.each(function (_, element) {
     if (one) autoRemove = function (e) {
-      remove(element, e.type, callback);
+      removeEvent(element, e.type, callback);
       return callback.apply(this, arguments);
     };
 
@@ -996,11 +1056,11 @@ var on = function (event, selector, data, callback, one) {
       }
     };
 
-    add(element, event, callback, data, selector, delegator || autoRemove);
+    addEvent(element, event, callback, data, selector, delegator || autoRemove);
   });
-};
+}
 
-var off = function (event, selector, callback) {
+function off(event, selector, callback) {
   var $this = this;
   if (event && !isString(event)) {
     D.each(event, function (type, fn) {
@@ -1015,9 +1075,9 @@ var off = function (event, selector, callback) {
   if (callback === false) callback = returnFalse;
 
   return $this.each(function () {
-    remove(this, event, callback, selector);
+    removeEvent(this, event, callback, selector);
   });
-};
+}
 
 var prefix = '',
   eventPrefix,
@@ -1066,7 +1126,7 @@ cssReset[transitionProperty = prefix + 'transition-property'] =
   cssReset[animationDelay = prefix + 'animation-delay'] =
   cssReset[animationTiming = prefix + 'animation-timing-function'] = '';
 
-var anim$1 = function (properties, duration, ease, callback, delay) {
+function anim$1(properties, duration, ease, callback, delay) {
   var key, cssValues = {}, cssProperties, transforms = '',
     that = this, wrappedCallback, endEvent = D.fx.transitionEnd,
     fired = false;
@@ -1129,9 +1189,9 @@ var anim$1 = function (properties, duration, ease, callback, delay) {
   }, 0);
 
   return this;
-};
+}
 
-var animate = function (properties, duration, ease, callback, delay) {
+function animate(properties, duration, ease, callback, delay) {
   if (isFunction(duration))
     callback = duration, ease = undefined, duration = undefined;
   if (isFunction(ease))
@@ -1142,19 +1202,19 @@ var animate = function (properties, duration, ease, callback, delay) {
     (D.fx.speeds[duration] || D.fx.speeds._default)) / 1000;
   if (delay) delay = parseFloat(delay) / 1000;
   return this.anim(properties, duration, ease, callback, delay);
-};
+}
 
-var origShow = function () {
+function origShow() {
   return this.each(function () {
     this.style.display == 'none' && (this.style.display = '');
     if (getComputedStyle(this, '').getPropertyValue('display') == 'none')
       this.style.display = defaultDisplay(this.nodeName);
   });
-};
+}
 
-var origHide = function () {
+function origHide() {
   return this.css('display', 'none');
-};
+}
 
 function anim(el, speed, opacity, scale, callback) {
   if (typeof speed == 'function' && !callback) callback = speed, speed = undefined;
@@ -1175,28 +1235,28 @@ function hideHelper(el, speed, scale, callback) {
 
 // Export
 
-var show = function (speed, callback) {
+function show(speed, callback) {
   origShow.call(this);
   if (speed === undefined) speed = 0;
   else this.css('opacity', 0);
   return anim(this, speed, 1, '1,1', callback);
-};
+}
 
-var hide = function (speed, callback) {
+function hide(speed, callback) {
   if (speed === undefined) return origHide.call(this);
   else return hideHelper(this, speed, '0,0', callback);
-};
+}
 
-var fadeTo = function (speed, opacity, callback) {
+function fadeTo(speed, opacity, callback) {
   return anim(this, speed, opacity, null, callback);
-};
+}
 
-var fadeIn = function (speed, callback) {
+function fadeIn(speed, callback) {
   var target = this.css('opacity');
   if (target > 0) this.css('opacity', 0);
   else target = 1;
   return origShow.call(this).fadeTo(speed, target, callback);
-};
+}
 
 var $ = D;
 var methods = {
@@ -1214,7 +1274,7 @@ var fnMethods = {
   attr: attr,
   removeAttr: removeAttr,
   append: append,
-  remove: remove$1,
+  remove: remove,
   empty: empty,
   html: html,
   width: width,
@@ -1521,7 +1581,7 @@ var draggable = {
       left = parseFloat($modal.css('left'));
       top = parseFloat($modal.css('top'));
 
-      // Reset modal position with left and top
+      // Reset modal's position with left and top value
       $modal.css({
         left: left,
         top: top,
@@ -1730,7 +1790,7 @@ var resizable = {
 
     // Modal CSS options
     var getModalOpts = function getModalOpts(dir, offsetX, offsetY) {
-      // Modal should not move when its width to the minwidth
+      // Modal should not move when its width to the min-width
       var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.x : modalData.x + modalData.w - minWidth;
       var modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.y : modalData.y + modalData.h - minHeight;
       var opts = {
@@ -1775,7 +1835,7 @@ var resizable = {
     // Image CSS options
     var getImageOpts = function getImageOpts(dir, offsetX, offsetY) {
       // Image should not move when modal width to the min width
-      // The minwidth is modal width, so we should clac the stage minwidth
+      // The min-width is modal width, so we should clac the stage min-width
       var widthDiff = offsetX + modalData.w > minWidth ? stageData.w - imgWidth + offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
       var heightDiff = offsetY + modalData.h > minHeight ? stageData.h - imgHeight + offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
       var widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
@@ -1924,7 +1984,7 @@ var PhotoViewer = /*#__PURE__*/function () {
     // Store element of clicked
     this.$el = $(el);
 
-    // As we have multiple instances, so every instance has the following variables.
+    // As we have multiple instances, so every instance has the following variables
 
     // Whether modal opened
     this.isOpened = false;
@@ -2073,31 +2133,29 @@ var PhotoViewer = /*#__PURE__*/function () {
     key: "open",
     value: function open() {
       this._triggerHook('beforeOpen', this);
-      if (!this.options.multiInstances) {
-        $(CLASS_NS + '-modal').eq(0).remove();
+      if (!this.options.multiInstances && PhotoViewer.instances.length > 0) {
+        PhotoViewer.instances[0].close();
       }
       this.build();
       this.setInitModalPos();
+      PhotoViewer.instances.push(this);
       this._triggerHook('opened', this);
     }
   }, {
     key: "close",
     value: function close() {
+      var _this2 = this;
       this._triggerHook('beforeClose', this);
 
-      // Remove PhotoViewer instance
+      // Remove the DOM and all bound events
       this.$photoviewer.remove();
-      this.isOpened = false;
-      this.isMaximized = false;
-      this.isRotated = false;
-      this.rotationDegree = 0;
-      if (!$(CLASS_NS + '-modal').length) {
+      PhotoViewer.instances = PhotoViewer.instances.filter(function (p) {
+        return p !== _this2;
+      });
+      if (PhotoViewer.instances.length === 0) {
         // Reset `z-index` after close
-        if (this.options.multiInstances) {
-          PUBLIC_VARS['zIndex'] = this.options.zIndex;
-        }
-
-        // Off resize event
+        PUBLIC_VARS['zIndex'] = this.options.zIndex;
+        // Remove the bound event on windows
         $W.off(RESIZE_EVENT + EVENT_NS);
       }
       this._triggerHook('closed', this);
@@ -2161,7 +2219,7 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "setModalSize",
     value: function setModalSize(img) {
-      var _this2 = this;
+      var _this3 = this;
       var offsetParentData = this._getOffsetParentData();
 
       // Modal size should calculate with stage css value
@@ -2209,7 +2267,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       // Add init animation for modal
       if (this.options.initAnimation) {
         this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, 'ease-in-out', function () {
-          _this2.setImageSize(img);
+          _this3.setImageSize(img);
         });
       } else {
         this.$photoviewer.css(modalTransCSS);
@@ -2283,7 +2341,7 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "loadImage",
     value: function loadImage(imgSrc, fn, err) {
-      var _this3 = this;
+      var _this4 = this;
       // Reset image
       this.$image.removeAttr('style').attr('src', '');
       this.isRotated = false;
@@ -2302,17 +2360,17 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$image.attr('src', imgSrc);
       preloadImage(imgSrc, function (img) {
         // Store HTMLImageElement
-        _this3.img = img;
+        _this4.img = img;
 
         // Store original data
-        _this3.imageData = {
+        _this4.imageData = {
           originalWidth: img.width,
           originalHeight: img.height
         };
-        if (_this3.isMaximized || _this3.isOpened && _this3.options.fixedModalPos) {
-          _this3.setImageSize(img);
+        if (_this4.isMaximized || _this4.isOpened && _this4.options.fixedModalPos) {
+          _this4.setImageSize(img);
         } else {
-          _this3.setModalSize(img);
+          _this4.setModalSize(img);
         }
 
         // Callback of image loaded successfully
@@ -2321,7 +2379,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         }
       }, function () {
         // Loader end
-        _this3.$photoviewer.find(CLASS_NS + '-loader').remove();
+        _this4.$photoviewer.find(CLASS_NS + '-loader').remove();
 
         // Callback of image loading failed
         if (err) {
@@ -2354,7 +2412,7 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "jumpTo",
     value: function jumpTo(index) {
-      var _this4 = this;
+      var _this5 = this;
       index = index % this.groupData.length;
       if (index >= 0) {
         index = index % this.groupData.length;
@@ -2363,9 +2421,9 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
       this.groupIndex = index;
       this.loadImage(this.groupData[index].src, function () {
-        _this4._triggerHook('changed', [_this4, index]);
+        _this5._triggerHook('changed', [_this5, index]);
       }, function () {
-        _this4._triggerHook('changed', [_this4, index]);
+        _this5._triggerHook('changed', [_this5, index]);
       });
     }
   }, {
@@ -2672,54 +2730,54 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "_addEvents",
     value: function _addEvents() {
-      var _this5 = this;
-      this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.close();
+      var _this6 = this;
+      this.$close.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.close();
       });
-      this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, function (e) {
-        _this5.wheel(e);
+      this.$stage.on(WHEEL_EVENT + EVENT_NS, function (e) {
+        _this6.wheel(e);
       });
-      this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.zoom(_this5.options.ratioThreshold * 3);
+      this.$zoomIn.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.zoom(_this6.options.ratioThreshold * 3);
       });
-      this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.zoom(-_this5.options.ratioThreshold * 3);
+      this.$zoomOut.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.zoom(-_this6.options.ratioThreshold * 3);
       });
-      this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.zoomTo(1);
+      this.$actualSize.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.zoomTo(1);
       });
-      this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.jump(-1);
+      this.$prev.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.jump(-1);
       });
-      this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.fullscreen();
+      this.$fullscreen.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.fullscreen();
       });
-      this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.jump(1);
+      this.$next.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.jump(1);
       });
-      this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.rotate(-90);
+      this.$rotateLeft.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.rotate(-90);
       });
-      this.$rotateRight.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.rotate(90);
+      this.$rotateRight.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.rotate(90);
       });
-      this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function () {
-        _this5.toggleMaximize();
+      this.$maximize.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.toggleMaximize();
       });
-      this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, function (e) {
-        _this5._keydown(e);
+      this.$photoviewer.on(KEYDOWN_EVENT + EVENT_NS, function (e) {
+        _this6._keydown(e);
       });
       $W.on(RESIZE_EVENT + EVENT_NS, debounce(function () {
-        return _this5.resize();
+        return _this6.resize();
       }, 500));
     }
   }, {
     key: "_addCustomButtonEvents",
     value: function _addCustomButtonEvents() {
-      var _this6 = this;
+      var _this7 = this;
       var _loop = function _loop(btnKey) {
-        _this6.$photoviewer.find(CLASS_NS + '-button-' + btnKey).off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, function (e) {
-          _this6.options.customButtons[btnKey].click.apply(_this6, [_this6, e]);
+        _this7.$photoviewer.find(CLASS_NS + '-button-' + btnKey).on(CLICK_EVENT + EVENT_NS, function (e) {
+          _this7.options.customButtons[btnKey].click.apply(_this7, [_this7, e]);
         });
       };
       for (var btnKey in this.options.customButtons) {
@@ -2739,6 +2797,8 @@ var PhotoViewer = /*#__PURE__*/function () {
 /**
  * Add methods to PhotoViewer
  */
+// Store modal instances
+_defineProperty(PhotoViewer, "instances", []);
 $.extend(PhotoViewer.prototype, draggable, movable, resizable);
 
 /**
