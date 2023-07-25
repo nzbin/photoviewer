@@ -12,7 +12,6 @@ import {
   EVENT_NS,
   PUBLIC_VARS
 } from './constants';
-
 import {
   debounce,
   preloadImage,
@@ -23,7 +22,6 @@ import {
   getCSSValueSum,
   isBorderBox
 } from './utilities';
-
 import draggable from './draggable';
 import movable from './movable';
 import resizable from './resizable';
@@ -32,6 +30,9 @@ import resizable from './resizable';
  * PhotoViewer class
  */
 class PhotoViewer {
+  // Store modal instances
+  static instances = [];
+
   constructor(items, options, el) {
     this.options = $.extend(true, {}, DEFAULTS, options);
 
@@ -46,7 +47,7 @@ class PhotoViewer {
     // Store element of clicked
     this.$el = $(el);
 
-    // As we have multiple instances, so every instance has the following variables.
+    // As we have multiple instances, so every instance has the following variables
 
     // Whether modal opened
     this.isOpened = false;
@@ -232,13 +233,15 @@ class PhotoViewer {
   open() {
     this._triggerHook('beforeOpen', this);
 
-    if (!this.options.multiInstances) {
-      $(CLASS_NS + '-modal').eq(0).remove();
+    if (!this.options.multiInstances && PhotoViewer.instances.length > 0) {
+      PhotoViewer.instances[0].close();
     }
 
     this.build();
 
     this.setInitModalPos();
+
+    PhotoViewer.instances.push(this);
 
     this._triggerHook('opened', this);
   }
@@ -246,21 +249,15 @@ class PhotoViewer {
   close() {
     this._triggerHook('beforeClose', this);
 
-    // Remove PhotoViewer instance
+    // Remove the DOM and all bound events
     this.$photoviewer.remove();
 
-    this.isOpened = false;
-    this.isMaximized = false;
-    this.isRotated = false;
-    this.rotationDegree = 0;
+    PhotoViewer.instances = PhotoViewer.instances.filter(p => p !== this);
 
-    if (!$(CLASS_NS + '-modal').length) {
+    if (PhotoViewer.instances.length === 0) {
       // Reset `z-index` after close
-      if (this.options.multiInstances) {
-        PUBLIC_VARS['zIndex'] = this.options.zIndex;
-      }
-
-      // Off resize event
+      PUBLIC_VARS['zIndex'] = this.options.zIndex;
+      // Remove the bound event on windows
       $W.off(RESIZE_EVENT + EVENT_NS);
     }
 
