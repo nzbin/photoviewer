@@ -874,51 +874,51 @@ class PhotoViewer {
   }
 
   _addEvents() {
-    this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$close.on(CLICK_EVENT + EVENT_NS, () => {
       this.close();
     });
 
-    this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, e => {
+    this.$stage.on(WHEEL_EVENT + EVENT_NS, e => {
       this.wheel(e);
     });
 
-    this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$zoomIn.on(CLICK_EVENT + EVENT_NS, () => {
       this.zoom(this.options.ratioThreshold * 3);
     });
 
-    this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$zoomOut.on(CLICK_EVENT + EVENT_NS, () => {
       this.zoom(-this.options.ratioThreshold * 3);
     });
 
-    this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$actualSize.on(CLICK_EVENT + EVENT_NS, () => {
       this.zoomTo(1);
     });
 
-    this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$prev.on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(-1);
     });
 
-    this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$fullscreen.on(CLICK_EVENT + EVENT_NS, () => {
       this.fullscreen();
     });
 
-    this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$next.on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(1);
     });
 
-    this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$rotateLeft.on(CLICK_EVENT + EVENT_NS, () => {
       this.rotate(-90);
     });
 
-    this.$rotateRight.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$rotateRight.on(CLICK_EVENT + EVENT_NS, () => {
       this.rotate(90);
     });
 
-    this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+    this.$maximize.on(CLICK_EVENT + EVENT_NS, () => {
       this.toggleMaximize();
     });
 
-    this.$photoviewer.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
+    this.$photoviewer.on(KEYDOWN_EVENT + EVENT_NS, e => {
       this._keydown(e);
     });
 
@@ -927,10 +927,9 @@ class PhotoViewer {
 
   _addCustomButtonEvents() {
     for (const btnKey in this.options.customButtons) {
-      this.$photoviewer.find(CLASS_NS + '-button-' + btnKey)
-        .off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
-          this.options.customButtons[btnKey].click.apply(this, [this, e]);
-        });
+      this.$photoviewer.find(CLASS_NS + '-button-' + btnKey).on(CLICK_EVENT + EVENT_NS, e => {
+        this.options.customButtons[btnKey].click.apply(this, [this, e]);
+      });
     }
   }
 
