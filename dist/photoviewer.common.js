@@ -2803,9 +2803,4 @@ var PhotoViewer = /*#__PURE__*/function () {
 _defineProperty(PhotoViewer, "instances", []);
 $.extend(PhotoViewer.prototype, draggable, movable, resizable);
 
-/**
- * Add PhotoViewer to globle
- */
-window.PhotoViewer = PhotoViewer;
-
 module.exports = PhotoViewer;

@@ -24,7 +24,7 @@ export default [
     input: 'src/js/index.js',
     output: [
       {
-        name: 'photoviewer',
+        name: 'PhotoViewer',
         banner,
         file: 'dist/photoviewer.js',
         format: 'umd'

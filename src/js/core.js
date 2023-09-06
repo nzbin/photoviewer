@@ -945,9 +945,4 @@ class PhotoViewer {
  */
 $.extend(PhotoViewer.prototype, draggable, movable, resizable);
 
-/**
- * Add PhotoViewer to globle
- */
-window.PhotoViewer = PhotoViewer;
-
 export default PhotoViewer;
