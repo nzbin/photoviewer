@@ -1,15 +1,15 @@
 declare namespace PhotoViewer {
-  type toolbarOption =
+  type ToolbarOption =
     | 'minimize'
     | 'maximize'
     | 'close'
     | 'zoomIn'
     | 'zoomOut'
     | 'prev'
-    | 'fullscreen'
     | 'next'
-    | 'rotateRight'
     | 'rotateLeft'
+    | 'rotateRight'
+    | 'fullscreen'
     | 'actualSize';
 
   export interface Img {
@@ -17,10 +17,10 @@ declare namespace PhotoViewer {
     title?: string;
   }
 
-  export interface customButton {
+  export interface CustomButton {
     text: string;
     title?: string;
-    click?: (context?: any, e?: MouseEvent) => void
+    click?: (context?: any, event?: MouseEvent) => void
   }
 
   export interface Options {
@@ -37,8 +37,8 @@ declare namespace PhotoViewer {
     ratioThreshold?: number;
     minRatio?: number;
     maxRatio?: number;
-    headerToolbar?: toolbarOption[] | string[];
-    footerToolbar?: toolbarOption[] | string[];
+    headerToolbar?: ToolbarOption[] | string[];
+    footerToolbar?: ToolbarOption[] | string[];
     icons?: {
       minimize?: string;
       maximize?: string;
@@ -77,13 +77,13 @@ declare namespace PhotoViewer {
       beforeClose?: (context?: any) => void;
       closed?: (context?: any) => void;
       beforeChange?: (context?: any, index?: number) => void;
-      changed: (context?: any, index?: number) => void;
+      changed?: (context?: any, index?: number) => void;
     };
     index?: number;
     progressiveLoading?: boolean;
     appendTo?: string;
     customButtons?: {
-      [k: string]: customButton
+      [k: string]: CustomButton
     };
     positionFixed?: boolean;
     initModalPos?: {
