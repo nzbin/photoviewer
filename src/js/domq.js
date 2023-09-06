@@ -1,5 +1,5 @@
 import {
-  D,
+  D as $,
   isPlainObject,
   isArray,
   noop,
@@ -31,8 +31,6 @@ import {
   fadeTo,
   fadeIn
 } from 'domq.js/src/domq.modular';
-
-const $ = D;
 
 const methods = {
   isPlainObject,

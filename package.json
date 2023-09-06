@@ -12,17 +12,6 @@
     "types",
     "_index.scss"
   ],
-  "homepage": "https://nzbin.github.io/photoviewer/",
-  "author": "nzbin",
-  "license": "MIT",
-  "directories": {
-    "doc": "docs",
-    "example": "examples"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nzbin/photoviewer.git"
-  },
   "keywords": [
     "photoviewer",
     "lightbox",
@@ -39,6 +28,17 @@
     "fullscreen",
     "hotkeys"
   ],
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "author": "nzbin",
+  "license": "MIT",
+  "homepage": "https://nzbin.github.io/photoviewer/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nzbin/photoviewer.git"
+  },
   "bugs": {
     "url": "https://github.com/nzbin/photoviewer/issues"
   },
@@ -65,6 +65,9 @@
     "watch": "onchange src -- run-p build:js build:css",
     "prepublishOnly": "npm run release"
   },
+  "dependencies": {
+    "domq.js": "^0.6.8"
+  },
   "devDependencies": {
     "@babel/core": "^7.22.9",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
@@ -86,8 +89,5 @@
     "stylelint-config-recommended-scss": "^8.0.0",
     "stylelint-config-standard": "^29.0.0",
     "uglify-js": "^3.17.4"
-  },
-  "dependencies": {
-    "domq.js": "^0.6.8"
   }
 }

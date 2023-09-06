@@ -14,7 +14,7 @@ const banner = String.raw`/*!
  * ${pkg.description}
  * ${pkg.homepage}
  *
- * Copyright (c) 2018 ${pkg.author}
+ * Copyright (c) 2018-present ${pkg.author}
  * Released under ${pkg.license} License
  */
 `;
@@ -43,8 +43,8 @@ export default [
     ],
     plugins: [
       babel({ babelHelpers: 'bundled', exclude: 'node_modules/**' }),
+      commonjs(),
       resolve(),
-      commonjs()
     ]
   }
 ];
