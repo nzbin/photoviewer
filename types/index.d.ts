@@ -20,7 +20,7 @@ declare namespace PhotoViewer {
   export interface CustomButton {
     text: string;
     title?: string;
-    click?: (context?: any, event?: MouseEvent) => void
+    click?: (context: PhotoViewer, event: MouseEvent) => void
   }
 
   export interface Options {
@@ -72,12 +72,12 @@ declare namespace PhotoViewer {
     zIndex?: number;
     dragHandle?: string | null;
     callbacks?: {
-      beforeOpen?: (context?: any) => void;
-      opened?: (context?: any) => void;
-      beforeClose?: (context?: any) => void;
-      closed?: (context?: any) => void;
-      beforeChange?: (context?: any, index?: number) => void;
-      changed?: (context?: any, index?: number) => void;
+      beforeOpen?: (context: PhotoViewer) => void;
+      opened?: (context: PhotoViewer) => void;
+      beforeClose?: (context: PhotoViewer) => void;
+      closed?: (context: PhotoViewer) => void;
+      beforeChange?: (context: PhotoViewer, index: number) => void;
+      changed?: (context: PhotoViewer, index: number) => void;
     };
     index?: number;
     progressiveLoading?: boolean;
@@ -96,7 +96,22 @@ declare namespace PhotoViewer {
 }
 
 declare class PhotoViewer {
+  static instances: PhotoViewer[];
   constructor(items: PhotoViewer.Img[], options?: PhotoViewer.Options);
+  init(items: PhotoViewer.Img[], options?: PhotoViewer.Options): void;
+  open(): void;
+  close(): void;
+  jump(step: number): void;
+  jumpTo(index: number): void;
+  zoom(ratio: number, origin: { x: number; y: number }): void;
+  zoomTo(ratio: number, origin: { x: number; y: number }): void;
+  rotate(degree: number): void;
+  rotateTo(degree: number): void;
+  maximize(): void;
+  exitMaximize(): void;
+  toggleMaximize(): void;
+  fullscreen(): void;
+  resize(): void;
 }
 
 declare module 'photoviewer' {
