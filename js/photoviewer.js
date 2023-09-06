@@ -16,7 +16,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.photoviewer = factory());
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.PhotoViewer = factory());
 })(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
@@ -2806,11 +2806,6 @@
   // Store modal instances
   _defineProperty(PhotoViewer, "instances", []);
   $.extend(PhotoViewer.prototype, draggable, movable, resizable);
-
-  /**
-   * Add PhotoViewer to globle
-   */
-  window.PhotoViewer = PhotoViewer;
 
   return PhotoViewer;
 
