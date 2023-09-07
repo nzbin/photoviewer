@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.7.2",
+  "version": "3.7.3",
   "description": "A JS plugin to view images just like in Windows.",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
