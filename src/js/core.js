@@ -22,9 +22,9 @@ import {
   getCSSValueSum,
   isBorderBox
 } from './utilities';
-import draggable from './draggable';
-import movable from './movable';
-import resizable from './resizable';
+import { draggable } from './draggable';
+import { movable } from './movable';
+import { resizable } from './resizable';
 
 /**
  * PhotoViewer class
@@ -60,9 +60,6 @@ class PhotoViewer {
 
     // Image rotation degree
     this.rotationDegree = 0;
-
-    // Whether modal do resize
-    this.isDoResize = false;
 
     // Store image data in every instance
     this.imageData = {};
@@ -943,6 +940,6 @@ class PhotoViewer {
 /**
  * Add methods to PhotoViewer
  */
-$.extend(PhotoViewer.prototype, draggable, movable, resizable);
+$.extend(PhotoViewer.prototype, { draggable }, { movable }, { resizable });
 
 export default PhotoViewer;
