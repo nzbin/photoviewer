@@ -79,7 +79,7 @@ class PhotoViewer {
     // Reset public z-index with option
     PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
 
-    // Get image src
+    // Get the image src
     const imgSrc = items[this.groupIndex]['src'];
 
     this.open();
@@ -95,7 +95,7 @@ class PhotoViewer {
     }
 
     if (this.options.resizable) {
-      this.resizable(this.$photoviewer, this.$stage, this.$image, this.options.modalWidth, this.options.modalHeight);
+      this.resizable(this.$photoviewer, this.$stage, this.$image, this.options);
     }
   }
 

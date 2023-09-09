@@ -1725,10 +1725,9 @@ var ELEMS_WITH_RESIZE_CURSOR = "html, body, .".concat(NS, "-modal, .").concat(NS
  * @param {object} $modal - The modal element of domq
  * @param {object} $stage - The stage element of domq
  * @param {object} $image - The image element of domq
- * @param {number} minWidth - The modalWidth option
- * @param {number} minHeight - The modalHeight option
+ * @param {object} options - The options of PhotoViewer
  */
-function resizable($modal, $stage, $image, minWidth, minHeight) {
+function resizable($modal, $stage, $image, options) {
   var _this = this;
   var resizableHandleE = D("<div class=\"".concat(NS, "-resizable-handle ").concat(NS, "-resizable-handle-e\"></div>"));
   var resizableHandleW = D("<div class=\"".concat(NS, "-resizable-handle ").concat(NS, "-resizable-handle-w\"></div>"));
@@ -1774,10 +1773,12 @@ function resizable($modal, $stage, $image, minWidth, minHeight) {
   var imgWidth = 0;
   var imgHeight = 0;
   var direction = '';
+  var minWidth = options.modalWidth,
+    minHeight = options.modalHeight;
 
   // Modal CSS options
   var getModalOpts = function getModalOpts(dir, offsetX, offsetY) {
-    // Modal should not move when its width to the min-width
+    // Modal shouldn't move when its width to the min-width
     var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.x : modalData.x + modalData.w - minWidth;
     var modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.y : modalData.y + modalData.h - minHeight;
     var opts = {
@@ -1821,46 +1822,47 @@ function resizable($modal, $stage, $image, minWidth, minHeight) {
 
   // Image CSS options
   var getImageOpts = function getImageOpts(dir, offsetX, offsetY) {
-    // Image should not move when modal width to the min width
+    // Image shouldn't move when modal width to the min-width
     // The min-width is modal width, so we should clac the stage min-width
     var widthDiff = offsetX + modalData.w > minWidth ? stageData.w - imgWidth + offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
     var heightDiff = offsetY + modalData.h > minHeight ? stageData.h - imgHeight + offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
     var widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
     var heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
-
-    // Get image position in dragging
-    var imgLeft = (widthDiff > 0 ? $image.position().left : $image.position().left < 0 ? $image.position().left : 0) - δ;
-    var imgTop = (heightDiff > 0 ? $image.position().top : $image.position().top < 0 ? $image.position().top : 0) + δ;
-    var imgLeft2 = (widthDiff2 > 0 ? $image.position().left : $image.position().left < 0 ? $image.position().left : 0) - δ;
-    var imgTop2 = (heightDiff2 > 0 ? $image.position().top : $image.position().top < 0 ? $image.position().top : 0) + δ;
+    var $imageLeft = $image.position().left;
+    var $imageTop = $image.position().top;
+    // Get the image position for dragging
+    var imgLeft = (widthDiff > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
+    var imgTop = (heightDiff > 0 ? $imageTop : Math.min($imageTop, 0)) + δ;
+    var imgLeft2 = (widthDiff2 > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
+    var imgTop2 = (heightDiff2 > 0 ? $imageTop : Math.min($imageTop, 0)) + δ;
     var opts = {
       e: {
-        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
+        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : Math.max(imgLeft, widthDiff)
       },
       s: {
-        top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff
+        top: heightDiff >= δ ? (heightDiff + δ) / 2 : Math.max(imgTop, heightDiff)
       },
       se: {
-        top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
-        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
+        top: heightDiff >= δ ? (heightDiff + δ) / 2 : Math.max(imgTop, heightDiff),
+        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : Math.max(imgLeft, widthDiff)
       },
       w: {
-        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
+        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : Math.max(imgLeft2, widthDiff2)
       },
       n: {
-        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2
+        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : Math.max(imgTop2, heightDiff2)
       },
       nw: {
-        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
-        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
+        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : Math.max(imgTop2, heightDiff2),
+        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : Math.max(imgLeft2, widthDiff2)
       },
       ne: {
-        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
-        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
+        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : Math.max(imgTop2, heightDiff2),
+        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : Math.max(imgLeft, widthDiff)
       },
       sw: {
-        top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
-        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
+        top: heightDiff >= δ ? (heightDiff + δ) / 2 : Math.max(imgTop, heightDiff),
+        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : Math.max(imgLeft2, widthDiff2)
       }
     };
     return opts[dir];
@@ -2004,7 +2006,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         this.movable(this.$stage, this.$image);
       }
       if (this.options.resizable) {
-        this.resizable(this.$photoviewer, this.$stage, this.$image, this.options.modalWidth, this.options.modalHeight);
+        this.resizable(this.$photoviewer, this.$stage, this.$image, this.options);
       }
     }
   }, {

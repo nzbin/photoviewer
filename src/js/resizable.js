@@ -22,10 +22,9 @@ const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}
  * @param {object} $modal - The modal element of domq
  * @param {object} $stage - The stage element of domq
  * @param {object} $image - The image element of domq
- * @param {number} minWidth - The modalWidth option
- * @param {number} minHeight - The modalHeight option
+ * @param {object} options - The options of PhotoViewer
  */
-export function resizable($modal, $stage, $image, minWidth, minHeight) {
+export function resizable($modal, $stage, $image, options) {
   const resizableHandleE = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-e"></div>`);
   const resizableHandleW = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-w"></div>`);
   const resizableHandleS = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-s"></div>`);
@@ -68,9 +67,11 @@ export function resizable($modal, $stage, $image, minWidth, minHeight) {
   let imgHeight = 0;
   let direction = '';
 
+  const { modalWidth: minWidth, modalHeight: minHeight } = options;
+
   // Modal CSS options
   const getModalOpts = (dir, offsetX, offsetY) => {
-    // Modal should not move when its width to the min-width
+    // Modal shouldn't move when its width to the min-width
     const modalLeft = -offsetX + modalData.w > minWidth
       ? offsetX + modalData.x
       : modalData.x + modalData.w - minWidth;
@@ -120,7 +121,7 @@ export function resizable($modal, $stage, $image, minWidth, minHeight) {
 
   // Image CSS options
   const getImageOpts = (dir, offsetX, offsetY) => {
-    // Image should not move when modal width to the min width
+    // Image shouldn't move when modal width to the min-width
     // The min-width is modal width, so we should clac the stage min-width
     const widthDiff = offsetX + modalData.w > minWidth
       ? stageData.w - imgWidth + offsetX - δ
@@ -135,56 +136,42 @@ export function resizable($modal, $stage, $image, minWidth, minHeight) {
       ? stageData.h - imgHeight - offsetY + δ
       : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
 
-    // Get image position in dragging
-    const imgLeft = (widthDiff > 0
-      ? $image.position().left
-      : $image.position().left < 0
-        ? $image.position().left
-        : 0) - δ;
-    const imgTop = (heightDiff > 0
-      ? $image.position().top
-      : $image.position().top < 0
-        ? $image.position().top
-        : 0) + δ;
-    const imgLeft2 = (widthDiff2 > 0
-      ? $image.position().left
-      : $image.position().left < 0
-        ? $image.position().left
-        : 0) - δ;
-    const imgTop2 = (heightDiff2 > 0
-      ? $image.position().top
-      : $image.position().top < 0
-        ? $image.position().top
-        : 0) + δ;
+    const $imageLeft = $image.position().left;
+    const $imageTop = $image.position().top;
+    // Get the image position for dragging
+    const imgLeft = (widthDiff > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
+    const imgTop = (heightDiff > 0 ? $imageTop : Math.min($imageTop, 0)) + δ;
+    const imgLeft2 = (widthDiff2 > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
+    const imgTop2 = (heightDiff2 > 0 ? $imageTop : Math.min($imageTop, 0)) + δ;
 
     const opts = {
       e: {
-        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
+        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : Math.max(imgLeft, widthDiff)
       },
       s: {
-        top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff
+        top: heightDiff >= δ ? (heightDiff + δ) / 2 : Math.max(imgTop, heightDiff)
       },
       se: {
-        top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
-        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
+        top: heightDiff >= δ ? (heightDiff + δ) / 2 : Math.max(imgTop, heightDiff),
+        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : Math.max(imgLeft, widthDiff)
       },
       w: {
-        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
+        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : Math.max(imgLeft2, widthDiff2)
       },
       n: {
-        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2
+        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : Math.max(imgTop2, heightDiff2)
       },
       nw: {
-        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
-        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
+        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : Math.max(imgTop2, heightDiff2),
+        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : Math.max(imgLeft2, widthDiff2)
       },
       ne: {
-        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : imgTop2 > heightDiff2 ? imgTop2 : heightDiff2,
-        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : imgLeft > widthDiff ? imgLeft : widthDiff
+        top: heightDiff2 >= δ ? (heightDiff2 + δ) / 2 : Math.max(imgTop2, heightDiff2),
+        left: widthDiff >= -δ ? (widthDiff - δ) / 2 : Math.max(imgLeft, widthDiff)
       },
       sw: {
-        top: heightDiff >= δ ? (heightDiff + δ) / 2 : imgTop > heightDiff ? imgTop : heightDiff,
-        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : imgLeft2 > widthDiff2 ? imgLeft2 : widthDiff2
+        top: heightDiff >= δ ? (heightDiff + δ) / 2 : Math.max(imgTop, heightDiff),
+        left: widthDiff2 >= -δ ? (widthDiff2 - δ) / 2 : Math.max(imgLeft2, widthDiff2)
       }
     };
 
