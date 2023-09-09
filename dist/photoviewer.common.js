@@ -1937,7 +1937,7 @@ function resizable($modal, $stage, $image, minWidth, minHeight) {
     D(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
     // Update image initial data
-    var scale = _this.getImageScale($stage.width(), $stage.height());
+    var scale = _this._getImageScale($stage.width(), $stage.height());
     D.extend(_this.imageData, {
       initWidth: _this.img.width * scale,
       initHeight: _this.img.height * scale,
@@ -1956,69 +1956,57 @@ function resizable($modal, $stage, $image, minWidth, minHeight) {
  * PhotoViewer class
  */
 var PhotoViewer = /*#__PURE__*/function () {
-  function PhotoViewer(items, options, el) {
+  function PhotoViewer(items, options) {
     _classCallCheck(this, PhotoViewer);
-    this.options = D.extend(true, {}, DEFAULTS, options);
-    if (options && D.isArray(options.footerToolbar)) {
-      this.options.footerToolbar = options.footerToolbar;
-    }
-    if (options && D.isArray(options.headerToolbar)) {
-      this.options.headerToolbar = options.headerToolbar;
-    }
-
-    // Store element of clicked
-    this.$el = D(el);
-
-    // As we have multiple instances, so every instance has the following variables
-
     // Whether modal opened
-    this.isOpened = false;
-
+    _defineProperty(this, "isOpened", false);
     // Whether modal maximized
-    this.isMaximized = false;
-
+    _defineProperty(this, "isMaximized", false);
     // Whether image rotated (`90*(2n+1)`)
-    this.isRotated = false;
-
+    _defineProperty(this, "isRotated", false);
     // Image rotation degree
-    this.rotationDegree = 0;
-
+    _defineProperty(this, "rotationDegree", 0);
     // Store image data in every instance
-    this.imageData = {};
-
+    _defineProperty(this, "imageData", {});
     // Store modal data in every instance
-    this.modalData = {
+    _defineProperty(this, "modalData", {
       width: null,
       height: null,
       left: null,
       top: null
-    };
-
+    });
     // Used for time comparison
-    this._lastTimestamp = 0;
-    this.init(items, this.options);
+    _defineProperty(this, "_lastTimestamp", 0);
+    this.init(items, options);
   }
   _createClass(PhotoViewer, [{
     key: "init",
-    value: function init(items, opts) {
+    value: function init(items, options) {
+      this.options = D.extend(true, {}, DEFAULTS, options);
+      if (options && D.isArray(options.footerToolbar)) {
+        this.options.footerToolbar = options.footerToolbar;
+      }
+      if (options && D.isArray(options.headerToolbar)) {
+        this.options.headerToolbar = options.headerToolbar;
+      }
       this.groupData = items;
-      this.groupIndex = opts['index'];
+      this.groupIndex = this.options['index'];
 
       // Reset public z-index with option
-      PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex'];
+      PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
 
       // Get image src
       var imgSrc = items[this.groupIndex]['src'];
       this.open();
-      this.loadImage(imgSrc);
-      if (opts.draggable) {
+      this._loadImage(imgSrc);
+      if (this.options.draggable) {
         this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
       }
-      if (opts.movable) {
+      if (this.options.movable) {
         this.movable(this.$stage, this.$image);
       }
-      if (opts.resizable) {
-        this.resizable(this.$photoviewer, this.$stage, this.$image, opts.modalWidth, opts.modalHeight);
+      if (this.options.resizable) {
+        this.resizable(this.$photoviewer, this.$stage, this.$image, this.options.modalWidth, this.options.modalHeight);
       }
     }
   }, {
@@ -2050,12 +2038,12 @@ var PhotoViewer = /*#__PURE__*/function () {
       return photoviewerHTML;
     }
   }, {
-    key: "build",
-    value: function build() {
+    key: "_build",
+    value: function _build() {
       // Create PhotoViewer HTML string
       var photoviewerHTML = this._createTemplate();
 
-      // Make PhotoViewer HTML string to jQuery element
+      // Make PhotoViewer HTML string to Domq element
       var $photoviewer = D(photoviewerHTML);
 
       // Get all PhotoViewer elements
@@ -2118,8 +2106,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       if (!this.options.multiInstances && PhotoViewer.instances.length > 0) {
         PhotoViewer.instances[0].close();
       }
-      this.build();
-      this.setInitModalPos();
+      this._build();
+      this._setInitModalPos();
       PhotoViewer.instances.push(this);
       this._triggerHook('opened', this);
     }
@@ -2154,8 +2142,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       };
     }
   }, {
-    key: "setModalToCenter",
-    value: function setModalToCenter() {
+    key: "_setModalToCenter",
+    value: function _setModalToCenter() {
       var initLeft, initTop, initRight, initBottom;
 
       // Extra width/height for `content-box`
@@ -2186,21 +2174,21 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$photoviewer.css(modalInitCSS);
     }
   }, {
-    key: "setInitModalPos",
-    value: function setInitModalPos() {
+    key: "_setInitModalPos",
+    value: function _setInitModalPos() {
       if (this.options.initMaximized) {
         this.maximize();
         this.isOpened = true;
       } else {
-        this.setModalToCenter();
+        this._setModalToCenter();
       }
 
       // The focus must be set after opening
       this.$photoviewer[0].focus();
     }
   }, {
-    key: "setModalSize",
-    value: function setModalSize(img) {
+    key: "_setModalSize",
+    value: function _setModalSize(img) {
       var _this3 = this;
       var offsetParentData = this._getOffsetParentData();
 
@@ -2249,17 +2237,17 @@ var PhotoViewer = /*#__PURE__*/function () {
       // Add init animation for modal
       if (this.options.initAnimation) {
         this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, 'ease-in-out', function () {
-          _this3.setImageSize(img);
+          _this3._setImageSize(img);
         });
       } else {
         this.$photoviewer.css(modalTransCSS);
-        this.setImageSize(img);
+        this._setImageSize(img);
       }
       this.isOpened = true;
     }
   }, {
-    key: "getImageScale",
-    value: function getImageScale(stageWidth, stageHeight) {
+    key: "_getImageScale",
+    value: function _getImageScale(stageWidth, stageHeight) {
       var scale = 1;
       if (!this.isRotated) {
         scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
@@ -2269,13 +2257,13 @@ var PhotoViewer = /*#__PURE__*/function () {
       return scale;
     }
   }, {
-    key: "setImageSize",
-    value: function setImageSize(img) {
+    key: "_setImageSize",
+    value: function _setImageSize(img) {
       var stageData = {
         w: this.$stage.width(),
         h: this.$stage.height()
       };
-      var scale = this.getImageScale(stageData.w, stageData.h);
+      var scale = this._getImageScale(stageData.w, stageData.h);
       this.$image.css({
         width: Math.round(img.width * scale),
         height: Math.round(img.height * scale),
@@ -2321,8 +2309,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "loadImage",
-    value: function loadImage(imgSrc, fn, err) {
+    key: "_loadImage",
+    value: function _loadImage(imgSrc, fn, err) {
       var _this4 = this;
       // Reset image
       this.$image.removeAttr('style').attr('src', '');
@@ -2350,9 +2338,9 @@ var PhotoViewer = /*#__PURE__*/function () {
           originalHeight: img.height
         };
         if (_this4.isMaximized || _this4.isOpened && _this4.options.fixedModalPos) {
-          _this4.setImageSize(img);
+          _this4._setImageSize(img);
         } else {
-          _this4.setModalSize(img);
+          _this4._setModalSize(img);
         }
 
         // Callback of image loaded successfully
@@ -2369,12 +2357,12 @@ var PhotoViewer = /*#__PURE__*/function () {
         }
       });
       if (this.options.title) {
-        this.setImageTitle(imgSrc);
+        this._setImageTitle(imgSrc);
       }
     }
   }, {
-    key: "setImageTitle",
-    value: function setImageTitle(url) {
+    key: "_setImageTitle",
+    value: function _setImageTitle(url) {
       var title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
       this.$title.html(title);
     }
@@ -2402,15 +2390,15 @@ var PhotoViewer = /*#__PURE__*/function () {
         index = (this.groupData.length + index) % this.groupData.length;
       }
       this.groupIndex = index;
-      this.loadImage(this.groupData[index].src, function () {
+      this._loadImage(this.groupData[index].src, function () {
         _this5._triggerHook('changed', [_this5, index]);
       }, function () {
         _this5._triggerHook('changed', [_this5, index]);
       });
     }
   }, {
-    key: "wheel",
-    value: function wheel(e) {
+    key: "_wheel",
+    value: function _wheel(e) {
       e.preventDefault();
       var delta = 1;
       if (e.deltaY) {
@@ -2501,7 +2489,7 @@ var PhotoViewer = /*#__PURE__*/function () {
 
       // Whether the image scale get to the critical point
       if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
-        this.setImageSize(this.img);
+        this._setImageSize(this.img);
       } else {
         $image.css({
           width: Math.round(newWidth),
@@ -2545,30 +2533,13 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$image.css({
         transform: 'rotate(' + degree + 'deg)'
       });
-      this.setImageSize({
+      this._setImageSize({
         width: this.imageData.originalWidth,
         height: this.imageData.originalHeight
       });
 
       // Remove grab cursor when rotate
       this.$stage.removeClass('is-grab');
-    }
-  }, {
-    key: "resize",
-    value: function resize() {
-      if (this.isOpened) {
-        if (this.isMaximized) {
-          this.setImageSize({
-            width: this.imageData.originalWidth,
-            height: this.imageData.originalHeight
-          });
-        } else {
-          this.setModalSize({
-            width: this.imageData.originalWidth,
-            height: this.imageData.originalHeight
-          });
-        }
-      }
     }
   }, {
     key: "maximize",
@@ -2588,7 +2559,7 @@ var PhotoViewer = /*#__PURE__*/function () {
     key: "exitMaximize",
     value: function exitMaximize() {
       this.$photoviewer.removeClass(NS + '-maximized');
-      this.setModalToCenter();
+      this._setModalToCenter();
       this.isMaximized = false;
     }
   }, {
@@ -2613,7 +2584,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       } else {
         this.exitMaximize();
       }
-      this.setImageSize({
+      this._setImageSize({
         width: this.imageData.originalWidth,
         height: this.imageData.originalHeight
       });
@@ -2624,6 +2595,23 @@ var PhotoViewer = /*#__PURE__*/function () {
     value: function fullscreen() {
       requestFullscreen(this.$photoviewer[0]);
       this.$photoviewer[0].focus();
+    }
+  }, {
+    key: "resize",
+    value: function resize() {
+      if (this.isOpened) {
+        if (this.isMaximized) {
+          this._setImageSize({
+            width: this.imageData.originalWidth,
+            height: this.imageData.originalHeight
+          });
+        } else {
+          this._setModalSize({
+            width: this.imageData.originalWidth,
+            height: this.imageData.originalHeight
+          });
+        }
+      }
     }
   }, {
     key: "_keydown",
@@ -2717,7 +2705,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         _this6.close();
       });
       this.$stage.on(WHEEL_EVENT + EVENT_NS, function (e) {
-        _this6.wheel(e);
+        _this6._wheel(e);
       });
       this.$zoomIn.on(CLICK_EVENT + EVENT_NS, function () {
         _this6.zoom(_this6.options.ratioThreshold * 3);

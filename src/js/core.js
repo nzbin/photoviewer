@@ -33,81 +33,69 @@ class PhotoViewer {
   // Store modal instances
   static instances = [];
 
-  constructor(items, options, el) {
+  // Whether modal opened
+  isOpened = false;
+
+  // Whether modal maximized
+  isMaximized = false;
+
+  // Whether image rotated (`90*(2n+1)`)
+  isRotated = false;
+
+  // Image rotation degree
+  rotationDegree = 0;
+
+  // Store image data in every instance
+  imageData = {};
+
+  // Store modal data in every instance
+  modalData = {
+    width: null,
+    height: null,
+    left: null,
+    top: null
+  };
+
+  // Used for time comparison
+  _lastTimestamp = 0;
+
+  constructor(items, options) {
+    this.init(items, options);
+  }
+
+  init(items, options) {
     this.options = $.extend(true, {}, DEFAULTS, options);
 
     if (options && $.isArray(options.footerToolbar)) {
       this.options.footerToolbar = options.footerToolbar;
     }
-
     if (options && $.isArray(options.headerToolbar)) {
       this.options.headerToolbar = options.headerToolbar;
     }
 
-    // Store element of clicked
-    this.$el = $(el);
-
-    // As we have multiple instances, so every instance has the following variables
-
-    // Whether modal opened
-    this.isOpened = false;
-
-    // Whether modal maximized
-    this.isMaximized = false;
-
-    // Whether image rotated (`90*(2n+1)`)
-    this.isRotated = false;
-
-    // Image rotation degree
-    this.rotationDegree = 0;
-
-    // Store image data in every instance
-    this.imageData = {};
-
-    // Store modal data in every instance
-    this.modalData = {
-      width: null,
-      height: null,
-      left: null,
-      top: null
-    };
-
-    // Used for time comparison
-    this._lastTimestamp = 0;
-
-    this.init(items, this.options);
-  }
-
-  init(items, opts) {
     this.groupData = items;
-    this.groupIndex = opts['index'];
+    this.groupIndex = this.options['index'];
 
     // Reset public z-index with option
-    PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex'];
+    PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
 
     // Get image src
     const imgSrc = items[this.groupIndex]['src'];
 
     this.open();
 
-    this.loadImage(imgSrc);
+    this._loadImage(imgSrc);
 
-    if (opts.draggable) {
+    if (this.options.draggable) {
       this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
     }
 
-    if (opts.movable) {
+    if (this.options.movable) {
       this.movable(this.$stage, this.$image);
     }
 
-    if (opts.resizable) {
-      this.resizable(
-        this.$photoviewer,
-        this.$stage,
-        this.$image,
-        opts.modalWidth,
-        opts.modalHeight
-      );
+    if (this.options.resizable) {
+      this.resizable(this.$photoviewer, this.$stage, this.$image, this.options.modalWidth, this.options.modalHeight);
     }
   }
 
@@ -166,11 +154,11 @@ class PhotoViewer {
     return photoviewerHTML;
   }
 
-  build() {
+  _build() {
     // Create PhotoViewer HTML string
     const photoviewerHTML = this._createTemplate();
 
-    // Make PhotoViewer HTML string to jQuery element
+    // Make PhotoViewer HTML string to Domq element
     const $photoviewer = $(photoviewerHTML);
 
     // Get all PhotoViewer elements
@@ -234,9 +222,9 @@ class PhotoViewer {
       PhotoViewer.instances[0].close();
     }
 
-    this.build();
+    this._build();
 
-    this.setInitModalPos();
+    this._setInitModalPos();
 
     PhotoViewer.instances.push(this);
 
@@ -271,7 +259,7 @@ class PhotoViewer {
     };
   }
 
-  setModalToCenter() {
+  _setModalToCenter() {
     let initLeft, initTop, initRight, initBottom;
 
     // Extra width/height for `content-box`
@@ -305,20 +293,20 @@ class PhotoViewer {
     this.$photoviewer.css(modalInitCSS);
   }
 
-  setInitModalPos() {
+  _setInitModalPos() {
     if (this.options.initMaximized) {
       this.maximize();
 
       this.isOpened = true;
     } else {
-      this.setModalToCenter();
+      this._setModalToCenter();
     }
 
     // The focus must be set after opening
     this.$photoviewer[0].focus();
   }
 
-  setModalSize(img) {
+  _setModalSize(img) {
     const offsetParentData = this._getOffsetParentData();
 
     // Modal size should calculate with stage css value
@@ -376,17 +364,17 @@ class PhotoViewer {
     // Add init animation for modal
     if (this.options.initAnimation) {
       this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, 'ease-in-out', () => {
-        this.setImageSize(img);
+        this._setImageSize(img);
       });
     } else {
       this.$photoviewer.css(modalTransCSS);
-      this.setImageSize(img);
+      this._setImageSize(img);
     }
 
     this.isOpened = true;
   }
 
-  getImageScale(stageWidth, stageHeight) {
+  _getImageScale(stageWidth, stageHeight) {
     let scale = 1;
 
     if (!this.isRotated) {
@@ -398,13 +386,13 @@ class PhotoViewer {
     return scale;
   }
 
-  setImageSize(img) {
+  _setImageSize(img) {
     const stageData = {
       w: this.$stage.width(),
       h: this.$stage.height()
     };
 
-    const scale = this.getImageScale(stageData.w, stageData.h);
+    const scale = this._getImageScale(stageData.w, stageData.h);
 
     this.$image.css({
       width: Math.round(img.width * scale),
@@ -451,7 +439,7 @@ class PhotoViewer {
     }
   }
 
-  loadImage(imgSrc, fn, err) {
+  _loadImage(imgSrc, fn, err) {
     // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
@@ -485,9 +473,9 @@ class PhotoViewer {
         };
 
         if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
-          this.setImageSize(img);
+          this._setImageSize(img);
         } else {
-          this.setModalSize(img);
+          this._setModalSize(img);
         }
 
         // Callback of image loaded successfully
@@ -507,11 +495,11 @@ class PhotoViewer {
     );
 
     if (this.options.title) {
-      this.setImageTitle(imgSrc);
+      this._setImageTitle(imgSrc);
     }
   }
 
-  setImageTitle(url) {
+  _setImageTitle(url) {
     const title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
 
     this.$title.html(title);
@@ -542,7 +530,7 @@ class PhotoViewer {
 
     this.groupIndex = index;
 
-    this.loadImage(
+    this._loadImage(
       this.groupData[index].src,
       () => {
         this._triggerHook('changed', [this, index]);
@@ -553,7 +541,7 @@ class PhotoViewer {
     );
   }
 
-  wheel(e) {
+  _wheel(e) {
     e.preventDefault();
 
     let delta = 1;
@@ -650,7 +638,7 @@ class PhotoViewer {
 
     // Whether the image scale get to the critical point
     if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
-      this.setImageSize(this.img);
+      this._setImageSize(this.img);
     } else {
       $image.css({
         width: Math.round(newWidth),
@@ -693,29 +681,13 @@ class PhotoViewer {
       transform: 'rotate(' + degree + 'deg)'
     });
 
-    this.setImageSize({
+    this._setImageSize({
       width: this.imageData.originalWidth,
       height: this.imageData.originalHeight
     });
 
     // Remove grab cursor when rotate
     this.$stage.removeClass('is-grab');
-  }
-
-  resize() {
-    if (this.isOpened) {
-      if (this.isMaximized) {
-        this.setImageSize({
-          width: this.imageData.originalWidth,
-          height: this.imageData.originalHeight
-        });
-      } else {
-        this.setModalSize({
-          width: this.imageData.originalWidth,
-          height: this.imageData.originalHeight
-        });
-      }
-    }
   }
 
   maximize() {
@@ -736,7 +708,7 @@ class PhotoViewer {
   exitMaximize() {
     this.$photoviewer.removeClass(NS + '-maximized');
 
-    this.setModalToCenter();
+    this._setModalToCenter();
 
     this.isMaximized = false;
   }
@@ -764,7 +736,7 @@ class PhotoViewer {
       this.exitMaximize();
     }
 
-    this.setImageSize({
+    this._setImageSize({
       width: this.imageData.originalWidth,
       height: this.imageData.originalHeight
     });
@@ -776,6 +748,22 @@ class PhotoViewer {
     requestFullscreen(this.$photoviewer[0]);
 
     this.$photoviewer[0].focus();
+  }
+
+  resize() {
+    if (this.isOpened) {
+      if (this.isMaximized) {
+        this._setImageSize({
+          width: this.imageData.originalWidth,
+          height: this.imageData.originalHeight
+        });
+      } else {
+        this._setModalSize({
+          width: this.imageData.originalWidth,
+          height: this.imageData.originalHeight
+        });
+      }
+    }
   }
 
   _keydown(e) {
@@ -876,7 +864,7 @@ class PhotoViewer {
     });
 
     this.$stage.on(WHEEL_EVENT + EVENT_NS, e => {
-      this.wheel(e);
+      this._wheel(e);
     });
 
     this.$zoomIn.on(CLICK_EVENT + EVENT_NS, () => {

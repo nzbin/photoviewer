@@ -277,7 +277,7 @@ export function resizable($modal, $stage, $image, minWidth, minHeight) {
     $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
     // Update image initial data
-    const scale = this.getImageScale(
+    const scale = this._getImageScale(
       $stage.width(),
       $stage.height()
     );
