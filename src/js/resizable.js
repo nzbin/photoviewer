@@ -136,9 +136,9 @@ export function resizable($modal, $stage, $image, options) {
       ? stageData.h - imgHeight - offsetY + δ
       : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
 
+    // Get the image position in dragging
     const $imageLeft = $image.position().left;
     const $imageTop = $image.position().top;
-    // Get the image position for dragging
     const imgLeft = (widthDiff > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
     const imgTop = (heightDiff > 0 ? $imageTop : Math.min($imageTop, 0)) + δ;
     const imgLeft2 = (widthDiff2 > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;

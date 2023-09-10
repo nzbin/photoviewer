@@ -73,14 +73,14 @@ class PhotoViewer {
       this.options.headerToolbar = options.headerToolbar;
     }
 
-    this.groupData = items;
-    this.groupIndex = this.options['index'];
+    this.images = items;
+    this.index = this.options['index'];
 
     // Reset public z-index with option
     PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
 
     // Get the image src
-    const imgSrc = items[this.groupIndex]['src'];
+    const imgSrc = items[this.index]['src'];
 
     this.open();
 
@@ -89,11 +89,9 @@ class PhotoViewer {
     if (this.options.draggable) {
       this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
     }
-
     if (this.options.movable) {
       this.movable(this.$stage, this.$image);
     }
-
     if (this.options.resizable) {
       this.resizable(this.$photoviewer, this.$stage, this.$image, this.options);
     }
@@ -378,9 +376,9 @@ class PhotoViewer {
     let scale = 1;
 
     if (!this.isRotated) {
-      scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
+      scale = Math.min(stageWidth / this._img.width, stageHeight / this._img.height, 1);
     } else {
-      scale = Math.min(stageWidth / this.img.height, stageHeight / this.img.width, 1);
+      scale = Math.min(stageWidth / this._img.height, stageHeight / this._img.width, 1);
     }
 
     return scale;
@@ -463,8 +461,8 @@ class PhotoViewer {
     preloadImage(
       imgSrc,
       img => {
-        // Store HTMLImageElement
-        this.img = img;
+        // Store original HTMLImageElement
+        this._img = img;
 
         // Store original data
         this.imageData = {
@@ -500,38 +498,38 @@ class PhotoViewer {
   }
 
   _setImageTitle(url) {
-    const title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
+    const title = this.images[this.index].title || getImageNameFromUrl(url);
 
     this.$title.html(title);
   }
 
   jump(step) {
-    this._triggerHook('beforeChange', [this, this.groupIndex]);
+    this._triggerHook('beforeChange', [this, this.index]);
 
     // Make sure change image after the modal animation has finished
     const now = Date.now();
     if (now - this._lastTimestamp >= this.options.animationDuration) {
-      this.groupIndex = this.groupIndex + step;
+      this.index = this.index + step;
 
-      this.jumpTo(this.groupIndex);
+      this.jumpTo(this.index);
 
       this._lastTimestamp = now;
     }
   }
 
   jumpTo(index) {
-    index = index % this.groupData.length;
+    index = index % this.images.length;
 
     if (index >= 0) {
-      index = index % this.groupData.length;
+      index = index % this.images.length;
     } else if (index < 0) {
-      index = (this.groupData.length + index) % this.groupData.length;
+      index = (this.images.length + index) % this.images.length;
     }
 
-    this.groupIndex = index;
+    this.index = index;
 
     this._loadImage(
-      this.groupData[index].src,
+      this.images[index].src,
       () => {
         this._triggerHook('changed', [this, index]);
       },
@@ -638,7 +636,7 @@ class PhotoViewer {
 
     // Whether the image scale get to the critical point
     if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
-      this._setImageSize(this.img);
+      this._setImageSize(this._img);
     } else {
       $image.css({
         width: Math.round(newWidth),

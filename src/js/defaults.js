@@ -1,4 +1,5 @@
 import $ from './domq.js';
+
 export default {
   // Whether to enable modal dragging
   draggable: true,

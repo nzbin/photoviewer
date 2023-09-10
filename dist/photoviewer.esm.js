@@ -1828,9 +1828,10 @@ function resizable($modal, $stage, $image, options) {
     var heightDiff = offsetY + modalData.h > minHeight ? stageData.h - imgHeight + offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
     var widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
     var heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
+
+    // Get the image position in dragging
     var $imageLeft = $image.position().left;
     var $imageTop = $image.position().top;
-    // Get the image position for dragging
     var imgLeft = (widthDiff > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
     var imgTop = (heightDiff > 0 ? $imageTop : Math.min($imageTop, 0)) + δ;
     var imgLeft2 = (widthDiff2 > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
@@ -1989,14 +1990,14 @@ var PhotoViewer = /*#__PURE__*/function () {
       if (options && D.isArray(options.headerToolbar)) {
         this.options.headerToolbar = options.headerToolbar;
       }
-      this.groupData = items;
-      this.groupIndex = this.options['index'];
+      this.images = items;
+      this.index = this.options['index'];
 
       // Reset public z-index with option
       PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
 
-      // Get image src
-      var imgSrc = items[this.groupIndex]['src'];
+      // Get the image src
+      var imgSrc = items[this.index]['src'];
       this.open();
       this._loadImage(imgSrc);
       if (this.options.draggable) {
@@ -2250,9 +2251,9 @@ var PhotoViewer = /*#__PURE__*/function () {
     value: function _getImageScale(stageWidth, stageHeight) {
       var scale = 1;
       if (!this.isRotated) {
-        scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
+        scale = Math.min(stageWidth / this._img.width, stageHeight / this._img.height, 1);
       } else {
-        scale = Math.min(stageWidth / this.img.height, stageHeight / this.img.width, 1);
+        scale = Math.min(stageWidth / this._img.height, stageHeight / this._img.width, 1);
       }
       return scale;
     }
@@ -2329,8 +2330,8 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
       this.$image.attr('src', imgSrc);
       preloadImage(imgSrc, function (img) {
-        // Store HTMLImageElement
-        _this4.img = img;
+        // Store original HTMLImageElement
+        _this4._img = img;
 
         // Store original data
         _this4.imageData = {
@@ -2363,19 +2364,19 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "_setImageTitle",
     value: function _setImageTitle(url) {
-      var title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
+      var title = this.images[this.index].title || getImageNameFromUrl(url);
       this.$title.html(title);
     }
   }, {
     key: "jump",
     value: function jump(step) {
-      this._triggerHook('beforeChange', [this, this.groupIndex]);
+      this._triggerHook('beforeChange', [this, this.index]);
 
       // Make sure change image after the modal animation has finished
       var now = Date.now();
       if (now - this._lastTimestamp >= this.options.animationDuration) {
-        this.groupIndex = this.groupIndex + step;
-        this.jumpTo(this.groupIndex);
+        this.index = this.index + step;
+        this.jumpTo(this.index);
         this._lastTimestamp = now;
       }
     }
@@ -2383,14 +2384,14 @@ var PhotoViewer = /*#__PURE__*/function () {
     key: "jumpTo",
     value: function jumpTo(index) {
       var _this5 = this;
-      index = index % this.groupData.length;
+      index = index % this.images.length;
       if (index >= 0) {
-        index = index % this.groupData.length;
+        index = index % this.images.length;
       } else if (index < 0) {
-        index = (this.groupData.length + index) % this.groupData.length;
+        index = (this.images.length + index) % this.images.length;
       }
-      this.groupIndex = index;
-      this._loadImage(this.groupData[index].src, function () {
+      this.index = index;
+      this._loadImage(this.images[index].src, function () {
         _this5._triggerHook('changed', [_this5, index]);
       }, function () {
         _this5._triggerHook('changed', [_this5, index]);
@@ -2489,7 +2490,7 @@ var PhotoViewer = /*#__PURE__*/function () {
 
       // Whether the image scale get to the critical point
       if (Math.abs(this.imageData.initWidth - newWidth) < this.imageData.initWidth * 0.05) {
-        this._setImageSize(this.img);
+        this._setImageSize(this._img);
       } else {
         $image.css({
           width: Math.round(newWidth),
