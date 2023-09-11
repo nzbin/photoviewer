@@ -1465,7 +1465,7 @@ function getImageNameFromUrl(url) {
  * @param {object} imageData - The image data
  * @param {object} stageData - The stage data
  * @param {object} $stage - The stage element of domq
- * @param {boolean} isRotate - The image rotated flag
+ * @param {boolean} isRotate - Whether the image rotated
  */
 function setGrabCursor(imageData, stageData, $stage, isRotated) {
   var imageWidth = !isRotated ? imageData.w : imageData.h;
@@ -1518,6 +1518,26 @@ function getCSSValueSum($elem, props) {
  */
 function isBorderBox($elem) {
   return $elem.css('box-sizing') === 'border-box';
+}
+
+/**
+ * Get image scale in stage
+ *
+ * @param {number} imageWidth - The image width
+ * @param {number} imageHeight - The image height
+ * @param {number} stageWidth - The stage width
+ * @param {number} stageHeight - The stage height
+ * @param {boolean} isRotated - Whether the image rotated
+ * @returns {number}
+ */
+function getImageScale(imageWidth, imageHeight, stageWidth, stageHeight, isRotated) {
+  var scale = 1;
+  if (!isRotated) {
+    scale = Math.min(stageWidth / imageWidth, stageHeight / imageHeight, 1);
+  } else {
+    scale = Math.min(stageWidth / imageHeight, stageHeight / imageWidth, 1);
+  }
+  return scale;
 }
 
 var $W = D(window);
@@ -1924,14 +1944,18 @@ function resizable($modal, $stage, $image, options) {
   var dragEnd = function dragEnd() {
     $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
 
+    // Reclac the stage size because it has changed
+    var stageWidth = $stage.width();
+    var stageHeight = $stage.height();
+
     // Set grab cursor
     if (PUBLIC_VARS['isResizing']) {
       setGrabCursor({
         w: imgWidth,
         h: imgHeight
       }, {
-        w: $stage.width(),
-        h: $stage.height()
+        w: stageWidth,
+        h: stageHeight
       }, $stage);
     }
     PUBLIC_VARS['isResizing'] = false;
@@ -1940,15 +1964,15 @@ function resizable($modal, $stage, $image, options) {
     D(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
     // Update the image initial data
-    var scale = _this._getImageScale($stage.width(), $stage.height());
     var _this$imageData = _this.imageData,
       imgOrigWidth = _this$imageData.originalWidth,
       imgOrigHeight = _this$imageData.originalHeight;
+    var scale = getImageScale(imgOrigWidth, imgOrigHeight, stageWidth, stageHeight, _this.isRotated);
     D.extend(_this.imageData, {
       initWidth: imgOrigWidth * scale,
       initHeight: imgOrigHeight * scale,
-      initLeft: ($stage.width() - imgOrigWidth * scale) / 2,
-      initTop: ($stage.height() - imgOrigHeight * scale) / 2
+      initLeft: (stageWidth - imgOrigWidth * scale) / 2,
+      initTop: (stageHeight - imgOrigHeight * scale) / 2
     });
   };
   D.each(resizableHandles, function (dir, handle) {
@@ -2253,30 +2277,16 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.isOpened = true;
     }
   }, {
-    key: "_getImageScale",
-    value: function _getImageScale(stageWidth, stageHeight) {
+    key: "_setImageSize",
+    value: function _setImageSize() {
       var _this$imageData2 = this.imageData,
         imgOrigWidth = _this$imageData2.originalWidth,
         imgOrigHeight = _this$imageData2.originalHeight;
-      var scale = 1;
-      if (!this.isRotated) {
-        scale = Math.min(stageWidth / imgOrigWidth, stageHeight / imgOrigHeight, 1);
-      } else {
-        scale = Math.min(stageWidth / imgOrigHeight, stageHeight / imgOrigWidth, 1);
-      }
-      return scale;
-    }
-  }, {
-    key: "_setImageSize",
-    value: function _setImageSize() {
-      var _this$imageData3 = this.imageData,
-        imgOrigWidth = _this$imageData3.originalWidth,
-        imgOrigHeight = _this$imageData3.originalHeight;
       var stageData = {
         w: this.$stage.width(),
         h: this.$stage.height()
       };
-      var scale = this._getImageScale(stageData.w, stageData.h);
+      var scale = getImageScale(imgOrigWidth, imgOrigHeight, stageData.w, stageData.h, this.isRotated);
       this.$image.css({
         width: Math.round(imgOrigWidth * scale),
         height: Math.round(imgOrigHeight * scale),
@@ -2445,14 +2455,14 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "zoomTo",
     value: function zoomTo(ratio, origin) {
-      var _this$imageData4 = this.imageData,
-        imgOrigWidth = _this$imageData4.originalWidth,
-        imgOrigHeight = _this$imageData4.originalHeight,
-        imgWidth = _this$imageData4.width,
-        imgHeight = _this$imageData4.height,
-        imgLeft = _this$imageData4.left,
-        imgTop = _this$imageData4.top,
-        imgInitWidth = _this$imageData4.initWidth;
+      var _this$imageData3 = this.imageData,
+        imgOrigWidth = _this$imageData3.originalWidth,
+        imgOrigHeight = _this$imageData3.originalHeight,
+        imgWidth = _this$imageData3.width,
+        imgHeight = _this$imageData3.height,
+        imgLeft = _this$imageData3.left,
+        imgTop = _this$imageData3.top,
+        imgInitWidth = _this$imageData3.initWidth;
 
       // Image stage position
       // We will use it to calc the relative position of image
@@ -2477,7 +2487,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       // Think about it for a while
       var newLeft = origin.x - (origin.x - imgLeft) / imgWidth * newWidth;
       var newTop = origin.y - (origin.y - imgTop) / imgHeight * newHeight;
-      // δ is the difference between new width and new height of image
+      // δ is the difference between new width and new height of the image
       var δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2;
       // The width and height should be exchanged after rotated
       var transWidth = !this.isRotated ? newWidth : newHeight;
@@ -2546,9 +2556,6 @@ var PhotoViewer = /*#__PURE__*/function () {
         transform: 'rotate(' + degree + 'deg)'
       });
       this._setImageSize();
-
-      // Remove grab cursor when rotate
-      this.$stage.removeClass('is-grab');
     }
   }, {
     key: "maximize",

@@ -20,7 +20,8 @@ import {
   setGrabCursor,
   isRootNode,
   getCSSValueSum,
-  isBorderBox
+  isBorderBox,
+  getImageScale
 } from './utilities';
 import { draggable } from './draggable';
 import { movable } from './movable';
@@ -371,20 +372,6 @@ class PhotoViewer {
     this.isOpened = true;
   }
 
-  _getImageScale(stageWidth, stageHeight) {
-    const { originalWidth: imgOrigWidth, originalHeight: imgOrigHeight } = this.imageData;
-
-    let scale = 1;
-
-    if (!this.isRotated) {
-      scale = Math.min(stageWidth / imgOrigWidth, stageHeight / imgOrigHeight, 1);
-    } else {
-      scale = Math.min(stageWidth / imgOrigHeight, stageHeight / imgOrigWidth, 1);
-    }
-
-    return scale;
-  }
-
   _setImageSize() {
     const { originalWidth: imgOrigWidth, originalHeight: imgOrigHeight } = this.imageData;
 
@@ -393,7 +380,7 @@ class PhotoViewer {
       h: this.$stage.height()
     };
 
-    const scale = this._getImageScale(stageData.w, stageData.h);
+    const scale = getImageScale(imgOrigWidth, imgOrigHeight, stageData.w, stageData.h, this.isRotated);
 
     this.$image.css({
       width: Math.round(imgOrigWidth * scale),
@@ -679,9 +666,6 @@ class PhotoViewer {
     });
 
     this._setImageSize();
-
-    // Remove grab cursor when rotate
-    this.$stage.removeClass('is-grab');
   }
 
   maximize() {

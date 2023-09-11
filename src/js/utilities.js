@@ -140,7 +140,7 @@ export function getScrollbarWidth() {
  * @param {object} imageData - The image data
  * @param {object} stageData - The stage data
  * @param {object} $stage - The stage element of domq
- * @param {boolean} isRotate - The image rotated flag
+ * @param {boolean} isRotate - Whether the image rotated
  */
 export function setGrabCursor(imageData, stageData, $stage, isRotated) {
   const imageWidth = !isRotated ? imageData.w : imageData.h;
@@ -194,4 +194,24 @@ export function getCSSValueSum($elem, props) {
  */
 export function isBorderBox($elem) {
   return $elem.css('box-sizing') === 'border-box';
+}
+
+/**
+ * Get image scale in stage
+ *
+ * @param {number} imageWidth - The image width
+ * @param {number} imageHeight - The image height
+ * @param {number} stageWidth - The stage width
+ * @param {number} stageHeight - The stage height
+ * @param {boolean} isRotated - Whether the image rotated
+ * @returns {number}
+ */
+export function getImageScale(imageWidth, imageHeight, stageWidth, stageHeight, isRotated) {
+  let scale = 1;
+  if (!isRotated) {
+    scale = Math.min(stageWidth / imageWidth, stageHeight / imageHeight, 1);
+  } else {
+    scale = Math.min(stageWidth / imageHeight, stageHeight / imageWidth, 1);
+  }
+  return scale;
 }

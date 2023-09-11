@@ -8,7 +8,7 @@ import {
   EVENT_NS,
   PUBLIC_VARS
 } from './constants';
-import { isBorderBox, setGrabCursor } from './utilities';
+import { isBorderBox, setGrabCursor, getImageScale } from './utilities';
 
 const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}-button`;
 
@@ -249,29 +249,32 @@ export function resizable($modal, $stage, $image, options) {
     $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
       .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
 
+    // Reclac the stage size because it has changed
+    const stageWidth = $stage.width();
+    const stageHeight = $stage.height();
+
     // Set grab cursor
     if (PUBLIC_VARS['isResizing']) {
       setGrabCursor(
         { w: imgWidth, h: imgHeight },
-        { w: $stage.width(), h: $stage.height() },
+        { w: stageWidth, h: stageHeight },
         $stage
       );
     }
-
     PUBLIC_VARS['isResizing'] = false;
 
     // Remove resizable cursor
     $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
     // Update the image initial data
-    const scale = this._getImageScale($stage.width(), $stage.height());
     const { originalWidth: imgOrigWidth, originalHeight: imgOrigHeight } = this.imageData;
+    const scale = getImageScale(imgOrigWidth, imgOrigHeight, stageWidth, stageHeight, this.isRotated);
 
     $.extend(this.imageData, {
       initWidth: imgOrigWidth * scale,
       initHeight: imgOrigHeight * scale,
-      initLeft: ($stage.width() - imgOrigWidth * scale) / 2,
-      initTop: ($stage.height() - imgOrigHeight * scale) / 2
+      initLeft: (stageWidth - imgOrigWidth * scale) / 2,
+      initTop: (stageHeight - imgOrigHeight * scale) / 2
     });
   };
 
