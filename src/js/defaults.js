@@ -146,6 +146,9 @@ export default {
   // Modal transform animation duration
   animationDuration: 400,
 
+  // Modal transform animation easing function
+  animationEasing: 'ease-in-out',
+
   // Whether to disable modal translate to center after image changed
   fixedModalPos: false,
 

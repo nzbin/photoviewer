@@ -68,6 +68,7 @@ declare namespace PhotoViewer {
     multiInstances?: boolean;
     initAnimation?: boolean;
     animationDuration?: number;
+    animationEasing?: string;
     fixedModalPos?: boolean;
     zIndex?: number;
     dragHandle?: string | null;

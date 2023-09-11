@@ -1366,6 +1366,8 @@
     initAnimation: true,
     // Modal transform animation duration
     animationDuration: 400,
+    // Modal transform animation easing function
+    animationEasing: 'ease-in-out',
     // Whether to disable modal translate to center after image changed
     fixedModalPos: false,
     // Modal css `z-index`
@@ -2271,7 +2273,7 @@
 
         // Add init animation for modal
         if (this.options.initAnimation) {
-          this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, 'ease-in-out', function () {
+          this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, this.options.animationEasing, function () {
             _this3._setImageSize();
           });
         } else {

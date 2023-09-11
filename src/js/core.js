@@ -361,7 +361,7 @@ class PhotoViewer {
 
     // Add init animation for modal
     if (this.options.initAnimation) {
-      this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, 'ease-in-out', () => {
+      this.$photoviewer.animate(modalTransCSS, this.options.animationDuration, this.options.animationEasing, () => {
         this._setImageSize();
       });
     } else {
