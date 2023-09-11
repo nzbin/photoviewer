@@ -69,8 +69,8 @@ export function resizable($modal, $stage, $image, options) {
 
   const { modalWidth: minWidth, modalHeight: minHeight } = options;
 
-  // Modal CSS options
-  const getModalOpts = (dir, offsetX, offsetY) => {
+  // Modal CSS
+  const getModalCSS = (dir, offsetX, offsetY) => {
     // Modal shouldn't move when its width to the min-width
     const modalLeft = -offsetX + modalData.w > minWidth
       ? offsetX + modalData.x
@@ -79,7 +79,7 @@ export function resizable($modal, $stage, $image, options) {
       ? offsetY + modalData.y
       : modalData.y + modalData.h - minHeight;
 
-    const opts = {
+    const dirsCSS = {
       e: {
         width: Math.max(offsetX + modalData.w, minWidth)
       },
@@ -116,11 +116,11 @@ export function resizable($modal, $stage, $image, options) {
       }
     };
 
-    return opts[dir];
+    return dirsCSS[dir];
   };
 
-  // Image CSS options
-  const getImageOpts = (dir, offsetX, offsetY) => {
+  // Image CSS
+  const getImageCSS = (dir, offsetX, offsetY) => {
     // Image shouldn't move when modal width to the min-width
     // The min-width is modal width, so we should clac the stage min-width
     const widthDiff = offsetX + modalData.w > minWidth
@@ -144,7 +144,7 @@ export function resizable($modal, $stage, $image, options) {
     const imgLeft2 = (widthDiff2 > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
     const imgTop2 = (heightDiff2 > 0 ? $imageTop : Math.min($imageTop, 0)) + δ;
 
-    const opts = {
+    const dirsCSS = {
       e: {
         left: widthDiff >= -δ ? (widthDiff - δ) / 2 : Math.max(imgLeft, widthDiff)
       },
@@ -175,7 +175,7 @@ export function resizable($modal, $stage, $image, options) {
       }
     };
 
-    return opts[dir];
+    return dirsCSS[dir];
   };
 
   const dragStart = (dir, e) => {
@@ -235,13 +235,13 @@ export function resizable($modal, $stage, $image, options) {
       const relativeX = endX - startX;
       const relativeY = endY - startY;
 
-      const modalOpts = getModalOpts(direction, relativeX, relativeY);
+      const modalCSS = getModalCSS(direction, relativeX, relativeY);
 
-      $modal.css(modalOpts);
+      $modal.css(modalCSS);
 
-      const imageOpts = getImageOpts(direction, relativeX, relativeY);
+      const imageCSS = getImageCSS(direction, relativeX, relativeY);
 
-      $image.css(imageOpts);
+      $image.css(imageCSS);
     }
   };
 
@@ -263,17 +263,15 @@ export function resizable($modal, $stage, $image, options) {
     // Remove resizable cursor
     $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
-    // Update image initial data
-    const scale = this._getImageScale(
-      $stage.width(),
-      $stage.height()
-    );
+    // Update the image initial data
+    const scale = this._getImageScale($stage.width(), $stage.height());
+    const { originalWidth: imgOrigWidth, originalHeight: imgOrigHeight } = this.imageData;
 
     $.extend(this.imageData, {
-      initWidth: this.img.width * scale,
-      initHeight: this.img.height * scale,
-      initLeft: ($stage.width() - this.img.width * scale) / 2,
-      initTop: ($stage.height() - this.img.height * scale) / 2
+      initWidth: imgOrigWidth * scale,
+      initHeight: imgOrigHeight * scale,
+      initLeft: ($stage.width() - imgOrigWidth * scale) / 2,
+      initTop: ($stage.height() - imgOrigHeight * scale) / 2
     });
   };
 
