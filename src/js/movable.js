@@ -59,7 +59,7 @@ export function movable($stage, $image) {
     left = $image.position().left - δ;
     top = $image.position().top + δ;
 
-    // Add grabbing cursor
+    // Add the grabbing cursor
     if ($stage.hasClass('is-grab')) {
       $(ELEMS_WITH_GRABBING_CURSOR).addClass('is-grabbing');
     }
@@ -119,7 +119,7 @@ export function movable($stage, $image) {
 
     PUBLIC_VARS['isMoving'] = false;
 
-    // Remove grabbing cursor
+    // Remove the grabbing cursor
     $(ELEMS_WITH_GRABBING_CURSOR).removeClass('is-grabbing');
   };
 

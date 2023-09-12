@@ -135,7 +135,7 @@ export function getScrollbarWidth() {
 }
 
 /**
- * Set grab cursor when move image
+ * Set grab cursor when move the image
  *
  * @param {object} imageData - The image data
  * @param {object} stageData - The stage data
@@ -155,7 +155,7 @@ export function setGrabCursor(imageData, stageData, $stage, isRotated) {
 }
 
 /**
- * Check whether browser support touch event
+ * Check whether the browser support touch event
  *
  * @return {boolean}
  */
@@ -197,7 +197,7 @@ export function isBorderBox($elem) {
 }
 
 /**
- * Get image scale in stage
+ * Get the image scale in stage
  *
  * @param {number} imageWidth - The image width
  * @param {number} imageHeight - The image height

@@ -44,11 +44,11 @@ export function draggable($modal, dragHandle, dragCancel) {
     startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
     startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
 
-    // Get current position of the modal
+    // Get the modal's current position
     left = parseFloat($modal.css('left'));
     top = parseFloat($modal.css('top'));
 
-    // Reset modal's position with left and top value
+    // Reset the modal's position with left and top value
     $modal.css({ left, top, right: '', bottom: '' });
 
     $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)

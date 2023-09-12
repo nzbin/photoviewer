@@ -74,7 +74,7 @@ class PhotoViewer {
       this.options.headerToolbar = options.headerToolbar;
     }
 
-    // Reset public z-index with option
+    // Reset public `z-index` with option
     PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
 
     this.open();
@@ -125,7 +125,6 @@ class PhotoViewer {
   }
 
   _createTemplate() {
-    // PhotoViewer base HTML
     const photoviewerHTML =
       `<div class="${NS}-modal" tabindex="0">
         <div class="${NS}-inner">
@@ -153,10 +152,10 @@ class PhotoViewer {
     // Create PhotoViewer HTML string
     const photoviewerHTML = this._createTemplate();
 
-    // Make PhotoViewer HTML string to Domq element
+    // Trans PhotoViewer HTML string to Domq element
     const $photoviewer = $(photoviewerHTML);
 
-    // Get all PhotoViewer elements
+    // Get and store all PhotoViewer elements
     this.$photoviewer = $photoviewer;
     this.$stage = $photoviewer.find(CLASS_NS + '-stage');
     this.$title = $photoviewer.find(CLASS_NS + '-title');
@@ -173,18 +172,18 @@ class PhotoViewer {
     this.$prev = $photoviewer.find(CLASS_NS + '-button-prev');
     this.$next = $photoviewer.find(CLASS_NS + '-button-next');
 
-    // Add class before image loaded
+    // Add init classes before image loaded
     this.$stage.addClass('stage-ready');
     this.$image.addClass('image-ready');
 
-    // Reset modal `z-index` of multiple instances
+    // Reset the modal `z-index` of multiple instances
     this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
 
     if (this.options.positionFixed) {
       this.$photoviewer.css({ position: 'fixed' });
     }
 
-    // Set handle element of draggable
+    // Set the handle element for dragging
     if (!this.options.dragHandle || this.options.dragHandle === CLASS_NS + '-modal') {
       this.dragHandle = this.$photoviewer;
     } else {
@@ -382,7 +381,7 @@ class PhotoViewer {
       top: (stageHeight - Math.round(imgHeight)) / 2
     });
 
-    // Store image initial data
+    // Store the image initial data
     $.extend(this.imageData, {
       initWidth: imgWidth,
       initHeight: imgHeight,
@@ -394,7 +393,6 @@ class PhotoViewer {
       top: (stageHeight - imgHeight) / 2
     });
 
-    // Set grab cursor
     setGrabCursor(
       { w: imgWidth, h: imgHeight },
       { w: stageWidth, h: stageHeight },
@@ -407,7 +405,7 @@ class PhotoViewer {
       // Loader end
       this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
-      // Remove class after image loaded
+      // Remove init classes after image loaded
       this.$stage.removeClass('stage-ready');
       this.$image.removeClass('image-ready');
 
@@ -424,7 +422,7 @@ class PhotoViewer {
     const imgSrc = this.images[index]?.src;
     if (!imgSrc) return;
 
-    // Reset image
+    // Reset the image src
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
     this.rotationDegree = 0;
@@ -434,7 +432,7 @@ class PhotoViewer {
     // Loader start
     this.$photoviewer.append(`<div class="${NS}-loader"></div>`);
 
-    // Add class before image loaded
+    // Add init classes before image loaded
     this.$stage.addClass('stage-ready');
     this.$image.addClass('image-ready');
 
@@ -447,7 +445,7 @@ class PhotoViewer {
     preloadImage(
       imgSrc,
       img => {
-        // Store original image size
+        // Store the original image size
         this.imageData = {
           originalWidth: img.width,
           originalHeight: img.height
@@ -459,7 +457,7 @@ class PhotoViewer {
           this._setModalSize();
         }
 
-        // Callback of image loaded successfully
+        // Callback of the image loaded successfully
         if (fn) {
           fn.call();
         }
@@ -468,7 +466,7 @@ class PhotoViewer {
         // Loader end
         this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
-        // Callback of image loading failed
+        // Callback of the image loading failed
         if (err) {
           err.call();
         }
@@ -488,7 +486,7 @@ class PhotoViewer {
   jump(step) {
     this._triggerHook('beforeChange', [this, this.index]);
 
-    // Make sure change image after the modal animation has finished
+    // Only allow to change image after the modal animation has finished
     const now = Date.now();
     if (now - this._lastTimestamp >= this.options.animationDuration) {
       this.index = this.index + step;
@@ -575,7 +573,7 @@ class PhotoViewer {
     const stageWidth = this.$stage.width();
     const stageHeight = this.$stage.height();
 
-    // Set default origin coordinates (center of stage)
+    // Set the default origin coordinates (center of stage)
     if (origin === void 0) {
       origin = {
         x: stageWidth / 2,
@@ -592,20 +590,20 @@ class PhotoViewer {
     // δ is the difference between new width and new height of the image
     const δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2;
     // The width and height should be exchanged after rotated
-    const transWidth = !this.isRotated ? newWidth : newHeight;
-    const transHeight = !this.isRotated ? newHeight : newWidth;
+    const imgNewWidth = !this.isRotated ? newWidth : newHeight;
+    const imgNewHeight = !this.isRotated ? newHeight : newWidth;
     // The difference between stage size and new image size
     const diffX = stageWidth - newWidth;
     const diffY = stageHeight - newHeight;
     // Zoom-out & Zoom-in condition
     // It's important and it takes me a lot of time to get it
     // The conditions with image rotated 90 degree drive me crazy alomst!
-    if (transWidth <= stageWidth) {
+    if (imgNewWidth <= stageWidth) {
       newLeft = diffX / 2;
     } else {
       newLeft = newLeft > -δ ? -δ : Math.max(newLeft, diffX + δ);
     }
-    if (transHeight <= stageHeight) {
+    if (imgNewHeight <= stageHeight) {
       newTop = diffY / 2;
     } else {
       newTop = newTop > δ ? δ : Math.max(newTop, diffY - δ);
@@ -622,15 +620,14 @@ class PhotoViewer {
         top: Math.round(newTop)
       });
 
-      // Set grab cursor
       setGrabCursor(
-        { w: Math.round(transWidth), h: Math.round(transHeight) },
+        { w: Math.round(imgNewWidth), h: Math.round(imgNewHeight) },
         { w: stageWidth, h: stageHeight },
         this.$stage
       );
     }
 
-    // Update image initial data
+    // Update the image initial data
     $.extend(this.imageData, {
       width: newWidth,
       height: newHeight,
@@ -692,7 +689,7 @@ class PhotoViewer {
         originalHeight += this._modalEdgeValue.vertical;
       }
 
-      // Store modal's size and position before maximized
+      // Store the modal's size and position before maximized
       this.modalData = {
         width: originalWidth,
         height: originalHeight,

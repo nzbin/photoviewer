@@ -136,7 +136,7 @@ export function resizable($modal, $stage, $image, options) {
       ? stageData.h - imgHeight - offsetY + δ
       : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
 
-    // Get the image position in dragging
+    // Get the image position on resizing
     const $imageLeft = $image.position().left;
     const $imageTop = $image.position().top;
     const imgLeft = (widthDiff > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
@@ -217,7 +217,7 @@ export function resizable($modal, $stage, $image, options) {
 
     direction = dir;
 
-    // Add resizable cursor
+    // Add the resizable cursor
     $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
 
     $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
@@ -253,7 +253,6 @@ export function resizable($modal, $stage, $image, options) {
     const stageWidth = $stage.width();
     const stageHeight = $stage.height();
 
-    // Set grab cursor
     if (PUBLIC_VARS['isResizing']) {
       setGrabCursor(
         { w: imgWidth, h: imgHeight },
@@ -263,7 +262,7 @@ export function resizable($modal, $stage, $image, options) {
     }
     PUBLIC_VARS['isResizing'] = false;
 
-    // Remove resizable cursor
+    // Remove the resizable cursor
     $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
     // Update the image initial data

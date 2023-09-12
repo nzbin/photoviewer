@@ -1466,7 +1466,7 @@
   }
 
   /**
-   * Set grab cursor when move image
+   * Set grab cursor when move the image
    *
    * @param {object} imageData - The image data
    * @param {object} stageData - The stage data
@@ -1485,7 +1485,7 @@
   }
 
   /**
-   * Check whether browser support touch event
+   * Check whether the browser support touch event
    *
    * @return {boolean}
    */
@@ -1527,7 +1527,7 @@
   }
 
   /**
-   * Get image scale in stage
+   * Get the image scale in stage
    *
    * @param {number} imageWidth - The image width
    * @param {number} imageHeight - The image height
@@ -1601,11 +1601,11 @@
       startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
       startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
 
-      // Get current position of the modal
+      // Get the modal's current position
       left = parseFloat($modal.css('left'));
       top = parseFloat($modal.css('top'));
 
-      // Reset modal's position with left and top value
+      // Reset the modal's position with left and top value
       $modal.css({
         left: left,
         top: top,
@@ -1684,7 +1684,7 @@
       left = $image.position().left - δ;
       top = $image.position().top + δ;
 
-      // Add grabbing cursor
+      // Add the grabbing cursor
       if ($stage.hasClass('is-grab')) {
         D(ELEMS_WITH_GRABBING_CURSOR).addClass('is-grabbing');
       }
@@ -1735,7 +1735,7 @@
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
       PUBLIC_VARS['isMoving'] = false;
 
-      // Remove grabbing cursor
+      // Remove the grabbing cursor
       D(ELEMS_WITH_GRABBING_CURSOR).removeClass('is-grabbing');
     };
     $stage.on(TOUCH_START_EVENT + EVENT_NS, dragStart);
@@ -1857,7 +1857,7 @@
       var widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
       var heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
 
-      // Get the image position in dragging
+      // Get the image position on resizing
       var $imageLeft = $image.position().left;
       var $imageTop = $image.position().top;
       var imgLeft = (widthDiff > 0 ? $imageLeft : Math.min($imageLeft, 0)) - δ;
@@ -1929,7 +1929,7 @@
       imgHeight = !_this.isRotated ? imageData.h : imageData.w;
       direction = dir;
 
-      // Add resizable cursor
+      // Add the resizable cursor
       D(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
       $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
     };
@@ -1953,8 +1953,6 @@
       // Reclac the stage size because it has changed
       var stageWidth = $stage.width();
       var stageHeight = $stage.height();
-
-      // Set grab cursor
       if (PUBLIC_VARS['isResizing']) {
         setGrabCursor({
           w: imgWidth,
@@ -1966,7 +1964,7 @@
       }
       PUBLIC_VARS['isResizing'] = false;
 
-      // Remove resizable cursor
+      // Remove the resizable cursor
       D(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
       // Update the image initial data
@@ -2028,7 +2026,7 @@
           this.options.headerToolbar = options.headerToolbar;
         }
 
-        // Reset public z-index with option
+        // Reset public `z-index` with option
         PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
         this.open();
         this.images = items;
@@ -2068,7 +2066,6 @@
     }, {
       key: "_createTemplate",
       value: function _createTemplate() {
-        // PhotoViewer base HTML
         var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
         return photoviewerHTML;
       }
@@ -2078,10 +2075,10 @@
         // Create PhotoViewer HTML string
         var photoviewerHTML = this._createTemplate();
 
-        // Make PhotoViewer HTML string to Domq element
+        // Trans PhotoViewer HTML string to Domq element
         var $photoviewer = D(photoviewerHTML);
 
-        // Get all PhotoViewer elements
+        // Get and store all PhotoViewer elements
         this.$photoviewer = $photoviewer;
         this.$stage = $photoviewer.find(CLASS_NS + '-stage');
         this.$title = $photoviewer.find(CLASS_NS + '-title');
@@ -2098,11 +2095,11 @@
         this.$prev = $photoviewer.find(CLASS_NS + '-button-prev');
         this.$next = $photoviewer.find(CLASS_NS + '-button-next');
 
-        // Add class before image loaded
+        // Add init classes before image loaded
         this.$stage.addClass('stage-ready');
         this.$image.addClass('image-ready');
 
-        // Reset modal `z-index` of multiple instances
+        // Reset the modal `z-index` of multiple instances
         this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
         if (this.options.positionFixed) {
           this.$photoviewer.css({
@@ -2110,7 +2107,7 @@
           });
         }
 
-        // Set handle element of draggable
+        // Set the handle element for dragging
         if (!this.options.dragHandle || this.options.dragHandle === CLASS_NS + '-modal') {
           this.dragHandle = this.$photoviewer;
         } else {
@@ -2295,7 +2292,7 @@
           top: (stageHeight - Math.round(imgHeight)) / 2
         });
 
-        // Store image initial data
+        // Store the image initial data
         D.extend(this.imageData, {
           initWidth: imgWidth,
           initHeight: imgHeight,
@@ -2306,8 +2303,6 @@
           left: (stageWidth - imgWidth) / 2,
           top: (stageHeight - imgHeight) / 2
         });
-
-        // Set grab cursor
         setGrabCursor({
           w: imgWidth,
           h: imgHeight
@@ -2321,7 +2316,7 @@
           // Loader end
           this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
-          // Remove class after image loaded
+          // Remove init classes after image loaded
           this.$stage.removeClass('stage-ready');
           this.$image.removeClass('image-ready');
 
@@ -2340,7 +2335,7 @@
         var imgSrc = (_this$images$index = this.images[index]) === null || _this$images$index === void 0 ? void 0 : _this$images$index.src;
         if (!imgSrc) return;
 
-        // Reset image
+        // Reset the image src
         this.$image.removeAttr('style').attr('src', '');
         this.isRotated = false;
         this.rotationDegree = 0;
@@ -2349,7 +2344,7 @@
         // Loader start
         this.$photoviewer.append("<div class=\"".concat(NS, "-loader\"></div>"));
 
-        // Add class before image loaded
+        // Add init classes before image loaded
         this.$stage.addClass('stage-ready');
         this.$image.addClass('image-ready');
         if (this.options.initAnimation && !this.options.progressiveLoading) {
@@ -2357,7 +2352,7 @@
         }
         this.$image.attr('src', imgSrc);
         preloadImage(imgSrc, function (img) {
-          // Store original image size
+          // Store the original image size
           _this4.imageData = {
             originalWidth: img.width,
             originalHeight: img.height
@@ -2368,7 +2363,7 @@
             _this4._setModalSize();
           }
 
-          // Callback of image loaded successfully
+          // Callback of the image loaded successfully
           if (fn) {
             fn.call();
           }
@@ -2376,7 +2371,7 @@
           // Loader end
           _this4.$photoviewer.find(CLASS_NS + '-loader').remove();
 
-          // Callback of image loading failed
+          // Callback of the image loading failed
           if (err) {
             err.call();
           }
@@ -2396,7 +2391,7 @@
       value: function jump(step) {
         this._triggerHook('beforeChange', [this, this.index]);
 
-        // Make sure change image after the modal animation has finished
+        // Only allow to change image after the modal animation has finished
         var now = Date.now();
         if (now - this._lastTimestamp >= this.options.animationDuration) {
           this.index = this.index + step;
@@ -2473,7 +2468,7 @@
         var stageWidth = this.$stage.width();
         var stageHeight = this.$stage.height();
 
-        // Set default origin coordinates (center of stage)
+        // Set the default origin coordinates (center of stage)
         if (origin === void 0) {
           origin = {
             x: stageWidth / 2,
@@ -2490,20 +2485,20 @@
         // δ is the difference between new width and new height of the image
         var δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2;
         // The width and height should be exchanged after rotated
-        var transWidth = !this.isRotated ? newWidth : newHeight;
-        var transHeight = !this.isRotated ? newHeight : newWidth;
+        var imgNewWidth = !this.isRotated ? newWidth : newHeight;
+        var imgNewHeight = !this.isRotated ? newHeight : newWidth;
         // The difference between stage size and new image size
         var diffX = stageWidth - newWidth;
         var diffY = stageHeight - newHeight;
         // Zoom-out & Zoom-in condition
         // It's important and it takes me a lot of time to get it
         // The conditions with image rotated 90 degree drive me crazy alomst!
-        if (transWidth <= stageWidth) {
+        if (imgNewWidth <= stageWidth) {
           newLeft = diffX / 2;
         } else {
           newLeft = newLeft > -δ ? -δ : Math.max(newLeft, diffX + δ);
         }
-        if (transHeight <= stageHeight) {
+        if (imgNewHeight <= stageHeight) {
           newTop = diffY / 2;
         } else {
           newTop = newTop > δ ? δ : Math.max(newTop, diffY - δ);
@@ -2519,18 +2514,16 @@
             left: Math.round(newLeft),
             top: Math.round(newTop)
           });
-
-          // Set grab cursor
           setGrabCursor({
-            w: Math.round(transWidth),
-            h: Math.round(transHeight)
+            w: Math.round(imgNewWidth),
+            h: Math.round(imgNewHeight)
           }, {
             w: stageWidth,
             h: stageHeight
           }, this.$stage);
         }
 
-        // Update image initial data
+        // Update the image initial data
         D.extend(this.imageData, {
           width: newWidth,
           height: newHeight,
@@ -2589,7 +2582,7 @@
             originalHeight += this._modalEdgeValue.vertical;
           }
 
-          // Store modal's size and position before maximized
+          // Store the modal's size and position before maximized
           this.modalData = {
             width: originalWidth,
             height: originalHeight,
