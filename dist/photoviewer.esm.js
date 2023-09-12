@@ -1965,14 +1965,16 @@ function resizable($modal, $stage, $image, options) {
 
     // Update the image initial data
     var _this$imageData = _this.imageData,
-      imgOrigWidth = _this$imageData.originalWidth,
-      imgOrigHeight = _this$imageData.originalHeight;
-    var scale = getImageScale(imgOrigWidth, imgOrigHeight, stageWidth, stageHeight, _this.isRotated);
+      imgOriginalWidth = _this$imageData.originalWidth,
+      imgOriginalHeight = _this$imageData.originalHeight;
+    var scale = getImageScale(imgOriginalWidth, imgOriginalHeight, stageWidth, stageHeight, _this.isRotated);
+    var imgInitWidth = imgOriginalWidth * scale;
+    var imgInitHeight = imgOriginalHeight * scale;
     D.extend(_this.imageData, {
-      initWidth: imgOrigWidth * scale,
-      initHeight: imgOrigHeight * scale,
-      initLeft: (stageWidth - imgOrigWidth * scale) / 2,
-      initTop: (stageHeight - imgOrigHeight * scale) / 2
+      initWidth: imgInitWidth,
+      initHeight: imgInitHeight,
+      initLeft: (stageWidth - imgInitWidth) / 2,
+      initTop: (stageHeight - imgInitHeight) / 2
     });
   };
   D.each(resizableHandles, function (dir, handle) {
@@ -2217,13 +2219,9 @@ var PhotoViewer = /*#__PURE__*/function () {
     key: "_setModalSize",
     value: function _setModalSize() {
       var _this3 = this;
-      var _this$imageData = this.imageData,
-        imgOrigWidth = _this$imageData.originalWidth,
-        imgOrigHeight = _this$imageData.originalHeight;
-
       // Modal size should calculate with stage css value
-      var modalWidth = imgOrigWidth + this._stageEdgeValue.horizontal;
-      var modalHeight = imgOrigHeight + this._stageEdgeValue.vertical;
+      var modalWidth = this.imageData.originalWidth + this._stageEdgeValue.horizontal;
+      var modalHeight = this.imageData.originalHeight + this._stageEdgeValue.vertical;
 
       // Extra width/height for `content-box`
       var extraWidth = 0,
@@ -2276,40 +2274,40 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "_setImageSize",
     value: function _setImageSize() {
-      var _this$imageData2 = this.imageData,
-        imgOrigWidth = _this$imageData2.originalWidth,
-        imgOrigHeight = _this$imageData2.originalHeight;
-      var stageData = {
-        w: this.$stage.width(),
-        h: this.$stage.height()
-      };
-      var scale = getImageScale(imgOrigWidth, imgOrigHeight, stageData.w, stageData.h, this.isRotated);
+      var stageWidth = this.$stage.width();
+      var stageHeight = this.$stage.height();
+      var _this$imageData = this.imageData,
+        imgOriginalWidth = _this$imageData.originalWidth,
+        imgOriginalHeight = _this$imageData.originalHeight;
+      var scale = getImageScale(imgOriginalWidth, imgOriginalHeight, stageWidth, stageHeight, this.isRotated);
+      var imgWidth = imgOriginalWidth * scale;
+      var imgHeight = imgOriginalHeight * scale;
       this.$image.css({
-        width: Math.round(imgOrigWidth * scale),
-        height: Math.round(imgOrigHeight * scale),
-        left: (stageData.w - Math.round(imgOrigWidth * scale)) / 2,
-        top: (stageData.h - Math.round(imgOrigHeight * scale)) / 2
+        width: Math.round(imgWidth),
+        height: Math.round(imgHeight),
+        left: (stageWidth - Math.round(imgWidth)) / 2,
+        top: (stageHeight - Math.round(imgHeight)) / 2
       });
 
       // Store image initial data
       D.extend(this.imageData, {
-        initWidth: imgOrigWidth * scale,
-        initHeight: imgOrigHeight * scale,
-        initLeft: (stageData.w - imgOrigWidth * scale) / 2,
-        initTop: (stageData.h - imgOrigHeight * scale) / 2,
-        width: imgOrigWidth * scale,
-        height: imgOrigHeight * scale,
-        left: (stageData.w - imgOrigWidth * scale) / 2,
-        top: (stageData.h - imgOrigHeight * scale) / 2
+        initWidth: imgWidth,
+        initHeight: imgHeight,
+        initLeft: (stageWidth - imgWidth) / 2,
+        initTop: (stageHeight - imgHeight) / 2,
+        width: imgWidth,
+        height: imgHeight,
+        left: (stageWidth - imgWidth) / 2,
+        top: (stageHeight - imgHeight) / 2
       });
 
       // Set grab cursor
       setGrabCursor({
-        w: this.$image.width(),
-        h: this.$image.height()
+        w: imgWidth,
+        h: imgHeight
       }, {
-        w: this.$stage.width(),
-        h: this.$stage.height()
+        w: stageWidth,
+        h: stageHeight
       }, this.$stage, this.isRotated);
 
       // Just execute before image loaded
@@ -2353,7 +2351,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       }
       this.$image.attr('src', imgSrc);
       preloadImage(imgSrc, function (img) {
-        // Store original image data
+        // Store original image size
         _this4.imageData = {
           originalWidth: img.width,
           originalHeight: img.height
@@ -2443,7 +2441,7 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "zoom",
     value: function zoom(ratio, origin) {
-      // Zoom out ratio & Zoom in ratio
+      // Zoom-out ratio & Zoom-in ratio
       ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
 
       // Image ratio
@@ -2456,35 +2454,30 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "zoomTo",
     value: function zoomTo(ratio, origin) {
-      var _this$imageData3 = this.imageData,
-        imgOrigWidth = _this$imageData3.originalWidth,
-        imgOrigHeight = _this$imageData3.originalHeight,
-        imgWidth = _this$imageData3.width,
-        imgHeight = _this$imageData3.height,
-        imgLeft = _this$imageData3.left,
-        imgTop = _this$imageData3.top,
-        imgInitWidth = _this$imageData3.initWidth;
+      var _this$imageData2 = this.imageData,
+        imgOriginalWidth = _this$imageData2.originalWidth,
+        imgOriginalHeight = _this$imageData2.originalHeight,
+        imgWidth = _this$imageData2.width,
+        imgHeight = _this$imageData2.height,
+        imgLeft = _this$imageData2.left,
+        imgTop = _this$imageData2.top,
+        imgInitWidth = _this$imageData2.initWidth;
 
-      // Image stage position
-      // We will use it to calc the relative position of image
-      var stageData = {
-        w: this.$stage.width(),
-        h: this.$stage.height(),
-        x: this.$stage.offset().left,
-        y: this.$stage.offset().top
-      };
+      // We will use the stage size to calc the relative position of image
+      var stageWidth = this.$stage.width();
+      var stageHeight = this.$stage.height();
 
       // Set default origin coordinates (center of stage)
       if (origin === void 0) {
         origin = {
-          x: this.$stage.width() / 2,
-          y: this.$stage.height() / 2
+          x: stageWidth / 2,
+          y: stageHeight / 2
         };
       }
 
       // Get the new size of the image
-      var newWidth = imgOrigWidth * ratio;
-      var newHeight = imgOrigHeight * ratio;
+      var newWidth = imgOriginalWidth * ratio;
+      var newHeight = imgOriginalHeight * ratio;
       // Think about it for a while
       var newLeft = origin.x - (origin.x - imgLeft) / imgWidth * newWidth;
       var newTop = origin.y - (origin.y - imgTop) / imgHeight * newHeight;
@@ -2494,17 +2487,17 @@ var PhotoViewer = /*#__PURE__*/function () {
       var transWidth = !this.isRotated ? newWidth : newHeight;
       var transHeight = !this.isRotated ? newHeight : newWidth;
       // The difference between stage size and new image size
-      var diffX = stageData.w - newWidth;
-      var diffY = stageData.h - newHeight;
+      var diffX = stageWidth - newWidth;
+      var diffY = stageHeight - newHeight;
       // Zoom-out & Zoom-in condition
       // It's important and it takes me a lot of time to get it
       // The conditions with image rotated 90 degree drive me crazy alomst!
-      if (transWidth <= stageData.w) {
+      if (transWidth <= stageWidth) {
         newLeft = diffX / 2;
       } else {
         newLeft = newLeft > -δ ? -δ : Math.max(newLeft, diffX + δ);
       }
-      if (transHeight <= stageData.h) {
+      if (transHeight <= stageHeight) {
         newTop = diffY / 2;
       } else {
         newTop = newTop > δ ? δ : Math.max(newTop, diffY - δ);
@@ -2526,8 +2519,8 @@ var PhotoViewer = /*#__PURE__*/function () {
           w: Math.round(transWidth),
           h: Math.round(transHeight)
         }, {
-          w: stageData.w,
-          h: stageData.h
+          w: stageWidth,
+          h: stageHeight
         }, this.$stage);
       }
 
@@ -2727,9 +2720,6 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.$prev.on(CLICK_EVENT + EVENT_NS, function () {
         _this6.jump(-1);
       });
-      this.$fullscreen.on(CLICK_EVENT + EVENT_NS, function () {
-        _this6.fullscreen();
-      });
       this.$next.on(CLICK_EVENT + EVENT_NS, function () {
         _this6.jump(1);
       });
@@ -2741,6 +2731,9 @@ var PhotoViewer = /*#__PURE__*/function () {
       });
       this.$maximize.on(CLICK_EVENT + EVENT_NS, function () {
         _this6.toggleMaximize();
+      });
+      this.$fullscreen.on(CLICK_EVENT + EVENT_NS, function () {
+        _this6.fullscreen();
       });
       this.$photoviewer.on(KEYDOWN_EVENT + EVENT_NS, function (e) {
         _this6._keydown(e);

@@ -302,11 +302,9 @@ class PhotoViewer {
   }
 
   _setModalSize() {
-    const { originalWidth: imgOrigWidth, originalHeight: imgOrigHeight } = this.imageData;
-
     // Modal size should calculate with stage css value
-    let modalWidth = imgOrigWidth + this._stageEdgeValue.horizontal;
-    let modalHeight = imgOrigHeight + this._stageEdgeValue.vertical;
+    let modalWidth = this.imageData.originalWidth + this._stageEdgeValue.horizontal;
+    let modalHeight = this.imageData.originalHeight + this._stageEdgeValue.vertical;
 
     // Extra width/height for `content-box`
     let extraWidth = 0, extraHeight = 0;
@@ -369,38 +367,37 @@ class PhotoViewer {
   }
 
   _setImageSize() {
-    const { originalWidth: imgOrigWidth, originalHeight: imgOrigHeight } = this.imageData;
+    const stageWidth = this.$stage.width();
+    const stageHeight = this.$stage.height();
 
-    const stageData = {
-      w: this.$stage.width(),
-      h: this.$stage.height()
-    };
-
-    const scale = getImageScale(imgOrigWidth, imgOrigHeight, stageData.w, stageData.h, this.isRotated);
+    const { originalWidth: imgOriginalWidth, originalHeight: imgOriginalHeight } = this.imageData;
+    const scale = getImageScale(imgOriginalWidth, imgOriginalHeight, stageWidth, stageHeight, this.isRotated);
+    const imgWidth = imgOriginalWidth * scale;
+    const imgHeight = imgOriginalHeight * scale;
 
     this.$image.css({
-      width: Math.round(imgOrigWidth * scale),
-      height: Math.round(imgOrigHeight * scale),
-      left: (stageData.w - Math.round(imgOrigWidth * scale)) / 2,
-      top: (stageData.h - Math.round(imgOrigHeight * scale)) / 2
+      width: Math.round(imgWidth),
+      height: Math.round(imgHeight),
+      left: (stageWidth - Math.round(imgWidth)) / 2,
+      top: (stageHeight - Math.round(imgHeight)) / 2
     });
 
     // Store image initial data
     $.extend(this.imageData, {
-      initWidth: imgOrigWidth * scale,
-      initHeight: imgOrigHeight * scale,
-      initLeft: (stageData.w - imgOrigWidth * scale) / 2,
-      initTop: (stageData.h - imgOrigHeight * scale) / 2,
-      width: imgOrigWidth * scale,
-      height: imgOrigHeight * scale,
-      left: (stageData.w - imgOrigWidth * scale) / 2,
-      top: (stageData.h - imgOrigHeight * scale) / 2
+      initWidth: imgWidth,
+      initHeight: imgHeight,
+      initLeft: (stageWidth - imgWidth) / 2,
+      initTop: (stageHeight - imgHeight) / 2,
+      width: imgWidth,
+      height: imgHeight,
+      left: (stageWidth - imgWidth) / 2,
+      top: (stageHeight - imgHeight) / 2
     });
 
     // Set grab cursor
     setGrabCursor(
-      { w: this.$image.width(), h: this.$image.height() },
-      { w: this.$stage.width(), h: this.$stage.height() },
+      { w: imgWidth, h: imgHeight },
+      { w: stageWidth, h: stageHeight },
       this.$stage,
       this.isRotated
     );
@@ -450,7 +447,7 @@ class PhotoViewer {
     preloadImage(
       imgSrc,
       img => {
-        // Store original image data
+        // Store original image size
         this.imageData = {
           originalWidth: img.width,
           originalHeight: img.height
@@ -550,7 +547,7 @@ class PhotoViewer {
   }
 
   zoom(ratio, origin) {
-    // Zoom out ratio & Zoom in ratio
+    // Zoom-out ratio & Zoom-in ratio
     ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
 
     // Image ratio
@@ -565,8 +562,8 @@ class PhotoViewer {
 
   zoomTo(ratio, origin) {
     const {
-      originalWidth: imgOrigWidth,
-      originalHeight: imgOrigHeight,
+      originalWidth: imgOriginalWidth,
+      originalHeight: imgOriginalHeight,
       width: imgWidth,
       height: imgHeight,
       left: imgLeft,
@@ -574,26 +571,21 @@ class PhotoViewer {
       initWidth: imgInitWidth
     } = this.imageData;
 
-    // Image stage position
-    // We will use it to calc the relative position of image
-    const stageData = {
-      w: this.$stage.width(),
-      h: this.$stage.height(),
-      x: this.$stage.offset().left,
-      y: this.$stage.offset().top
-    };
+    // We will use the stage size to calc the relative position of image
+    const stageWidth = this.$stage.width();
+    const stageHeight = this.$stage.height();
 
     // Set default origin coordinates (center of stage)
     if (origin === void 0) {
       origin = {
-        x: this.$stage.width() / 2,
-        y: this.$stage.height() / 2
+        x: stageWidth / 2,
+        y: stageHeight / 2
       };
     }
 
     // Get the new size of the image
-    const newWidth = imgOrigWidth * ratio;
-    const newHeight = imgOrigHeight * ratio;
+    const newWidth = imgOriginalWidth * ratio;
+    const newHeight = imgOriginalHeight * ratio;
     // Think about it for a while
     let newLeft = origin.x - ((origin.x - imgLeft) / imgWidth) * newWidth;
     let newTop = origin.y - ((origin.y - imgTop) / imgHeight) * newHeight;
@@ -603,17 +595,17 @@ class PhotoViewer {
     const transWidth = !this.isRotated ? newWidth : newHeight;
     const transHeight = !this.isRotated ? newHeight : newWidth;
     // The difference between stage size and new image size
-    const diffX = stageData.w - newWidth;
-    const diffY = stageData.h - newHeight;
+    const diffX = stageWidth - newWidth;
+    const diffY = stageHeight - newHeight;
     // Zoom-out & Zoom-in condition
     // It's important and it takes me a lot of time to get it
     // The conditions with image rotated 90 degree drive me crazy alomst!
-    if (transWidth <= stageData.w) {
+    if (transWidth <= stageWidth) {
       newLeft = diffX / 2;
     } else {
       newLeft = newLeft > -δ ? -δ : Math.max(newLeft, diffX + δ);
     }
-    if (transHeight <= stageData.h) {
+    if (transHeight <= stageHeight) {
       newTop = diffY / 2;
     } else {
       newTop = newTop > δ ? δ : Math.max(newTop, diffY - δ);
@@ -633,7 +625,7 @@ class PhotoViewer {
       // Set grab cursor
       setGrabCursor(
         { w: Math.round(transWidth), h: Math.round(transHeight) },
-        { w: stageData.w, h: stageData.h },
+        { w: stageWidth, h: stageHeight },
         this.$stage
       );
     }
@@ -851,10 +843,6 @@ class PhotoViewer {
       this.jump(-1);
     });
 
-    this.$fullscreen.on(CLICK_EVENT + EVENT_NS, () => {
-      this.fullscreen();
-    });
-
     this.$next.on(CLICK_EVENT + EVENT_NS, () => {
       this.jump(1);
     });
@@ -869,6 +857,10 @@ class PhotoViewer {
 
     this.$maximize.on(CLICK_EVENT + EVENT_NS, () => {
       this.toggleMaximize();
+    });
+
+    this.$fullscreen.on(CLICK_EVENT + EVENT_NS, () => {
+      this.fullscreen();
     });
 
     this.$photoviewer.on(KEYDOWN_EVENT + EVENT_NS, e => {

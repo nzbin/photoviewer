@@ -267,14 +267,16 @@ export function resizable($modal, $stage, $image, options) {
     $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', '');
 
     // Update the image initial data
-    const { originalWidth: imgOrigWidth, originalHeight: imgOrigHeight } = this.imageData;
-    const scale = getImageScale(imgOrigWidth, imgOrigHeight, stageWidth, stageHeight, this.isRotated);
+    const { originalWidth: imgOriginalWidth, originalHeight: imgOriginalHeight } = this.imageData;
+    const scale = getImageScale(imgOriginalWidth, imgOriginalHeight, stageWidth, stageHeight, this.isRotated);
+    const imgInitWidth = imgOriginalWidth * scale;
+    const imgInitHeight = imgOriginalHeight * scale;
 
     $.extend(this.imageData, {
-      initWidth: imgOrigWidth * scale,
-      initHeight: imgOrigHeight * scale,
-      initLeft: (stageWidth - imgOrigWidth * scale) / 2,
-      initTop: (stageHeight - imgOrigHeight * scale) / 2
+      initWidth: imgInitWidth,
+      initHeight: imgInitHeight,
+      initLeft: (stageWidth - imgInitWidth) / 2,
+      initTop: (stageHeight - imgInitHeight) / 2
     });
   };
 
