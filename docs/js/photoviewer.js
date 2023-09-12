@@ -2025,16 +2025,13 @@
         if (options && D.isArray(options.headerToolbar)) {
           this.options.headerToolbar = options.headerToolbar;
         }
-        this.images = items;
-        this.index = this.options['index'];
 
         // Reset public z-index with option
         PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
-
-        // Get the image src
-        var imgSrc = items[this.index]['src'];
         this.open();
-        this._loadImage(imgSrc);
+        this.images = items;
+        this.index = this.options['index'];
+        this._loadImage(this.index);
         if (this.options.draggable) {
           this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
         }
@@ -2339,8 +2336,12 @@
       }
     }, {
       key: "_loadImage",
-      value: function _loadImage(imgSrc, fn, err) {
-        var _this4 = this;
+      value: function _loadImage(index, fn, err) {
+        var _this$images$index,
+          _this4 = this;
+        var imgSrc = (_this$images$index = this.images[index]) === null || _this$images$index === void 0 ? void 0 : _this$images$index.src;
+        if (!imgSrc) return;
+
         // Reset image
         this.$image.removeAttr('style').attr('src', '');
         this.isRotated = false;
@@ -2382,7 +2383,7 @@
             err.call();
           }
         });
-        if (this.options.title) {
+        if (this.options.title && imgSrc) {
           this._setImageTitle(imgSrc);
         }
       }
@@ -2416,7 +2417,7 @@
           index = (this.images.length + index) % this.images.length;
         }
         this.index = index;
-        this._loadImage(this.images[index].src, function () {
+        this._loadImage(index, function () {
           _this5._triggerHook('changed', [_this5, index]);
         }, function () {
           _this5._triggerHook('changed', [_this5, index]);

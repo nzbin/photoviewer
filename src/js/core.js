@@ -74,18 +74,14 @@ class PhotoViewer {
       this.options.headerToolbar = options.headerToolbar;
     }
 
-    this.images = items;
-    this.index = this.options['index'];
-
     // Reset public z-index with option
     PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
 
-    // Get the image src
-    const imgSrc = items[this.index]['src'];
-
     this.open();
 
-    this._loadImage(imgSrc);
+    this.images = items;
+    this.index = this.options['index'];
+    this._loadImage(this.index);
 
     if (this.options.draggable) {
       this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
@@ -427,7 +423,10 @@ class PhotoViewer {
     }
   }
 
-  _loadImage(imgSrc, fn, err) {
+  _loadImage(index, fn, err) {
+    const imgSrc = this.images[index]?.src;
+    if (!imgSrc) return;
+
     // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
@@ -479,7 +478,7 @@ class PhotoViewer {
       }
     );
 
-    if (this.options.title) {
+    if (this.options.title && imgSrc) {
       this._setImageTitle(imgSrc);
     }
   }
@@ -515,7 +514,7 @@ class PhotoViewer {
     this.index = index;
 
     this._loadImage(
-      this.images[index].src,
+      index,
       () => {
         this._triggerHook('changed', [this, index]);
       },
