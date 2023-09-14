@@ -1798,50 +1798,50 @@
     };
     // δ is the difference between image width and height
     var δ = 0;
-    var imgWidth = 0;
-    var imgHeight = 0;
+    var imgFrameWidth = 0;
+    var imgFrameHeight = 0;
     var direction = '';
-    var minWidth = options.modalWidth,
-      minHeight = options.modalHeight;
+    var minModalWidth = options.modalWidth,
+      minModalHeight = options.modalHeight;
 
     // Modal CSS
     var getModalCSS = function getModalCSS(dir, offsetX, offsetY) {
       // Modal shouldn't move when its width to the min-width
-      var modalLeft = -offsetX + modalData.w > minWidth ? offsetX + modalData.x : modalData.x + modalData.w - minWidth;
-      var modalTop = -offsetY + modalData.h > minHeight ? offsetY + modalData.y : modalData.y + modalData.h - minHeight;
+      var modalLeft = -offsetX + modalData.w > minModalWidth ? offsetX + modalData.x : modalData.x + modalData.w - minModalWidth;
+      var modalTop = -offsetY + modalData.h > minModalHeight ? offsetY + modalData.y : modalData.y + modalData.h - minModalHeight;
       var dirsCSS = {
         e: {
-          width: Math.max(offsetX + modalData.w, minWidth)
+          width: Math.max(offsetX + modalData.w, minModalWidth)
         },
         s: {
-          height: Math.max(offsetY + modalData.h, minHeight)
+          height: Math.max(offsetY + modalData.h, minModalHeight)
         },
         se: {
-          width: Math.max(offsetX + modalData.w, minWidth),
-          height: Math.max(offsetY + modalData.h, minHeight)
+          width: Math.max(offsetX + modalData.w, minModalWidth),
+          height: Math.max(offsetY + modalData.h, minModalHeight)
         },
         w: {
-          width: Math.max(-offsetX + modalData.w, minWidth),
+          width: Math.max(-offsetX + modalData.w, minModalWidth),
           left: modalLeft
         },
         n: {
-          height: Math.max(-offsetY + modalData.h, minHeight),
+          height: Math.max(-offsetY + modalData.h, minModalHeight),
           top: modalTop
         },
         nw: {
-          width: Math.max(-offsetX + modalData.w, minWidth),
-          height: Math.max(-offsetY + modalData.h, minHeight),
+          width: Math.max(-offsetX + modalData.w, minModalWidth),
+          height: Math.max(-offsetY + modalData.h, minModalHeight),
           top: modalTop,
           left: modalLeft
         },
         ne: {
-          width: Math.max(offsetX + modalData.w, minWidth),
-          height: Math.max(-offsetY + modalData.h, minHeight),
+          width: Math.max(offsetX + modalData.w, minModalWidth),
+          height: Math.max(-offsetY + modalData.h, minModalHeight),
           top: modalTop
         },
         sw: {
-          width: Math.max(-offsetX + modalData.w, minWidth),
-          height: Math.max(offsetY + modalData.h, minHeight),
+          width: Math.max(-offsetX + modalData.w, minModalWidth),
+          height: Math.max(offsetY + modalData.h, minModalHeight),
           left: modalLeft
         }
       };
@@ -1852,10 +1852,10 @@
     var getImageCSS = function getImageCSS(dir, offsetX, offsetY) {
       // Image shouldn't move when modal width to the min-width
       // The min-width is modal width, so we should clac the stage min-width
-      var widthDiff = offsetX + modalData.w > minWidth ? stageData.w - imgWidth + offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
-      var heightDiff = offsetY + modalData.h > minHeight ? stageData.h - imgHeight + offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
-      var widthDiff2 = -offsetX + modalData.w > minWidth ? stageData.w - imgWidth - offsetX - δ : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
-      var heightDiff2 = -offsetY + modalData.h > minHeight ? stageData.h - imgHeight - offsetY + δ : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
+      var widthDiff = offsetX + modalData.w > minModalWidth ? stageData.w - imgFrameWidth + offsetX - δ : minModalWidth - (modalData.w - stageData.w) - imgFrameWidth - δ;
+      var heightDiff = offsetY + modalData.h > minModalHeight ? stageData.h - imgFrameHeight + offsetY + δ : minModalHeight - (modalData.h - stageData.h) - imgFrameHeight + δ;
+      var widthDiff2 = -offsetX + modalData.w > minModalWidth ? stageData.w - imgFrameWidth - offsetX - δ : minModalWidth - (modalData.w - stageData.w) - imgFrameWidth - δ;
+      var heightDiff2 = -offsetY + modalData.h > minModalHeight ? stageData.h - imgFrameHeight - offsetY + δ : minModalHeight - (modalData.h - stageData.h) - imgFrameHeight + δ;
 
       // Get the image position on resizing
       var $imageLeft = $image.position().left;
@@ -1925,8 +1925,8 @@
 
       // δ is the difference between image width and height
       δ = !_this.isRotated ? 0 : (imageData.w - imageData.h) / 2;
-      imgWidth = !_this.isRotated ? imageData.w : imageData.h;
-      imgHeight = !_this.isRotated ? imageData.h : imageData.w;
+      imgFrameWidth = !_this.isRotated ? imageData.w : imageData.h;
+      imgFrameHeight = !_this.isRotated ? imageData.h : imageData.w;
       direction = dir;
 
       // Add the resizable cursor
@@ -1955,8 +1955,8 @@
       var stageHeight = $stage.height();
       if (PUBLIC_VARS['isResizing']) {
         setGrabCursor({
-          w: imgWidth,
-          h: imgHeight
+          w: imgFrameWidth,
+          h: imgFrameHeight
         }, {
           w: stageWidth,
           h: stageHeight
@@ -2333,7 +2333,9 @@
         var _this$images$index,
           _this4 = this;
         var imgSrc = (_this$images$index = this.images[index]) === null || _this$images$index === void 0 ? void 0 : _this$images$index.src;
-        if (!imgSrc) return;
+        if (!imgSrc) {
+          return;
+        }
 
         // Reset the image src
         this.$image.removeAttr('style').attr('src', '');
@@ -2479,26 +2481,30 @@
         // Get the new size of the image
         var newWidth = imgOriginalWidth * ratio;
         var newHeight = imgOriginalHeight * ratio;
-        // Think about it for a while
+
+        // Get the new position of the image, think about it for a while
         var newLeft = origin.x - (origin.x - imgLeft) / imgWidth * newWidth;
         var newTop = origin.y - (origin.y - imgTop) / imgHeight * newHeight;
+
         // δ is the difference between new width and new height of the image
         var δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2;
         // The width and height should be exchanged after rotated
-        var imgNewWidth = !this.isRotated ? newWidth : newHeight;
-        var imgNewHeight = !this.isRotated ? newHeight : newWidth;
+        var imgFrameWidth = !this.isRotated ? newWidth : newHeight;
+        var imgFrameHeight = !this.isRotated ? newHeight : newWidth;
+
         // The difference between stage size and new image size
         var diffX = stageWidth - newWidth;
         var diffY = stageHeight - newHeight;
+
         // Zoom-out & Zoom-in condition
         // It's important and it takes me a lot of time to get it
         // The conditions with image rotated 90 degree drive me crazy alomst!
-        if (imgNewWidth <= stageWidth) {
+        if (imgFrameWidth <= stageWidth) {
           newLeft = diffX / 2;
         } else {
           newLeft = newLeft > -δ ? -δ : Math.max(newLeft, diffX + δ);
         }
-        if (imgNewHeight <= stageHeight) {
+        if (imgFrameHeight <= stageHeight) {
           newTop = diffY / 2;
         } else {
           newTop = newTop > δ ? δ : Math.max(newTop, diffY - δ);
@@ -2515,8 +2521,8 @@
             top: Math.round(newTop)
           });
           setGrabCursor({
-            w: Math.round(imgNewWidth),
-            h: Math.round(imgNewHeight)
+            w: Math.round(imgFrameWidth),
+            h: Math.round(imgFrameHeight)
           }, {
             w: stageWidth,
             h: stageHeight
@@ -2617,7 +2623,7 @@
       key: "_keydown",
       value: function _keydown(e) {
         if (!this.options.keyboard) {
-          return false;
+          return;
         }
         e.preventDefault();
         var keyCode = e.keyCode || e.which || e.charCode;

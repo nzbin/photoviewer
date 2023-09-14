@@ -420,7 +420,10 @@ class PhotoViewer {
 
   _loadImage(index, fn, err) {
     const imgSrc = this.images[index]?.src;
-    if (!imgSrc) return;
+
+    if (!imgSrc) {
+      return;
+    }
 
     // Reset the image src
     this.$image.removeAttr('style').attr('src', '');
@@ -584,26 +587,30 @@ class PhotoViewer {
     // Get the new size of the image
     const newWidth = imgOriginalWidth * ratio;
     const newHeight = imgOriginalHeight * ratio;
-    // Think about it for a while
+
+    // Get the new position of the image, think about it for a while
     let newLeft = origin.x - ((origin.x - imgLeft) / imgWidth) * newWidth;
     let newTop = origin.y - ((origin.y - imgTop) / imgHeight) * newHeight;
+
     // δ is the difference between new width and new height of the image
     const δ = !this.isRotated ? 0 : (newWidth - newHeight) / 2;
     // The width and height should be exchanged after rotated
-    const imgNewWidth = !this.isRotated ? newWidth : newHeight;
-    const imgNewHeight = !this.isRotated ? newHeight : newWidth;
+    const imgFrameWidth = !this.isRotated ? newWidth : newHeight;
+    const imgFrameHeight = !this.isRotated ? newHeight : newWidth;
+
     // The difference between stage size and new image size
     const diffX = stageWidth - newWidth;
     const diffY = stageHeight - newHeight;
+
     // Zoom-out & Zoom-in condition
     // It's important and it takes me a lot of time to get it
     // The conditions with image rotated 90 degree drive me crazy alomst!
-    if (imgNewWidth <= stageWidth) {
+    if (imgFrameWidth <= stageWidth) {
       newLeft = diffX / 2;
     } else {
       newLeft = newLeft > -δ ? -δ : Math.max(newLeft, diffX + δ);
     }
-    if (imgNewHeight <= stageHeight) {
+    if (imgFrameHeight <= stageHeight) {
       newTop = diffY / 2;
     } else {
       newTop = newTop > δ ? δ : Math.max(newTop, diffY - δ);
@@ -621,7 +628,7 @@ class PhotoViewer {
       });
 
       setGrabCursor(
-        { w: Math.round(imgNewWidth), h: Math.round(imgNewHeight) },
+        { w: Math.round(imgFrameWidth), h: Math.round(imgFrameHeight) },
         { w: stageWidth, h: stageHeight },
         this.$stage
       );
@@ -725,7 +732,7 @@ class PhotoViewer {
 
   _keydown(e) {
     if (!this.options.keyboard) {
-      return false;
+      return;
     }
 
     e.preventDefault();

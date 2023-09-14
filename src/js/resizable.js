@@ -63,55 +63,55 @@ export function resizable($modal, $stage, $image, options) {
   let imageData = { w: 0, h: 0, x: 0, y: 0 };
   // δ is the difference between image width and height
   let δ = 0;
-  let imgWidth = 0;
-  let imgHeight = 0;
+  let imgFrameWidth = 0;
+  let imgFrameHeight = 0;
   let direction = '';
 
-  const { modalWidth: minWidth, modalHeight: minHeight } = options;
+  const { modalWidth: minModalWidth, modalHeight: minModalHeight } = options;
 
   // Modal CSS
   const getModalCSS = (dir, offsetX, offsetY) => {
     // Modal shouldn't move when its width to the min-width
-    const modalLeft = -offsetX + modalData.w > minWidth
+    const modalLeft = -offsetX + modalData.w > minModalWidth
       ? offsetX + modalData.x
-      : modalData.x + modalData.w - minWidth;
-    const modalTop = -offsetY + modalData.h > minHeight
+      : modalData.x + modalData.w - minModalWidth;
+    const modalTop = -offsetY + modalData.h > minModalHeight
       ? offsetY + modalData.y
-      : modalData.y + modalData.h - minHeight;
+      : modalData.y + modalData.h - minModalHeight;
 
     const dirsCSS = {
       e: {
-        width: Math.max(offsetX + modalData.w, minWidth)
+        width: Math.max(offsetX + modalData.w, minModalWidth)
       },
       s: {
-        height: Math.max(offsetY + modalData.h, minHeight)
+        height: Math.max(offsetY + modalData.h, minModalHeight)
       },
       se: {
-        width: Math.max(offsetX + modalData.w, minWidth),
-        height: Math.max(offsetY + modalData.h, minHeight)
+        width: Math.max(offsetX + modalData.w, minModalWidth),
+        height: Math.max(offsetY + modalData.h, minModalHeight)
       },
       w: {
-        width: Math.max(-offsetX + modalData.w, minWidth),
+        width: Math.max(-offsetX + modalData.w, minModalWidth),
         left: modalLeft
       },
       n: {
-        height: Math.max(-offsetY + modalData.h, minHeight),
+        height: Math.max(-offsetY + modalData.h, minModalHeight),
         top: modalTop
       },
       nw: {
-        width: Math.max(-offsetX + modalData.w, minWidth),
-        height: Math.max(-offsetY + modalData.h, minHeight),
+        width: Math.max(-offsetX + modalData.w, minModalWidth),
+        height: Math.max(-offsetY + modalData.h, minModalHeight),
         top: modalTop,
         left: modalLeft
       },
       ne: {
-        width: Math.max(offsetX + modalData.w, minWidth),
-        height: Math.max(-offsetY + modalData.h, minHeight),
+        width: Math.max(offsetX + modalData.w, minModalWidth),
+        height: Math.max(-offsetY + modalData.h, minModalHeight),
         top: modalTop
       },
       sw: {
-        width: Math.max(-offsetX + modalData.w, minWidth),
-        height: Math.max(offsetY + modalData.h, minHeight),
+        width: Math.max(-offsetX + modalData.w, minModalWidth),
+        height: Math.max(offsetY + modalData.h, minModalHeight),
         left: modalLeft
       }
     };
@@ -123,18 +123,18 @@ export function resizable($modal, $stage, $image, options) {
   const getImageCSS = (dir, offsetX, offsetY) => {
     // Image shouldn't move when modal width to the min-width
     // The min-width is modal width, so we should clac the stage min-width
-    const widthDiff = offsetX + modalData.w > minWidth
-      ? stageData.w - imgWidth + offsetX - δ
-      : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
-    const heightDiff = offsetY + modalData.h > minHeight
-      ? stageData.h - imgHeight + offsetY + δ
-      : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
-    const widthDiff2 = -offsetX + modalData.w > minWidth
-      ? stageData.w - imgWidth - offsetX - δ
-      : minWidth - (modalData.w - stageData.w) - imgWidth - δ;
-    const heightDiff2 = -offsetY + modalData.h > minHeight
-      ? stageData.h - imgHeight - offsetY + δ
-      : minHeight - (modalData.h - stageData.h) - imgHeight + δ;
+    const widthDiff = offsetX + modalData.w > minModalWidth
+      ? stageData.w - imgFrameWidth + offsetX - δ
+      : minModalWidth - (modalData.w - stageData.w) - imgFrameWidth - δ;
+    const heightDiff = offsetY + modalData.h > minModalHeight
+      ? stageData.h - imgFrameHeight + offsetY + δ
+      : minModalHeight - (modalData.h - stageData.h) - imgFrameHeight + δ;
+    const widthDiff2 = -offsetX + modalData.w > minModalWidth
+      ? stageData.w - imgFrameWidth - offsetX - δ
+      : minModalWidth - (modalData.w - stageData.w) - imgFrameWidth - δ;
+    const heightDiff2 = -offsetY + modalData.h > minModalHeight
+      ? stageData.h - imgFrameHeight - offsetY + δ
+      : minModalHeight - (modalData.h - stageData.h) - imgFrameHeight + δ;
 
     // Get the image position on resizing
     const $imageLeft = $image.position().left;
@@ -212,8 +212,8 @@ export function resizable($modal, $stage, $image, options) {
 
     // δ is the difference between image width and height
     δ = !this.isRotated ? 0 : (imageData.w - imageData.h) / 2;
-    imgWidth = !this.isRotated ? imageData.w : imageData.h;
-    imgHeight = !this.isRotated ? imageData.h : imageData.w;
+    imgFrameWidth = !this.isRotated ? imageData.w : imageData.h;
+    imgFrameHeight = !this.isRotated ? imageData.h : imageData.w;
 
     direction = dir;
 
@@ -255,7 +255,7 @@ export function resizable($modal, $stage, $image, options) {
 
     if (PUBLIC_VARS['isResizing']) {
       setGrabCursor(
-        { w: imgWidth, h: imgHeight },
+        { w: imgFrameWidth, h: imgFrameHeight },
         { w: stageWidth, h: stageHeight },
         $stage
       );
