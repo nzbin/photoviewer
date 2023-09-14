@@ -98,14 +98,16 @@ declare namespace PhotoViewer {
 
 declare class PhotoViewer {
   static instances: PhotoViewer[];
+  images: PhotoViewer.Img[];
+  index: number;
   constructor(items: PhotoViewer.Img[], options?: PhotoViewer.Options);
   init(items: PhotoViewer.Img[], options?: PhotoViewer.Options): void;
   open(): void;
   close(): void;
   jump(step: number): void;
   jumpTo(index: number): void;
-  zoom(ratio: number, origin: { x: number; y: number }): void;
-  zoomTo(ratio: number, origin: { x: number; y: number }): void;
+  zoom(ratio: number, origin?: { x: number; y: number }): void;
+  zoomTo(ratio: number, origin?: { x: number; y: number }): void;
   rotate(degree: number): void;
   rotateTo(degree: number): void;
   maximize(): void;
