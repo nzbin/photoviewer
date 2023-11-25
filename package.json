@@ -2,9 +2,7 @@
   "name": "photoviewer",
   "version": "3.8.1",
   "description": "A JS plugin to view images just like in Windows.",
-  "main": "dist/photoviewer.common.js",
-  "module": "dist/photoviewer.esm.js",
-  "browser": "dist/photoviewer.js",
+  "main": "src/js/photoviewer.js",
   "types": "types/index.d.ts",
   "files": [
     "dist",
