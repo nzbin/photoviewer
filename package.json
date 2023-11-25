@@ -1,6 +1,6 @@
 {
   "name": "photoviewer",
-  "version": "3.8.1",
+  "version": "3.9.0",
   "description": "A JS plugin to view images just like in Windows.",
   "main": "src/js/photoviewer.js",
   "types": "types/index.d.ts",
