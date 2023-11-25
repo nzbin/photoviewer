@@ -30,7 +30,7 @@ import {
   animate,
   fadeTo,
   fadeIn
-} from 'domq.js/src/domq.modular';
+} from 'domq.js';
 
 const methods = {
   isPlainObject,

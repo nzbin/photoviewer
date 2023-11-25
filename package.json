@@ -66,7 +66,7 @@
     "prepublishOnly": "npm run release"
   },
   "dependencies": {
-    "domq.js": "^0.6.8"
+    "domq.js": "^0.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",

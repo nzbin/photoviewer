@@ -21,7 +21,7 @@ const banner = String.raw`/*!
 
 export default [
   {
-    input: 'src/js/index.js',
+    input: 'src/js/photoviewer.js',
     output: [
       {
         name: 'PhotoViewer',
