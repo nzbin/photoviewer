@@ -82,7 +82,7 @@ declare namespace PhotoViewer {
     };
     index?: number;
     progressiveLoading?: boolean;
-    appendTo?: string;
+    appendTo?: string | Node;
     customButtons?: {
       [k: string]: CustomButton
     };
