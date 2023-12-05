@@ -735,8 +735,6 @@ class PhotoViewer {
       return;
     }
 
-    e.preventDefault();
-
     const keyCode = e.keyCode || e.which || e.charCode;
     const ctrlKey = e.ctrlKey || e.metaKey;
     const altKey = e.altKey;
@@ -795,6 +793,8 @@ class PhotoViewer {
       // Ctrl + ,
       case 188:
         if (ctrlKey) {
+          // `⌘ + ,` is the hotkey of browser settings
+          e.preventDefault();
           this.rotate(-90);
         }
         break;
