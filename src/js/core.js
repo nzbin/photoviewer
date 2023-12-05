@@ -126,7 +126,7 @@ class PhotoViewer {
 
   _createTemplate() {
     const photoviewerHTML =
-      `<div class="${NS}-modal" tabindex="0">
+      `<div class="${NS}-modal" tabindex="0" role="dialog">
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-header">

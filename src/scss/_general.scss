@@ -3,14 +3,16 @@
   z-index: 1090;
   width: 320px;
   height: 320px;
-  overflow: visible !important;
   color: #333;
-  cursor: default;
-  background-color: rgba(255, 255, 255, .92);
-  border: 1px solid rgba(0, 0, 0, .64);
+  background-color: rgba(255, 255, 255, .9);
+  border: 1px solid rgba(0, 0, 0, .6);
   border-radius: 6px;
+  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, .3);
   outline: none;
-  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, .32);
+
+  &:focus-visible {
+    outline: thick solid rgba(0, 0, 0, .2);
+  }
 }
 
 .photoviewer-inner {
@@ -44,22 +46,15 @@
   }
 }
 
-.photoviewer-toolbar {
-  font-size: 0;
-}
-
 .photoviewer-button {
   display: inline-block;
   min-width: 40px;
   height: 40px;
   box-sizing: border-box;
-  margin: 0;
   font-size: 16px;
-  line-height: 1;
-  text-align: center;
+  line-height: inherit;
   background: none;
   border-width: 0;
-  border-radius: 0;
   color: inherit;
   cursor: pointer;
   outline: none;
@@ -69,7 +64,7 @@
   }
 
   &:focus {
-    background-color: rgba(0, 0, 0, .08);
+    background-color: rgba(0, 0, 0, .1);
   }
 
   svg {
@@ -101,7 +96,7 @@
     height: 30px;
 
     &:hover {
-      background-color: rgba(0, 0, 0, .08);
+      background-color: rgba(0, 0, 0, .1);
     }
   }
 
@@ -130,8 +125,8 @@
   bottom: 40px;
   left: 0;
   z-index: 1;
-  border-top: 1px solid rgba(0, 0, 0, .64);
-  border-bottom: 1px solid rgba(0, 0, 0, .64);
+  border-top: 1px solid rgba(0, 0, 0, .6);
+  border-bottom: 1px solid rgba(0, 0, 0, .6);
   background-color: #fff;
   overflow: hidden;
 
@@ -170,10 +165,6 @@
   width: 100%;
   height: 40px;
   text-align: center;
-
-  .photoviewer-toolbar {
-    display: inline-block;
-  }
 }
 
 [dir='rtl'] {

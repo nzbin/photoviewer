@@ -27,8 +27,7 @@ export function draggable($modal, dragHandle, dragCancel) {
     // Must be removed
     // e.preventDefault();
 
-    // Fix focus scroll issue on Chrome
-    $modal[0].blur();
+    $modal[0].focus();
 
     // Get clicked button
     const elemCancel = $(e.target).closest(dragCancel);
@@ -80,9 +79,6 @@ export function draggable($modal, dragHandle, dragCancel) {
   const dragEnd = () => {
     $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
       .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
-
-    // Focus must be executed after drag end
-    $modal[0].focus();
   };
 
   $(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
