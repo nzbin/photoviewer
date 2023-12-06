@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.9.1
+ * photoviewer - v3.9.2
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -1586,8 +1586,7 @@
       // Must be removed
       // e.preventDefault();
 
-      // Fix focus scroll issue on Chrome
-      $modal[0].blur();
+      $modal[0].focus();
 
       // Get clicked button
       var elemCancel = D(e.target).closest(dragCancel);
@@ -1630,9 +1629,6 @@
     };
     var dragEnd = function dragEnd() {
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
-
-      // Focus must be executed after drag end
-      $modal[0].focus();
     };
     D(dragHandle).on(TOUCH_START_EVENT + EVENT_NS, dragStart);
   }
@@ -2066,7 +2062,7 @@
     }, {
       key: "_createTemplate",
       value: function _createTemplate() {
-        var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
+        var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\" role=\"dialog\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
         return photoviewerHTML;
       }
     }, {
@@ -2625,7 +2621,6 @@
         if (!this.options.keyboard) {
           return;
         }
-        e.preventDefault();
         var keyCode = e.keyCode || e.which || e.charCode;
         var ctrlKey = e.ctrlKey || e.metaKey;
         var altKey = e.altKey;
@@ -2678,6 +2673,8 @@
           // Ctrl + ,
           case 188:
             if (ctrlKey) {
+              // `⌘ + ,` is the hotkey of browser settings
+              e.preventDefault();
               this.rotate(-90);
             }
             break;
