@@ -4,11 +4,20 @@
 [![npm](https://img.shields.io/npm/v/photoviewer.svg)](https://www.npmjs.com/package/photoviewer)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/nzbin/photoviewer/blob/master/LICENSE)
 [![Gitter](https://img.shields.io/gitter/room/photoviewer/photoviewer.svg)](https://gitter.im/photoviewer/community)
-[![Financial Contributors on Open Collective](https://opencollective.com/photoviewer/all/badge.svg?label=financial+contributors)](https://opencollective.com/photoviewer) 
+[![Financial Contributors on Open Collective](https://opencollective.com/photoviewer/all/badge.svg?label=financial+contributors)](https://opencollective.com/photoviewer)
 
-PhotoViewer is a JS plugin to view images just like in Windows. [[Examples](https://nzbin.github.io/photoviewer/)]
+<p align="center">
+  <img width="600" src="https://github.com/nzbin/photoviewer/assets/20625845/a129140e-e5c4-4ebd-a590-b6fbab2429b7" alt="photoviewer"/>
+</p>
+
+PhotoViewer is a JS plugin to view images just like in Windows.
 
 > If you want to support IE8, please goto [Magnify](https://github.com/nzbin/magnify/).
+
+#### Quick links
+
+[Documentation](https://nzbin.github.io/photoviewer/) | 
+[Examples](https://codepen.io/collection/DYVgMQ)
 
 ## Features
 
