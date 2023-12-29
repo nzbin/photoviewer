@@ -14,6 +14,10 @@ code {
   font-size: 80%;
 }
 
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  color: inherit;
+}
+
 h3 {
   word-break: break-all;
 }
@@ -121,7 +125,6 @@ pre ol {
 
 .prettyprint {
   padding: 15px;
-  margin: 10px -15px;
   background-color: #f7f7f9;
   border: 1px solid #f7f7f9;
 }
