@@ -80,7 +80,7 @@ class PhotoViewer {
     this.open();
 
     this.images = items;
-    this.index = this.options['index'];
+    this.index = this._prevIndex = this.options['index'];
     this._loadImage(this.index);
 
     if (this.options.draggable) {
@@ -415,10 +415,19 @@ class PhotoViewer {
       }
 
       this.imageLoaded = true;
+
+      this._triggerHook('changed', [this, this.index]);
+
+      this._prevIndex = this.index;
     }
   }
 
-  _loadImage(index, fn, err) {
+  _loadImage(index) {
+    // Flag for both image loaded and animation finished
+    this.imageLoaded = false;
+
+    this._triggerHook('beforeChange', [this, this._prevIndex]);
+
     const imgSrc = this.images[index]?.src;
 
     if (!imgSrc) {
@@ -429,8 +438,6 @@ class PhotoViewer {
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
     this.rotationDegree = 0;
-
-    this.imageLoaded = false;
 
     // Loader start
     this.$photoviewer.append(`<div class="${NS}-loader"></div>`);
@@ -459,20 +466,14 @@ class PhotoViewer {
         } else {
           this._setModalSize();
         }
-
-        // Callback of the image loaded successfully
-        if (fn) {
-          fn.call();
-        }
       },
       () => {
         // Loader end
         this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
-        // Callback of the image loading failed
-        if (err) {
-          err.call();
-        }
+        this._triggerHook('changed', [this, index]);
+
+        this._prevIndex = index;
       }
     );
 
@@ -487,8 +488,6 @@ class PhotoViewer {
   }
 
   jump(step) {
-    this._triggerHook('beforeChange', [this, this.index]);
-
     // Only allow to change image after the modal animation has finished
     const now = Date.now();
     if (now - this._lastTimestamp >= this.options.animationDuration) {
@@ -511,15 +510,7 @@ class PhotoViewer {
 
     this.index = index;
 
-    this._loadImage(
-      index,
-      () => {
-        this._triggerHook('changed', [this, index]);
-      },
-      () => {
-        this._triggerHook('changed', [this, index]);
-      }
-    );
+    this._loadImage(index);
   }
 
   _wheel(e) {

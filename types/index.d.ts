@@ -98,6 +98,7 @@ declare namespace PhotoViewer {
 
 declare class PhotoViewer {
   static instances: PhotoViewer[];
+  imageLoaded: boolean;
   images: PhotoViewer.Img[];
   index: number;
   constructor(items: PhotoViewer.Img[], options?: PhotoViewer.Options);
