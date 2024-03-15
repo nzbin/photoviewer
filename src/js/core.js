@@ -57,6 +57,9 @@ class PhotoViewer {
     top: null
   };
 
+  // Store previous index
+  prevIndex = null;
+
   // Used for time comparison
   _lastTimestamp = 0;
 
@@ -80,7 +83,7 @@ class PhotoViewer {
     this.open();
 
     this.images = items;
-    this.index = this._prevIndex = this.options['index'];
+    this.index = this.options['index'];
     this._loadImage(this.index);
 
     if (this.options.draggable) {
@@ -417,8 +420,6 @@ class PhotoViewer {
       this.imageLoaded = true;
 
       this._triggerHook('changed', [this, this.index]);
-
-      this._prevIndex = this.index;
     }
   }
 
@@ -426,7 +427,7 @@ class PhotoViewer {
     // Flag for both image loaded and animation finished
     this.imageLoaded = false;
 
-    this._triggerHook('beforeChange', [this, this._prevIndex]);
+    this._triggerHook('beforeChange', [this, this.prevIndex]);
 
     // Reset the image src and rotation status
     this.$image.removeAttr('style').attr('src', '');
@@ -476,8 +477,6 @@ class PhotoViewer {
         this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
         this._triggerHook('changed', [this, index]);
-
-        this._prevIndex = index;
       }
     );
   }
@@ -486,26 +485,26 @@ class PhotoViewer {
     // Only allow to change image after the modal animation has finished
     const now = Date.now();
     if (now - this._lastTimestamp >= this.options.animationDuration) {
-      this.index = this.index + step;
+      const newIndex = this.index + step;
 
-      this.jumpTo(this.index);
+      this.jumpTo(newIndex);
 
       this._lastTimestamp = now;
     }
   }
 
   jumpTo(index) {
-    index = index % this.images.length;
+    this.prevIndex = this.index;
 
-    if (index >= 0) {
-      index = index % this.images.length;
-    } else if (index < 0) {
-      index = (this.images.length + index) % this.images.length;
+    let newIndex = index % this.images.length;
+
+    if (newIndex <= 0) {
+      newIndex = (newIndex + this.images.length) % this.images.length;
     }
 
-    this.index = index;
+    this.index = newIndex;
 
-    this._loadImage(index);
+    this._loadImage(this.index);
   }
 
   _wheel(e) {

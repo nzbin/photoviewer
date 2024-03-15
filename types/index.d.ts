@@ -101,6 +101,7 @@ declare class PhotoViewer {
   imageLoaded: boolean;
   images: PhotoViewer.Img[];
   index: number;
+  prevIndex: number | null;
   constructor(items: PhotoViewer.Img[], options?: PhotoViewer.Options);
   init(items: PhotoViewer.Img[], options?: PhotoViewer.Options): void;
   open(): void;
