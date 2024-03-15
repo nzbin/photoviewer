@@ -145,7 +145,7 @@ class PhotoViewer {
         </div>
       </div>`;
 
-    return photoviewerHTML;
+    return photoviewerHTML.replace(/>\s+</g, '><');
   }
 
   _build() {
@@ -428,13 +428,7 @@ class PhotoViewer {
 
     this._triggerHook('beforeChange', [this, this._prevIndex]);
 
-    const imgSrc = this.images[index]?.src;
-
-    if (!imgSrc) {
-      return;
-    }
-
-    // Reset the image src
+    // Reset the image src and rotation status
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
     this.rotationDegree = 0;
@@ -450,7 +444,17 @@ class PhotoViewer {
       this.$image.hide();
     }
 
+    // The image src must be a string
+    const imgSrc = this.images[index]?.src == null ? '' : this.images[index].src.toString();
+
+    // Get image with src
     this.$image.attr('src', imgSrc);
+
+    const title = this.images[index]?.title || getImageNameFromUrl(imgSrc);
+
+    if (this.options.title) {
+      this.$title.html(title);
+    }
 
     preloadImage(
       imgSrc,
@@ -476,15 +480,6 @@ class PhotoViewer {
         this._prevIndex = index;
       }
     );
-
-    if (this.options.title && imgSrc) {
-      this._setImageTitle(imgSrc);
-    }
-  }
-
-  _setImageTitle(url) {
-    const title = this.images[this.index].title || getImageNameFromUrl(url);
-    this.$title.html(title);
   }
 
   jump(step) {
