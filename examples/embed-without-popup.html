@@ -46,15 +46,15 @@
       egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
     <hr>
     <div class="image-set">
-      <a data-gallery="photoviewer" data-title="Slipping Away by Jerry Fryer"
+      <a data-title="Slipping Away by Jerry Fryer"
          href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
         <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
       </a>
-      <a data-gallery="photoviewer" data-title="Mi Fuego by albert dros"
+      <a data-title="Mi Fuego by albert dros"
          href="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_z.jpg">
         <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
       </a>
-      <a data-gallery="photoviewer" data-title="Winter Fairytale by Achim Thomae"
+      <a data-title="Winter Fairytale by Achim Thomae"
          href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
         <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
       </a>
@@ -108,6 +108,7 @@
         src: 'https://farm1.staticflickr.com/512/32967783396_a6b4babd92_z.jpg',
         title: '3'
       }];
+
       var options = {
         appendTo: '.container',
         positionFixed: false,
@@ -124,22 +125,21 @@
       new PhotoViewer(items, options);
 
       // initialize manually with a list of links
-      $('[data-gallery=photoviewer]').click(function (e) {
+      $('.image-set a').click(function (e) {
         e.preventDefault();
 
-        var items = [];
+        var items = $('.image-set a').get().map(function (el) {
+          return {
+            src: $(el).attr('href'),
+            title: $(el).attr('data-title')
+          }
+        });
+
         var options = {
           index: $(this).index(),
           positionFixed: false,
           appendTo: '.container'
         };
-
-        $('[data-gallery=photoviewer]').each(function () {
-          items.push({
-            src: $(this).attr('href'),
-            title: $(this).attr('data-title')
-          });
-        });
 
         new PhotoViewer(items, options);
       });

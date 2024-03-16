@@ -16,59 +16,13 @@
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-  <style>
-    .photoviewer-modal {
-      background-color: transparent;
-      border: none;
-      border-radius: 0;
-      box-shadow: 0 0 6px 2px rgba(0, 0, 0, .3);
-    }
-
-    .photoviewer-header .photoviewer-toolbar {
-      background-color: rgba(0, 0, 0, .5);
-    }
-
-    .photoviewer-stage {
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: rgba(0, 0, 0, .85);
-      border: none;
-    }
-
-    .photoviewer-footer .photoviewer-toolbar {
-      display: inline-block;
-      background-color: rgba(0, 0, 0, .5);
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-    }
-
-    .photoviewer-header,
-    .photoviewer-footer {
-      border-radius: 0;
-      pointer-events: none;
-    }
-
-    .photoviewer-title {
-      color: #ccc;
-    }
-
-    .photoviewer-button {
-      color: #ccc;
-      pointer-events: auto;
-    }
-
-    .photoviewer-header .photoviewer-button:hover,
-    .photoviewer-footer .photoviewer-button:hover {
-      color: white;
-    }
-  </style>
 </head>
 
 <body dir="ltr">
   <div class="container">
-    <div class="image-set">
+    <h2>Image alt</h2>
+
+    <div class="image-set group1">
       <a data-title="Slipping Away by Jerry Fryer"
          href="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_z.jpg">
         <img src="https://farm1.staticflickr.com/313/31812080833_297acfbbd9_s.jpg" alt="">
@@ -78,12 +32,16 @@
         <img src="https://farm4.staticflickr.com/3804/33589584740_b0fbdcd4aa_s.jpg" alt="">
       </a>
       <a data-title="Winter Fairytale by Achim Thomae"
-         href="https://farm1.staticflickr.com/470/31340603494_fb7228020d_z.jpg">
-        <img src="https://farm1.staticflickr.com/470/31340603494_fb7228020d_s.jpg" alt="">
+         href="undefined.jpg">
+        <img src="https://dummyimage.com/75x75/555/fff/?text=broken-image-link" alt="">
       </a>
+    </div>
 
-      <a href="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg">
-        <img src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
+    <h2>Use errorMsg</h2>
+
+    <div class="image-set group2">
+      <a href="undefined.jpg">
+        <img src="https://dummyimage.com/75x75/555/fff/?text=broken-image-link" alt="">
       </a>
       <a href="https://farm1.staticflickr.com/4160/34418397675_18de1f7b9f_z.jpg">
         <img src="https://farm1.staticflickr.com/4160/34418397675_18de1f7b9f_s.jpg" alt="">
@@ -100,11 +58,10 @@
   <script src="../dist/photoviewer.js"></script>
   <script>
     // initialize manually with a list of links
-    $('.image-set a').click(function (e) {
-
+    $('.group1 a').click(function (e) {
       e.preventDefault();
 
-      var items = $('.image-set a').get().map(function (el) {
+      var items = $('.group1 a').get().map(function (el) {
         return {
           src: $(el).attr('href'),
           title: $(el).attr('data-title')
@@ -113,10 +70,41 @@
 
       var options = {
         index: $(this).index(),
+        callbacks: {
+          beforeChange: function (context, index) {
+            console.log(context, index);
+          },
+          changed: function (context, index) {
+            console.log(context, index);
+
+            if (!context.imageLoaded) {
+              alert(index);
+            }
+          },
+        },
       };
 
       new PhotoViewer(items, options);
+    });
 
+    $('.group2 a').click(function (e) {
+      e.preventDefault();
+
+      var items = $('.group2 a').get().map(function (el) {
+        return {
+          src: $(el).attr('href'),
+          title: $(el).attr('data-title')
+        }
+      });
+
+      var options = {
+        index: $(this).index(),
+        // errorMsg: 'image load failed',
+        errorMsg: (ctx, index) =>
+          `<a href="https://example.com/" target="_blank">#${index} image</a> load failed`
+      };
+
+      new PhotoViewer(items, options);
     });
   </script>
 </body>
