@@ -184,5 +184,8 @@ export default {
   positionFixed: true,
 
   // Init modal position `{top: 0, right: 0, bottom: 0, left: 0}`
-  initModalPos: null
+  initModalPos: null,
+
+  // Error message when image could not be loaded
+  errorMsg: '',
 };

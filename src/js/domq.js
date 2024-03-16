@@ -2,6 +2,7 @@ import {
   D as $,
   isPlainObject,
   isArray,
+  isFunction,
   noop,
   find,
   closest,
@@ -35,6 +36,7 @@ import {
 const methods = {
   isPlainObject,
   isArray,
+  isFunction,
   noop
 };
 

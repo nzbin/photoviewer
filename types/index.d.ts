@@ -92,7 +92,8 @@ declare namespace PhotoViewer {
       left?: number;
       bottom?: number;
       right?: number;
-    }
+    };
+    errorMsg?: string | ((context: PhotoViewer, index: number) => string);
   }
 }
 

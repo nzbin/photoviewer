@@ -175,10 +175,6 @@ class PhotoViewer {
     this.$prev = $photoviewer.find(CLASS_NS + '-button-prev');
     this.$next = $photoviewer.find(CLASS_NS + '-button-next');
 
-    // Add init classes before image loaded
-    this.$stage.addClass('stage-ready');
-    this.$image.addClass('image-ready');
-
     // Reset the modal `z-index` of multiple instances
     this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
 
@@ -407,10 +403,8 @@ class PhotoViewer {
     if (!this.imageLoaded) {
       // Loader end
       this.$photoviewer.find(CLASS_NS + '-loader').remove();
-
-      // Remove init classes after image loaded
-      this.$stage.removeClass('stage-ready');
-      this.$image.removeClass('image-ready');
+      // The class must be removed after image loaded
+      this.$stage.removeClass(NS + '-align-center');
 
       // Add init animation for image
       if (this.options.initAnimation && !this.options.progressiveLoading) {
@@ -429,6 +423,8 @@ class PhotoViewer {
 
     this._triggerHook('beforeChange', [this, this.prevIndex]);
 
+    this._removeErrorMsg();
+
     // Reset the image src and rotation status
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
@@ -436,10 +432,8 @@ class PhotoViewer {
 
     // Loader start
     this.$photoviewer.append(`<div class="${NS}-loader"></div>`);
-
-    // Add init classes before image loaded
-    this.$stage.addClass('stage-ready');
-    this.$image.addClass('image-ready');
+    // Used for centering image
+    this.$stage.addClass(NS + '-align-center');
 
     if (this.options.initAnimation && !this.options.progressiveLoading) {
       this.$image.hide();
@@ -456,6 +450,8 @@ class PhotoViewer {
     if (this.options.title) {
       this.$title.html(title);
     }
+
+    this.$image.attr('alt', title);
 
     preloadImage(
       imgSrc,
@@ -477,12 +473,30 @@ class PhotoViewer {
         this.$photoviewer.find(CLASS_NS + '-loader').remove();
 
         this._triggerHook('changed', [this, index]);
+
+        this._setErrorMsg();
       }
     );
   }
 
+  _setErrorMsg() {
+    const errorMsg = $.isFunction(this.options.errorMsg)
+      ? this.options.errorMsg(this, this.index)
+      : this.options.errorMsg;
+
+    if (errorMsg) {
+      this.$stage.append(`<span class="${NS}-error-msg">${errorMsg}</span>`);
+      this.$image.addClass(NS + '-image-error');
+    }
+  }
+
+  _removeErrorMsg() {
+    this.$stage.find(CLASS_NS + '-error-msg').remove();
+    this.$image.removeClass(NS + '-image-error');
+  }
+
   jump(step) {
-    // Only allow to change image after the modal animation has finished
+    // Allow to change image only after the modal animation has finished
     const now = Date.now();
     if (now - this._lastTimestamp >= this.options.animationDuration) {
       const newIndex = this.index + step;
