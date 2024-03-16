@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.9.2
+ * photoviewer - v3.10.0
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -1267,6 +1267,7 @@
   var methods = {
     isPlainObject: isPlainObject,
     isArray: isArray,
+    isFunction: isFunction,
     noop: noop
   };
   var fnMethods = {
@@ -1394,7 +1395,9 @@
     // Whether to set modal css `position: fixed`
     positionFixed: true,
     // Init modal position `{top: 0, right: 0, bottom: 0, left: 0}`
-    initModalPos: null
+    initModalPos: null,
+    // Error message when image could not be loaded
+    errorMsg: ''
   };
 
   var document = window.document;
@@ -2007,6 +2010,8 @@
         left: null,
         top: null
       });
+      // Store previous index
+      _defineProperty(this, "prevIndex", null);
       // Used for time comparison
       _defineProperty(this, "_lastTimestamp", 0);
       this.init(items, options);
@@ -2063,7 +2068,7 @@
       key: "_createTemplate",
       value: function _createTemplate() {
         var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\" role=\"dialog\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
-        return photoviewerHTML;
+        return photoviewerHTML.replace(/>\s+</g, '><');
       }
     }, {
       key: "_build",
@@ -2090,10 +2095,6 @@
         this.$rotateRight = $photoviewer.find(CLASS_NS + '-button-rotateRight');
         this.$prev = $photoviewer.find(CLASS_NS + '-button-prev');
         this.$next = $photoviewer.find(CLASS_NS + '-button-next');
-
-        // Add init classes before image loaded
-        this.$stage.addClass('stage-ready');
-        this.$image.addClass('image-ready');
 
         // Reset the modal `z-index` of multiple instances
         this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
@@ -2311,44 +2312,51 @@
         if (!this.imageLoaded) {
           // Loader end
           this.$photoviewer.find(CLASS_NS + '-loader').remove();
-
-          // Remove init classes after image loaded
-          this.$stage.removeClass('stage-ready');
-          this.$image.removeClass('image-ready');
+          // The class must be removed after image loaded
+          this.$stage.removeClass(NS + '-align-center');
 
           // Add init animation for image
           if (this.options.initAnimation && !this.options.progressiveLoading) {
             this.$image.fadeIn();
           }
           this.imageLoaded = true;
+          this._triggerHook('changed', [this, this.index]);
         }
       }
     }, {
       key: "_loadImage",
-      value: function _loadImage(index, fn, err) {
+      value: function _loadImage(index) {
         var _this$images$index,
+          _this$images$index2,
           _this4 = this;
-        var imgSrc = (_this$images$index = this.images[index]) === null || _this$images$index === void 0 ? void 0 : _this$images$index.src;
-        if (!imgSrc) {
-          return;
-        }
+        // Flag for both image loaded and animation finished
+        this.imageLoaded = false;
+        this._triggerHook('beforeChange', [this, this.prevIndex]);
+        this._removeErrorMsg();
 
-        // Reset the image src
+        // Reset the image src and rotation status
         this.$image.removeAttr('style').attr('src', '');
         this.isRotated = false;
         this.rotationDegree = 0;
-        this.imageLoaded = false;
 
         // Loader start
         this.$photoviewer.append("<div class=\"".concat(NS, "-loader\"></div>"));
-
-        // Add init classes before image loaded
-        this.$stage.addClass('stage-ready');
-        this.$image.addClass('image-ready');
+        // Used for centering image
+        this.$stage.addClass(NS + '-align-center');
         if (this.options.initAnimation && !this.options.progressiveLoading) {
           this.$image.hide();
         }
+
+        // The image src must be a string
+        var imgSrc = ((_this$images$index = this.images[index]) === null || _this$images$index === void 0 ? void 0 : _this$images$index.src) == null ? '' : this.images[index].src.toString();
+
+        // Get image with src
         this.$image.attr('src', imgSrc);
+        var title = ((_this$images$index2 = this.images[index]) === null || _this$images$index2 === void 0 ? void 0 : _this$images$index2.title) || getImageNameFromUrl(imgSrc);
+        if (this.options.title) {
+          this.$title.html(title);
+        }
+        this.$image.attr('alt', title);
         preloadImage(imgSrc, function (img) {
           // Store the original image size
           _this4.imageData = {
@@ -2360,59 +2368,49 @@
           } else {
             _this4._setModalSize();
           }
-
-          // Callback of the image loaded successfully
-          if (fn) {
-            fn.call();
-          }
         }, function () {
           // Loader end
           _this4.$photoviewer.find(CLASS_NS + '-loader').remove();
-
-          // Callback of the image loading failed
-          if (err) {
-            err.call();
-          }
+          _this4._triggerHook('changed', [_this4, index]);
+          _this4._setErrorMsg();
         });
-        if (this.options.title && imgSrc) {
-          this._setImageTitle(imgSrc);
+      }
+    }, {
+      key: "_setErrorMsg",
+      value: function _setErrorMsg() {
+        var errorMsg = D.isFunction(this.options.errorMsg) ? this.options.errorMsg(this, this.index) : this.options.errorMsg;
+        if (errorMsg) {
+          this.$stage.append("<span class=\"".concat(NS, "-error-msg\">").concat(errorMsg, "</span>"));
+          this.$image.addClass(NS + '-image-error');
         }
       }
     }, {
-      key: "_setImageTitle",
-      value: function _setImageTitle(url) {
-        var title = this.images[this.index].title || getImageNameFromUrl(url);
-        this.$title.html(title);
+      key: "_removeErrorMsg",
+      value: function _removeErrorMsg() {
+        this.$stage.find(CLASS_NS + '-error-msg').remove();
+        this.$image.removeClass(NS + '-image-error');
       }
     }, {
       key: "jump",
       value: function jump(step) {
-        this._triggerHook('beforeChange', [this, this.index]);
-
-        // Only allow to change image after the modal animation has finished
+        // Allow to change image only after the modal animation has finished
         var now = Date.now();
         if (now - this._lastTimestamp >= this.options.animationDuration) {
-          this.index = this.index + step;
-          this.jumpTo(this.index);
+          var newIndex = this.index + step;
+          this.jumpTo(newIndex);
           this._lastTimestamp = now;
         }
       }
     }, {
       key: "jumpTo",
       value: function jumpTo(index) {
-        var _this5 = this;
-        index = index % this.images.length;
-        if (index >= 0) {
-          index = index % this.images.length;
-        } else if (index < 0) {
-          index = (this.images.length + index) % this.images.length;
+        this.prevIndex = this.index;
+        var newIndex = index % this.images.length;
+        if (newIndex <= 0) {
+          newIndex = (newIndex + this.images.length) % this.images.length;
         }
-        this.index = index;
-        this._loadImage(index, function () {
-          _this5._triggerHook('changed', [_this5, index]);
-        }, function () {
-          _this5._triggerHook('changed', [_this5, index]);
-        });
+        this.index = newIndex;
+        this._loadImage(this.index);
       }
     }, {
       key: "_wheel",
@@ -2703,54 +2701,54 @@
     }, {
       key: "_addEvents",
       value: function _addEvents() {
-        var _this6 = this;
+        var _this5 = this;
         this.$close.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.close();
+          _this5.close();
         });
         this.$stage.on(WHEEL_EVENT + EVENT_NS, function (e) {
-          _this6._wheel(e);
+          _this5._wheel(e);
         });
         this.$zoomIn.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.zoom(_this6.options.ratioThreshold * 3);
+          _this5.zoom(_this5.options.ratioThreshold * 3);
         });
         this.$zoomOut.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.zoom(-_this6.options.ratioThreshold * 3);
+          _this5.zoom(-_this5.options.ratioThreshold * 3);
         });
         this.$actualSize.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.zoomTo(1);
+          _this5.zoomTo(1);
         });
         this.$prev.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.jump(-1);
+          _this5.jump(-1);
         });
         this.$next.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.jump(1);
+          _this5.jump(1);
         });
         this.$rotateLeft.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.rotate(-90);
+          _this5.rotate(-90);
         });
         this.$rotateRight.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.rotate(90);
+          _this5.rotate(90);
         });
         this.$maximize.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.toggleMaximize();
+          _this5.toggleMaximize();
         });
         this.$fullscreen.on(CLICK_EVENT + EVENT_NS, function () {
-          _this6.fullscreen();
+          _this5.fullscreen();
         });
         this.$photoviewer.on(KEYDOWN_EVENT + EVENT_NS, function (e) {
-          _this6._keydown(e);
+          _this5._keydown(e);
         });
         $W.on(RESIZE_EVENT + EVENT_NS, debounce(function () {
-          return _this6.resize();
+          return _this5.resize();
         }, 500));
       }
     }, {
       key: "_addCustomButtonEvents",
       value: function _addCustomButtonEvents() {
-        var _this7 = this;
+        var _this6 = this;
         var _loop = function _loop(btnKey) {
-          _this7.$photoviewer.find(CLASS_NS + '-button-' + btnKey).on(CLICK_EVENT + EVENT_NS, function (e) {
-            _this7.options.customButtons[btnKey].click.apply(_this7, [_this7, e]);
+          _this6.$photoviewer.find(CLASS_NS + '-button-' + btnKey).on(CLICK_EVENT + EVENT_NS, function (e) {
+            _this6.options.customButtons[btnKey].click.apply(_this6, [_this6, e]);
           });
         };
         for (var btnKey in this.options.customButtons) {
