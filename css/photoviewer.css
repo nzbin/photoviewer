@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.10.0
+ * photoviewer - v3.10.1
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -262,183 +262,75 @@
   cursor: ne-resize;
 }
 
-:-webkit-full-screen {
+.photoviewer-modal:-webkit-full-screen {
   top: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background-color: transparent;
+  background-color: black;
   border-width: 0;
   border-radius: 0;
 }
-:-webkit-full-screen .photoviewer-header,
-:-webkit-full-screen .photoviewer-footer,
-:-webkit-full-screen .photoviewer-resizable-handle {
-  display: none;
-}
-:-webkit-full-screen .photoviewer-stage {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-width: 0;
-  background-color: black;
-}
 
-:-moz-full-screen {
+.photoviewer-modal:-ms-fullscreen {
   top: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background-color: transparent;
+  background-color: black;
   border-width: 0;
   border-radius: 0;
 }
-:-moz-full-screen .photoviewer-header,
-:-moz-full-screen .photoviewer-footer,
-:-moz-full-screen .photoviewer-resizable-handle {
-  display: none;
-}
-:-moz-full-screen .photoviewer-stage {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-width: 0;
-  background-color: black;
-}
 
-:-ms-fullscreen {
+.photoviewer-modal:fullscreen {
   top: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background-color: transparent;
+  background-color: black;
   border-width: 0;
   border-radius: 0;
 }
-:-ms-fullscreen .photoviewer-header,
-:-ms-fullscreen .photoviewer-footer,
-:-ms-fullscreen .photoviewer-resizable-handle {
+.photoviewer-modal:-webkit-full-screen .photoviewer-header, .photoviewer-modal:-webkit-full-screen .photoviewer-footer, .photoviewer-modal:-webkit-full-screen .photoviewer-resizable-handle {
   display: none;
 }
-:-ms-fullscreen .photoviewer-stage {
+.photoviewer-modal:-ms-fullscreen .photoviewer-header, .photoviewer-modal:-ms-fullscreen .photoviewer-footer, .photoviewer-modal:-ms-fullscreen .photoviewer-resizable-handle {
+  display: none;
+}
+.photoviewer-modal:fullscreen .photoviewer-header,
+.photoviewer-modal:fullscreen .photoviewer-footer,
+.photoviewer-modal:fullscreen .photoviewer-resizable-handle {
+  display: none;
+}
+.photoviewer-modal:-webkit-full-screen .photoviewer-stage {
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   border-width: 0;
-  background-color: black;
-}
-
-:full-screen {
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
   background-color: transparent;
-  border-width: 0;
-  border-radius: 0;
 }
-:full-screen .photoviewer-header,
-:full-screen .photoviewer-footer,
-:full-screen .photoviewer-resizable-handle {
-  display: none;
-}
-:full-screen .photoviewer-stage {
+.photoviewer-modal:-ms-fullscreen .photoviewer-stage {
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   border-width: 0;
-  background-color: black;
-}
-
-:-webkit-full-screen {
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
   background-color: transparent;
-  border-width: 0;
-  border-radius: 0;
 }
-
-:-ms-fullscreen {
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background-color: transparent;
-  border-width: 0;
-  border-radius: 0;
-}
-
-:fullscreen {
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background-color: transparent;
-  border-width: 0;
-  border-radius: 0;
-}
-:-webkit-full-screen .photoviewer-header, :-webkit-full-screen .photoviewer-footer, :-webkit-full-screen .photoviewer-resizable-handle {
-  display: none;
-}
-:-ms-fullscreen .photoviewer-header, :-ms-fullscreen .photoviewer-footer, :-ms-fullscreen .photoviewer-resizable-handle {
-  display: none;
-}
-:fullscreen .photoviewer-header,
-:fullscreen .photoviewer-footer,
-:fullscreen .photoviewer-resizable-handle {
-  display: none;
-}
-:-webkit-full-screen .photoviewer-stage {
+.photoviewer-modal:fullscreen .photoviewer-stage {
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   border-width: 0;
-  background-color: black;
-}
-:-ms-fullscreen .photoviewer-stage {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-width: 0;
-  background-color: black;
-}
-:fullscreen .photoviewer-stage {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-width: 0;
-  background-color: black;
-}
-
-::backdrop {
-  background-color: black;
-}
-
-::-ms-backdrop {
-  background-color: black;
+  background-color: transparent;
 }
 
 .is-grab {
