@@ -55,6 +55,8 @@ export function throttle(fn, timeFrame) {
 export function preloadImage(src, success, error) {
   const img = new Image();
 
+  img.crossOrigin = "anonymous";
+
   img.onload = function () {
     success(img);
   };
