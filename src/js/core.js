@@ -138,7 +138,7 @@ class PhotoViewer {
             ${this._createTitle()}
           </div>
           <div class="${NS}-stage">
-            <img class="${NS}-image" src="" alt="" />
+            <img class="${NS}-image" src="" alt="" crossorigin="anonymous" />
           </div>
           <div class="${NS}-footer">
             <div class="${NS}-toolbar ${NS}-toolbar-footer">
