@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.10.1
+ * photoviewer - v3.10.2
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -1430,7 +1430,7 @@
    */
   function preloadImage(src, success, error) {
     var img = new Image();
-    img.crossOrigin = "anonymous";
+    img.crossOrigin = 'anonymous';
     img.onload = function () {
       success(img);
     };

@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.10.1
+ * photoviewer - v3.10.2
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -1430,6 +1430,7 @@
    */
   function preloadImage(src, success, error) {
     var img = new Image();
+    img.crossOrigin = 'anonymous';
     img.onload = function () {
       success(img);
     };
@@ -2067,7 +2068,7 @@
     }, {
       key: "_createTemplate",
       value: function _createTemplate() {
-        var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\" role=\"dialog\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
+        var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\" role=\"dialog\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" crossorigin=\"anonymous\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
         return photoviewerHTML.replace(/>\s+</g, '><');
       }
     }, {

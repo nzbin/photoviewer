@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.10.1
+ * photoviewer - v3.10.2
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -262,18 +262,6 @@
   cursor: ne-resize;
 }
 
-.photoviewer-modal:-webkit-full-screen {
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background-color: black;
-  border-width: 0;
-  border-radius: 0;
-}
-
 .photoviewer-modal:-ms-fullscreen {
   top: 0 !important;
   right: 0 !important;
@@ -297,9 +285,6 @@
   border-width: 0;
   border-radius: 0;
 }
-.photoviewer-modal:-webkit-full-screen .photoviewer-header, .photoviewer-modal:-webkit-full-screen .photoviewer-footer, .photoviewer-modal:-webkit-full-screen .photoviewer-resizable-handle {
-  display: none;
-}
 .photoviewer-modal:-ms-fullscreen .photoviewer-header, .photoviewer-modal:-ms-fullscreen .photoviewer-footer, .photoviewer-modal:-ms-fullscreen .photoviewer-resizable-handle {
   display: none;
 }
@@ -307,14 +292,6 @@
 .photoviewer-modal:fullscreen .photoviewer-footer,
 .photoviewer-modal:fullscreen .photoviewer-resizable-handle {
   display: none;
-}
-.photoviewer-modal:-webkit-full-screen .photoviewer-stage {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-width: 0;
-  background-color: transparent;
 }
 .photoviewer-modal:-ms-fullscreen .photoviewer-stage {
   top: 0;
