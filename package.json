@@ -4,6 +4,7 @@
   "description": "A JS plugin to view images just like in Windows.",
   "main": "src/js/photoviewer.js",
   "types": "types/index.d.ts",
+  "type": "module",
   "files": [
     "dist",
     "src",
