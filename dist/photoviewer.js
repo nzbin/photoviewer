@@ -1432,7 +1432,7 @@
     var crossOrigin = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     var img = new Image();
     if (crossOrigin) {
-      img.crossOrigin = "anonymous";
+      img.crossOrigin = 'anonymous';
     }
     img.onload = function () {
       success(img);
