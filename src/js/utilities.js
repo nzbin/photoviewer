@@ -56,7 +56,7 @@ export function preloadImage(src, success, error, crossOrigin = false) {
   const img = new Image();
 
   if (crossOrigin) {
-    img.crossOrigin = "anonymous";
+    img.crossOrigin = 'anonymous';
   }
 
   img.onload = function () {
