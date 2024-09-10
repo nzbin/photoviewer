@@ -143,6 +143,9 @@ export default {
   // Whether to enable modal transform animation
   initAnimation: true,
 
+  // Whether to have crossOrigin attribute
+  crossOrigin: false,
+
   // Modal transform animation duration
   animationDuration: 400,
 
