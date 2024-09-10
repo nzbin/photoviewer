@@ -1,3 +1,17 @@
+/*!
+ *     ____  __  ______  __________ _    _____________       ____________
+ *    / __ \/ / / / __ \/_  __/ __ \ |  / /  _/ ____/ |     / / ____/ __ \
+ *   / /_/ / /_/ / / / / / / / / / / | / // // __/  | | /| / / __/ / /_/ /
+ *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
+ * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
+ *
+ * photoviewer - v3.10.1
+ * A JS plugin to view images just like in Windows.
+ * https://nzbin.github.io/photoviewer/
+ *
+ * Copyright (c) 2018-present nzbin
+ * Released under MIT License
+ */
 .photoviewer-modal {
   position: absolute;
   z-index: 1090;
@@ -100,6 +114,9 @@
   line-height: 1;
   white-space: nowrap;
   text-overflow: ellipsis;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   overflow: hidden;
 }
@@ -160,6 +177,7 @@
 
 [dir=rtl] .photoviewer-button-prev,
 [dir=rtl] .photoviewer-button-next {
+  -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 
@@ -244,6 +262,30 @@
   cursor: ne-resize;
 }
 
+.photoviewer-modal:-webkit-full-screen {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: black;
+  border-width: 0;
+  border-radius: 0;
+}
+
+.photoviewer-modal:-ms-fullscreen {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: black;
+  border-width: 0;
+  border-radius: 0;
+}
+
 .photoviewer-modal:fullscreen {
   top: 0 !important;
   right: 0 !important;
@@ -255,10 +297,32 @@
   border-width: 0;
   border-radius: 0;
 }
+.photoviewer-modal:-webkit-full-screen .photoviewer-header, .photoviewer-modal:-webkit-full-screen .photoviewer-footer, .photoviewer-modal:-webkit-full-screen .photoviewer-resizable-handle {
+  display: none;
+}
+.photoviewer-modal:-ms-fullscreen .photoviewer-header, .photoviewer-modal:-ms-fullscreen .photoviewer-footer, .photoviewer-modal:-ms-fullscreen .photoviewer-resizable-handle {
+  display: none;
+}
 .photoviewer-modal:fullscreen .photoviewer-header,
 .photoviewer-modal:fullscreen .photoviewer-footer,
 .photoviewer-modal:fullscreen .photoviewer-resizable-handle {
   display: none;
+}
+.photoviewer-modal:-webkit-full-screen .photoviewer-stage {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-width: 0;
+  background-color: transparent;
+}
+.photoviewer-modal:-ms-fullscreen .photoviewer-stage {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-width: 0;
+  background-color: transparent;
 }
 .photoviewer-modal:fullscreen .photoviewer-stage {
   top: 0;
@@ -271,13 +335,11 @@
 
 .is-grab {
   cursor: move;
-  cursor: -webkit-grab;
   cursor: grab;
 }
 
 .is-grabbing {
   cursor: move;
-  cursor: -webkit-grabbing;
   cursor: grabbing;
 }
 

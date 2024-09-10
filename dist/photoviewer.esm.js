@@ -1423,8 +1423,11 @@ function debounce(fn, delay) {
  * @param {function} error - The callback of error
  */
 function preloadImage(src, success, error) {
+  var crossOrigin = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
   var img = new Image();
-  img.crossOrigin = "anonymous";
+  if (crossOrigin) {
+    img.crossOrigin = "anonymous";
+  }
   img.onload = function () {
     success(img);
   };
@@ -1998,6 +2001,8 @@ var PhotoViewer = /*#__PURE__*/function () {
     _defineProperty(this, "rotationDegree", 0);
     // Store image data in every instance
     _defineProperty(this, "imageData", {});
+    // Whether to have crossorigin
+    _defineProperty(this, "crossOrigin", false);
     // Store modal data in every instance
     _defineProperty(this, "modalData", {
       width: null,
@@ -2028,6 +2033,7 @@ var PhotoViewer = /*#__PURE__*/function () {
       this.images = items;
       this.index = this.options['index'];
       this._loadImage(this.index);
+      this.crossOrigin = this.options['crossOrigin'];
       if (this.options.draggable) {
         this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
       }
@@ -2062,7 +2068,8 @@ var PhotoViewer = /*#__PURE__*/function () {
   }, {
     key: "_createTemplate",
     value: function _createTemplate() {
-      var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\" role=\"dialog\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" crossorigin=\"anonymous\" />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
+      var crossOrigin = this.crossOrigin ? 'crossorigin="anonymous"' : '';
+      var photoviewerHTML = "<div class=\"".concat(NS, "-modal\" tabindex=\"0\" role=\"dialog\">\n        <div class=\"").concat(NS, "-inner\">\n          <div class=\"").concat(NS, "-header\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-header\">\n            ").concat(this._createBtns(this.options.headerToolbar), "\n            </div>\n            ").concat(this._createTitle(), "\n          </div>\n          <div class=\"").concat(NS, "-stage\">\n            <img class=\"").concat(NS, "-image\" src=\"\" alt=\"\" ").concat(crossOrigin, " />\n          </div>\n          <div class=\"").concat(NS, "-footer\">\n            <div class=\"").concat(NS, "-toolbar ").concat(NS, "-toolbar-footer\">\n            ").concat(this._createBtns(this.options.footerToolbar), "\n            </div>\n          </div>\n        </div>\n      </div>");
       return photoviewerHTML.replace(/>\s+</g, '><');
     }
   }, {
@@ -2368,7 +2375,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         _this4.$photoviewer.find(CLASS_NS + '-loader').remove();
         _this4._triggerHook('changed', [_this4, index]);
         _this4._setErrorMsg();
-      });
+      }, this.crossOrigin);
     }
   }, {
     key: "_setErrorMsg",

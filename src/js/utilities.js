@@ -52,10 +52,12 @@ export function throttle(fn, timeFrame) {
  * @param {function} success - The callback of success
  * @param {function} error - The callback of error
  */
-export function preloadImage(src, success, error) {
+export function preloadImage(src, success, error, crossOrigin = false) {
   const img = new Image();
 
-  img.crossOrigin = "anonymous";
+  if (crossOrigin) {
+    img.crossOrigin = "anonymous";
+  }
 
   img.onload = function () {
     success(img);

@@ -49,6 +49,9 @@ class PhotoViewer {
   // Store image data in every instance
   imageData = {};
 
+  // Whether to have crossorigin
+  crossOrigin = false;
+
   // Store modal data in every instance
   modalData = {
     width: null,
@@ -85,6 +88,8 @@ class PhotoViewer {
     this.images = items;
     this.index = this.options['index'];
     this._loadImage(this.index);
+
+    this.crossOrigin = this.options['crossOrigin'];
 
     if (this.options.draggable) {
       this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
@@ -128,6 +133,7 @@ class PhotoViewer {
   }
 
   _createTemplate() {
+    const crossOrigin = this.crossOrigin ? 'crossorigin="anonymous"' : '';
     const photoviewerHTML =
       `<div class="${NS}-modal" tabindex="0" role="dialog">
         <div class="${NS}-inner">
@@ -138,7 +144,7 @@ class PhotoViewer {
             ${this._createTitle()}
           </div>
           <div class="${NS}-stage">
-            <img class="${NS}-image" src="" alt="" crossorigin="anonymous" />
+            <img class="${NS}-image" src="" alt="" ${crossOrigin} />
           </div>
           <div class="${NS}-footer">
             <div class="${NS}-toolbar ${NS}-toolbar-footer">
@@ -475,7 +481,8 @@ class PhotoViewer {
         this._triggerHook('changed', [this, index]);
 
         this._setErrorMsg();
-      }
+      },
+      this.crossOrigin
     );
   }
 
