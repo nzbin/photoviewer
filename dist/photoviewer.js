@@ -2619,27 +2619,34 @@
         if (!this.options.keyboard) {
           return;
         }
-        var keyCode = e.keyCode || e.which || e.charCode;
+        var keyPressed = e.key || e.keyCode || e.which || e.charCode;
         var ctrlKey = e.ctrlKey || e.metaKey;
         var altKey = e.altKey;
-        switch (keyCode) {
+        switch (keyPressed) {
           // ←
-          case 37:
+          case "ArrowLeft":
+          case 37: //Support for older browsers
             this.jump(-1);
             break;
           // →
-          case 39:
+          case "ArrowRight":
+          case 39: //Support for older browsers
             this.jump(1);
             break;
           // +
-          case 187:
-            this.zoom(this.options.ratioThreshold * 3, {
-              x: this.$stage.width() / 2,
-              y: this.$stage.height() / 2
-            }, e);
+          case "+":
+          case 187: //Support for older browsers
+          case "Equal": // For Shift + "="
+            if (e.key === "+" || e.shiftKey || keyPressed === 187) { // Check for Shift key if using e.key
+              this.zoom(this.options.ratioThreshold * 3, {
+                x: this.$stage.width() / 2,
+                y: this.$stage.height() / 2
+              }, e);
+            }
             break;
           // -
-          case 189:
+          case "-":
+          case 189: //Support for older browsers
             this.zoom(-this.options.ratioThreshold * 3, {
               x: this.$stage.width() / 2,
               y: this.$stage.height() / 2
@@ -2660,7 +2667,8 @@
             }, e);
             break;
           // Ctrl + Alt + 0
-          case 48:
+          case "0":
+          case 48: //Support for older browsers
             if (ctrlKey && altKey) {
               this.zoomTo(1, {
                 x: this.$stage.width() / 2,
@@ -2669,7 +2677,8 @@
             }
             break;
           // Ctrl + ,
-          case 188:
+          case ",":
+          case 188: //Support for older browsers
             if (ctrlKey) {
               // `⌘ + ,` is the hotkey of browser settings
               e.preventDefault();
@@ -2677,23 +2686,27 @@
             }
             break;
           // Ctrl + .
-          case 190:
+          case ".":
+          case 190: //Support for older browsers
             if (ctrlKey) {
               this.rotate(90);
             }
             break;
-          // Q
-          case 81:
+          // q
+          case "q":
+          case 81: //Support for older browsers
             this.close();
             break;
           // Alt + X
-          case 88:
+          case "x":
+          case 88: //Support for older browsers
             if (altKey) {
               this.toggleMaximize();
             }
             break;
-          // F
-          case 70:
+          // f
+          case "f":
+          case 70: //Support for older browsers
             this.fullscreen();
             break;
         }
