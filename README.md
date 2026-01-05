@@ -39,7 +39,7 @@ PhotoViewer is a JS plugin to view images just like in Windows.
 You can install the plugin via npm
 
 ```sh
-$ npm install photoviewer --save
+npm install photoviewer --save
 ```
 
 ## Quick Start
