@@ -749,6 +749,7 @@ class PhotoViewer {
         break;
       // +
       case 187:
+      case 107:
         this.zoom(
           this.options.ratioThreshold * 3,
           { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
@@ -757,6 +758,7 @@ class PhotoViewer {
         break;
       // -
       case 189:
+      case 109:
         this.zoom(
           -this.options.ratioThreshold * 3,
           { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
