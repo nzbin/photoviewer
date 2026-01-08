@@ -54,7 +54,7 @@ export function movable($stage, $image) {
     // Modal can be dragging if image is smaller to stage
     PUBLIC_VARS['isMoving'] = widthDiff > 0 || heightDiff > 0 ? true : false;
 
-    // Reclac the element position when mousedown
+    // Recalc the element position when mousedown
     // Fix the issue of stage with a border
     left = $image.position().left - δ;
     top = $image.position().top + δ;

@@ -127,7 +127,7 @@ export function resizable($modal, $stage, $image, options) {
   // Image CSS
   const getImageCSS = (dir, offsetX, offsetY) => {
     // Image shouldn't move when modal width to the min-width
-    // The min-width is modal width, so we should clac the stage min-width
+    // The min-width is modal width, so we should calc the stage min-width
     const eWidthDiff = offsetX + modalData.w > minModalWidth
       ? stageData.w - imgFrameWidth + offsetX - δ
       : minModalWidth - (modalData.w - stageData.w) - imgFrameWidth - δ;
@@ -198,7 +198,7 @@ export function resizable($modal, $stage, $image, options) {
     startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;
     startY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.clientY;
 
-    // Reclac the modal data when mousedown
+    // Recalc the modal data when mousedown
     modalData = {
       w: $modal.width() + (isBorderBox($modal) ? this._modalEdgeValue.horizontal : 0),
       h: $modal.height() + (isBorderBox($modal) ? this._modalEdgeValue.vertical : 0),
@@ -259,7 +259,7 @@ export function resizable($modal, $stage, $image, options) {
     $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
       .off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
 
-    // Reclac the stage size because it has changed
+    // Recalc the stage size because it has changed
     const stageWidth = $stage.width();
     const stageHeight = $stage.height();
 
