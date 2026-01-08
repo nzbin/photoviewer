@@ -1,80 +1,68 @@
 .photoviewer-resizable-handle {
   position: absolute;
-  z-index: 10;
+  z-index: 1;
+}
+
+.photoviewer-resizable-handle-e,
+.photoviewer-resizable-handle-w {
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
 }
 
 .photoviewer-resizable-handle-e {
-  top: 0;
-  right: -5px;
-  bottom: 0;
-  left: auto;
-  width: 10px;
-  cursor: e-resize;
-}
-
-.photoviewer-resizable-handle-s {
-  top: auto;
-  right: 0;
-  bottom: -5px;
-  left: 0;
-  height: 10px;
-  cursor: s-resize;
+  right: -4px;
 }
 
 .photoviewer-resizable-handle-w {
-  top: 0;
-  right: auto;
-  bottom: 0;
-  left: -5px;
-  width: 10px;
-  cursor: w-resize;
+  left: -4px;
+}
+
+.photoviewer-resizable-handle-s,
+.photoviewer-resizable-handle-n {
+  right: 0;
+  left: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.photoviewer-resizable-handle-s {
+  bottom: -4px;
 }
 
 .photoviewer-resizable-handle-n {
-  top: -5px;
-  right: 0;
-  bottom: auto;
-  left: 0;
-  height: 10px;
-  cursor: n-resize;
+  top: -4px;
+}
+
+.photoviewer-resizable-handle-se,
+.photoviewer-resizable-handle-sw,
+.photoviewer-resizable-handle-ne,
+.photoviewer-resizable-handle-nw {
+  width: 8px;
+  height: 8px;
 }
 
 .photoviewer-resizable-handle-se {
-  top: auto;
-  right: -5px;
-  bottom: -5px;
-  left: auto;
-  width: 10px;
-  height: 10px;
-  cursor: se-resize;
+  right: -4px;
+  bottom: -4px;
+  cursor: nwse-resize;
 }
 
 .photoviewer-resizable-handle-sw {
-  top: auto;
-  right: auto;
-  bottom: -5px;
-  left: -5px;
-  width: 10px;
-  height: 10px;
-  cursor: sw-resize;
-}
-
-.photoviewer-resizable-handle-nw {
-  top: -5px;
-  right: auto;
-  bottom: auto;
-  left: -5px;
-  width: 10px;
-  height: 10px;
-  cursor: nw-resize;
+  bottom: -4px;
+  left: -4px;
+  cursor: nesw-resize;
 }
 
 .photoviewer-resizable-handle-ne {
-  top: -5px;
-  right: -5px;
-  bottom: auto;
-  left: auto;
-  width: 10px;
-  height: 10px;
-  cursor: ne-resize;
+  top: -4px;
+  right: -4px;
+  cursor: nesw-resize;
+}
+
+.photoviewer-resizable-handle-nw {
+  top: -4px;
+  left: -4px;
+  cursor: nwse-resize;
 }
