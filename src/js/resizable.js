@@ -12,6 +12,13 @@ import { isBorderBox, setGrabCursor, getImageScale } from './utilities';
 
 const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}-button`;
 
+const DIRECTION_CURSOR_MAP = {
+  n: 'ns', s: 'ns',
+  e: 'ew', w: 'ew',
+  nw: 'nwse', se: 'nwse',
+  ne: 'nesw', sw: 'nesw',
+};
+
 /**
  * Modal resizable
  *
@@ -227,7 +234,7 @@ export function resizable($modal, $stage, $image) {
     direction = dir;
 
     // Add the resizable cursor
-    $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', dir + '-resize');
+    $(ELEMS_WITH_RESIZE_CURSOR).css('cursor', DIRECTION_CURSOR_MAP[dir] + '-resize');
 
     $D.on(TOUCH_MOVE_EVENT + EVENT_NS, dragMove)
       .on(TOUCH_END_EVENT + EVENT_NS, dragEnd);
