@@ -33,11 +33,11 @@ export function draggable($modal, dragHandle, dragCancel) {
     const elemCancel = $(e.target).closest(dragCancel);
     // Stop modal moving when click buttons
     if (elemCancel.length) {
-      return true;
+      return;
     }
 
     if (this.options.multiInstances) {
-      $modal.css('z-index', ++PUBLIC_VARS['zIndex']);
+      this._bringToFront();
     }
 
     startX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.clientX;

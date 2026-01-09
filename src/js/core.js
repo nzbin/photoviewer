@@ -9,8 +9,7 @@ import {
   WHEEL_EVENT,
   NS,
   CLASS_NS,
-  EVENT_NS,
-  PUBLIC_VARS
+  EVENT_NS
 } from './constants';
 import {
   debounce,
@@ -63,6 +62,8 @@ class PhotoViewer {
   // Used for time comparison
   _lastTimestamp = 0;
 
+  zIndex = 1;
+
   constructor(items, options) {
     this.init(items, options);
   }
@@ -77,13 +78,10 @@ class PhotoViewer {
       this.options.headerToolbar = options.headerToolbar;
     }
 
-    // Reset public `z-index` with option
-    PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? this.options['zIndex'] : PUBLIC_VARS['zIndex'];
-
     this.open();
 
     this.images = items;
-    this.index = this.options['index'];
+    this.index = this.options.index;
     this._loadImage(this.index);
 
     if (this.options.draggable) {
@@ -93,8 +91,10 @@ class PhotoViewer {
       this.movable(this.$stage, this.$image);
     }
     if (this.options.resizable) {
-      this.resizable(this.$photoviewer, this.$stage, this.$image, this.options);
+      this.resizable(this.$photoviewer, this.$stage, this.$image);
     }
+
+    this._bringToFront();
   }
 
   _createBtns(toolbar) {
@@ -110,12 +110,12 @@ class PhotoViewer {
       if (btns.indexOf(item) >= 0) {
         btnsHTML +=
           `<button class="${btnClass}" title="${this.options.i18n[item]}">
-          ${this.options.icons[item]}
+            ${this.options.icons[item]}
           </button>`;
       } else if (this.options.customButtons[item]) {
         btnsHTML +=
           `<button class="${btnClass}" title="${this.options.customButtons[item].title || ''}">
-          ${this.options.customButtons[item].text}
+            ${this.options.customButtons[item].text}
           </button>`;
       }
     });
@@ -133,7 +133,7 @@ class PhotoViewer {
         <div class="${NS}-inner">
           <div class="${NS}-header">
             <div class="${NS}-toolbar ${NS}-toolbar-header">
-            ${this._createBtns(this.options.headerToolbar)}
+              ${this._createBtns(this.options.headerToolbar)}
             </div>
             ${this._createTitle()}
           </div>
@@ -142,7 +142,7 @@ class PhotoViewer {
           </div>
           <div class="${NS}-footer">
             <div class="${NS}-toolbar ${NS}-toolbar-footer">
-            ${this._createBtns(this.options.footerToolbar)}
+              ${this._createBtns(this.options.footerToolbar)}
             </div>
           </div>
         </div>
@@ -174,9 +174,6 @@ class PhotoViewer {
     this.$rotateRight = $photoviewer.find(CLASS_NS + '-button-rotateRight');
     this.$prev = $photoviewer.find(CLASS_NS + '-button-prev');
     this.$next = $photoviewer.find(CLASS_NS + '-button-next');
-
-    // Reset the modal `z-index` of multiple instances
-    this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']);
 
     if (this.options.positionFixed) {
       this.$photoviewer.css({ position: 'fixed' });
@@ -233,8 +230,6 @@ class PhotoViewer {
     PhotoViewer.instances = PhotoViewer.instances.filter(p => p !== this);
 
     if (PhotoViewer.instances.length === 0) {
-      // Reset `z-index` after close
-      PUBLIC_VARS['zIndex'] = this.options.zIndex;
       // Remove the bound event on windows
       $W.off(RESIZE_EVENT + EVENT_NS);
     }
@@ -887,6 +882,23 @@ class PhotoViewer {
     if (this.options.callbacks[e]) {
       this.options.callbacks[e].apply(this, $.isArray(data) ? data : [data]);
     }
+  }
+
+  _bringToFront() {
+    // Get a list of instances sorted by the z-index
+    const refs = PhotoViewer.instances.sort((a, b) => a.zIndex - b.zIndex);
+    // Move the active modal to the end of the array
+    const index = refs.indexOf(this);
+    refs.splice(index, 1);
+    refs.push(this);
+    // Set new z-index values according to the order in the array
+    refs.forEach((ref, idx) => {
+      const zIndex = this.options.zIndex + idx;
+      if (ref.zIndex !== zIndex) {
+        ref.zIndex = zIndex;
+        ref.$photoviewer.css('z-index', zIndex);
+      }
+    });
   }
 }
 

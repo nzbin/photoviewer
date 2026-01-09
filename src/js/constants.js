@@ -21,7 +21,5 @@ export const PUBLIC_VARS = {
   // Whether image is moving
   isMoving: false,
   // Whether modal is resizing
-  isResizing: false,
-  // Modal's `z-index`
-  zIndex: 0
+  isResizing: false
 };

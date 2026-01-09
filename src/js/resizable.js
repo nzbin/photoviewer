@@ -22,9 +22,8 @@ const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}
  * @param {object} $modal - The modal element of domq
  * @param {object} $stage - The stage element of domq
  * @param {object} $image - The image element of domq
- * @param {object} options - The options of PhotoViewer
  */
-export function resizable($modal, $stage, $image, options) {
+export function resizable($modal, $stage, $image) {
   const eHandle = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-e"></div>`);
   const wHandle = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-w"></div>`);
   const sHandle = $(`<div class="${NS}-resizable-handle ${NS}-resizable-handle-s"></div>`);
@@ -67,7 +66,7 @@ export function resizable($modal, $stage, $image, options) {
   let imgFrameHeight = 0;
   let direction = '';
 
-  const { modalWidth: minModalWidth, modalHeight: minModalHeight } = options;
+  const { modalWidth: minModalWidth, modalHeight: minModalHeight } = this.options;
 
   // Modal CSS
   const getModalCSS = (dir, offsetX, offsetY) => {

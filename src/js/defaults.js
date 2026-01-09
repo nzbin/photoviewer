@@ -153,7 +153,7 @@ export default {
   fixedModalPos: false,
 
   // Modal css `z-index`
-  zIndex: 1090,
+  zIndex: 1100,
 
   // Selector of drag handler
   dragHandle: null,
