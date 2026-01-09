@@ -397,7 +397,7 @@ class PhotoViewer {
     // Just execute before image loaded
     if (!this.imageLoaded) {
       // Loader end
-      this.$photoviewer.find(CLASS_NS + '-loader').remove();
+      this.$stage.find(CLASS_NS + '-loader').remove();
       // The class must be removed after image loaded
       this.$stage.removeClass(NS + '-align-center');
 
@@ -426,7 +426,7 @@ class PhotoViewer {
     this.rotationDegree = 0;
 
     // Loader start
-    this.$photoviewer.append(`<div class="${NS}-loader"></div>`);
+    this.$stage.append(`<div class="${NS}-loader"></div>`);
     // Used for centering image
     this.$stage.addClass(NS + '-align-center');
 
@@ -465,7 +465,7 @@ class PhotoViewer {
       },
       () => {
         // Loader end
-        this.$photoviewer.find(CLASS_NS + '-loader').remove();
+        this.$stage.find(CLASS_NS + '-loader').remove();
 
         this._triggerHook('changed', [this, index]);
 
