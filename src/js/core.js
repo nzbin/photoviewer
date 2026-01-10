@@ -734,17 +734,30 @@ class PhotoViewer {
     const altKey = e.altKey;
 
     switch (keyCode) {
-      // ←
+      // ← ↑
       case 37:
+      case 38:
         this.jump(-1);
         break;
-      // →
+      // → ↓
       case 39:
+      case 40:
         this.jump(1);
+        break;
+      // Home, PageUp
+      case 36:
+      case 33:
+        this.jumpTo(0);
+        break;
+      // End, PageDown
+      case 35:
+      case 34:
+        this.jumpTo(this.images.length - 1);
         break;
       // +
       case 187:
-      case 107:
+      case 107: // Numpad
+      case 61:  // Firefox
         this.zoom(
           this.options.ratioThreshold * 3,
           { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
@@ -753,23 +766,8 @@ class PhotoViewer {
         break;
       // -
       case 189:
-      case 109:
-        this.zoom(
-          -this.options.ratioThreshold * 3,
-          { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
-          e
-        );
-        break;
-      // + Firefox
-      case 61:
-        this.zoom(
-          this.options.ratioThreshold * 3,
-          { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
-          e
-        );
-        break;
-      // - Firefox
-      case 173:
+      case 109: // Numpad
+      case 173: // Firefox
         this.zoom(
           -this.options.ratioThreshold * 3,
           { x: this.$stage.width() / 2, y: this.$stage.height() / 2 },
