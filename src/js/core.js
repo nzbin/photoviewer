@@ -884,17 +884,17 @@ class PhotoViewer {
 
   _bringToFront() {
     // Get a list of instances sorted by the z-index
-    const refs = PhotoViewer.instances.sort((a, b) => a.zIndex - b.zIndex);
+    const sortedInstances = PhotoViewer.instances
+      .filter(inst => inst !== this)
+      .sort((a, b) => a.zIndex - b.zIndex);
     // Move the active modal to the end of the array
-    const index = refs.indexOf(this);
-    refs.splice(index, 1);
-    refs.push(this);
+    sortedInstances.push(this);
     // Set new z-index values according to the order in the array
-    refs.forEach((ref, idx) => {
+    sortedInstances.forEach((inst, idx) => {
       const zIndex = this.options.zIndex + idx;
-      if (ref.zIndex !== zIndex) {
-        ref.zIndex = zIndex;
-        ref.$photoviewer.css('z-index', zIndex);
+      if (inst.zIndex !== zIndex) {
+        inst.zIndex = zIndex;
+        inst.$photoviewer.css('z-index', zIndex);
       }
     });
   }
