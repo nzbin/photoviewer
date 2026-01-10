@@ -19,10 +19,8 @@
   <style>
     .photoviewer-stage {
       top: 0;
-      right: 0;
       bottom: 0;
-      left: 0;
-      background-color: rgba(0, 0, 0, .85);
+      background-color: rgba(0, 0, 0, .8);
       border: none;
     }
 
@@ -32,26 +30,24 @@
 
     .photoviewer-footer {
       bottom: 10px;
+      left: 50%;
+      width: auto;
+      transform: translate(-50%, 0);
+      white-space: nowrap;
     }
 
     .photoviewer-footer .photoviewer-toolbar {
-      display: inline-block;
       background-color: rgba(0, 0, 0, .5);
       border-radius: 5px;
     }
 
-    .photoviewer-header,
-    .photoviewer-footer {
-      pointer-events: none;
-    }
-
     .photoviewer-title {
       color: #ccc;
+      text-shadow: 0 0 4px rgba(0, 0, 0, .9);
     }
 
     .photoviewer-button {
       color: #ccc;
-      pointer-events: auto;
     }
 
     .photoviewer-footer .photoviewer-button:hover {

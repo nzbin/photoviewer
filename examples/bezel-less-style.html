@@ -19,9 +19,7 @@
   <style>
     .photoviewer-modal {
       background-color: transparent;
-      border: none;
       border-radius: 0;
-      box-shadow: 0 0 6px 2px rgba(0, 0, 0, .3);
     }
 
     .photoviewer-header .photoviewer-toolbar {
@@ -30,33 +28,34 @@
 
     .photoviewer-stage {
       top: 0;
-      right: 0;
       bottom: 0;
-      left: 0;
-      background-color: rgba(0, 0, 0, .85);
+      background-color: rgba(0, 0, 0, .8);
       border: none;
     }
 
     .photoviewer-footer .photoviewer-toolbar {
-      display: inline-block;
       background-color: rgba(0, 0, 0, .5);
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
+      border-radius: 6px 6px 0 0;
     }
 
-    .photoviewer-header,
-    .photoviewer-footer {
+    .photoviewer-header {
       border-radius: 0;
-      pointer-events: none;
+    }
+
+    .photoviewer-footer {
+      left: 50%;
+      width: auto;
+      transform: translate(-50%, 0);
+      white-space: nowrap;
     }
 
     .photoviewer-title {
       color: #ccc;
+      text-shadow: 0 0 4px rgba(0, 0, 0, .9);
     }
 
     .photoviewer-button {
       color: #ccc;
-      pointer-events: auto;
     }
 
     .photoviewer-header .photoviewer-button:hover,
