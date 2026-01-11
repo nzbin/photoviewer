@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.10.3
+ * photoviewer - v3.11.0
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -14,18 +14,17 @@
  */
 .photoviewer-modal {
   position: absolute;
-  z-index: 1090;
+  z-index: 1100;
   width: 320px;
   height: 320px;
   color: #333;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.6);
+  background-color: #fff;
   border-radius: 6px;
-  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6), 0 0 1px rgba(0, 0, 0, 0.6), 0 8px 32px -4px rgba(0, 0, 0, 0.4);
   outline: none;
 }
 .photoviewer-modal:focus-visible {
-  outline: thick solid rgba(0, 0, 0, 0.2);
+  outline: 4px solid rgba(0, 0, 0, 0.2);
 }
 
 .photoviewer-inner {
@@ -64,7 +63,7 @@
   font-size: 16px;
   line-height: 1;
   background: none;
-  border-width: 0;
+  border: none;
   color: inherit;
   cursor: pointer;
   outline: none;
@@ -76,19 +75,16 @@
   background-color: rgba(0, 0, 0, 0.1);
 }
 .photoviewer-button svg {
-  display: inline-block;
-  font-size: inherit;
   width: 1em;
   height: 1em;
-  overflow: visible;
   vertical-align: -0.125em;
 }
 
 .photoviewer-header {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   height: 30px;
-  border-radius: 5px 5px 0 0;
+  border-radius: 6px 6px 0 0;
   overflow: hidden;
 }
 .photoviewer-header .photoviewer-toolbar {
@@ -127,10 +123,8 @@
   right: 0;
   bottom: 40px;
   left: 0;
-  z-index: 1;
-  border-top: 1px solid rgba(0, 0, 0, 0.6);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-  background-color: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -144,7 +138,7 @@
 .photoviewer-footer {
   position: absolute;
   bottom: 0;
-  z-index: 2;
+  z-index: 1;
   width: 100%;
   height: 40px;
   text-align: center;
@@ -183,83 +177,71 @@
 
 .photoviewer-resizable-handle {
   position: absolute;
-  z-index: 10;
+  z-index: 1;
+}
+
+.photoviewer-resizable-handle-e,
+.photoviewer-resizable-handle-w {
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
 }
 
 .photoviewer-resizable-handle-e {
-  top: 0;
-  right: -5px;
-  bottom: 0;
-  left: auto;
-  width: 10px;
-  cursor: e-resize;
-}
-
-.photoviewer-resizable-handle-s {
-  top: auto;
-  right: 0;
-  bottom: -5px;
-  left: 0;
-  height: 10px;
-  cursor: s-resize;
+  right: -4px;
 }
 
 .photoviewer-resizable-handle-w {
-  top: 0;
-  right: auto;
-  bottom: 0;
-  left: -5px;
-  width: 10px;
-  cursor: w-resize;
+  left: -4px;
+}
+
+.photoviewer-resizable-handle-s,
+.photoviewer-resizable-handle-n {
+  right: 0;
+  left: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.photoviewer-resizable-handle-s {
+  bottom: -4px;
 }
 
 .photoviewer-resizable-handle-n {
-  top: -5px;
-  right: 0;
-  bottom: auto;
-  left: 0;
-  height: 10px;
-  cursor: n-resize;
+  top: -4px;
+}
+
+.photoviewer-resizable-handle-se,
+.photoviewer-resizable-handle-sw,
+.photoviewer-resizable-handle-ne,
+.photoviewer-resizable-handle-nw {
+  width: 8px;
+  height: 8px;
 }
 
 .photoviewer-resizable-handle-se {
-  top: auto;
-  right: -5px;
-  bottom: -5px;
-  left: auto;
-  width: 10px;
-  height: 10px;
-  cursor: se-resize;
+  right: -4px;
+  bottom: -4px;
+  cursor: nwse-resize;
 }
 
 .photoviewer-resizable-handle-sw {
-  top: auto;
-  right: auto;
-  bottom: -5px;
-  left: -5px;
-  width: 10px;
-  height: 10px;
-  cursor: sw-resize;
-}
-
-.photoviewer-resizable-handle-nw {
-  top: -5px;
-  right: auto;
-  bottom: auto;
-  left: -5px;
-  width: 10px;
-  height: 10px;
-  cursor: nw-resize;
+  bottom: -4px;
+  left: -4px;
+  cursor: nesw-resize;
 }
 
 .photoviewer-resizable-handle-ne {
-  top: -5px;
-  right: -5px;
-  bottom: auto;
-  left: auto;
-  width: 10px;
-  height: 10px;
-  cursor: ne-resize;
+  top: -4px;
+  right: -4px;
+  cursor: nesw-resize;
+}
+
+.photoviewer-resizable-handle-nw {
+  top: -4px;
+  left: -4px;
+  cursor: nwse-resize;
 }
 
 .photoviewer-modal:-ms-fullscreen {
@@ -322,11 +304,10 @@
 
 .photoviewer-loader {
   position: absolute;
-  top: 30px;
+  top: 0;
   left: 0;
   right: 0;
-  bottom: 40px;
-  z-index: 2;
+  bottom: 0;
   text-align: center;
   color: #333;
 }
@@ -334,10 +315,10 @@
   content: "";
   position: relative;
   display: inline-block;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   box-sizing: border-box;
-  border-width: 5px;
+  border-width: 4px;
   border-style: solid;
   border-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5) rgba(255, 255, 255, 0.5);
   border-radius: 100%;
