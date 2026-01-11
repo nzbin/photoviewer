@@ -295,32 +295,35 @@ class PhotoViewer {
   }
 
   _setModalSize() {
-    // Modal size should calculate with stage css value
-    let modalWidth = this.imageData.originalWidth + this._stageEdgeValue.horizontal;
-    let modalHeight = this.imageData.originalHeight + this._stageEdgeValue.vertical;
-
-    // Extra width/height for `content-box`
-    let extraWidth = 0, extraHeight = 0;
-
-    if (isBorderBox(this.$photoviewer)) {
-      modalWidth += this._modalEdgeValue.horizontal;
-      modalHeight += this._modalEdgeValue.vertical;
-    } else {
-      extraWidth += this._modalEdgeValue.horizontal;
-      extraHeight += this._modalEdgeValue.vertical;
-    }
-
     const offsetParentData = this._getOffsetParentData();
     const gapThreshold = Math.max(this.options.gapThreshold, 0) + 1;
+
+    const fixedWidth = this._stageEdgeValue.horizontal + this._modalEdgeValue.horizontal;
+    const fixedHeight = this._stageEdgeValue.vertical + this._modalEdgeValue.vertical;
     // Modal scale relative to parent element
     const scale = Math.min(
-      offsetParentData.width / ((modalWidth + extraWidth) * gapThreshold),
-      offsetParentData.height / ((modalHeight + extraHeight) * gapThreshold),
+      (offsetParentData.width / gapThreshold - fixedWidth) / this.imageData.originalWidth,
+      (offsetParentData.height / gapThreshold - fixedHeight) / this.imageData.originalHeight,
       1
     );
 
-    let minWidth = Math.max(modalWidth * scale, this.options.modalWidth);
-    let minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
+    let extraWidth = 0, extraHeight = 0, extraXOffset = 0, extraYOffset = 0;
+    if (isBorderBox(this.$photoviewer)) {
+      extraWidth += this._modalEdgeValue.horizontal;
+      extraHeight += this._modalEdgeValue.vertical;
+    } else {
+      extraXOffset += this._modalEdgeValue.horizontal;
+      extraYOffset += this._modalEdgeValue.vertical;
+    }
+
+    let minWidth = Math.max(
+      this.imageData.originalWidth * scale + this._stageEdgeValue.horizontal + extraWidth,
+      this.options.modalWidth
+    );
+    let minHeight = Math.max(
+      this.imageData.originalHeight * scale + this._stageEdgeValue.vertical + extraHeight,
+      this.options.modalHeight
+    );
 
     minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
     minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
@@ -333,8 +336,8 @@ class PhotoViewer {
       transRight = this.options.initModalPos.right;
       transBottom = this.options.initModalPos.bottom;
     } else {
-      transLeft = (offsetParentData.width - minWidth - extraWidth) / 2 + offsetParentData.scrollLeft;
-      transTop = (offsetParentData.height - minHeight - extraHeight) / 2 + offsetParentData.scrollTop;
+      transLeft = (offsetParentData.width - minWidth - extraXOffset) / 2 + offsetParentData.scrollLeft;
+      transTop = (offsetParentData.height - minHeight - extraYOffset) / 2 + offsetParentData.scrollTop;
     }
 
     const modalTransCSS = {
