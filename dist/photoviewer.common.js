@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|
  *
- * photoviewer - v3.11.0
+ * photoviewer - v3.11.1
  * A JS plugin to view images just like in Windows.
  * https://nzbin.github.io/photoviewer/
  *
@@ -2026,6 +2026,7 @@ var PhotoViewer = /*#__PURE__*/function () {
         this.options.headerToolbar = options.headerToolbar;
       }
       this.open();
+      this._bringToFront();
       this.images = items;
       this.index = this.options.index;
       this._loadImage(this.index);
@@ -2038,7 +2039,6 @@ var PhotoViewer = /*#__PURE__*/function () {
       if (this.options.resizable) {
         this.resizable(this.$photoviewer, this.$stage, this.$image);
       }
-      this._bringToFront();
     }
   }, {
     key: "_createBtns",
@@ -2617,21 +2617,25 @@ var PhotoViewer = /*#__PURE__*/function () {
         // ← ↑
         case 37:
         case 38:
+          e.preventDefault();
           this.jump(-1);
           break;
         // → ↓
         case 39:
         case 40:
+          e.preventDefault();
           this.jump(1);
           break;
         // Home, PageUp
         case 36:
         case 33:
+          e.preventDefault();
           this.jumpTo(0);
           break;
         // End, PageDown
         case 35:
         case 34:
+          e.preventDefault();
           this.jumpTo(this.images.length - 1);
           break;
         // +
