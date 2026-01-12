@@ -80,6 +80,8 @@ class PhotoViewer {
 
     this.open();
 
+    this._bringToFront();
+
     this.images = items;
     this.index = this.options.index;
     this._loadImage(this.index);
@@ -93,8 +95,6 @@ class PhotoViewer {
     if (this.options.resizable) {
       this.resizable(this.$photoviewer, this.$stage, this.$image);
     }
-
-    this._bringToFront();
   }
 
   _createBtns(toolbar) {
@@ -740,21 +740,25 @@ class PhotoViewer {
       // ← ↑
       case 37:
       case 38:
+        e.preventDefault();
         this.jump(-1);
         break;
       // → ↓
       case 39:
       case 40:
+        e.preventDefault();
         this.jump(1);
         break;
       // Home, PageUp
       case 36:
       case 33:
+        e.preventDefault();
         this.jumpTo(0);
         break;
       // End, PageDown
       case 35:
       case 34:
+        e.preventDefault();
         this.jumpTo(this.images.length - 1);
         break;
       // +
